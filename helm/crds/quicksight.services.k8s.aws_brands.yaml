@@ -1,0 +1,463 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.19.0
+  name: brands.quicksight.services.k8s.aws
+spec:
+  group: quicksight.services.k8s.aws
+  names:
+    kind: Brand
+    listKind: BrandList
+    plural: brands
+    singular: brand
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: Brand is the Schema for the Brands API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: BrandSpec defines the desired state of Brand.
+            properties:
+              awsAccountID:
+                description: |-
+                  The ID of the Amazon Web Services account that owns the brand.
+
+                  Regex Pattern: `^[0-9]{12}$`
+                type: string
+              brandDefinition:
+                description: The definition of the brand.
+                properties:
+                  applicationTheme:
+                    description: The application theme.
+                    properties:
+                      brandColorPalette:
+                        description: The color palette.
+                        properties:
+                          accent:
+                            description: The color palette.
+                            properties:
+                              background:
+                                type: string
+                              foreground:
+                                type: string
+                            type: object
+                          danger:
+                            description: The color palette.
+                            properties:
+                              background:
+                                type: string
+                              foreground:
+                                type: string
+                            type: object
+                          dimension:
+                            description: The color palette.
+                            properties:
+                              background:
+                                type: string
+                              foreground:
+                                type: string
+                            type: object
+                          info:
+                            description: The color palette.
+                            properties:
+                              background:
+                                type: string
+                              foreground:
+                                type: string
+                            type: object
+                          measure:
+                            description: The color palette.
+                            properties:
+                              background:
+                                type: string
+                              foreground:
+                                type: string
+                            type: object
+                          primary:
+                            description: The color palette.
+                            properties:
+                              background:
+                                type: string
+                              foreground:
+                                type: string
+                            type: object
+                          secondary:
+                            description: The color palette.
+                            properties:
+                              background:
+                                type: string
+                              foreground:
+                                type: string
+                            type: object
+                          success:
+                            description: The color palette.
+                            properties:
+                              background:
+                                type: string
+                              foreground:
+                                type: string
+                            type: object
+                          warning:
+                            description: The color palette.
+                            properties:
+                              background:
+                                type: string
+                              foreground:
+                                type: string
+                            type: object
+                        type: object
+                      brandElementStyle:
+                        description: The element style.
+                        properties:
+                          navbarStyle:
+                            description: The navigation bar style.
+                            properties:
+                              contextualNavbar:
+                                description: The color palette.
+                                properties:
+                                  background:
+                                    type: string
+                                  foreground:
+                                    type: string
+                                type: object
+                              globalNavbar:
+                                description: The color palette.
+                                properties:
+                                  background:
+                                    type: string
+                                  foreground:
+                                    type: string
+                                type: object
+                            type: object
+                        type: object
+                      contextualAccentPalette:
+                        description: The contextual accent palette.
+                        properties:
+                          automation:
+                            description: The color palette.
+                            properties:
+                              background:
+                                type: string
+                              foreground:
+                                type: string
+                            type: object
+                          connection:
+                            description: The color palette.
+                            properties:
+                              background:
+                                type: string
+                              foreground:
+                                type: string
+                            type: object
+                          insight:
+                            description: The color palette.
+                            properties:
+                              background:
+                                type: string
+                              foreground:
+                                type: string
+                            type: object
+                          visualization:
+                            description: The color palette.
+                            properties:
+                              background:
+                                type: string
+                              foreground:
+                                type: string
+                            type: object
+                        type: object
+                    type: object
+                  brandName:
+                    type: string
+                  description:
+                    type: string
+                  logoConfiguration:
+                    description: The logo configuration.
+                    properties:
+                      altText:
+                        type: string
+                      logoSet:
+                        description: The logo set configuration.
+                        properties:
+                          favicon:
+                            description: The image set configuration.
+                            properties:
+                              original:
+                                description: The logo image configuration.
+                                properties:
+                                  source:
+                                    description: The source of the image.
+                                    properties:
+                                      publicURL:
+                                        type: string
+                                      s3URI:
+                                        type: string
+                                    type: object
+                                type: object
+                            type: object
+                          primary:
+                            description: The image set configuration.
+                            properties:
+                              original:
+                                description: The logo image configuration.
+                                properties:
+                                  source:
+                                    description: The source of the image.
+                                    properties:
+                                      publicURL:
+                                        type: string
+                                      s3URI:
+                                        type: string
+                                    type: object
+                                type: object
+                            type: object
+                        type: object
+                    type: object
+                type: object
+              brandID:
+                description: |-
+                  The ID of the Quick Suite brand.
+
+                  Regex Pattern: `^[\w\-]+$`
+                type: string
+              tags:
+                description: A map of the key-value pairs that are assigned to the
+                  brand.
+                items:
+                  description: |-
+                    The key or keys of the key-value pairs for the resource tag or tags assigned
+                    to the resource.
+                  properties:
+                    key:
+                      type: string
+                    value:
+                      type: string
+                  type: object
+                type: array
+            required:
+            - awsAccountID
+            - brandID
+            type: object
+          status:
+            description: BrandStatus defines the observed state of Brand
+            properties:
+              ackResourceMetadata:
+                description: |-
+                  All CRs managed by ACK have a common `Status.ACKResourceMetadata` member
+                  that is used to contain resource sync state, account ownership,
+                  constructed ARN for the resource
+                properties:
+                  arn:
+                    description: |-
+                      ARN is the Amazon Resource Name for the resource. This is a
+                      globally-unique identifier and is set only by the ACK service controller
+                      once the controller has orchestrated the creation of the resource OR
+                      when it has verified that an "adopted" resource (a resource where the
+                      ARN annotation was set by the Kubernetes user on the CR) exists and
+                      matches the supplied CR's Spec field values.
+                      https://github.com/aws/aws-controllers-k8s/issues/270
+                    type: string
+                  ownerAccountID:
+                    description: |-
+                      OwnerAccountID is the AWS Account ID of the account that owns the
+                      backend AWS service API resource.
+                    type: string
+                  region:
+                    description: Region is the AWS region in which the resource exists
+                      or will exist.
+                    type: string
+                required:
+                - ownerAccountID
+                - region
+                type: object
+              brandDetail:
+                description: The details of the brand.
+                properties:
+                  arn:
+                    type: string
+                  brandID:
+                    type: string
+                  brandStatus:
+                    type: string
+                  createdTime:
+                    format: date-time
+                    type: string
+                  errors:
+                    items:
+                      type: string
+                    type: array
+                  lastUpdatedTime:
+                    format: date-time
+                    type: string
+                  logo:
+                    description: The logo configuration.
+                    properties:
+                      altText:
+                        type: string
+                      logoSet:
+                        description: A set of logos.
+                        properties:
+                          favicon:
+                            description: The image set.
+                            properties:
+                              height32:
+                                description: The logo image.
+                                properties:
+                                  generatedImageURL:
+                                    type: string
+                                  source:
+                                    description: The source of the image.
+                                    properties:
+                                      publicURL:
+                                        type: string
+                                      s3URI:
+                                        type: string
+                                    type: object
+                                type: object
+                              height64:
+                                description: The logo image.
+                                properties:
+                                  generatedImageURL:
+                                    type: string
+                                  source:
+                                    description: The source of the image.
+                                    properties:
+                                      publicURL:
+                                        type: string
+                                      s3URI:
+                                        type: string
+                                    type: object
+                                type: object
+                              original:
+                                description: The logo image.
+                                properties:
+                                  generatedImageURL:
+                                    type: string
+                                  source:
+                                    description: The source of the image.
+                                    properties:
+                                      publicURL:
+                                        type: string
+                                      s3URI:
+                                        type: string
+                                    type: object
+                                type: object
+                            type: object
+                          primary:
+                            description: The image set.
+                            properties:
+                              height32:
+                                description: The logo image.
+                                properties:
+                                  generatedImageURL:
+                                    type: string
+                                  source:
+                                    description: The source of the image.
+                                    properties:
+                                      publicURL:
+                                        type: string
+                                      s3URI:
+                                        type: string
+                                    type: object
+                                type: object
+                              height64:
+                                description: The logo image.
+                                properties:
+                                  generatedImageURL:
+                                    type: string
+                                  source:
+                                    description: The source of the image.
+                                    properties:
+                                      publicURL:
+                                        type: string
+                                      s3URI:
+                                        type: string
+                                    type: object
+                                type: object
+                              original:
+                                description: The logo image.
+                                properties:
+                                  generatedImageURL:
+                                    type: string
+                                  source:
+                                    description: The source of the image.
+                                    properties:
+                                      publicURL:
+                                        type: string
+                                      s3URI:
+                                        type: string
+                                    type: object
+                                type: object
+                            type: object
+                        type: object
+                    type: object
+                  versionID:
+                    type: string
+                  versionStatus:
+                    type: string
+                type: object
+              conditions:
+                description: |-
+                  All CRs managed by ACK have a common `Status.Conditions` member that
+                  contains a collection of `ackv1alpha1.Condition` objects that describe
+                  the various terminal states of the CR and its backend AWS service API
+                  resource
+                items:
+                  description: |-
+                    Condition is the common struct used by all CRDs managed by ACK service
+                    controllers to indicate terminal states  of the CR and its backend AWS
+                    service API resource
+                  properties:
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status
+                        to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: A human readable message indicating details about
+                        the transition.
+                      type: string
+                    reason:
+                      description: The reason for the condition's last transition.
+                      type: string
+                    status:
+                      description: Status of the condition, one of True, False, Unknown.
+                      type: string
+                    type:
+                      description: Type is the type of the Condition
+                      type: string
+                  required:
+                  - status
+                  - type
+                  type: object
+                type: array
+              requestID:
+                description: The Amazon Web Services request ID for this operation.
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

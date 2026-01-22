@@ -1,0 +1,308 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.19.0
+  name: actionconnectors.quicksight.services.k8s.aws
+spec:
+  group: quicksight.services.k8s.aws
+  names:
+    kind: ActionConnector
+    listKind: ActionConnectorList
+    plural: actionconnectors
+    singular: actionconnector
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: ActionConnector is the Schema for the ActionConnectors API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: |-
+              ActionConnectorSpec defines the desired state of ActionConnector.
+
+              Contains detailed information about an action connector, including its configuration,
+              status, and enabled actions.
+            properties:
+              actionConnectorID:
+                description: |-
+                  A unique identifier for the action connector. This ID must be unique within
+                  the Amazon Web Services account. The ActionConnectorId must not start with
+                  the prefix quicksuite-
+
+                  Regex Pattern: `^[\w\-]+$`
+                type: string
+              authenticationConfig:
+                description: |-
+                  The authentication configuration for connecting to the external service.
+                  This includes the authentication type, base URL, and authentication metadata
+                  such as client credentials or API keys.
+                properties:
+                  authenticationMetadata:
+                    description: |-
+                      Union type containing authentication metadata for different authentication
+                      methods.
+                    properties:
+                      apiKeyConnectionMetadata:
+                        description: Configuration for API key-based authentication
+                          to external services.
+                        properties:
+                          apiKey:
+                            type: string
+                          baseEndpoint:
+                            type: string
+                          email:
+                            type: string
+                        type: object
+                      authorizationCodeGrantMetadata:
+                        description: Metadata for OAuth 2.0 authorization code grant
+                          authentication.
+                        properties:
+                          authorizationCodeGrantCredentialsDetails:
+                            description: Details for OAuth 2.0 authorization code
+                              grant credentials.
+                            properties:
+                              authorizationCodeGrantDetails:
+                                description: Configuration details for OAuth 2.0 authorization
+                                  code grant flow.
+                                properties:
+                                  authorizationEndpoint:
+                                    type: string
+                                  clientID:
+                                    type: string
+                                  clientSecret:
+                                    type: string
+                                  tokenEndpoint:
+                                    type: string
+                                type: object
+                            type: object
+                          authorizationCodeGrantCredentialsSource:
+                            type: string
+                          baseEndpoint:
+                            type: string
+                          redirectURL:
+                            type: string
+                        type: object
+                      basicAuthConnectionMetadata:
+                        description: Metadata for basic authentication using username
+                          and password.
+                        properties:
+                          baseEndpoint:
+                            type: string
+                          password:
+                            type: string
+                          username:
+                            type: string
+                        type: object
+                      clientCredentialsGrantMetadata:
+                        description: |-
+                          Configuration for OAuth 2.0 client credentials grant authentication, including
+                          client ID, client secret, token endpoint, and optional scopes.
+                        properties:
+                          baseEndpoint:
+                            type: string
+                          clientCredentialsDetails:
+                            description: Details for OAuth 2.0 client credentials
+                              grant authentication.
+                            properties:
+                              clientCredentialsGrantDetails:
+                                description: |-
+                                  Configuration details for OAuth2 client credentials grant flow, including
+                                  client ID, client secret, token endpoint, and optional scopes.
+                                properties:
+                                  clientID:
+                                    type: string
+                                  clientSecret:
+                                    type: string
+                                  tokenEndpoint:
+                                    type: string
+                                type: object
+                            type: object
+                          clientCredentialsSource:
+                            type: string
+                        type: object
+                      iamConnectionMetadata:
+                        description: |-
+                          Authentication metadata for IAM-based connections, used for first-party Amazon
+                          Web Services service integrations.
+                        properties:
+                          roleARN:
+                            type: string
+                        type: object
+                      noneConnectionMetadata:
+                        description: |-
+                          Authentication metadata for connections that do not require authentication
+                          credentials.
+                        properties:
+                          baseEndpoint:
+                            type: string
+                        type: object
+                    type: object
+                  authenticationType:
+                    type: string
+                type: object
+              awsAccountID:
+                description: |-
+                  The Amazon Web Services account ID associated with the action connector.
+
+                  Regex Pattern: `^[0-9]{12}$`
+                type: string
+              description:
+                description: |-
+                  An optional description of the action connector.
+
+                  Regex Pattern: `^[A-Za-z0-9 _.,!?-]*$`
+                type: string
+              name:
+                description: |-
+                  A descriptive name for the action connector.
+
+                  Regex Pattern: `^[A-Za-z0-9](?:[\w- ]*[A-Za-z0-9])?$`
+                type: string
+              permissions:
+                description: |-
+                  The permissions configuration that defines which users, groups, or namespaces
+                  can access this action connector and what operations they can perform.
+                items:
+                  description: Permission for the resource.
+                  properties:
+                    actions:
+                      items:
+                        type: string
+                      type: array
+                    principal:
+                      type: string
+                  type: object
+                type: array
+              tags:
+                description: |-
+                  A list of tags to apply to the action connector for resource management and
+                  organization.
+                items:
+                  description: |-
+                    The key or keys of the key-value pairs for the resource tag or tags assigned
+                    to the resource.
+                  properties:
+                    key:
+                      type: string
+                    value:
+                      type: string
+                  type: object
+                type: array
+              type_:
+                description: The type of action connector.
+                type: string
+              vpcConnectionARN:
+                description: |-
+                  The ARN of the VPC connection to use for secure connectivity to the external
+                  service.
+                type: string
+            required:
+            - actionConnectorID
+            - authenticationConfig
+            - awsAccountID
+            - name
+            - type_
+            type: object
+          status:
+            description: ActionConnectorStatus defines the observed state of ActionConnector
+            properties:
+              ackResourceMetadata:
+                description: |-
+                  All CRs managed by ACK have a common `Status.ACKResourceMetadata` member
+                  that is used to contain resource sync state, account ownership,
+                  constructed ARN for the resource
+                properties:
+                  arn:
+                    description: |-
+                      ARN is the Amazon Resource Name for the resource. This is a
+                      globally-unique identifier and is set only by the ACK service controller
+                      once the controller has orchestrated the creation of the resource OR
+                      when it has verified that an "adopted" resource (a resource where the
+                      ARN annotation was set by the Kubernetes user on the CR) exists and
+                      matches the supplied CR's Spec field values.
+                      https://github.com/aws/aws-controllers-k8s/issues/270
+                    type: string
+                  ownerAccountID:
+                    description: |-
+                      OwnerAccountID is the AWS Account ID of the account that owns the
+                      backend AWS service API resource.
+                    type: string
+                  region:
+                    description: Region is the AWS region in which the resource exists
+                      or will exist.
+                    type: string
+                required:
+                - ownerAccountID
+                - region
+                type: object
+              conditions:
+                description: |-
+                  All CRs managed by ACK have a common `Status.Conditions` member that
+                  contains a collection of `ackv1alpha1.Condition` objects that describe
+                  the various terminal states of the CR and its backend AWS service API
+                  resource
+                items:
+                  description: |-
+                    Condition is the common struct used by all CRDs managed by ACK service
+                    controllers to indicate terminal states  of the CR and its backend AWS
+                    service API resource
+                  properties:
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status
+                        to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: A human readable message indicating details about
+                        the transition.
+                      type: string
+                    reason:
+                      description: The reason for the condition's last transition.
+                      type: string
+                    status:
+                      description: Status of the condition, one of True, False, Unknown.
+                      type: string
+                    type:
+                      description: Type is the type of the Condition
+                      type: string
+                  required:
+                  - status
+                  - type
+                  type: object
+                type: array
+              creationStatus:
+                description: The creation status of the action connector.
+                type: string
+              requestID:
+                description: The Amazon Web Services request ID for this operation.
+                type: string
+              status:
+                description: The HTTP status code of the request.
+                format: int64
+                type: integer
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

@@ -1,0 +1,17 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  creationTimestamp: null
+  name: ack-quicksight-reader
+  namespace: default
+rules:
+- apiGroups:
+  - quicksight.services.k8s.aws
+  resources:
+  - actionconnectors
+  - brands
+  verbs:
+  - get
+  - list
+  - watch
