@@ -23,6 +23,26 @@ rules:
   - list
   - watch
 - apiGroups:
+  - quicksight.services.k8s.aws
+  resources:
+  - datasources
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - quicksight.services.k8s.aws
+  resources:
+  - datasources/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
   - services.k8s.aws
   resources:
   - fieldexports

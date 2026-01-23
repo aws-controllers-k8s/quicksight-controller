@@ -27,3 +27,1473 @@ var (
 	_ = &aws.JSONValue{}
 	_ = ackv1alpha1.AWSAccountID("")
 )
+
+// The parameters for IoT Analytics.
+type AWSIOtAnalyticsParameters struct {
+	DataSetName *string `json:"dataSetName,omitempty"`
+}
+
+// The Amazon QuickSight customizations associated with your Amazon Web Services
+// account or a QuickSight namespace in a specific Amazon Web Services Region.
+type AccountCustomization struct {
+	DefaultEmailCustomizationTemplate *string `json:"defaultEmailCustomizationTemplate,omitempty"`
+	DefaultTheme                      *string `json:"defaultTheme,omitempty"`
+}
+
+// A structure that contains the following account information elements:
+//
+//   - Your Amazon QuickSight account name.
+//
+//   - The edition of Amazon QuickSight that your account is using.
+//
+//   - The notification email address that is associated with the Amazon QuickSight
+//     account.
+//
+//   - The authentication type of the Amazon QuickSight account.
+//
+//   - The status of the Amazon QuickSight account's subscription.
+type AccountInfo struct {
+	AccountName                  *string `json:"accountName,omitempty"`
+	AccountSubscriptionStatus    *string `json:"accountSubscriptionStatus,omitempty"`
+	AuthenticationType           *string `json:"authenticationType,omitempty"`
+	IAMIdentityCenterInstanceARN *string `json:"iamIdentityCenterInstanceARN,omitempty"`
+	NotificationEmail            *string `json:"notificationEmail,omitempty"`
+}
+
+// The Amazon QuickSight settings associated with your Amazon Web Services account.
+type AccountSettings struct {
+	AccountName                  *string `json:"accountName,omitempty"`
+	NotificationEmail            *string `json:"notificationEmail,omitempty"`
+	PublicSharingEnabled         *bool   `json:"publicSharingEnabled,omitempty"`
+	TerminationProtectionEnabled *bool   `json:"terminationProtectionEnabled,omitempty"`
+}
+
+// The active Identity and Access Management (IAM) policy assignment.
+type ActiveIAMPolicyAssignment struct {
+	PolicyARN *string `json:"policyARN,omitempty"`
+}
+
+// The parameters for OpenSearch.
+type AmazonElasticsearchParameters struct {
+	Domain *string `json:"domain,omitempty"`
+}
+
+// The parameters for OpenSearch.
+type AmazonOpenSearchParameters struct {
+	Domain *string `json:"domain,omitempty"`
+}
+
+// Metadata structure for an analysis in Amazon QuickSight
+type Analysis struct {
+	ARN             *string      `json:"arn,omitempty"`
+	CreatedTime     *metav1.Time `json:"createdTime,omitempty"`
+	LastUpdatedTime *metav1.Time `json:"lastUpdatedTime,omitempty"`
+	Status          *string      `json:"status,omitempty"`
+	ThemeARN        *string      `json:"themeARN,omitempty"`
+}
+
+// A filter that you apply when searching for one or more analyses.
+type AnalysisSearchFilter struct {
+	Value *string `json:"value,omitempty"`
+}
+
+// The source template of an analysis.
+type AnalysisSourceTemplate struct {
+	ARN *string `json:"arn,omitempty"`
+}
+
+// The summary metadata that describes an analysis.
+type AnalysisSummary struct {
+	ARN             *string      `json:"arn,omitempty"`
+	CreatedTime     *metav1.Time `json:"createdTime,omitempty"`
+	LastUpdatedTime *metav1.Time `json:"lastUpdatedTime,omitempty"`
+	Status          *string      `json:"status,omitempty"`
+}
+
+// Controls how a specific Analysis resource is parameterized in the returned
+// CloudFormation template.
+type AssetBundleExportJobAnalysisOverrideProperties struct {
+	ARN *string `json:"arn,omitempty"`
+}
+
+// Controls how a specific Dashboard resource is parameterized in the returned
+// CloudFormation template.
+type AssetBundleExportJobDashboardOverrideProperties struct {
+	ARN *string `json:"arn,omitempty"`
+}
+
+// Controls how a specific DataSet resource is parameterized in the returned
+// CloudFormation template.
+type AssetBundleExportJobDataSetOverrideProperties struct {
+	ARN *string `json:"arn,omitempty"`
+}
+
+// Controls how a specific DataSource resource is parameterized in the returned
+// CloudFormation template.
+type AssetBundleExportJobDataSourceOverrideProperties struct {
+	ARN *string `json:"arn,omitempty"`
+}
+
+// Describes an error that occurred during an Asset Bundle export job.
+type AssetBundleExportJobError struct {
+	ARN *string `json:"arn,omitempty"`
+}
+
+// Controls how a specific Folder resource is parameterized in the returned
+// CloudFormation template.
+type AssetBundleExportJobFolderOverrideProperties struct {
+	ARN *string `json:"arn,omitempty"`
+}
+
+// Controls how a specific RefreshSchedule resource is parameterized in the
+// returned CloudFormation template.
+type AssetBundleExportJobRefreshScheduleOverrideProperties struct {
+	ARN *string `json:"arn,omitempty"`
+}
+
+// An optional structure that configures resource ID overrides for the export
+// job.
+type AssetBundleExportJobResourceIDOverrideConfiguration struct {
+	PrefixForAllResources *bool `json:"prefixForAllResources,omitempty"`
+}
+
+// A summary of the export job that includes details of the job's configuration
+// and its current status.
+type AssetBundleExportJobSummary struct {
+	ARN                    *string      `json:"arn,omitempty"`
+	CreatedTime            *metav1.Time `json:"createdTime,omitempty"`
+	IncludeAllDependencies *bool        `json:"includeAllDependencies,omitempty"`
+	IncludePermissions     *bool        `json:"includePermissions,omitempty"`
+	IncludeTags            *bool        `json:"includeTags,omitempty"`
+}
+
+// Controls how a specific Theme resource is parameterized in the returned CloudFormation
+// template.
+type AssetBundleExportJobThemeOverrideProperties struct {
+	ARN *string `json:"arn,omitempty"`
+}
+
+// Controls how a specific VPCConnection resource is parameterized in the outputted
+// CloudFormation template.
+type AssetBundleExportJobVPCConnectionOverrideProperties struct {
+	ARN *string `json:"arn,omitempty"`
+}
+
+// The option to relax the validation that is required to export each asset.
+// When StrictModeForAllResource is set to false, validation is skipped for
+// specific UI errors.
+type AssetBundleExportJobValidationStrategy struct {
+	StrictModeForAllResources *bool `json:"strictModeForAllResources,omitempty"`
+}
+
+// Describes a warning that occurred during an Asset Bundle export job.
+type AssetBundleExportJobWarning struct {
+	ARN *string `json:"arn,omitempty"`
+}
+
+// The override parameters for a single analysis that is being imported.
+type AssetBundleImportJobAnalysisOverrideParameters struct {
+	AnalysisID *string `json:"analysisID,omitempty"`
+	Name       *string `json:"name,omitempty"`
+}
+
+// An object that contains a list of tags to be assigned to a list of analysis
+// IDs.
+type AssetBundleImportJobAnalysisOverrideTags struct {
+	Tags []*Tag `json:"tags,omitempty"`
+}
+
+// The override parameters for a single dashboard that is being imported.
+type AssetBundleImportJobDashboardOverrideParameters struct {
+	DashboardID *string `json:"dashboardID,omitempty"`
+	Name        *string `json:"name,omitempty"`
+}
+
+// An object that contains a list of tags to be assigned to a list of dashboard
+// IDs.
+type AssetBundleImportJobDashboardOverrideTags struct {
+	Tags []*Tag `json:"tags,omitempty"`
+}
+
+// The override parameters for a single dataset that is being imported.
+type AssetBundleImportJobDataSetOverrideParameters struct {
+	DataSetID *string `json:"dataSetID,omitempty"`
+	Name      *string `json:"name,omitempty"`
+}
+
+// An object that contains a list of tags to be assigned to a list of dataset
+// IDs.
+type AssetBundleImportJobDataSetOverrideTags struct {
+	Tags []*Tag `json:"tags,omitempty"`
+}
+
+// A username and password credential pair to use to import a data source resource.
+type AssetBundleImportJobDataSourceCredentialPair struct {
+	Password *string `json:"password,omitempty"`
+	Username *string `json:"username,omitempty"`
+}
+
+// The login credentials to use to import a data source resource.
+type AssetBundleImportJobDataSourceCredentials struct {
+	SecretARN *string `json:"secretARN,omitempty"`
+}
+
+// The override parameters for a single data source that is being imported.
+type AssetBundleImportJobDataSourceOverrideParameters struct {
+	DataSourceID *string `json:"dataSourceID,omitempty"`
+	// The parameters that Amazon QuickSight uses to connect to your underlying
+	// data source. This is a variant type structure. For this structure to be valid,
+	// only one of the attributes can be non-null.
+	DataSourceParameters *DataSourceParameters `json:"dataSourceParameters,omitempty"`
+	Name                 *string               `json:"name,omitempty"`
+	// Secure Socket Layer (SSL) properties that apply when Amazon QuickSight connects
+	// to your underlying data source.
+	SSLProperties *SSLProperties `json:"sslProperties,omitempty"`
+	// VPC connection properties.
+	VPCConnectionProperties *VPCConnectionProperties `json:"vpcConnectionProperties,omitempty"`
+}
+
+// An object that contains a list of tags to be assigned to a list of data source
+// IDs.
+type AssetBundleImportJobDataSourceOverrideTags struct {
+	Tags []*Tag `json:"tags,omitempty"`
+}
+
+// Describes an error that occurred within an Asset Bundle import execution.
+type AssetBundleImportJobError struct {
+	ARN *string `json:"arn,omitempty"`
+}
+
+// The override parameters for a single folder that is being imported.
+type AssetBundleImportJobFolderOverrideParameters struct {
+	FolderID        *string `json:"folderID,omitempty"`
+	Name            *string `json:"name,omitempty"`
+	ParentFolderARN *string `json:"parentFolderARN,omitempty"`
+}
+
+// An object that contains a list of tags to be assigned to a list of folder
+// IDs.
+type AssetBundleImportJobFolderOverrideTags struct {
+	Tags []*Tag `json:"tags,omitempty"`
+}
+
+// An optional parameter that overrides the validation strategy for all analyses
+// and dashboards before the resource is imported.
+type AssetBundleImportJobOverrideValidationStrategy struct {
+	StrictModeForAllResources *bool `json:"strictModeForAllResources,omitempty"`
+}
+
+// A list of overrides for a specific RefreshsSchedule resource that is present
+// in the asset bundle that is imported.
+type AssetBundleImportJobRefreshScheduleOverrideParameters struct {
+	DataSetID          *string      `json:"dataSetID,omitempty"`
+	ScheduleID         *string      `json:"scheduleID,omitempty"`
+	StartAfterDateTime *metav1.Time `json:"startAfterDateTime,omitempty"`
+}
+
+// An optional structure that configures resource ID overrides for the import
+// job.
+type AssetBundleImportJobResourceIDOverrideConfiguration struct {
+	PrefixForAllResources *string `json:"prefixForAllResources,omitempty"`
+}
+
+// A summary of the import job that includes details of the requested job's
+// configuration and its current status.
+type AssetBundleImportJobSummary struct {
+	ARN         *string      `json:"arn,omitempty"`
+	CreatedTime *metav1.Time `json:"createdTime,omitempty"`
+}
+
+// The override parameters for a single theme that is imported.
+type AssetBundleImportJobThemeOverrideParameters struct {
+	Name    *string `json:"name,omitempty"`
+	ThemeID *string `json:"themeID,omitempty"`
+}
+
+// An object that contains a list of tags to be assigned to a list of theme
+// IDs.
+type AssetBundleImportJobThemeOverrideTags struct {
+	Tags []*Tag `json:"tags,omitempty"`
+}
+
+// The override parameters for a single VPC connection that is imported.
+type AssetBundleImportJobVPCConnectionOverrideParameters struct {
+	Name    *string `json:"name,omitempty"`
+	RoleARN *string `json:"roleARN,omitempty"`
+}
+
+// An object that contains a list of tags to be assigned to a list of VPC connection
+// IDs.
+type AssetBundleImportJobVPCConnectionOverrideTags struct {
+	Tags []*Tag `json:"tags,omitempty"`
+}
+
+// Describes a warning that occurred during an Asset Bundle import job.
+type AssetBundleImportJobWarning struct {
+	ARN *string `json:"arn,omitempty"`
+}
+
+// A structure that contains the permissions for the resource that you want
+// to override in an asset bundle import job.
+type AssetBundleResourcePermissions struct {
+	Actions []*string `json:"actions,omitempty"`
+}
+
+// An array of analysis level configurations.
+type AssetOptions struct {
+	Timezone *string `json:"timezone,omitempty"`
+}
+
+// Parameters for Amazon Athena.
+type AthenaParameters struct {
+	RoleARN   *string `json:"roleARN,omitempty"`
+	WorkGroup *string `json:"workGroup,omitempty"`
+}
+
+// Aggregation for attributes.
+type AttributeAggregationFunction struct {
+	ValueForMultipleValues *string `json:"valueForMultipleValues,omitempty"`
+}
+
+// Parameters for Amazon Aurora.
+type AuroraParameters struct {
+	Database *string `json:"database,omitempty"`
+	Host     *string `json:"host,omitempty"`
+	Port     *int64  `json:"port,omitempty"`
+}
+
+// Parameters for Amazon Aurora PostgreSQL-Compatible Edition.
+type AuroraPostgreSQLParameters struct {
+	Database *string `json:"database,omitempty"`
+	Host     *string `json:"host,omitempty"`
+	Port     *int64  `json:"port,omitempty"`
+}
+
+// The label options for a chart axis. You must specify the field that the label
+// is targeted to.
+type AxisLabelOptions struct {
+	CustomLabel *string `json:"customLabel,omitempty"`
+}
+
+// The parameters that are required to connect to a Google BigQuery data source.
+type BigQueryParameters struct {
+	DataSetRegion *string `json:"dataSetRegion,omitempty"`
+	ProjectID     *string `json:"projectID,omitempty"`
+}
+
+// The bookmarks configuration of an embedded dashboard.
+type BookmarksConfigurations struct {
+	Enabled *bool `json:"enabled,omitempty"`
+}
+
+// The display options for tile borders for visuals.
+type BorderStyle struct {
+	Show *bool `json:"show,omitempty"`
+}
+
+// The details of the brand.
+type BrandDetail struct {
+	ARN             *string      `json:"arn,omitempty"`
+	CreatedTime     *metav1.Time `json:"createdTime,omitempty"`
+	LastUpdatedTime *metav1.Time `json:"lastUpdatedTime,omitempty"`
+}
+
+// A summary of the brand.
+type BrandSummary struct {
+	ARN             *string      `json:"arn,omitempty"`
+	CreatedTime     *metav1.Time `json:"createdTime,omitempty"`
+	LastUpdatedTime *metav1.Time `json:"lastUpdatedTime,omitempty"`
+}
+
+// The source controls that are used in a CascadingControlConfiguration.
+type CascadingControlSource struct {
+	SourceSheetControlID *string `json:"sourceSheetControlID,omitempty"`
+}
+
+// A structure describing the name, data type, and geographic role of the columns.
+type ColumnGroupColumnSchema struct {
+	Name *string `json:"name,omitempty"`
+}
+
+// The column group schema.
+type ColumnGroupSchema struct {
+	Name *string `json:"name,omitempty"`
+}
+
+// The column schema.
+type ColumnSchema struct {
+	DataType       *string `json:"dataType,omitempty"`
+	GeographicRole *string `json:"geographicRole,omitempty"`
+	Name           *string `json:"name,omitempty"`
+}
+
+// The tooltip item for the columns that are not part of a field well.
+type ColumnTooltipItem struct {
+	Label *string `json:"label,omitempty"`
+}
+
+// The definition for a CreateTopicReviewedAnswer.
+type CreateTopicReviewedAnswer struct {
+	DatasetARN *string `json:"datasetARN,omitempty"`
+}
+
+// The combination of user name and password that are used as credentials.
+type CredentialPair struct {
+	AlternateDataSourceParameters []*DataSourceParameters `json:"alternateDataSourceParameters,omitempty"`
+	Password                      *string                 `json:"password,omitempty"`
+	Username                      *string                 `json:"username,omitempty"`
+}
+
+// The custom permissions profile.
+type CustomPermissions struct {
+	ARN *string `json:"arn,omitempty"`
+}
+
+// A physical table type built from the results of the custom SQL query.
+type CustomSQL struct {
+	DataSourceARN *string `json:"dataSourceARN,omitempty"`
+}
+
+// Dashboard.
+type Dashboard struct {
+	ARN               *string      `json:"arn,omitempty"`
+	CreatedTime       *metav1.Time `json:"createdTime,omitempty"`
+	LastPublishedTime *metav1.Time `json:"lastPublishedTime,omitempty"`
+	LastUpdatedTime   *metav1.Time `json:"lastUpdatedTime,omitempty"`
+}
+
+// A filter that you apply when searching for dashboards.
+type DashboardSearchFilter struct {
+	Value *string `json:"value,omitempty"`
+}
+
+// Dashboard source template.
+type DashboardSourceTemplate struct {
+	ARN *string `json:"arn,omitempty"`
+}
+
+// Dashboard summary.
+type DashboardSummary struct {
+	ARN               *string      `json:"arn,omitempty"`
+	CreatedTime       *metav1.Time `json:"createdTime,omitempty"`
+	LastPublishedTime *metav1.Time `json:"lastPublishedTime,omitempty"`
+	LastUpdatedTime   *metav1.Time `json:"lastUpdatedTime,omitempty"`
+}
+
+// Dashboard version.
+type DashboardVersion struct {
+	ARN             *string      `json:"arn,omitempty"`
+	CreatedTime     *metav1.Time `json:"createdTime,omitempty"`
+	SourceEntityARN *string      `json:"sourceEntityARN,omitempty"`
+	Status          *string      `json:"status,omitempty"`
+	ThemeARN        *string      `json:"themeARN,omitempty"`
+}
+
+// Dashboard version summary.
+type DashboardVersionSummary struct {
+	ARN             *string      `json:"arn,omitempty"`
+	CreatedTime     *metav1.Time `json:"createdTime,omitempty"`
+	SourceEntityARN *string      `json:"sourceEntityARN,omitempty"`
+	Status          *string      `json:"status,omitempty"`
+}
+
+// Dataset.
+type DataSet struct {
+	ARN             *string      `json:"arn,omitempty"`
+	CreatedTime     *metav1.Time `json:"createdTime,omitempty"`
+	DataSetID       *string      `json:"dataSetID,omitempty"`
+	LastUpdatedTime *metav1.Time `json:"lastUpdatedTime,omitempty"`
+	Name            *string      `json:"name,omitempty"`
+}
+
+// Dataset configuration.
+type DataSetConfiguration struct {
+	Placeholder *string `json:"placeholder,omitempty"`
+}
+
+// A data set.
+type DataSetIdentifierDeclaration struct {
+	DataSetARN *string `json:"dataSetARN,omitempty"`
+}
+
+// Dataset reference.
+type DataSetReference struct {
+	DataSetARN *string `json:"dataSetARN,omitempty"`
+}
+
+// A filter that you apply when searching for datasets.
+type DataSetSearchFilter struct {
+	Value *string `json:"value,omitempty"`
+}
+
+// Dataset summary.
+type DataSetSummary struct {
+	ARN                                       *string      `json:"arn,omitempty"`
+	ColumnLevelPermissionRulesApplied         *bool        `json:"columnLevelPermissionRulesApplied,omitempty"`
+	CreatedTime                               *metav1.Time `json:"createdTime,omitempty"`
+	DataSetID                                 *string      `json:"dataSetID,omitempty"`
+	LastUpdatedTime                           *metav1.Time `json:"lastUpdatedTime,omitempty"`
+	Name                                      *string      `json:"name,omitempty"`
+	RowLevelPermissionTagConfigurationApplied *bool        `json:"rowLevelPermissionTagConfigurationApplied,omitempty"`
+}
+
+// The usage configuration to apply to child datasets that reference this dataset
+// as a source.
+type DataSetUsageConfiguration struct {
+	DisableUseAsDirectQuerySource *bool `json:"disableUseAsDirectQuerySource,omitempty"`
+	DisableUseAsImportedSource    *bool `json:"disableUseAsImportedSource,omitempty"`
+}
+
+// Data source credentials. This is a variant type structure. For this structure
+// to be valid, only one of the attributes can be non-null.
+type DataSourceCredentials struct {
+	CopySourceARN *string `json:"copySourceARN,omitempty"`
+	// The combination of user name and password that are used as credentials.
+	CredentialPair *CredentialPair `json:"credentialPair,omitempty"`
+	SecretARN      *string         `json:"secretARN,omitempty"`
+}
+
+// Error information for the data source creation or update.
+type DataSourceErrorInfo struct {
+	Message *string `json:"message,omitempty"`
+	Type    *string `json:"type_,omitempty"`
+}
+
+// The parameters that Amazon QuickSight uses to connect to your underlying
+// data source. This is a variant type structure. For this structure to be valid,
+// only one of the attributes can be non-null.
+type DataSourceParameters struct {
+	// The parameters for OpenSearch.
+	AmazonElasticsearchParameters *AmazonElasticsearchParameters `json:"amazonElasticsearchParameters,omitempty"`
+	// The parameters for OpenSearch.
+	AmazonOpenSearchParameters *AmazonOpenSearchParameters `json:"amazonOpenSearchParameters,omitempty"`
+	// Parameters for Amazon Athena.
+	AthenaParameters *AthenaParameters `json:"athenaParameters,omitempty"`
+	// Parameters for Amazon Aurora.
+	AuroraParameters *AuroraParameters `json:"auroraParameters,omitempty"`
+	// Parameters for Amazon Aurora PostgreSQL-Compatible Edition.
+	AuroraPostgreSQLParameters *AuroraPostgreSQLParameters `json:"auroraPostgreSQLParameters,omitempty"`
+	// The parameters for IoT Analytics.
+	AWSIOtAnalyticsParameters *AWSIOtAnalyticsParameters `json:"awsIOtAnalyticsParameters,omitempty"`
+	// The parameters that are required to connect to a Google BigQuery data source.
+	BigQueryParameters *BigQueryParameters `json:"bigQueryParameters,omitempty"`
+	// The parameters that are required to connect to a Databricks data source.
+	DatabricksParameters *DatabricksParameters `json:"databricksParameters,omitempty"`
+	// The required parameters for connecting to an Exasol data source.
+	ExasolParameters *ExasolParameters `json:"exasolParameters,omitempty"`
+	// The parameters for Jira.
+	JiraParameters *JiraParameters `json:"jiraParameters,omitempty"`
+	// The parameters for MariaDB.
+	MariaDBParameters *MariaDBParameters `json:"mariaDBParameters,omitempty"`
+	// The parameters for MySQL.
+	MySQLParameters *MySQLParameters `json:"mySQLParameters,omitempty"`
+	// The parameters for Oracle.
+	OracleParameters *OracleParameters `json:"oracleParameters,omitempty"`
+	// The parameters for PostgreSQL.
+	PostgreSQLParameters *PostgreSQLParameters `json:"postgreSQLParameters,omitempty"`
+	// The parameters for Presto.
+	PrestoParameters *PrestoParameters `json:"prestoParameters,omitempty"`
+	// The parameters for Amazon RDS.
+	RdsParameters *RdsParameters `json:"rdsParameters,omitempty"`
+	// The parameters for Amazon Redshift. The ClusterId field can be blank if Host
+	// and Port are both set. The Host and Port fields can be blank if the ClusterId
+	// field is set.
+	RedshiftParameters *RedshiftParameters `json:"redshiftParameters,omitempty"`
+	// The parameters for S3.
+	S3Parameters *S3Parameters `json:"s3Parameters,omitempty"`
+	// The parameters for ServiceNow.
+	ServiceNowParameters *ServiceNowParameters `json:"serviceNowParameters,omitempty"`
+	// The parameters for Snowflake.
+	SnowflakeParameters *SnowflakeParameters `json:"snowflakeParameters,omitempty"`
+	// The parameters for Spark.
+	SparkParameters *SparkParameters `json:"sparkParameters,omitempty"`
+	// The parameters for SQL Server.
+	SQLServerParameters *SQLServerParameters `json:"sqlServerParameters,omitempty"`
+	// The parameters that are required to connect to a Starburst data source.
+	StarburstParameters *StarburstParameters `json:"starburstParameters,omitempty"`
+	// The parameters for Teradata.
+	TeradataParameters *TeradataParameters `json:"teradataParameters,omitempty"`
+	// The parameters that are required to connect to a Trino data source.
+	TrinoParameters *TrinoParameters `json:"trinoParameters,omitempty"`
+	// The parameters for Twitter.
+	TwitterParameters *TwitterParameters `json:"twitterParameters,omitempty"`
+}
+
+// A filter that you apply when searching for data sources.
+type DataSourceSearchFilter struct {
+	Value *string `json:"value,omitempty"`
+}
+
+// A DataSourceSummary object that returns a summary of a data source.
+type DataSourceSummary struct {
+	ARN             *string      `json:"arn,omitempty"`
+	CreatedTime     *metav1.Time `json:"createdTime,omitempty"`
+	DataSourceID    *string      `json:"dataSourceID,omitempty"`
+	LastUpdatedTime *metav1.Time `json:"lastUpdatedTime,omitempty"`
+	Name            *string      `json:"name,omitempty"`
+	Type            *string      `json:"type_,omitempty"`
+}
+
+// The structure of a data source.
+type DataSource_SDK struct {
+	AlternateDataSourceParameters []*DataSourceParameters `json:"alternateDataSourceParameters,omitempty"`
+	ARN                           *string                 `json:"arn,omitempty"`
+	CreatedTime                   *metav1.Time            `json:"createdTime,omitempty"`
+	DataSourceID                  *string                 `json:"dataSourceID,omitempty"`
+	// The parameters that Amazon QuickSight uses to connect to your underlying
+	// data source. This is a variant type structure. For this structure to be valid,
+	// only one of the attributes can be non-null.
+	DataSourceParameters *DataSourceParameters `json:"dataSourceParameters,omitempty"`
+	// Error information for the data source creation or update.
+	ErrorInfo       *DataSourceErrorInfo `json:"errorInfo,omitempty"`
+	LastUpdatedTime *metav1.Time         `json:"lastUpdatedTime,omitempty"`
+	Name            *string              `json:"name,omitempty"`
+	SecretARN       *string              `json:"secretARN,omitempty"`
+	// Secure Socket Layer (SSL) properties that apply when Amazon QuickSight connects
+	// to your underlying data source.
+	SSLProperties *SSLProperties `json:"sslProperties,omitempty"`
+	Status        *string        `json:"status,omitempty"`
+	Type          *string        `json:"type_,omitempty"`
+	// VPC connection properties.
+	VPCConnectionProperties *VPCConnectionProperties `json:"vpcConnectionProperties,omitempty"`
+}
+
+// The parameters that are required to connect to a Databricks data source.
+type DatabricksParameters struct {
+	Host            *string `json:"host,omitempty"`
+	Port            *int64  `json:"port,omitempty"`
+	SQLEndpointPath *string `json:"sqlEndpointPath,omitempty"`
+}
+
+// A structure that represents a dataset.
+type DatasetMetadata struct {
+	DatasetARN *string `json:"datasetARN,omitempty"`
+}
+
+// The configuration of destination parameter values.
+//
+// This is a union type structure. For this structure to be valid, only one
+// of the attributes can be defined.
+type DestinationParameterValueConfiguration struct {
+	SourceParameterName *string `json:"sourceParameterName,omitempty"`
+}
+
+// A structure that represents additional options for display formatting.
+type DisplayFormatOptions struct {
+	UseBlankCellFormat *bool `json:"useBlankCellFormat,omitempty"`
+	UseGrouping        *bool `json:"useGrouping,omitempty"`
+}
+
+// Error information for the SPICE ingestion of a dataset.
+type ErrorInfo struct {
+	Message *string `json:"message,omitempty"`
+}
+
+// The required parameters for connecting to an Exasol data source.
+type ExasolParameters struct {
+	Host *string `json:"host,omitempty"`
+	Port *int64  `json:"port,omitempty"`
+}
+
+// An entry that appears when a KeyRegistration update to Amazon QuickSight
+// fails.
+type FailedKeyRegistrationEntry struct {
+	KeyARN      *string `json:"keyARN,omitempty"`
+	SenderFault *bool   `json:"senderFault,omitempty"`
+	StatusCode  *int64  `json:"statusCode,omitempty"`
+}
+
+// The tooltip item for the fields.
+type FieldTooltipItem struct {
+	Label *string `json:"label,omitempty"`
+}
+
+// A folder in Amazon QuickSight.
+type Folder struct {
+	ARN             *string      `json:"arn,omitempty"`
+	CreatedTime     *metav1.Time `json:"createdTime,omitempty"`
+	LastUpdatedTime *metav1.Time `json:"lastUpdatedTime,omitempty"`
+}
+
+// A filter to use to search an Amazon QuickSight folder.
+type FolderSearchFilter struct {
+	Value *string `json:"value,omitempty"`
+}
+
+// A summary of information about an existing Amazon QuickSight folder.
+type FolderSummary struct {
+	ARN             *string      `json:"arn,omitempty"`
+	CreatedTime     *metav1.Time `json:"createdTime,omitempty"`
+	LastUpdatedTime *metav1.Time `json:"lastUpdatedTime,omitempty"`
+}
+
+// Determines the font settings.
+type Font struct {
+	FontFamily *string `json:"fontFamily,omitempty"`
+}
+
+// Configures the display properties of the given text.
+type FontConfiguration struct {
+	FontFamily *string `json:"fontFamily,omitempty"`
+}
+
+// The forecast computation configuration.
+type ForecastComputation struct {
+	Name *string `json:"name,omitempty"`
+}
+
+// The categorical data color for a single category.
+type GeospatialCategoricalDataColor struct {
+	DataValue *string `json:"dataValue,omitempty"`
+}
+
+// The properties for a single geospatial layer.
+type GeospatialLayerItem struct {
+	Label   *string `json:"label,omitempty"`
+	LayerID *string `json:"layerID,omitempty"`
+}
+
+// The custom actions for a layer.
+type GeospatialLayerJoinDefinition struct {
+	ShapeKeyField *string `json:"shapeKeyField,omitempty"`
+}
+
+// A group in Amazon QuickSight consists of a set of users. You can use groups
+// to make it easier to manage access and security.
+type Group struct {
+	ARN         *string `json:"arn,omitempty"`
+	PrincipalID *string `json:"principalID,omitempty"`
+}
+
+// A member of an Amazon QuickSight group. Currently, group members must be
+// users. Groups can't be members of another group. .
+type GroupMember struct {
+	ARN *string `json:"arn,omitempty"`
+}
+
+// A GroupSearchFilter object that you want to apply to your search.
+type GroupSearchFilter struct {
+	Value *string `json:"value,omitempty"`
+}
+
+// The growth rate computation configuration.
+type GrowthRateComputation struct {
+	Name *string `json:"name,omitempty"`
+}
+
+// The display options for gutter spacing between tiles on a sheet.
+type GutterStyle struct {
+	Show *bool `json:"show,omitempty"`
+}
+
+// An Identity and Access Management (IAM) policy assignment.
+type IAMPolicyAssignment struct {
+	AssignmentID *string `json:"assignmentID,omitempty"`
+	AWSAccountID *string `json:"awsAccountID,omitempty"`
+	PolicyARN    *string `json:"policyARN,omitempty"`
+}
+
+// The parameters for an IAM Identity Center configuration.
+type IdentityCenterConfiguration struct {
+	EnableIdentityPropagation *bool `json:"enableIdentityPropagation,omitempty"`
+}
+
+// The logo image.
+type Image struct {
+	GeneratedImageURL *string `json:"generatedImageURL,omitempty"`
+}
+
+// The source of the image.
+type ImageSource struct {
+	PublicURL *string `json:"publicURL,omitempty"`
+	S3URI     *string `json:"s3URI,omitempty"`
+}
+
+// Information about the SPICE ingestion for a dataset.
+type Ingestion struct {
+	ARN         *string      `json:"arn,omitempty"`
+	CreatedTime *metav1.Time `json:"createdTime,omitempty"`
+}
+
+// The parameters for Jira.
+type JiraParameters struct {
+	SiteBaseURL *string `json:"siteBaseURL,omitempty"`
+}
+
+// Properties associated with the columns participating in a join.
+type JoinKeyProperties struct {
+	UniqueKey *bool `json:"uniqueKey,omitempty"`
+}
+
+// The share label options for the labels.
+type LabelOptions struct {
+	CustomLabel *string `json:"customLabel,omitempty"`
+}
+
+// A structure that contains the configuration of a shareable link to the dashboard.
+type LinkSharingConfiguration struct {
+	Permissions []*ResourcePermission `json:"permissions,omitempty"`
+}
+
+// Information about the source of a logical table. This is a variant type structure.
+// For this structure to be valid, only one of the attributes can be non-null.
+type LogicalTableSource struct {
+	DataSetARN *string `json:"dataSetARN,omitempty"`
+}
+
+// The logo configuration.
+type LogoConfiguration struct {
+	AltText *string `json:"altText,omitempty"`
+}
+
+// The lookback window setup of an incremental refresh configuration.
+type LookbackWindow struct {
+	ColumnName *string `json:"columnName,omitempty"`
+}
+
+// Amazon S3 manifest file location.
+type ManifestFileLocation struct {
+	Bucket *string `json:"bucket,omitempty"`
+	Key    *string `json:"key,omitempty"`
+}
+
+// The display options for margins around the outside edge of sheets.
+type MarginStyle struct {
+	Show *bool `json:"show,omitempty"`
+}
+
+// The parameters for MariaDB.
+type MariaDBParameters struct {
+	Database *string `json:"database,omitempty"`
+	Host     *string `json:"host,omitempty"`
+	Port     *int64  `json:"port,omitempty"`
+}
+
+// The maximum and minimum computation configuration.
+type MaximumMinimumComputation struct {
+	Name *string `json:"name,omitempty"`
+}
+
+// An object that consists of a member Amazon Resource Name (ARN) and a member
+// ID.
+type MemberIDARNPair struct {
+	MemberARN *string `json:"memberARN,omitempty"`
+}
+
+// The metric comparison computation configuration.
+type MetricComparisonComputation struct {
+	Name *string `json:"name,omitempty"`
+}
+
+// The parameters for MySQL.
+type MySQLParameters struct {
+	Database *string `json:"database,omitempty"`
+	Host     *string `json:"host,omitempty"`
+	Port     *int64  `json:"port,omitempty"`
+}
+
+// Errors that occur during namespace creation.
+type NamespaceError struct {
+	Message *string `json:"message,omitempty"`
+}
+
+// The error type.
+type NamespaceInfoV2 struct {
+	ARN                             *string `json:"arn,omitempty"`
+	CapacityRegion                  *string `json:"capacityRegion,omitempty"`
+	IAMIdentityCenterApplicationARN *string `json:"iamIdentityCenterApplicationARN,omitempty"`
+	IAMIdentityCenterInstanceARN    *string `json:"iamIdentityCenterInstanceARN,omitempty"`
+}
+
+// A NestedFilter filters data with a subset of data that is defined by the
+// nested inner filter.
+type NestedFilter struct {
+	IncludeInnerSet *bool `json:"includeInnerSet,omitempty"`
+}
+
+// The structure that contains information about a network interface.
+type NetworkInterface struct {
+	AvailabilityZone *string `json:"availabilityZone,omitempty"`
+	ErrorMessage     *string `json:"errorMessage,omitempty"`
+}
+
+// A NumericRangeFilter filters values that are within the value range.
+type NumericRangeFilter struct {
+	IncludeMaximum *bool `json:"includeMaximum,omitempty"`
+	IncludeMinimum *bool `json:"includeMinimum,omitempty"`
+}
+
+// An object that contains information needed to create a data source connection
+// that uses OAuth client credentials. This option is available for data source
+// connections that are made with Snowflake and Starburst.
+type OAuthParameters struct {
+	IdentityProviderResourceURI *string `json:"identityProviderResourceURI,omitempty"`
+	// VPC connection properties.
+	IdentityProviderVPCConnectionProperties *VPCConnectionProperties `json:"identityProviderVPCConnectionProperties,omitempty"`
+	OAuthScope                              *string                  `json:"oAuthScope,omitempty"`
+	TokenProviderURL                        *string                  `json:"tokenProviderURL,omitempty"`
+}
+
+// The parameters for Oracle.
+type OracleParameters struct {
+	Database *string `json:"database,omitempty"`
+	Host     *string `json:"host,omitempty"`
+	Port     *int64  `json:"port,omitempty"`
+}
+
+// The period over period computation configuration.
+type PeriodOverPeriodComputation struct {
+	Name *string `json:"name,omitempty"`
+}
+
+// The period to date computation configuration.
+type PeriodToDateComputation struct {
+	Name *string `json:"name,omitempty"`
+}
+
+// The target of a pivot table field collapse state.
+type PivotTableFieldCollapseStateTarget struct {
+	FieldID *string `json:"fieldID,omitempty"`
+}
+
+// The optional configuration of totals cells in a PivotTableVisual.
+type PivotTotalOptions struct {
+	CustomLabel *string `json:"customLabel,omitempty"`
+}
+
+// A flexible visualization type that allows engineers to create new custom
+// charts in Amazon QuickSight.
+type PluginVisual struct {
+	PluginARN *string `json:"pluginARN,omitempty"`
+}
+
+// The key value pair of the persisted property.
+type PluginVisualProperty struct {
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+// The parameters for PostgreSQL.
+type PostgreSQLParameters struct {
+	Database *string `json:"database,omitempty"`
+	Host     *string `json:"host,omitempty"`
+	Port     *int64  `json:"port,omitempty"`
+}
+
+// The parameters for Presto.
+type PrestoParameters struct {
+	Catalog *string `json:"catalog,omitempty"`
+	Host    *string `json:"host,omitempty"`
+	Port    *int64  `json:"port,omitempty"`
+}
+
+// Information about a queued dataset SPICE ingestion.
+type QueueInfo struct {
+	QueuedIngestion    *string `json:"queuedIngestion,omitempty"`
+	WaitingOnIngestion *string `json:"waitingOnIngestion,omitempty"`
+}
+
+// The parameters for Amazon RDS.
+type RdsParameters struct {
+	Database   *string `json:"database,omitempty"`
+	InstanceID *string `json:"instanceID,omitempty"`
+}
+
+// A structure that grants Amazon QuickSight access to your cluster and make
+// a call to the redshift:GetClusterCredentials API. For more information on
+// the redshift:GetClusterCredentials API, see GetClusterCredentials (https://docs.aws.amazon.com/redshift/latest/APIReference/API_GetClusterCredentials.html).
+type RedshiftIAMParameters struct {
+	AutoCreateDatabaseUser *bool     `json:"autoCreateDatabaseUser,omitempty"`
+	DatabaseGroups         []*string `json:"databaseGroups,omitempty"`
+	DatabaseUser           *string   `json:"databaseUser,omitempty"`
+	RoleARN                *string   `json:"roleARN,omitempty"`
+}
+
+// The parameters for Amazon Redshift. The ClusterId field can be blank if Host
+// and Port are both set. The Host and Port fields can be blank if the ClusterId
+// field is set.
+type RedshiftParameters struct {
+	ClusterID *string `json:"clusterID,omitempty"`
+	Database  *string `json:"database,omitempty"`
+	Host      *string `json:"host,omitempty"`
+	// A structure that grants Amazon QuickSight access to your cluster and make
+	// a call to the redshift:GetClusterCredentials API. For more information on
+	// the redshift:GetClusterCredentials API, see GetClusterCredentials (https://docs.aws.amazon.com/redshift/latest/APIReference/API_GetClusterCredentials.html).
+	IAMParameters *RedshiftIAMParameters `json:"iamParameters,omitempty"`
+	// The parameters for an IAM Identity Center configuration.
+	IdentityCenterConfiguration *IdentityCenterConfiguration `json:"identityCenterConfiguration,omitempty"`
+	Port                        *int64                       `json:"port,omitempty"`
+}
+
+// Specifies the interval between each scheduled refresh of a dataset.
+type RefreshFrequency struct {
+	TimeOfTheDay *string `json:"timeOfTheDay,omitempty"`
+	Timezone     *string `json:"timezone,omitempty"`
+}
+
+// The refresh schedule of a dataset.
+type RefreshSchedule struct {
+	ARN                *string      `json:"arn,omitempty"`
+	ScheduleID         *string      `json:"scheduleID,omitempty"`
+	StartAfterDateTime *metav1.Time `json:"startAfterDateTime,omitempty"`
+}
+
+// A customer managed key structure that contains the information listed below:
+//
+//   - KeyArn - The ARN of a KMS key that is registered to a Amazon QuickSight
+//     account for encryption and decryption use.
+//
+//   - DefaultKey - Indicates whether the current key is set as the default
+//     key for encryption and decryption use.
+type RegisteredCustomerManagedKey struct {
+	DefaultKey *bool   `json:"defaultKey,omitempty"`
+	KeyARN     *string `json:"keyARN,omitempty"`
+}
+
+// A physical table type for relational data sources.
+type RelationalTable struct {
+	DataSourceARN *string `json:"dataSourceARN,omitempty"`
+}
+
+// Permission for the resource.
+type ResourcePermission struct {
+	Actions   []*string `json:"actions,omitempty"`
+	Principal *string   `json:"principal,omitempty"`
+}
+
+// Information about a dataset that contains permissions for row-level security
+// (RLS). The permissions dataset maps fields to users or groups. For more information,
+// see Using Row-Level Security (RLS) to Restrict Access to a Dataset (https://docs.aws.amazon.com/quicksight/latest/user/restrict-access-to-a-data-set-using-row-level-security.html)
+// in the Amazon QuickSight User Guide.
+//
+// The option to deny permissions by setting PermissionPolicy to DENY_ACCESS
+// is not supported for new RLS datasets.
+type RowLevelPermissionDataSet struct {
+	ARN *string `json:"arn,omitempty"`
+}
+
+// A set of rules associated with a tag.
+type RowLevelPermissionTagRule struct {
+	ColumnName *string `json:"columnName,omitempty"`
+}
+
+// The parameters for S3.
+type S3Parameters struct {
+	// Amazon S3 manifest file location.
+	ManifestFileLocation *ManifestFileLocation `json:"manifestFileLocation,omitempty"`
+	RoleARN              *string               `json:"roleARN,omitempty"`
+}
+
+// A physical table type for an S3 data source.
+type S3Source struct {
+	DataSourceARN *string `json:"dataSourceARN,omitempty"`
+}
+
+// The parameters for SQL Server.
+type SQLServerParameters struct {
+	Database *string `json:"database,omitempty"`
+	Host     *string `json:"host,omitempty"`
+	Port     *int64  `json:"port,omitempty"`
+}
+
+// Secure Socket Layer (SSL) properties that apply when Amazon QuickSight connects
+// to your underlying data source.
+type SSLProperties struct {
+	DisableSSL *bool `json:"disableSSL,omitempty"`
+}
+
+// The parameters for ServiceNow.
+type ServiceNowParameters struct {
+	SiteBaseURL *string `json:"siteBaseURL,omitempty"`
+}
+
+// The shared view settings of an embedded dashboard.
+type SharedViewConfigurations struct {
+	Enabled *bool `json:"enabled,omitempty"`
+}
+
+// A SignupResponse object that contains a summary of a newly created account.
+type SignupResponse struct {
+	AccountName   *string `json:"accountName,omitempty"`
+	DirectoryType *string `json:"directoryType,omitempty"`
+	IAMUser       *bool   `json:"iamUser,omitempty"`
+	UserLoginName *string `json:"userLoginName,omitempty"`
+}
+
+// An object that contains information on the error that caused the snapshot
+// job to fail.
+type SnapshotJobErrorInfo struct {
+	ErrorMessage *string `json:"errorMessage,omitempty"`
+	ErrorType    *string `json:"errorType,omitempty"`
+}
+
+// Information on the error that caused the snapshot job to fail.
+type SnapshotJobResultErrorInfo struct {
+	ErrorMessage *string `json:"errorMessage,omitempty"`
+	ErrorType    *string `json:"errorType,omitempty"`
+}
+
+// The parameters for Snowflake.
+type SnowflakeParameters struct {
+	AuthenticationType        *string `json:"authenticationType,omitempty"`
+	Database                  *string `json:"database,omitempty"`
+	DatabaseAccessControlRole *string `json:"databaseAccessControlRole,omitempty"`
+	Host                      *string `json:"host,omitempty"`
+	// An object that contains information needed to create a data source connection
+	// that uses OAuth client credentials. This option is available for data source
+	// connections that are made with Snowflake and Starburst.
+	OAuthParameters *OAuthParameters `json:"oAuthParameters,omitempty"`
+	Warehouse       *string          `json:"warehouse,omitempty"`
+}
+
+// The parameters for Spark.
+type SparkParameters struct {
+	Host *string `json:"host,omitempty"`
+	Port *int64  `json:"port,omitempty"`
+}
+
+// The parameters that are required to connect to a Starburst data source.
+type StarburstParameters struct {
+	AuthenticationType        *string `json:"authenticationType,omitempty"`
+	Catalog                   *string `json:"catalog,omitempty"`
+	DatabaseAccessControlRole *string `json:"databaseAccessControlRole,omitempty"`
+	Host                      *string `json:"host,omitempty"`
+	// An object that contains information needed to create a data source connection
+	// that uses OAuth client credentials. This option is available for data source
+	// connections that are made with Snowflake and Starburst.
+	OAuthParameters *OAuthParameters `json:"oAuthParameters,omitempty"`
+	Port            *int64           `json:"port,omitempty"`
+	ProductType     *string          `json:"productType,omitempty"`
+}
+
+// The state perssitence configuration of an embedded dashboard.
+type StatePersistenceConfigurations struct {
+	Enabled *bool `json:"enabled,omitempty"`
+}
+
+// The structure that contains the Amazon S3 location to download the static
+// file from.
+type StaticFileS3SourceOptions struct {
+	BucketName *string `json:"bucketName,omitempty"`
+	ObjectKey  *string `json:"objectKey,omitempty"`
+	Region     *string `json:"region,omitempty"`
+}
+
+// The structure that contains the URL to download the static file from.
+type StaticFileURLSourceOptions struct {
+	URL *string `json:"url,omitempty"`
+}
+
+// The subtotal options.
+type SubtotalOptions struct {
+	CustomLabel *string `json:"customLabel,omitempty"`
+}
+
+// A success entry that occurs when a KeyRegistration job is successfully applied
+// to the Amazon QuickSight account.
+type SuccessfulKeyRegistrationEntry struct {
+	KeyARN     *string `json:"keyARN,omitempty"`
+	StatusCode *int64  `json:"statusCode,omitempty"`
+}
+
+// The custom text content (value, font configuration) for the table link content
+// configuration.
+type TableFieldCustomTextContent struct {
+	Value *string `json:"value,omitempty"`
+}
+
+// The key or keys of the key-value pairs for the resource tag or tags assigned
+// to the resource.
+type Tag struct {
+	Key   *string `json:"key,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+// A template object. A template is an entity in Amazon QuickSight that encapsulates
+// the metadata required to create an analysis and that you can use to create
+// a dashboard. A template adds a layer of abstraction by using placeholders
+// to replace the dataset associated with an analysis. You can use templates
+// to create dashboards by replacing dataset placeholders with datasets that
+// follow the same schema that was used to create the source analysis and template.
+//
+// You can share templates across Amazon Web Services accounts by allowing users
+// in other Amazon Web Services accounts to create a template or a dashboard
+// from an existing template.
+type Template struct {
+	ARN             *string      `json:"arn,omitempty"`
+	CreatedTime     *metav1.Time `json:"createdTime,omitempty"`
+	LastUpdatedTime *metav1.Time `json:"lastUpdatedTime,omitempty"`
+}
+
+// The template alias.
+type TemplateAlias struct {
+	ARN *string `json:"arn,omitempty"`
+}
+
+// The source analysis of the template.
+type TemplateSourceAnalysis struct {
+	ARN *string `json:"arn,omitempty"`
+}
+
+// The source template of the template.
+type TemplateSourceTemplate struct {
+	ARN *string `json:"arn,omitempty"`
+}
+
+// The template summary.
+type TemplateSummary struct {
+	ARN             *string      `json:"arn,omitempty"`
+	CreatedTime     *metav1.Time `json:"createdTime,omitempty"`
+	LastUpdatedTime *metav1.Time `json:"lastUpdatedTime,omitempty"`
+}
+
+// A version of a template.
+type TemplateVersion struct {
+	CreatedTime     *metav1.Time `json:"createdTime,omitempty"`
+	SourceEntityARN *string      `json:"sourceEntityARN,omitempty"`
+	Status          *string      `json:"status,omitempty"`
+	ThemeARN        *string      `json:"themeARN,omitempty"`
+}
+
+// The template version.
+type TemplateVersionSummary struct {
+	ARN         *string      `json:"arn,omitempty"`
+	CreatedTime *metav1.Time `json:"createdTime,omitempty"`
+	Status      *string      `json:"status,omitempty"`
+}
+
+// The parameters for Teradata.
+type TeradataParameters struct {
+	Database *string `json:"database,omitempty"`
+	Host     *string `json:"host,omitempty"`
+	Port     *int64  `json:"port,omitempty"`
+}
+
+// Summary information about a theme.
+type Theme struct {
+	ARN             *string      `json:"arn,omitempty"`
+	CreatedTime     *metav1.Time `json:"createdTime,omitempty"`
+	LastUpdatedTime *metav1.Time `json:"lastUpdatedTime,omitempty"`
+}
+
+// An alias for a theme.
+type ThemeAlias struct {
+	ARN *string `json:"arn,omitempty"`
+}
+
+// The theme summary.
+type ThemeSummary struct {
+	ARN             *string      `json:"arn,omitempty"`
+	CreatedTime     *metav1.Time `json:"createdTime,omitempty"`
+	LastUpdatedTime *metav1.Time `json:"lastUpdatedTime,omitempty"`
+}
+
+// A version of a theme.
+type ThemeVersion struct {
+	ARN         *string      `json:"arn,omitempty"`
+	CreatedTime *metav1.Time `json:"createdTime,omitempty"`
+	Status      *string      `json:"status,omitempty"`
+}
+
+// The theme version.
+type ThemeVersionSummary struct {
+	ARN         *string      `json:"arn,omitempty"`
+	CreatedTime *metav1.Time `json:"createdTime,omitempty"`
+	Status      *string      `json:"status,omitempty"`
+}
+
+// A TimeEqualityFilter filters values that are equal to a given value.
+type TimeEqualityFilter struct {
+	Value *metav1.Time `json:"value,omitempty"`
+}
+
+// The time range drill down filter.
+type TimeRangeDrillDownFilter struct {
+	RangeMaximum *metav1.Time `json:"rangeMaximum,omitempty"`
+	RangeMinimum *metav1.Time `json:"rangeMinimum,omitempty"`
+}
+
+// A TimeRangeFilter filters values that are between two specified values.
+type TimeRangeFilter struct {
+	IncludeMaximum *bool `json:"includeMaximum,omitempty"`
+	IncludeMinimum *bool `json:"includeMinimum,omitempty"`
+}
+
+// The value of a time range filter.
+//
+// This is a union type structure. For this structure to be valid, only one
+// of the attributes can be defined.
+type TimeRangeFilterValue struct {
+	StaticValue *metav1.Time `json:"staticValue,omitempty"`
+}
+
+// The top movers and bottom movers computation setup.
+type TopBottomMoversComputation struct {
+	Name *string `json:"name,omitempty"`
+}
+
+// The top ranked and bottom ranked computation configuration.
+type TopBottomRankedComputation struct {
+	Name *string `json:"name,omitempty"`
+}
+
+// A structure that represents a calculated field.
+type TopicCalculatedField struct {
+	IsIncludedInTopic      *bool `json:"isIncludedInTopic,omitempty"`
+	NeverAggregateInFilter *bool `json:"neverAggregateInFilter,omitempty"`
+}
+
+// A structure that represents a category filter.
+type TopicCategoryFilter struct {
+	Inverse *bool `json:"inverse,omitempty"`
+}
+
+// Represents a column in a dataset.
+type TopicColumn struct {
+	IsIncludedInTopic      *bool `json:"isIncludedInTopic,omitempty"`
+	NeverAggregateInFilter *bool `json:"neverAggregateInFilter,omitempty"`
+}
+
+// A filter used to restrict data based on a range of dates or times.
+type TopicDateRangeFilter struct {
+	Inclusive *bool `json:"inclusive,omitempty"`
+}
+
+// A structure that describes the details of a topic, such as its name, description,
+// and associated data sets.
+type TopicDetails struct {
+	Name *string `json:"name,omitempty"`
+}
+
+// The definition for a TopicIRFilterOption.
+type TopicIRFilterOption struct {
+	Inclusive *bool `json:"inclusive,omitempty"`
+	Inverse   *bool `json:"inverse,omitempty"`
+}
+
+// A filter that filters topics based on the value of a numeric field. The filter
+// includes only topics whose numeric field value falls within the specified
+// range.
+type TopicNumericRangeFilter struct {
+	Inclusive *bool `json:"inclusive,omitempty"`
+}
+
+// The details about the refresh of a topic.
+type TopicRefreshDetails struct {
+	RefreshARN *string `json:"refreshARN,omitempty"`
+	RefreshID  *string `json:"refreshID,omitempty"`
+}
+
+// A structure that represents a topic refresh schedule.
+type TopicRefreshSchedule struct {
+	BasedOnSpiceSchedule *bool        `json:"basedOnSpiceSchedule,omitempty"`
+	StartingAt           *metav1.Time `json:"startingAt,omitempty"`
+}
+
+// A summary of the refresh schedule details for a dataset.
+type TopicRefreshScheduleSummary struct {
+	DatasetARN *string `json:"datasetARN,omitempty"`
+}
+
+// The deinition for a TopicReviewedAnswer.
+type TopicReviewedAnswer struct {
+	ARN        *string `json:"arn,omitempty"`
+	DatasetARN *string `json:"datasetARN,omitempty"`
+}
+
+// The filter that is used to search for a topic.
+type TopicSearchFilter struct {
+	Value *string `json:"value,omitempty"`
+}
+
+// A topic summary.
+type TopicSummary struct {
+	ARN  *string `json:"arn,omitempty"`
+	Name *string `json:"name,omitempty"`
+}
+
+// The total aggregation computation configuration.
+type TotalAggregationComputation struct {
+	Name *string `json:"name,omitempty"`
+}
+
+// The total options for a table visual.
+type TotalOptions struct {
+	CustomLabel *string `json:"customLabel,omitempty"`
+}
+
+// The parameters that are required to connect to a Trino data source.
+type TrinoParameters struct {
+	Catalog *string `json:"catalog,omitempty"`
+	Host    *string `json:"host,omitempty"`
+	Port    *int64  `json:"port,omitempty"`
+}
+
+// The parameters for Twitter.
+type TwitterParameters struct {
+	MaxRows *int64  `json:"maxRows,omitempty"`
+	Query   *string `json:"query,omitempty"`
+}
+
+// The unique values computation configuration.
+type UniqueValuesComputation struct {
+	Name *string `json:"name,omitempty"`
+}
+
+// Information about the format for a source file or files.
+type UploadSettings struct {
+	ContainsHeader *bool  `json:"containsHeader,omitempty"`
+	StartFromRow   *int64 `json:"startFromRow,omitempty"`
+}
+
+// A registered user of Amazon QuickSight.
+type User struct {
+	Active                              *bool   `json:"active,omitempty"`
+	ARN                                 *string `json:"arn,omitempty"`
+	Email                               *string `json:"email,omitempty"`
+	ExternalLoginFederationProviderType *string `json:"externalLoginFederationProviderType,omitempty"`
+	ExternalLoginFederationProviderURL  *string `json:"externalLoginFederationProviderURL,omitempty"`
+	ExternalLoginID                     *string `json:"externalLoginID,omitempty"`
+	PrincipalID                         *string `json:"principalID,omitempty"`
+}
+
+// The structure of a VPC connection.
+type VPCConnection struct {
+	ARN             *string      `json:"arn,omitempty"`
+	CreatedTime     *metav1.Time `json:"createdTime,omitempty"`
+	LastUpdatedTime *metav1.Time `json:"lastUpdatedTime,omitempty"`
+	Name            *string      `json:"name,omitempty"`
+	RoleARN         *string      `json:"roleARN,omitempty"`
+	VPCID           *string      `json:"vpcID,omitempty"`
+}
+
+// VPC connection properties.
+type VPCConnectionProperties struct {
+	VPCConnectionARN *string `json:"vpcConnectionARN,omitempty"`
+}
+
+// The summary metadata that describes a VPC connection.
+type VPCConnectionSummary struct {
+	ARN             *string      `json:"arn,omitempty"`
+	CreatedTime     *metav1.Time `json:"createdTime,omitempty"`
+	LastUpdatedTime *metav1.Time `json:"lastUpdatedTime,omitempty"`
+	Name            *string      `json:"name,omitempty"`
+	RoleARN         *string      `json:"roleARN,omitempty"`
+	VPCID           *string      `json:"vpcID,omitempty"`
+}
+
+// The options that determine the presentation of a waterfall visual.
+type WaterfallChartOptions struct {
+	TotalBarLabel *string `json:"totalBarLabel,omitempty"`
+}
+
+// Provides the forecast to meet the target for a particular date.
+type WhatIfPointScenario struct {
+	Date *metav1.Time `json:"date,omitempty"`
+}
+
+// Provides the forecast to meet the target for a particular date range.
+type WhatIfRangeScenario struct {
+	EndDate   *metav1.Time `json:"endDate,omitempty"`
+	StartDate *metav1.Time `json:"startDate,omitempty"`
+}

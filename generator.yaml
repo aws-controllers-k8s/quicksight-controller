@@ -5,7 +5,6 @@ ignore:
       - Analysis
       - Dashboard
       - DataSet
-      - DataSource
       - Folder
       - FolderMembership
       - Group
@@ -24,3 +23,38 @@ ignore:
       - VPCConnection
       - Brand
       - ActionConnector
+
+resources:
+  DataSource:
+    fields:
+      DataSourceId:
+        is_primary_key: true
+      AwsAccountId:
+        is_immutable: true
+      Type:
+        is_immutable: true
+        go_tag: json:"type,omitempty"
+      CreatedTime:
+        is_read_only: true
+      LastUpdatedTime:
+        is_read_only: true
+      Status:
+        is_read_only: true
+    exceptions:
+      errors:
+        404:
+          code: ResourceNotFoundException
+      terminal_codes:
+        - AccessDeniedException
+        - ConflictException
+        - InvalidParameterValueException
+        - ResourceExistsException
+    sensitive_fields:
+      - Credentials
+    hooks:
+      sdk_create_post_set_output:
+        template_path: hooks/data_source/sdk_create_post_set_output.go.tpl
+      sdk_update_pre_build_request:
+        template_path: hooks/data_source/sdk_update_pre_build_request.go.tpl
+      sdk_read_one_post_set_output:
+        template_path: hooks/data_source/sdk_read_one_post_set_output.go.tpl

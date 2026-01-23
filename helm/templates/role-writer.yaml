@@ -16,6 +16,7 @@ rules:
 - apiGroups:
   - quicksight.services.k8s.aws
   resources:
+  - datasources
   verbs:
   - create
   - delete
@@ -27,6 +28,7 @@ rules:
 - apiGroups:
   - quicksight.services.k8s.aws
   resources:
+  - datasources
   verbs:
   - get
   - patch
