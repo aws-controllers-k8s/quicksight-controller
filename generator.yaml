@@ -1,0 +1,26 @@
+ignore:
+  resource_names:
+      - AccountCustomization
+      - AccountSubscription
+      - Analysis
+      - Dashboard
+      - DataSet
+      - DataSource
+      - Folder
+      - FolderMembership
+      - Group
+      - GroupMembership
+      - IAMPolicyAssignment
+      - Ingestion
+      - Namespace
+      - RefreshSchedule
+      - RoleMembership
+      - Template
+      - TemplateAlias
+      - Theme
+      - ThemeAlias
+      - Topic
+      - TopicRefreshSchedule
+      - VPCConnection
+      - Brand
+      - ActionConnector

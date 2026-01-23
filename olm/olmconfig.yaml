@@ -1,0 +1,42 @@
+# This configuration is a placeholder. Replace any values with relevant values for your
+# service controller project.
+---
+annotations:
+  capabilityLevel: Basic Install
+  shortDescription: AWS QuickSight controller is a service controller for managing QuickSight resources
+    in Kubernetes
+displayName: AWS Controllers for Kubernetes - Amazon QuickSight
+description: |-
+  Manage Amazon QuickSight resources in AWS from within your Kubernetes cluster.
+
+
+  **About Amazon QuickSight**
+
+
+  Amazon Quick Sight delivers AI-powered BI capabilities within Quick, transforming your scattered data into strategic insights for everyone— enabling you to make faster decisions and achieve better business outcomes.
+
+  Quick Sight provides unified intelligence across all your enterprise data sources, and bridges the critical "last-mile gap" between insights and action. With the built-in agents for research and automation in Quick, you can explore data conversationally, take actions directly from dashboards, and leverage 40+ application integrations—all while maintaining enterprise-grade security and governance. 
+
+
+  **About the AWS Controllers for Kubernetes**
+
+
+  This controller is a component of the [AWS Controller for Kubernetes](https://github.com/aws/aws-controllers-k8s)
+  project. This project is currently in **developer preview**.
+
+
+  **Pre-Installation Steps**
+
+
+  Please follow the following link: [Red Hat OpenShift](https://aws-controllers-k8s.github.io/community/docs/user-docs/openshift/)
+samples:
+- kind: ExampleCustomKind
+  spec: '{}'
+- kind: SecondExampleCustomKind
+  spec: '{}'
+maintainers:
+- name: "quicksight maintainer team"
+  email: "ack-maintainers@amazon.com"
+links:
+- name: Amazon QuickSight Developer Resources
+  url: https://docs.aws.amazon.com/quicksight/latest/developerguide/welcome.html
