@@ -242,7 +242,7 @@ class TestDataSource:
         assert team_tag is not None
         assert team_tag['Value'] == 'data-analytics'
     
-    def test_data_source_update_name(self, quicksight_client, data_source_s3):
+    def test_data_source_update_name_and_role(self, quicksight_client, data_source_s3):
         """Test updating DataSource display name."""
         (ref, cr, aws_account_id, data_source_id, bucket_name) = data_source_s3
         condition.assert_synced(ref)
@@ -267,3 +267,34 @@ class TestDataSource:
         assert ds is not None
         assert ds['Name'] == new_name
         assert ds['Name'] != initial_name
+
+        # Bootstrap a new iam role and update the S3 role arn
+        qs_test_role = QuickSightTestRole()
+
+
+        try:
+            qs_test_role.bootstrap()
+
+        except Exception as e:
+            pytest.skip(f"Failed to create QuickSight test role: {e}")
+
+        
+        # Update role ARN
+
+        cr = k8s.get_resource(ref)
+        cr["spec"]["dataSourceParameters"]["s3Parameters"]["roleARN"] = qs_test_role.role_arn
+        k8s.patch_custom_resource(ref, cr)
+
+        time.sleep(UPDATE_WAIT_AFTER_SECONDS)
+        k8s.wait_on_condition(ref, "ACK.ResourceSynced", "True", wait_periods=5)
+        # Verify role ARN was updated
+        ds = data_source.get_data_source(aws_account_id, data_source_id)
+        assert ds is not None
+        assert ds['DataSourceParameters']['S3Parameters']['RoleArn'] == qs_test_role.role_arn
+
+        # cleanup test role
+        qs_test_role.cleanup()
+
+
+
+
