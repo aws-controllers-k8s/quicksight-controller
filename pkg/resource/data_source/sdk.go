@@ -91,34 +91,619 @@ func (rm *resourceManager) sdkFind(
 	// the original Kubernetes object we passed to the function
 	ko := r.ko.DeepCopy()
 
-	if resp.RequestId != nil {
-		ko.Status.RequestID = resp.RequestId
-	} else {
-		ko.Status.RequestID = nil
+	if ko.Status.ACKResourceMetadata == nil {
+		ko.Status.ACKResourceMetadata = &ackv1alpha1.ResourceMetadata{}
 	}
-	statusCopy := int64(resp.Status)
-	ko.Status.Status = &statusCopy
+	if resp.DataSource.Arn != nil {
+		arn := ackv1alpha1.AWSResourceName(*resp.DataSource.Arn)
+		ko.Status.ACKResourceMetadata.ARN = &arn
+	}
+	if resp.DataSource.CreatedTime != nil {
+		ko.Status.CreatedTime = &metav1.Time{*resp.DataSource.CreatedTime}
+	} else {
+		ko.Status.CreatedTime = nil
+	}
+	if resp.DataSource.DataSourceId != nil {
+		ko.Spec.DataSourceID = resp.DataSource.DataSourceId
+	} else {
+		ko.Spec.DataSourceID = nil
+	}
+	if resp.DataSource.DataSourceParameters != nil {
+		f4 := &svcapitypes.DataSourceParameters{}
+		switch resp.DataSource.DataSourceParameters.(type) {
+		case *svcsdktypes.DataSourceParametersMemberAmazonElasticsearchParameters:
+			f4f0 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberAmazonElasticsearchParameters)
+			if f4f0 != nil {
+				f4f0f0 := &svcapitypes.AmazonElasticsearchParameters{}
+				if f4f0.Value.Domain != nil {
+					f4f0f0.Domain = f4f0.Value.Domain
+				}
+				f4.AmazonElasticsearchParameters = f4f0f0
+			}
+		case *svcsdktypes.DataSourceParametersMemberAmazonOpenSearchParameters:
+			f4f1 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberAmazonOpenSearchParameters)
+			if f4f1 != nil {
+				f4f1f1 := &svcapitypes.AmazonOpenSearchParameters{}
+				if f4f1.Value.Domain != nil {
+					f4f1f1.Domain = f4f1.Value.Domain
+				}
+				f4.AmazonOpenSearchParameters = f4f1f1
+			}
+		case *svcsdktypes.DataSourceParametersMemberAthenaParameters:
+			f4f2 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberAthenaParameters)
+			if f4f2 != nil {
+				f4f2f2 := &svcapitypes.AthenaParameters{}
+				if f4f2.Value.IdentityCenterConfiguration != nil {
+					f4f2f2f0 := &svcapitypes.IdentityCenterConfiguration{}
+					if f4f2.Value.IdentityCenterConfiguration.EnableIdentityPropagation != nil {
+						f4f2f2f0.EnableIdentityPropagation = f4f2.Value.IdentityCenterConfiguration.EnableIdentityPropagation
+					}
+					f4f2f2.IdentityCenterConfiguration = f4f2f2f0
+				}
+				if f4f2.Value.RoleArn != nil {
+					f4f2f2.RoleARN = f4f2.Value.RoleArn
+				}
+				if f4f2.Value.WorkGroup != nil {
+					f4f2f2.WorkGroup = f4f2.Value.WorkGroup
+				}
+				f4.AthenaParameters = f4f2f2
+			}
+		case *svcsdktypes.DataSourceParametersMemberAuroraParameters:
+			f4f3 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberAuroraParameters)
+			if f4f3 != nil {
+				f4f3f3 := &svcapitypes.AuroraParameters{}
+				if f4f3.Value.Database != nil {
+					f4f3f3.Database = f4f3.Value.Database
+				}
+				if f4f3.Value.Host != nil {
+					f4f3f3.Host = f4f3.Value.Host
+				}
+				if f4f3.Value.Port != nil {
+					portCopy := int64(*f4f3.Value.Port)
+					f4f3f3.Port = &portCopy
+				}
+				f4.AuroraParameters = f4f3f3
+			}
+		case *svcsdktypes.DataSourceParametersMemberAuroraPostgreSqlParameters:
+			f4f4 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberAuroraPostgreSqlParameters)
+			if f4f4 != nil {
+				f4f4f4 := &svcapitypes.AuroraPostgreSQLParameters{}
+				if f4f4.Value.Database != nil {
+					f4f4f4.Database = f4f4.Value.Database
+				}
+				if f4f4.Value.Host != nil {
+					f4f4f4.Host = f4f4.Value.Host
+				}
+				if f4f4.Value.Port != nil {
+					portCopy := int64(*f4f4.Value.Port)
+					f4f4f4.Port = &portCopy
+				}
+				f4.AuroraPostgreSQLParameters = f4f4f4
+			}
+		case *svcsdktypes.DataSourceParametersMemberAwsIotAnalyticsParameters:
+			f4f5 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberAwsIotAnalyticsParameters)
+			if f4f5 != nil {
+				f4f5f5 := &svcapitypes.AWSIOtAnalyticsParameters{}
+				if f4f5.Value.DataSetName != nil {
+					f4f5f5.DataSetName = f4f5.Value.DataSetName
+				}
+				f4.AWSIOtAnalyticsParameters = f4f5f5
+			}
+		case *svcsdktypes.DataSourceParametersMemberBigQueryParameters:
+			f4f6 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberBigQueryParameters)
+			if f4f6 != nil {
+				f4f6f6 := &svcapitypes.BigQueryParameters{}
+				if f4f6.Value.DataSetRegion != nil {
+					f4f6f6.DataSetRegion = f4f6.Value.DataSetRegion
+				}
+				if f4f6.Value.ProjectId != nil {
+					f4f6f6.ProjectID = f4f6.Value.ProjectId
+				}
+				f4.BigQueryParameters = f4f6f6
+			}
+		case *svcsdktypes.DataSourceParametersMemberConfluenceParameters:
+			f4f7 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberConfluenceParameters)
+			if f4f7 != nil {
+				f4f7f7 := &svcapitypes.ConfluenceParameters{}
+				if f4f7.Value.ConfluenceUrl != nil {
+					f4f7f7.ConfluenceURL = f4f7.Value.ConfluenceUrl
+				}
+				f4.ConfluenceParameters = f4f7f7
+			}
+		case *svcsdktypes.DataSourceParametersMemberCustomConnectionParameters:
+			f4f8 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberCustomConnectionParameters)
+			if f4f8 != nil {
+				f4f8f8 := &svcapitypes.CustomConnectionParameters{}
+				if f4f8.Value.ConnectionType != nil {
+					f4f8f8.ConnectionType = f4f8.Value.ConnectionType
+				}
+				f4.CustomConnectionParameters = f4f8f8
+			}
+		case *svcsdktypes.DataSourceParametersMemberDatabricksParameters:
+			f4f9 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberDatabricksParameters)
+			if f4f9 != nil {
+				f4f9f9 := &svcapitypes.DatabricksParameters{}
+				if f4f9.Value.Host != nil {
+					f4f9f9.Host = f4f9.Value.Host
+				}
+				if f4f9.Value.Port != nil {
+					portCopy := int64(*f4f9.Value.Port)
+					f4f9f9.Port = &portCopy
+				}
+				if f4f9.Value.SqlEndpointPath != nil {
+					f4f9f9.SQLEndpointPath = f4f9.Value.SqlEndpointPath
+				}
+				f4.DatabricksParameters = f4f9f9
+			}
+		case *svcsdktypes.DataSourceParametersMemberExasolParameters:
+			f4f10 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberExasolParameters)
+			if f4f10 != nil {
+				f4f10f10 := &svcapitypes.ExasolParameters{}
+				if f4f10.Value.Host != nil {
+					f4f10f10.Host = f4f10.Value.Host
+				}
+				if f4f10.Value.Port != nil {
+					portCopy := int64(*f4f10.Value.Port)
+					f4f10f10.Port = &portCopy
+				}
+				f4.ExasolParameters = f4f10f10
+			}
+		case *svcsdktypes.DataSourceParametersMemberImpalaParameters:
+			f4f11 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberImpalaParameters)
+			if f4f11 != nil {
+				f4f11f11 := &svcapitypes.ImpalaParameters{}
+				if f4f11.Value.Database != nil {
+					f4f11f11.Database = f4f11.Value.Database
+				}
+				if f4f11.Value.Host != nil {
+					f4f11f11.Host = f4f11.Value.Host
+				}
+				if f4f11.Value.Port != nil {
+					portCopy := int64(*f4f11.Value.Port)
+					f4f11f11.Port = &portCopy
+				}
+				if f4f11.Value.SqlEndpointPath != nil {
+					f4f11f11.SQLEndpointPath = f4f11.Value.SqlEndpointPath
+				}
+				f4.ImpalaParameters = f4f11f11
+			}
+		case *svcsdktypes.DataSourceParametersMemberJiraParameters:
+			f4f12 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberJiraParameters)
+			if f4f12 != nil {
+				f4f12f12 := &svcapitypes.JiraParameters{}
+				if f4f12.Value.SiteBaseUrl != nil {
+					f4f12f12.SiteBaseURL = f4f12.Value.SiteBaseUrl
+				}
+				f4.JiraParameters = f4f12f12
+			}
+		case *svcsdktypes.DataSourceParametersMemberMariaDbParameters:
+			f4f13 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberMariaDbParameters)
+			if f4f13 != nil {
+				f4f13f13 := &svcapitypes.MariaDBParameters{}
+				if f4f13.Value.Database != nil {
+					f4f13f13.Database = f4f13.Value.Database
+				}
+				if f4f13.Value.Host != nil {
+					f4f13f13.Host = f4f13.Value.Host
+				}
+				if f4f13.Value.Port != nil {
+					portCopy := int64(*f4f13.Value.Port)
+					f4f13f13.Port = &portCopy
+				}
+				f4.MariaDBParameters = f4f13f13
+			}
+		case *svcsdktypes.DataSourceParametersMemberMySqlParameters:
+			f4f14 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberMySqlParameters)
+			if f4f14 != nil {
+				f4f14f14 := &svcapitypes.MySQLParameters{}
+				if f4f14.Value.Database != nil {
+					f4f14f14.Database = f4f14.Value.Database
+				}
+				if f4f14.Value.Host != nil {
+					f4f14f14.Host = f4f14.Value.Host
+				}
+				if f4f14.Value.Port != nil {
+					portCopy := int64(*f4f14.Value.Port)
+					f4f14f14.Port = &portCopy
+				}
+				f4.MySQLParameters = f4f14f14
+			}
+		case *svcsdktypes.DataSourceParametersMemberOracleParameters:
+			f4f15 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberOracleParameters)
+			if f4f15 != nil {
+				f4f15f15 := &svcapitypes.OracleParameters{}
+				if f4f15.Value.Database != nil {
+					f4f15f15.Database = f4f15.Value.Database
+				}
+				if f4f15.Value.Host != nil {
+					f4f15f15.Host = f4f15.Value.Host
+				}
+				if f4f15.Value.Port != nil {
+					portCopy := int64(*f4f15.Value.Port)
+					f4f15f15.Port = &portCopy
+				}
+				f4f15f15.UseServiceName = &f4f15.Value.UseServiceName
+				f4.OracleParameters = f4f15f15
+			}
+		case *svcsdktypes.DataSourceParametersMemberPostgreSqlParameters:
+			f4f16 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberPostgreSqlParameters)
+			if f4f16 != nil {
+				f4f16f16 := &svcapitypes.PostgreSQLParameters{}
+				if f4f16.Value.Database != nil {
+					f4f16f16.Database = f4f16.Value.Database
+				}
+				if f4f16.Value.Host != nil {
+					f4f16f16.Host = f4f16.Value.Host
+				}
+				if f4f16.Value.Port != nil {
+					portCopy := int64(*f4f16.Value.Port)
+					f4f16f16.Port = &portCopy
+				}
+				f4.PostgreSQLParameters = f4f16f16
+			}
+		case *svcsdktypes.DataSourceParametersMemberPrestoParameters:
+			f4f17 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberPrestoParameters)
+			if f4f17 != nil {
+				f4f17f17 := &svcapitypes.PrestoParameters{}
+				if f4f17.Value.Catalog != nil {
+					f4f17f17.Catalog = f4f17.Value.Catalog
+				}
+				if f4f17.Value.Host != nil {
+					f4f17f17.Host = f4f17.Value.Host
+				}
+				if f4f17.Value.Port != nil {
+					portCopy := int64(*f4f17.Value.Port)
+					f4f17f17.Port = &portCopy
+				}
+				f4.PrestoParameters = f4f17f17
+			}
+		case *svcsdktypes.DataSourceParametersMemberQBusinessParameters:
+			f4f18 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberQBusinessParameters)
+			if f4f18 != nil {
+				f4f18f18 := &svcapitypes.QBusinessParameters{}
+				if f4f18.Value.ApplicationArn != nil {
+					f4f18f18.ApplicationARN = f4f18.Value.ApplicationArn
+				}
+				f4.QBusinessParameters = f4f18f18
+			}
+		case *svcsdktypes.DataSourceParametersMemberRdsParameters:
+			f4f19 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberRdsParameters)
+			if f4f19 != nil {
+				f4f19f19 := &svcapitypes.RdsParameters{}
+				if f4f19.Value.Database != nil {
+					f4f19f19.Database = f4f19.Value.Database
+				}
+				if f4f19.Value.InstanceId != nil {
+					f4f19f19.InstanceID = f4f19.Value.InstanceId
+				}
+				f4.RdsParameters = f4f19f19
+			}
+		case *svcsdktypes.DataSourceParametersMemberRedshiftParameters:
+			f4f20 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberRedshiftParameters)
+			if f4f20 != nil {
+				f4f20f20 := &svcapitypes.RedshiftParameters{}
+				if f4f20.Value.ClusterId != nil {
+					f4f20f20.ClusterID = f4f20.Value.ClusterId
+				}
+				if f4f20.Value.Database != nil {
+					f4f20f20.Database = f4f20.Value.Database
+				}
+				if f4f20.Value.Host != nil {
+					f4f20f20.Host = f4f20.Value.Host
+				}
+				if f4f20.Value.IAMParameters != nil {
+					f4f20f20f3 := &svcapitypes.RedshiftIAMParameters{}
+					f4f20f20f3.AutoCreateDatabaseUser = &f4f20.Value.IAMParameters.AutoCreateDatabaseUser
+					if f4f20.Value.IAMParameters.DatabaseGroups != nil {
+						f4f20f20f3.DatabaseGroups = aws.StringSlice(f4f20.Value.IAMParameters.DatabaseGroups)
+					}
+					if f4f20.Value.IAMParameters.DatabaseUser != nil {
+						f4f20f20f3.DatabaseUser = f4f20.Value.IAMParameters.DatabaseUser
+					}
+					if f4f20.Value.IAMParameters.RoleArn != nil {
+						f4f20f20f3.RoleARN = f4f20.Value.IAMParameters.RoleArn
+					}
+					f4f20f20.IAMParameters = f4f20f20f3
+				}
+				if f4f20.Value.IdentityCenterConfiguration != nil {
+					f4f20f20f4 := &svcapitypes.IdentityCenterConfiguration{}
+					if f4f20.Value.IdentityCenterConfiguration.EnableIdentityPropagation != nil {
+						f4f20f20f4.EnableIdentityPropagation = f4f20.Value.IdentityCenterConfiguration.EnableIdentityPropagation
+					}
+					f4f20f20.IdentityCenterConfiguration = f4f20f20f4
+				}
+				portCopy := int64(f4f20.Value.Port)
+				f4f20f20.Port = &portCopy
+				f4.RedshiftParameters = f4f20f20
+			}
+		case *svcsdktypes.DataSourceParametersMemberS3KnowledgeBaseParameters:
+			f4f21 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberS3KnowledgeBaseParameters)
+			if f4f21 != nil {
+				f4f21f21 := &svcapitypes.S3KnowledgeBaseParameters{}
+				if f4f21.Value.BucketUrl != nil {
+					f4f21f21.BucketURL = f4f21.Value.BucketUrl
+				}
+				if f4f21.Value.MetadataFilesLocation != nil {
+					f4f21f21.MetadataFilesLocation = f4f21.Value.MetadataFilesLocation
+				}
+				if f4f21.Value.RoleArn != nil {
+					f4f21f21.RoleARN = f4f21.Value.RoleArn
+				}
+				f4.S3KnowledgeBaseParameters = f4f21f21
+			}
+		case *svcsdktypes.DataSourceParametersMemberS3Parameters:
+			f4f22 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberS3Parameters)
+			if f4f22 != nil {
+				f4f22f22 := &svcapitypes.S3Parameters{}
+				if f4f22.Value.ManifestFileLocation != nil {
+					f4f22f22f0 := &svcapitypes.ManifestFileLocation{}
+					if f4f22.Value.ManifestFileLocation.Bucket != nil {
+						f4f22f22f0.Bucket = f4f22.Value.ManifestFileLocation.Bucket
+					}
+					if f4f22.Value.ManifestFileLocation.Key != nil {
+						f4f22f22f0.Key = f4f22.Value.ManifestFileLocation.Key
+					}
+					f4f22f22.ManifestFileLocation = f4f22f22f0
+				}
+				if f4f22.Value.RoleArn != nil {
+					f4f22f22.RoleARN = f4f22.Value.RoleArn
+				}
+				f4.S3Parameters = f4f22f22
+			}
+		case *svcsdktypes.DataSourceParametersMemberServiceNowParameters:
+			f4f23 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberServiceNowParameters)
+			if f4f23 != nil {
+				f4f23f23 := &svcapitypes.ServiceNowParameters{}
+				if f4f23.Value.SiteBaseUrl != nil {
+					f4f23f23.SiteBaseURL = f4f23.Value.SiteBaseUrl
+				}
+				f4.ServiceNowParameters = f4f23f23
+			}
+		case *svcsdktypes.DataSourceParametersMemberSnowflakeParameters:
+			f4f24 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberSnowflakeParameters)
+			if f4f24 != nil {
+				f4f24f24 := &svcapitypes.SnowflakeParameters{}
+				if f4f24.Value.AuthenticationType != "" {
+					f4f24f24.AuthenticationType = aws.String(string(f4f24.Value.AuthenticationType))
+				}
+				if f4f24.Value.Database != nil {
+					f4f24f24.Database = f4f24.Value.Database
+				}
+				if f4f24.Value.DatabaseAccessControlRole != nil {
+					f4f24f24.DatabaseAccessControlRole = f4f24.Value.DatabaseAccessControlRole
+				}
+				if f4f24.Value.Host != nil {
+					f4f24f24.Host = f4f24.Value.Host
+				}
+				if f4f24.Value.OAuthParameters != nil {
+					f4f24f24f4 := &svcapitypes.OAuthParameters{}
+					if f4f24.Value.OAuthParameters.IdentityProviderResourceUri != nil {
+						f4f24f24f4.IdentityProviderResourceURI = f4f24.Value.OAuthParameters.IdentityProviderResourceUri
+					}
+					if f4f24.Value.OAuthParameters.IdentityProviderVpcConnectionProperties != nil {
+						f4f24f24f4f1 := &svcapitypes.VPCConnectionProperties{}
+						if f4f24.Value.OAuthParameters.IdentityProviderVpcConnectionProperties.VpcConnectionArn != nil {
+							f4f24f24f4f1.VPCConnectionARN = f4f24.Value.OAuthParameters.IdentityProviderVpcConnectionProperties.VpcConnectionArn
+						}
+						f4f24f24f4.IdentityProviderVPCConnectionProperties = f4f24f24f4f1
+					}
+					if f4f24.Value.OAuthParameters.OAuthScope != nil {
+						f4f24f24f4.OAuthScope = f4f24.Value.OAuthParameters.OAuthScope
+					}
+					if f4f24.Value.OAuthParameters.TokenProviderUrl != nil {
+						f4f24f24f4.TokenProviderURL = f4f24.Value.OAuthParameters.TokenProviderUrl
+					}
+					f4f24f24.OAuthParameters = f4f24f24f4
+				}
+				if f4f24.Value.Warehouse != nil {
+					f4f24f24.Warehouse = f4f24.Value.Warehouse
+				}
+				f4.SnowflakeParameters = f4f24f24
+			}
+		case *svcsdktypes.DataSourceParametersMemberSparkParameters:
+			f4f25 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberSparkParameters)
+			if f4f25 != nil {
+				f4f25f25 := &svcapitypes.SparkParameters{}
+				if f4f25.Value.Host != nil {
+					f4f25f25.Host = f4f25.Value.Host
+				}
+				if f4f25.Value.Port != nil {
+					portCopy := int64(*f4f25.Value.Port)
+					f4f25f25.Port = &portCopy
+				}
+				f4.SparkParameters = f4f25f25
+			}
+		case *svcsdktypes.DataSourceParametersMemberSqlServerParameters:
+			f4f26 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberSqlServerParameters)
+			if f4f26 != nil {
+				f4f26f26 := &svcapitypes.SQLServerParameters{}
+				if f4f26.Value.Database != nil {
+					f4f26f26.Database = f4f26.Value.Database
+				}
+				if f4f26.Value.Host != nil {
+					f4f26f26.Host = f4f26.Value.Host
+				}
+				if f4f26.Value.Port != nil {
+					portCopy := int64(*f4f26.Value.Port)
+					f4f26f26.Port = &portCopy
+				}
+				f4.SQLServerParameters = f4f26f26
+			}
+		case *svcsdktypes.DataSourceParametersMemberStarburstParameters:
+			f4f27 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberStarburstParameters)
+			if f4f27 != nil {
+				f4f27f27 := &svcapitypes.StarburstParameters{}
+				if f4f27.Value.AuthenticationType != "" {
+					f4f27f27.AuthenticationType = aws.String(string(f4f27.Value.AuthenticationType))
+				}
+				if f4f27.Value.Catalog != nil {
+					f4f27f27.Catalog = f4f27.Value.Catalog
+				}
+				if f4f27.Value.DatabaseAccessControlRole != nil {
+					f4f27f27.DatabaseAccessControlRole = f4f27.Value.DatabaseAccessControlRole
+				}
+				if f4f27.Value.Host != nil {
+					f4f27f27.Host = f4f27.Value.Host
+				}
+				if f4f27.Value.OAuthParameters != nil {
+					f4f27f27f4 := &svcapitypes.OAuthParameters{}
+					if f4f27.Value.OAuthParameters.IdentityProviderResourceUri != nil {
+						f4f27f27f4.IdentityProviderResourceURI = f4f27.Value.OAuthParameters.IdentityProviderResourceUri
+					}
+					if f4f27.Value.OAuthParameters.IdentityProviderVpcConnectionProperties != nil {
+						f4f27f27f4f1 := &svcapitypes.VPCConnectionProperties{}
+						if f4f27.Value.OAuthParameters.IdentityProviderVpcConnectionProperties.VpcConnectionArn != nil {
+							f4f27f27f4f1.VPCConnectionARN = f4f27.Value.OAuthParameters.IdentityProviderVpcConnectionProperties.VpcConnectionArn
+						}
+						f4f27f27f4.IdentityProviderVPCConnectionProperties = f4f27f27f4f1
+					}
+					if f4f27.Value.OAuthParameters.OAuthScope != nil {
+						f4f27f27f4.OAuthScope = f4f27.Value.OAuthParameters.OAuthScope
+					}
+					if f4f27.Value.OAuthParameters.TokenProviderUrl != nil {
+						f4f27f27f4.TokenProviderURL = f4f27.Value.OAuthParameters.TokenProviderUrl
+					}
+					f4f27f27.OAuthParameters = f4f27f27f4
+				}
+				if f4f27.Value.Port != nil {
+					portCopy := int64(*f4f27.Value.Port)
+					f4f27f27.Port = &portCopy
+				}
+				if f4f27.Value.ProductType != "" {
+					f4f27f27.ProductType = aws.String(string(f4f27.Value.ProductType))
+				}
+				f4.StarburstParameters = f4f27f27
+			}
+		case *svcsdktypes.DataSourceParametersMemberTeradataParameters:
+			f4f28 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberTeradataParameters)
+			if f4f28 != nil {
+				f4f28f28 := &svcapitypes.TeradataParameters{}
+				if f4f28.Value.Database != nil {
+					f4f28f28.Database = f4f28.Value.Database
+				}
+				if f4f28.Value.Host != nil {
+					f4f28f28.Host = f4f28.Value.Host
+				}
+				if f4f28.Value.Port != nil {
+					portCopy := int64(*f4f28.Value.Port)
+					f4f28f28.Port = &portCopy
+				}
+				f4.TeradataParameters = f4f28f28
+			}
+		case *svcsdktypes.DataSourceParametersMemberTrinoParameters:
+			f4f29 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberTrinoParameters)
+			if f4f29 != nil {
+				f4f29f29 := &svcapitypes.TrinoParameters{}
+				if f4f29.Value.Catalog != nil {
+					f4f29f29.Catalog = f4f29.Value.Catalog
+				}
+				if f4f29.Value.Host != nil {
+					f4f29f29.Host = f4f29.Value.Host
+				}
+				if f4f29.Value.Port != nil {
+					portCopy := int64(*f4f29.Value.Port)
+					f4f29f29.Port = &portCopy
+				}
+				f4.TrinoParameters = f4f29f29
+			}
+		case *svcsdktypes.DataSourceParametersMemberTwitterParameters:
+			f4f30 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberTwitterParameters)
+			if f4f30 != nil {
+				f4f30f30 := &svcapitypes.TwitterParameters{}
+				if f4f30.Value.MaxRows != nil {
+					maxRowsCopy := int64(*f4f30.Value.MaxRows)
+					f4f30f30.MaxRows = &maxRowsCopy
+				}
+				if f4f30.Value.Query != nil {
+					f4f30f30.Query = f4f30.Value.Query
+				}
+				f4.TwitterParameters = f4f30f30
+			}
+		case *svcsdktypes.DataSourceParametersMemberWebCrawlerParameters:
+			f4f31 := resp.DataSource.DataSourceParameters.(*svcsdktypes.DataSourceParametersMemberWebCrawlerParameters)
+			if f4f31 != nil {
+				f4f31f31 := &svcapitypes.WebCrawlerParameters{}
+				if f4f31.Value.LoginPageUrl != nil {
+					f4f31f31.LoginPageURL = f4f31.Value.LoginPageUrl
+				}
+				if f4f31.Value.PasswordButtonXpath != nil {
+					f4f31f31.PasswordButtonXpath = f4f31.Value.PasswordButtonXpath
+				}
+				if f4f31.Value.PasswordFieldXpath != nil {
+					f4f31f31.PasswordFieldXpath = f4f31.Value.PasswordFieldXpath
+				}
+				if f4f31.Value.UsernameButtonXpath != nil {
+					f4f31f31.UsernameButtonXpath = f4f31.Value.UsernameButtonXpath
+				}
+				if f4f31.Value.UsernameFieldXpath != nil {
+					f4f31f31.UsernameFieldXpath = f4f31.Value.UsernameFieldXpath
+				}
+				if f4f31.Value.WebCrawlerAuthType != "" {
+					f4f31f31.WebCrawlerAuthType = aws.String(string(f4f31.Value.WebCrawlerAuthType))
+				}
+				if f4f31.Value.WebProxyHostName != nil {
+					f4f31f31.WebProxyHostName = f4f31.Value.WebProxyHostName
+				}
+				webProxyPortNumberCopy := int64(f4f31.Value.WebProxyPortNumber)
+				f4f31f31.WebProxyPortNumber = &webProxyPortNumberCopy
+				f4.WebCrawlerParameters = f4f31f31
+			}
+		}
+		ko.Spec.DataSourceParameters = f4
+	} else {
+		ko.Spec.DataSourceParameters = nil
+	}
+	if resp.DataSource.ErrorInfo != nil {
+		f5 := &svcapitypes.DataSourceErrorInfo{}
+		if resp.DataSource.ErrorInfo.Message != nil {
+			f5.Message = resp.DataSource.ErrorInfo.Message
+		}
+		if resp.DataSource.ErrorInfo.Type != "" {
+			f5.Type = aws.String(string(resp.DataSource.ErrorInfo.Type))
+		}
+		ko.Status.ErrorInfo = f5
+	} else {
+		ko.Status.ErrorInfo = nil
+	}
+	if resp.DataSource.LastUpdatedTime != nil {
+		ko.Status.LastUpdatedTime = &metav1.Time{*resp.DataSource.LastUpdatedTime}
+	} else {
+		ko.Status.LastUpdatedTime = nil
+	}
+	if resp.DataSource.Name != nil {
+		ko.Spec.Name = resp.DataSource.Name
+	} else {
+		ko.Spec.Name = nil
+	}
+	if resp.DataSource.SslProperties != nil {
+		f9 := &svcapitypes.SSLProperties{}
+		f9.DisableSSL = &resp.DataSource.SslProperties.DisableSsl
+		ko.Spec.SSLProperties = f9
+	} else {
+		ko.Spec.SSLProperties = nil
+	}
+	if resp.DataSource.Status != "" {
+		ko.Status.Status = aws.String(string(resp.DataSource.Status))
+	} else {
+		ko.Status.Status = nil
+	}
+	if resp.DataSource.Type != "" {
+		ko.Spec.Type = aws.String(string(resp.DataSource.Type))
+	} else {
+		ko.Spec.Type = nil
+	}
+	if resp.DataSource.VpcConnectionProperties != nil {
+		f12 := &svcapitypes.VPCConnectionProperties{}
+		if resp.DataSource.VpcConnectionProperties.VpcConnectionArn != nil {
+			f12.VPCConnectionARN = resp.DataSource.VpcConnectionProperties.VpcConnectionArn
+		}
+		ko.Spec.VPCConnectionProperties = f12
+	} else {
+		ko.Spec.VPCConnectionProperties = nil
+	}
 
 	rm.setStatusDefaults(ko)
 
-	if resp.DataSource != nil {
-		if resp.DataSource.Name != nil {
-			ko.Spec.Name = resp.DataSource.Name
-		}
-		if resp.DataSource.Type != "" {
-			typeStr := string(resp.DataSource.Type)
-			ko.Spec.Type = &typeStr
-		}
-		if resp.DataSource.DataSourceParameters != nil {
-			ko.Spec.DataSourceParameters = rm.setResourceDataSourceParameters(resp.DataSource.DataSourceParameters)
-		}
-		if resp.DataSource.SslProperties != nil {
-			ko.Spec.SSLProperties = rm.setResourceSSLProperties(resp.DataSource.SslProperties)
-		}
-		if resp.DataSource.VpcConnectionProperties != nil {
-			ko.Spec.VPCConnectionProperties = rm.setResourceVPCConnectionProperties(resp.DataSource.VpcConnectionProperties)
-		}
-	}
 	if ko.Status.ACKResourceMetadata != nil && ko.Status.ACKResourceMetadata.ARN != nil {
 		ko.Spec.Tags = rm.getTags(ctx, *ko.Status.ACKResourceMetadata.ARN)
 	}
@@ -993,18 +1578,31 @@ func (rm *resourceManager) newCreateRequestPayload(
 			}
 			f1.CredentialPair = f1f1
 		}
+		if r.ko.Spec.Credentials.KeyPairCredentials != nil {
+			f1f2 := &svcsdktypes.KeyPairCredentials{}
+			if r.ko.Spec.Credentials.KeyPairCredentials.KeyPairUsername != nil {
+				f1f2.KeyPairUsername = r.ko.Spec.Credentials.KeyPairCredentials.KeyPairUsername
+			}
+			if r.ko.Spec.Credentials.KeyPairCredentials.PrivateKey != nil {
+				f1f2.PrivateKey = r.ko.Spec.Credentials.KeyPairCredentials.PrivateKey
+			}
+			if r.ko.Spec.Credentials.KeyPairCredentials.PrivateKeyPassphrase != nil {
+				f1f2.PrivateKeyPassphrase = r.ko.Spec.Credentials.KeyPairCredentials.PrivateKeyPassphrase
+			}
+			f1.KeyPairCredentials = f1f2
+		}
 		if r.ko.Spec.Credentials.SecretARN != nil {
 			f1.SecretArn = r.ko.Spec.Credentials.SecretARN
 		}
 		if r.ko.Spec.Credentials.WebProxyCredentials != nil {
-			f1f3 := &svcsdktypes.WebProxyCredentials{}
+			f1f4 := &svcsdktypes.WebProxyCredentials{}
 			if r.ko.Spec.Credentials.WebProxyCredentials.WebProxyPassword != nil {
-				f1f3.WebProxyPassword = r.ko.Spec.Credentials.WebProxyCredentials.WebProxyPassword
+				f1f4.WebProxyPassword = r.ko.Spec.Credentials.WebProxyCredentials.WebProxyPassword
 			}
 			if r.ko.Spec.Credentials.WebProxyCredentials.WebProxyUsername != nil {
-				f1f3.WebProxyUsername = r.ko.Spec.Credentials.WebProxyCredentials.WebProxyUsername
+				f1f4.WebProxyUsername = r.ko.Spec.Credentials.WebProxyCredentials.WebProxyUsername
 			}
-			f1.WebProxyCredentials = f1f3
+			f1.WebProxyCredentials = f1f4
 		}
 		res.Credentials = f1
 	}
@@ -2664,18 +3262,31 @@ func (rm *resourceManager) newUpdateRequestPayload(
 			}
 			f1.CredentialPair = f1f1
 		}
+		if r.ko.Spec.Credentials.KeyPairCredentials != nil {
+			f1f2 := &svcsdktypes.KeyPairCredentials{}
+			if r.ko.Spec.Credentials.KeyPairCredentials.KeyPairUsername != nil {
+				f1f2.KeyPairUsername = r.ko.Spec.Credentials.KeyPairCredentials.KeyPairUsername
+			}
+			if r.ko.Spec.Credentials.KeyPairCredentials.PrivateKey != nil {
+				f1f2.PrivateKey = r.ko.Spec.Credentials.KeyPairCredentials.PrivateKey
+			}
+			if r.ko.Spec.Credentials.KeyPairCredentials.PrivateKeyPassphrase != nil {
+				f1f2.PrivateKeyPassphrase = r.ko.Spec.Credentials.KeyPairCredentials.PrivateKeyPassphrase
+			}
+			f1.KeyPairCredentials = f1f2
+		}
 		if r.ko.Spec.Credentials.SecretARN != nil {
 			f1.SecretArn = r.ko.Spec.Credentials.SecretARN
 		}
 		if r.ko.Spec.Credentials.WebProxyCredentials != nil {
-			f1f3 := &svcsdktypes.WebProxyCredentials{}
+			f1f4 := &svcsdktypes.WebProxyCredentials{}
 			if r.ko.Spec.Credentials.WebProxyCredentials.WebProxyPassword != nil {
-				f1f3.WebProxyPassword = r.ko.Spec.Credentials.WebProxyCredentials.WebProxyPassword
+				f1f4.WebProxyPassword = r.ko.Spec.Credentials.WebProxyCredentials.WebProxyPassword
 			}
 			if r.ko.Spec.Credentials.WebProxyCredentials.WebProxyUsername != nil {
-				f1f3.WebProxyUsername = r.ko.Spec.Credentials.WebProxyCredentials.WebProxyUsername
+				f1f4.WebProxyUsername = r.ko.Spec.Credentials.WebProxyCredentials.WebProxyUsername
 			}
-			f1.WebProxyCredentials = f1f3
+			f1.WebProxyCredentials = f1f4
 		}
 		res.Credentials = f1
 	}

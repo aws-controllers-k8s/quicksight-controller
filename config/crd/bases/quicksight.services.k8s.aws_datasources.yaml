@@ -484,6 +484,18 @@ spec:
                       username:
                         type: string
                     type: object
+                  keyPairCredentials:
+                    description: |-
+                      The combination of username, private key and passphrase that are used as
+                      credentials.
+                    properties:
+                      keyPairUsername:
+                        type: string
+                      privateKey:
+                        type: string
+                      privateKeyPassphrase:
+                        type: string
+                    type: object
                   secretARN:
                     type: string
                   webProxyCredentials:
@@ -1049,16 +1061,32 @@ spec:
                   - type
                   type: object
                 type: array
+              createdTime:
+                description: The time that this data source was created.
+                format: date-time
+                type: string
               creationStatus:
                 description: The status of creating the data source.
+                type: string
+              errorInfo:
+                description: Error information from the last update or the creation
+                  of the data source.
+                properties:
+                  message:
+                    type: string
+                  type_:
+                    type: string
+                type: object
+              lastUpdatedTime:
+                description: The last time that this data source was updated.
+                format: date-time
                 type: string
               requestID:
                 description: The Amazon Web Services request ID for this operation.
                 type: string
               status:
                 description: The HTTP status of the request.
-                format: int64
-                type: integer
+                type: string
             type: object
         type: object
     served: true

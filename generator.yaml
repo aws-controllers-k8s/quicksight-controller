@@ -24,6 +24,10 @@ ignore:
       - Brand
       - ActionConnector
 
+operations:
+  DescribeDataSource:
+    output_wrapper_field_path: DataSource
+
 resources:
   DataSource:
     fields:
@@ -36,10 +40,24 @@ resources:
         go_tag: json:"type,omitempty"
       CreatedTime:
         is_read_only: true
+        from:
+          operation: DescribeDataSource
+          path: DataSource.CreatedTime
       LastUpdatedTime:
         is_read_only: true
+        from:
+          operation: DescribeDataSource
+          path: DataSource.LastUpdatedTime
+      ErrorInfo:
+        is_read_only: true
+        from:
+          operation: DescribeDataSource
+          path: DataSource.ErrorInfo
       Status:
         is_read_only: true
+        from:
+          operation: DescribeDataSource
+          path: DataSource.Status
     exceptions:
       errors:
         404:

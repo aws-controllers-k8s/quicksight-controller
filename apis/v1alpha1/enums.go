@@ -587,6 +587,13 @@ const (
 	DashboardBehavior_ENABLED  DashboardBehavior = "ENABLED"
 )
 
+type DashboardCustomizationStatus string
+
+const (
+	DashboardCustomizationStatus_DISABLED DashboardCustomizationStatus = "DISABLED"
+	DashboardCustomizationStatus_ENABLED  DashboardCustomizationStatus = "ENABLED"
+)
+
 type DashboardErrorType string
 
 const (
@@ -829,6 +836,40 @@ const (
 	DayOfWeek_THURSDAY  DayOfWeek = "THURSDAY"
 	DayOfWeek_TUESDAY   DayOfWeek = "TUESDAY"
 	DayOfWeek_WEDNESDAY DayOfWeek = "WEDNESDAY"
+)
+
+type DecalPatternType string
+
+const (
+	DecalPatternType_CHECKERBOARD_LARGE       DecalPatternType = "CHECKERBOARD_LARGE"
+	DecalPatternType_CHECKERBOARD_MEDIUM      DecalPatternType = "CHECKERBOARD_MEDIUM"
+	DecalPatternType_CHECKERBOARD_SMALL       DecalPatternType = "CHECKERBOARD_SMALL"
+	DecalPatternType_CIRCLE_LARGE             DecalPatternType = "CIRCLE_LARGE"
+	DecalPatternType_CIRCLE_MEDIUM            DecalPatternType = "CIRCLE_MEDIUM"
+	DecalPatternType_CIRCLE_SMALL             DecalPatternType = "CIRCLE_SMALL"
+	DecalPatternType_DIAGONAL_LARGE           DecalPatternType = "DIAGONAL_LARGE"
+	DecalPatternType_DIAGONAL_MEDIUM          DecalPatternType = "DIAGONAL_MEDIUM"
+	DecalPatternType_DIAGONAL_OPPOSITE_LARGE  DecalPatternType = "DIAGONAL_OPPOSITE_LARGE"
+	DecalPatternType_DIAGONAL_OPPOSITE_MEDIUM DecalPatternType = "DIAGONAL_OPPOSITE_MEDIUM"
+	DecalPatternType_DIAGONAL_OPPOSITE_SMALL  DecalPatternType = "DIAGONAL_OPPOSITE_SMALL"
+	DecalPatternType_DIAGONAL_SMALL           DecalPatternType = "DIAGONAL_SMALL"
+	DecalPatternType_DIAMOND_GRID_LARGE       DecalPatternType = "DIAMOND_GRID_LARGE"
+	DecalPatternType_DIAMOND_GRID_MEDIUM      DecalPatternType = "DIAMOND_GRID_MEDIUM"
+	DecalPatternType_DIAMOND_GRID_SMALL       DecalPatternType = "DIAMOND_GRID_SMALL"
+	DecalPatternType_DIAMOND_LARGE            DecalPatternType = "DIAMOND_LARGE"
+	DecalPatternType_DIAMOND_MEDIUM           DecalPatternType = "DIAMOND_MEDIUM"
+	DecalPatternType_DIAMOND_SMALL            DecalPatternType = "DIAMOND_SMALL"
+	DecalPatternType_SOLID                    DecalPatternType = "SOLID"
+	DecalPatternType_TRIANGLE_LARGE           DecalPatternType = "TRIANGLE_LARGE"
+	DecalPatternType_TRIANGLE_MEDIUM          DecalPatternType = "TRIANGLE_MEDIUM"
+	DecalPatternType_TRIANGLE_SMALL           DecalPatternType = "TRIANGLE_SMALL"
+)
+
+type DecalStyleType string
+
+const (
+	DecalStyleType_Auto   DecalStyleType = "Auto"
+	DecalStyleType_Manual DecalStyleType = "Manual"
 )
 
 type DefaultAggregation string
@@ -1880,6 +1921,31 @@ type SelectedTooltipType string
 const (
 	SelectedTooltipType_BASIC    SelectedTooltipType = "BASIC"
 	SelectedTooltipType_DETAILED SelectedTooltipType = "DETAILED"
+)
+
+type SelfUpgradeAdminAction string
+
+const (
+	SelfUpgradeAdminAction_APPROVE SelfUpgradeAdminAction = "APPROVE"
+	SelfUpgradeAdminAction_DENY    SelfUpgradeAdminAction = "DENY"
+	SelfUpgradeAdminAction_VERIFY  SelfUpgradeAdminAction = "VERIFY"
+)
+
+type SelfUpgradeRequestStatus string
+
+const (
+	SelfUpgradeRequestStatus_APPROVED      SelfUpgradeRequestStatus = "APPROVED"
+	SelfUpgradeRequestStatus_DENIED        SelfUpgradeRequestStatus = "DENIED"
+	SelfUpgradeRequestStatus_PENDING       SelfUpgradeRequestStatus = "PENDING"
+	SelfUpgradeRequestStatus_UPDATE_FAILED SelfUpgradeRequestStatus = "UPDATE_FAILED"
+	SelfUpgradeRequestStatus_VERIFY_FAILED SelfUpgradeRequestStatus = "VERIFY_FAILED"
+)
+
+type SelfUpgradeStatus string
+
+const (
+	SelfUpgradeStatus_ADMIN_APPROVAL SelfUpgradeStatus = "ADMIN_APPROVAL"
+	SelfUpgradeStatus_AUTO_APPROVAL  SelfUpgradeStatus = "AUTO_APPROVAL"
 )
 
 type ServiceType string

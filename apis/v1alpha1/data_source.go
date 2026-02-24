@@ -79,15 +79,24 @@ type DataSourceStatus struct {
 	// resource
 	// +kubebuilder:validation:Optional
 	Conditions []*ackv1alpha1.Condition `json:"conditions"`
+	// The time that this data source was created.
+	// +kubebuilder:validation:Optional
+	CreatedTime *metav1.Time `json:"createdTime,omitempty"`
 	// The status of creating the data source.
 	// +kubebuilder:validation:Optional
 	CreationStatus *string `json:"creationStatus,omitempty"`
+	// Error information from the last update or the creation of the data source.
+	// +kubebuilder:validation:Optional
+	ErrorInfo *DataSourceErrorInfo `json:"errorInfo,omitempty"`
+	// The last time that this data source was updated.
+	// +kubebuilder:validation:Optional
+	LastUpdatedTime *metav1.Time `json:"lastUpdatedTime,omitempty"`
 	// The Amazon Web Services request ID for this operation.
 	// +kubebuilder:validation:Optional
 	RequestID *string `json:"requestID,omitempty"`
 	// The HTTP status of the request.
 	// +kubebuilder:validation:Optional
-	Status *int64 `json:"status,omitempty"`
+	Status *string `json:"status,omitempty"`
 }
 
 // DataSource is the Schema for the DataSources API

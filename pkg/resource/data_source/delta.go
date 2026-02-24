@@ -84,6 +84,31 @@ func newResourceDelta(
 				}
 			}
 		}
+		if ackcompare.HasNilDifference(a.ko.Spec.Credentials.KeyPairCredentials, b.ko.Spec.Credentials.KeyPairCredentials) {
+			delta.Add("Spec.Credentials.KeyPairCredentials", a.ko.Spec.Credentials.KeyPairCredentials, b.ko.Spec.Credentials.KeyPairCredentials)
+		} else if a.ko.Spec.Credentials.KeyPairCredentials != nil && b.ko.Spec.Credentials.KeyPairCredentials != nil {
+			if ackcompare.HasNilDifference(a.ko.Spec.Credentials.KeyPairCredentials.KeyPairUsername, b.ko.Spec.Credentials.KeyPairCredentials.KeyPairUsername) {
+				delta.Add("Spec.Credentials.KeyPairCredentials.KeyPairUsername", a.ko.Spec.Credentials.KeyPairCredentials.KeyPairUsername, b.ko.Spec.Credentials.KeyPairCredentials.KeyPairUsername)
+			} else if a.ko.Spec.Credentials.KeyPairCredentials.KeyPairUsername != nil && b.ko.Spec.Credentials.KeyPairCredentials.KeyPairUsername != nil {
+				if *a.ko.Spec.Credentials.KeyPairCredentials.KeyPairUsername != *b.ko.Spec.Credentials.KeyPairCredentials.KeyPairUsername {
+					delta.Add("Spec.Credentials.KeyPairCredentials.KeyPairUsername", a.ko.Spec.Credentials.KeyPairCredentials.KeyPairUsername, b.ko.Spec.Credentials.KeyPairCredentials.KeyPairUsername)
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.Credentials.KeyPairCredentials.PrivateKey, b.ko.Spec.Credentials.KeyPairCredentials.PrivateKey) {
+				delta.Add("Spec.Credentials.KeyPairCredentials.PrivateKey", a.ko.Spec.Credentials.KeyPairCredentials.PrivateKey, b.ko.Spec.Credentials.KeyPairCredentials.PrivateKey)
+			} else if a.ko.Spec.Credentials.KeyPairCredentials.PrivateKey != nil && b.ko.Spec.Credentials.KeyPairCredentials.PrivateKey != nil {
+				if *a.ko.Spec.Credentials.KeyPairCredentials.PrivateKey != *b.ko.Spec.Credentials.KeyPairCredentials.PrivateKey {
+					delta.Add("Spec.Credentials.KeyPairCredentials.PrivateKey", a.ko.Spec.Credentials.KeyPairCredentials.PrivateKey, b.ko.Spec.Credentials.KeyPairCredentials.PrivateKey)
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.Credentials.KeyPairCredentials.PrivateKeyPassphrase, b.ko.Spec.Credentials.KeyPairCredentials.PrivateKeyPassphrase) {
+				delta.Add("Spec.Credentials.KeyPairCredentials.PrivateKeyPassphrase", a.ko.Spec.Credentials.KeyPairCredentials.PrivateKeyPassphrase, b.ko.Spec.Credentials.KeyPairCredentials.PrivateKeyPassphrase)
+			} else if a.ko.Spec.Credentials.KeyPairCredentials.PrivateKeyPassphrase != nil && b.ko.Spec.Credentials.KeyPairCredentials.PrivateKeyPassphrase != nil {
+				if *a.ko.Spec.Credentials.KeyPairCredentials.PrivateKeyPassphrase != *b.ko.Spec.Credentials.KeyPairCredentials.PrivateKeyPassphrase {
+					delta.Add("Spec.Credentials.KeyPairCredentials.PrivateKeyPassphrase", a.ko.Spec.Credentials.KeyPairCredentials.PrivateKeyPassphrase, b.ko.Spec.Credentials.KeyPairCredentials.PrivateKeyPassphrase)
+				}
+			}
+		}
 		if ackcompare.HasNilDifference(a.ko.Spec.Credentials.SecretARN, b.ko.Spec.Credentials.SecretARN) {
 			delta.Add("Spec.Credentials.SecretARN", a.ko.Spec.Credentials.SecretARN, b.ko.Spec.Credentials.SecretARN)
 		} else if a.ko.Spec.Credentials.SecretARN != nil && b.ko.Spec.Credentials.SecretARN != nil {

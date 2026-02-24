@@ -614,7 +614,10 @@ type DataSourceCredentials struct {
 	CopySourceARN *string `json:"copySourceARN,omitempty"`
 	// The combination of user name and password that are used as credentials.
 	CredentialPair *CredentialPair `json:"credentialPair,omitempty"`
-	SecretARN      *string         `json:"secretARN,omitempty"`
+	// The combination of username, private key and passphrase that are used as
+	// credentials.
+	KeyPairCredentials *KeyPairCredentials `json:"keyPairCredentials,omitempty"`
+	SecretARN          *string             `json:"secretARN,omitempty"`
 	// The credentials for authenticating with a web proxy server.
 	WebProxyCredentials *WebProxyCredentials `json:"webProxyCredentials,omitempty"`
 }
@@ -949,6 +952,14 @@ type JoinKeyProperties struct {
 	UniqueKey *bool `json:"uniqueKey,omitempty"`
 }
 
+// The combination of username, private key and passphrase that are used as
+// credentials.
+type KeyPairCredentials struct {
+	KeyPairUsername      *string `json:"keyPairUsername,omitempty"`
+	PrivateKey           *string `json:"privateKey,omitempty"`
+	PrivateKeyPassphrase *string `json:"privateKeyPassphrase,omitempty"`
+}
+
 // The share label options for the labels.
 type LabelOptions struct {
 	CustomLabel *string `json:"customLabel,omitempty"`
@@ -1278,6 +1289,13 @@ type SearchFlowsFilter struct {
 	Value *string `json:"value,omitempty"`
 }
 
+// Details of a self-upgrade request.
+type SelfUpgradeRequestDetail struct {
+	LastUpdateFailureReason *string `json:"lastUpdateFailureReason,omitempty"`
+	RequestNote             *string `json:"requestNote,omitempty"`
+	UpgradeRequestID        *string `json:"upgradeRequestID,omitempty"`
+}
+
 // The parameters for ServiceNow.
 type ServiceNowParameters struct {
 	SiteBaseURL *string `json:"siteBaseURL,omitempty"`
@@ -1303,6 +1321,8 @@ type SignupResponse struct {
 
 // An object that contains information on the error that caused the snapshot
 // job to fail.
+//
+// For more information, see DescribeDashboardSnapshotJobResult API (https://docs.aws.amazon.com/quicksight/latest/APIReference/API_DescribeDashboardSnapshotJobResult.html).
 type SnapshotJobErrorInfo struct {
 	ErrorMessage *string `json:"errorMessage,omitempty"`
 	ErrorType    *string `json:"errorType,omitempty"`
@@ -1647,6 +1667,11 @@ type User struct {
 	ExternalLoginFederationProviderURL  *string `json:"externalLoginFederationProviderURL,omitempty"`
 	ExternalLoginID                     *string `json:"externalLoginID,omitempty"`
 	PrincipalID                         *string `json:"principalID,omitempty"`
+}
+
+// A structure that contains information to identify a user.
+type UserIdentifier struct {
+	UserARN *string `json:"userARN,omitempty"`
 }
 
 // The structure of a VPC connection.
