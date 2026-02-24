@@ -96,7 +96,7 @@ type DataSourceStatus struct {
 	RequestID *string `json:"requestID,omitempty"`
 	// The HTTP status of the request.
 	// +kubebuilder:validation:Optional
-	Status *string `json:"status,omitempty"`
+	Status *int64 `json:"status,omitempty"`
 }
 
 // DataSource is the Schema for the DataSources API

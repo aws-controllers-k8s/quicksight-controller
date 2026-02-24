@@ -55,9 +55,9 @@ resources:
           path: DataSource.ErrorInfo
       Status:
         is_read_only: true
-        from:
-          operation: DescribeDataSource
-          path: DataSource.Status
+        set:
+          - method: ReadOne
+            ignore: true
     exceptions:
       errors:
         404:

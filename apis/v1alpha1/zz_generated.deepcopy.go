@@ -2712,7 +2712,7 @@ func (in *DataSourceStatus) DeepCopyInto(out *DataSourceStatus) {
 	}
 	if in.Status != nil {
 		in, out := &in.Status, &out.Status
-		*out = new(string)
+		*out = new(int64)
 		**out = **in
 	}
 }

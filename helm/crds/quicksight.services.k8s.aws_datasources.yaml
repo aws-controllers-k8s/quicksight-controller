@@ -1086,7 +1086,8 @@ spec:
                 type: string
               status:
                 description: The HTTP status of the request.
-                type: string
+                format: int64
+                type: integer
             type: object
         type: object
     served: true
