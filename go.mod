@@ -3,7 +3,11 @@ module github.com/aws-controllers-k8s/quicksight-controller
 go 1.25.0
 
 require (
+	github.com/aws-controllers-k8s/iam-controller v1.6.1
+	github.com/aws-controllers-k8s/rds-controller v1.7.6
 	github.com/aws-controllers-k8s/runtime v0.57.0
+	github.com/aws-controllers-k8s/s3-controller v1.3.1
+	github.com/aws-controllers-k8s/secretsmanager-controller v1.2.1
 	github.com/aws/aws-sdk-go v1.55.8
 	github.com/aws/aws-sdk-go-v2 v1.41.1
 	github.com/aws/aws-sdk-go-v2/service/quicksight v1.101.0
@@ -24,8 +28,8 @@ require (
 	github.com/aws/aws-sdk-go-v2/internal/configsources v1.4.17 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.7.17 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/ini v1.8.1 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.12.1 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.12.6 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.12.2 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.12.10 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sso v1.24.7 // indirect
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.28.6 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.33.2 // indirect

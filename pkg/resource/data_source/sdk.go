@@ -1566,7 +1566,13 @@ func (rm *resourceManager) newCreateRequestPayload(
 				f1f1.AlternateDataSourceParameters = f1f1f0
 			}
 			if r.ko.Spec.Credentials.CredentialPair.Password != nil {
-				f1f1.Password = r.ko.Spec.Credentials.CredentialPair.Password
+				tmpSecret, err := rm.rr.SecretValueFromReference(ctx, r.ko.Spec.Credentials.CredentialPair.Password)
+				if err != nil {
+					return nil, ackrequeue.Needed(err)
+				}
+				if tmpSecret != "" {
+					f1f1.Password = aws.String(tmpSecret)
+				}
 			}
 			if r.ko.Spec.Credentials.CredentialPair.Username != nil {
 				f1f1.Username = r.ko.Spec.Credentials.CredentialPair.Username
@@ -1579,10 +1585,22 @@ func (rm *resourceManager) newCreateRequestPayload(
 				f1f2.KeyPairUsername = r.ko.Spec.Credentials.KeyPairCredentials.KeyPairUsername
 			}
 			if r.ko.Spec.Credentials.KeyPairCredentials.PrivateKey != nil {
-				f1f2.PrivateKey = r.ko.Spec.Credentials.KeyPairCredentials.PrivateKey
+				tmpSecret, err := rm.rr.SecretValueFromReference(ctx, r.ko.Spec.Credentials.KeyPairCredentials.PrivateKey)
+				if err != nil {
+					return nil, ackrequeue.Needed(err)
+				}
+				if tmpSecret != "" {
+					f1f2.PrivateKey = aws.String(tmpSecret)
+				}
 			}
 			if r.ko.Spec.Credentials.KeyPairCredentials.PrivateKeyPassphrase != nil {
-				f1f2.PrivateKeyPassphrase = r.ko.Spec.Credentials.KeyPairCredentials.PrivateKeyPassphrase
+				tmpSecret, err := rm.rr.SecretValueFromReference(ctx, r.ko.Spec.Credentials.KeyPairCredentials.PrivateKeyPassphrase)
+				if err != nil {
+					return nil, ackrequeue.Needed(err)
+				}
+				if tmpSecret != "" {
+					f1f2.PrivateKeyPassphrase = aws.String(tmpSecret)
+				}
 			}
 			f1.KeyPairCredentials = f1f2
 		}
@@ -1592,7 +1610,13 @@ func (rm *resourceManager) newCreateRequestPayload(
 		if r.ko.Spec.Credentials.WebProxyCredentials != nil {
 			f1f4 := &svcsdktypes.WebProxyCredentials{}
 			if r.ko.Spec.Credentials.WebProxyCredentials.WebProxyPassword != nil {
-				f1f4.WebProxyPassword = r.ko.Spec.Credentials.WebProxyCredentials.WebProxyPassword
+				tmpSecret, err := rm.rr.SecretValueFromReference(ctx, r.ko.Spec.Credentials.WebProxyCredentials.WebProxyPassword)
+				if err != nil {
+					return nil, ackrequeue.Needed(err)
+				}
+				if tmpSecret != "" {
+					f1f4.WebProxyPassword = aws.String(tmpSecret)
+				}
 			}
 			if r.ko.Spec.Credentials.WebProxyCredentials.WebProxyUsername != nil {
 				f1f4.WebProxyUsername = r.ko.Spec.Credentials.WebProxyCredentials.WebProxyUsername
@@ -3250,7 +3274,13 @@ func (rm *resourceManager) newUpdateRequestPayload(
 				f1f1.AlternateDataSourceParameters = f1f1f0
 			}
 			if r.ko.Spec.Credentials.CredentialPair.Password != nil {
-				f1f1.Password = r.ko.Spec.Credentials.CredentialPair.Password
+				tmpSecret, err := rm.rr.SecretValueFromReference(ctx, r.ko.Spec.Credentials.CredentialPair.Password)
+				if err != nil {
+					return nil, ackrequeue.Needed(err)
+				}
+				if tmpSecret != "" {
+					f1f1.Password = aws.String(tmpSecret)
+				}
 			}
 			if r.ko.Spec.Credentials.CredentialPair.Username != nil {
 				f1f1.Username = r.ko.Spec.Credentials.CredentialPair.Username
@@ -3263,10 +3293,22 @@ func (rm *resourceManager) newUpdateRequestPayload(
 				f1f2.KeyPairUsername = r.ko.Spec.Credentials.KeyPairCredentials.KeyPairUsername
 			}
 			if r.ko.Spec.Credentials.KeyPairCredentials.PrivateKey != nil {
-				f1f2.PrivateKey = r.ko.Spec.Credentials.KeyPairCredentials.PrivateKey
+				tmpSecret, err := rm.rr.SecretValueFromReference(ctx, r.ko.Spec.Credentials.KeyPairCredentials.PrivateKey)
+				if err != nil {
+					return nil, ackrequeue.Needed(err)
+				}
+				if tmpSecret != "" {
+					f1f2.PrivateKey = aws.String(tmpSecret)
+				}
 			}
 			if r.ko.Spec.Credentials.KeyPairCredentials.PrivateKeyPassphrase != nil {
-				f1f2.PrivateKeyPassphrase = r.ko.Spec.Credentials.KeyPairCredentials.PrivateKeyPassphrase
+				tmpSecret, err := rm.rr.SecretValueFromReference(ctx, r.ko.Spec.Credentials.KeyPairCredentials.PrivateKeyPassphrase)
+				if err != nil {
+					return nil, ackrequeue.Needed(err)
+				}
+				if tmpSecret != "" {
+					f1f2.PrivateKeyPassphrase = aws.String(tmpSecret)
+				}
 			}
 			f1.KeyPairCredentials = f1f2
 		}
@@ -3276,7 +3318,13 @@ func (rm *resourceManager) newUpdateRequestPayload(
 		if r.ko.Spec.Credentials.WebProxyCredentials != nil {
 			f1f4 := &svcsdktypes.WebProxyCredentials{}
 			if r.ko.Spec.Credentials.WebProxyCredentials.WebProxyPassword != nil {
-				f1f4.WebProxyPassword = r.ko.Spec.Credentials.WebProxyCredentials.WebProxyPassword
+				tmpSecret, err := rm.rr.SecretValueFromReference(ctx, r.ko.Spec.Credentials.WebProxyCredentials.WebProxyPassword)
+				if err != nil {
+					return nil, ackrequeue.Needed(err)
+				}
+				if tmpSecret != "" {
+					f1f4.WebProxyPassword = aws.String(tmpSecret)
+				}
 			}
 			if r.ko.Spec.Credentials.WebProxyCredentials.WebProxyUsername != nil {
 				f1f4.WebProxyUsername = r.ko.Spec.Credentials.WebProxyCredentials.WebProxyUsername

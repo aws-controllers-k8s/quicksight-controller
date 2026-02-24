@@ -58,6 +58,54 @@ resources:
         set:
           - method: ReadOne
             ignore: true
+      # Cross-resource references for IAM Roles
+      DataSourceParameters.AthenaParameters.RoleARN:
+        references:
+          service_name: iam
+          resource: Role
+          path: Status.ACKResourceMetadata.ARN
+      DataSourceParameters.S3Parameters.RoleARN:
+        references:
+          service_name: iam
+          resource: Role
+          path: Status.ACKResourceMetadata.ARN
+      DataSourceParameters.S3KnowledgeBaseParameters.RoleARN:
+        references:
+          service_name: iam
+          resource: Role
+          path: Status.ACKResourceMetadata.ARN
+      DataSourceParameters.RedshiftParameters.IAMParameters.RoleARN:
+        references:
+          service_name: iam
+          resource: Role
+          path: Status.ACKResourceMetadata.ARN
+      # Cross-resource reference for Secrets Manager
+      Credentials.SecretARN:
+        references:
+          service_name: secretsmanager
+          resource: Secret
+          path: Status.ACKResourceMetadata.ARN
+      # Cross-resource reference for RDS DBInstance
+      DataSourceParameters.RdsParameters.InstanceID:
+        references:
+          service_name: rds
+          resource: DBInstance
+          path: Spec.DBInstanceIdentifier
+      # Cross-resource reference for S3 Bucket
+      DataSourceParameters.S3Parameters.ManifestFileLocation.Bucket:
+        references:
+          service_name: s3
+          resource: Bucket
+          path: Spec.Name
+      # Secret fields - sensitive credentials that should be stored in K8s Secrets
+      Credentials.CredentialPair.Password:
+        is_secret: true
+      Credentials.KeyPairCredentials.PrivateKey:
+        is_secret: true
+      Credentials.KeyPairCredentials.PrivateKeyPassphrase:
+        is_secret: true
+      Credentials.WebProxyCredentials.WebProxyPassword:
+        is_secret: true
     exceptions:
       errors:
         404:

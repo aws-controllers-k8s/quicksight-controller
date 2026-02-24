@@ -17,13 +17,43 @@ package data_source
 
 import (
 	"context"
+	"fmt"
 
+	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
+	iamapitypes "github.com/aws-controllers-k8s/iam-controller/apis/v1alpha1"
+	rdsapitypes "github.com/aws-controllers-k8s/rds-controller/apis/v1alpha1"
+	ackv1alpha1 "github.com/aws-controllers-k8s/runtime/apis/core/v1alpha1"
+	ackerr "github.com/aws-controllers-k8s/runtime/pkg/errors"
 	acktypes "github.com/aws-controllers-k8s/runtime/pkg/types"
+	s3apitypes "github.com/aws-controllers-k8s/s3-controller/apis/v1alpha1"
+	secretsmanagerapitypes "github.com/aws-controllers-k8s/secretsmanager-controller/apis/v1alpha1"
 
 	svcapitypes "github.com/aws-controllers-k8s/quicksight-controller/apis/v1alpha1"
 )
+
+// +kubebuilder:rbac:groups=secretsmanager.services.k8s.aws,resources=secrets,verbs=get;list
+// +kubebuilder:rbac:groups=secretsmanager.services.k8s.aws,resources=secrets/status,verbs=get;list
+
+// +kubebuilder:rbac:groups=iam.services.k8s.aws,resources=roles,verbs=get;list
+// +kubebuilder:rbac:groups=iam.services.k8s.aws,resources=roles/status,verbs=get;list
+
+// +kubebuilder:rbac:groups=rds.services.k8s.aws,resources=dbinstances,verbs=get;list
+// +kubebuilder:rbac:groups=rds.services.k8s.aws,resources=dbinstances/status,verbs=get;list
+
+// +kubebuilder:rbac:groups=iam.services.k8s.aws,resources=roles,verbs=get;list
+// +kubebuilder:rbac:groups=iam.services.k8s.aws,resources=roles/status,verbs=get;list
+
+// +kubebuilder:rbac:groups=iam.services.k8s.aws,resources=roles,verbs=get;list
+// +kubebuilder:rbac:groups=iam.services.k8s.aws,resources=roles/status,verbs=get;list
+
+// +kubebuilder:rbac:groups=s3.services.k8s.aws,resources=buckets,verbs=get;list
+// +kubebuilder:rbac:groups=s3.services.k8s.aws,resources=buckets/status,verbs=get;list
+
+// +kubebuilder:rbac:groups=iam.services.k8s.aws,resources=roles,verbs=get;list
+// +kubebuilder:rbac:groups=iam.services.k8s.aws,resources=roles/status,verbs=get;list
 
 // ClearResolvedReferences removes any reference values that were made
 // concrete in the spec. It returns a copy of the input AWSResource which
@@ -31,6 +61,64 @@ import (
 // values.
 func (rm *resourceManager) ClearResolvedReferences(res acktypes.AWSResource) acktypes.AWSResource {
 	ko := rm.concreteResource(res).ko.DeepCopy()
+
+	if ko.Spec.Credentials != nil {
+		if ko.Spec.Credentials.SecretRef != nil {
+			ko.Spec.Credentials.SecretARN = nil
+		}
+	}
+
+	if ko.Spec.DataSourceParameters != nil {
+		if ko.Spec.DataSourceParameters.AthenaParameters != nil {
+			if ko.Spec.DataSourceParameters.AthenaParameters.RoleRef != nil {
+				ko.Spec.DataSourceParameters.AthenaParameters.RoleARN = nil
+			}
+		}
+	}
+
+	if ko.Spec.DataSourceParameters != nil {
+		if ko.Spec.DataSourceParameters.RdsParameters != nil {
+			if ko.Spec.DataSourceParameters.RdsParameters.InstanceRef != nil {
+				ko.Spec.DataSourceParameters.RdsParameters.InstanceID = nil
+			}
+		}
+	}
+
+	if ko.Spec.DataSourceParameters != nil {
+		if ko.Spec.DataSourceParameters.RedshiftParameters != nil {
+			if ko.Spec.DataSourceParameters.RedshiftParameters.IAMParameters != nil {
+				if ko.Spec.DataSourceParameters.RedshiftParameters.IAMParameters.RoleRef != nil {
+					ko.Spec.DataSourceParameters.RedshiftParameters.IAMParameters.RoleARN = nil
+				}
+			}
+		}
+	}
+
+	if ko.Spec.DataSourceParameters != nil {
+		if ko.Spec.DataSourceParameters.S3KnowledgeBaseParameters != nil {
+			if ko.Spec.DataSourceParameters.S3KnowledgeBaseParameters.RoleRef != nil {
+				ko.Spec.DataSourceParameters.S3KnowledgeBaseParameters.RoleARN = nil
+			}
+		}
+	}
+
+	if ko.Spec.DataSourceParameters != nil {
+		if ko.Spec.DataSourceParameters.S3Parameters != nil {
+			if ko.Spec.DataSourceParameters.S3Parameters.ManifestFileLocation != nil {
+				if ko.Spec.DataSourceParameters.S3Parameters.ManifestFileLocation.BucketRef != nil {
+					ko.Spec.DataSourceParameters.S3Parameters.ManifestFileLocation.Bucket = nil
+				}
+			}
+		}
+	}
+
+	if ko.Spec.DataSourceParameters != nil {
+		if ko.Spec.DataSourceParameters.S3Parameters != nil {
+			if ko.Spec.DataSourceParameters.S3Parameters.RoleRef != nil {
+				ko.Spec.DataSourceParameters.S3Parameters.RoleARN = nil
+			}
+		}
+	}
 
 	return &resource{ko}
 }
@@ -47,11 +135,564 @@ func (rm *resourceManager) ResolveReferences(
 	apiReader client.Reader,
 	res acktypes.AWSResource,
 ) (acktypes.AWSResource, bool, error) {
-	return res, false, nil
+	ko := rm.concreteResource(res).ko
+
+	resourceHasReferences := false
+	err := validateReferenceFields(ko)
+	if fieldHasReferences, err := rm.resolveReferenceForCredentials_SecretARN(ctx, apiReader, ko); err != nil {
+		return &resource{ko}, (resourceHasReferences || fieldHasReferences), err
+	} else {
+		resourceHasReferences = resourceHasReferences || fieldHasReferences
+	}
+
+	if fieldHasReferences, err := rm.resolveReferenceForDataSourceParameters_AthenaParameters_RoleARN(ctx, apiReader, ko); err != nil {
+		return &resource{ko}, (resourceHasReferences || fieldHasReferences), err
+	} else {
+		resourceHasReferences = resourceHasReferences || fieldHasReferences
+	}
+
+	if fieldHasReferences, err := rm.resolveReferenceForDataSourceParameters_RdsParameters_InstanceID(ctx, apiReader, ko); err != nil {
+		return &resource{ko}, (resourceHasReferences || fieldHasReferences), err
+	} else {
+		resourceHasReferences = resourceHasReferences || fieldHasReferences
+	}
+
+	if fieldHasReferences, err := rm.resolveReferenceForDataSourceParameters_RedshiftParameters_IAMParameters_RoleARN(ctx, apiReader, ko); err != nil {
+		return &resource{ko}, (resourceHasReferences || fieldHasReferences), err
+	} else {
+		resourceHasReferences = resourceHasReferences || fieldHasReferences
+	}
+
+	if fieldHasReferences, err := rm.resolveReferenceForDataSourceParameters_S3KnowledgeBaseParameters_RoleARN(ctx, apiReader, ko); err != nil {
+		return &resource{ko}, (resourceHasReferences || fieldHasReferences), err
+	} else {
+		resourceHasReferences = resourceHasReferences || fieldHasReferences
+	}
+
+	if fieldHasReferences, err := rm.resolveReferenceForDataSourceParameters_S3Parameters_ManifestFileLocation_Bucket(ctx, apiReader, ko); err != nil {
+		return &resource{ko}, (resourceHasReferences || fieldHasReferences), err
+	} else {
+		resourceHasReferences = resourceHasReferences || fieldHasReferences
+	}
+
+	if fieldHasReferences, err := rm.resolveReferenceForDataSourceParameters_S3Parameters_RoleARN(ctx, apiReader, ko); err != nil {
+		return &resource{ko}, (resourceHasReferences || fieldHasReferences), err
+	} else {
+		resourceHasReferences = resourceHasReferences || fieldHasReferences
+	}
+
+	return &resource{ko}, resourceHasReferences, err
 }
 
 // validateReferenceFields validates the reference field and corresponding
 // identifier field.
 func validateReferenceFields(ko *svcapitypes.DataSource) error {
+
+	if ko.Spec.Credentials != nil {
+		if ko.Spec.Credentials.SecretRef != nil && ko.Spec.Credentials.SecretARN != nil {
+			return ackerr.ResourceReferenceAndIDNotSupportedFor("Credentials.SecretARN", "Credentials.SecretRef")
+		}
+	}
+
+	if ko.Spec.DataSourceParameters != nil {
+		if ko.Spec.DataSourceParameters.AthenaParameters != nil {
+			if ko.Spec.DataSourceParameters.AthenaParameters.RoleRef != nil && ko.Spec.DataSourceParameters.AthenaParameters.RoleARN != nil {
+				return ackerr.ResourceReferenceAndIDNotSupportedFor("DataSourceParameters.AthenaParameters.RoleARN", "DataSourceParameters.AthenaParameters.RoleRef")
+			}
+		}
+	}
+
+	if ko.Spec.DataSourceParameters != nil {
+		if ko.Spec.DataSourceParameters.RdsParameters != nil {
+			if ko.Spec.DataSourceParameters.RdsParameters.InstanceRef != nil && ko.Spec.DataSourceParameters.RdsParameters.InstanceID != nil {
+				return ackerr.ResourceReferenceAndIDNotSupportedFor("DataSourceParameters.RdsParameters.InstanceID", "DataSourceParameters.RdsParameters.InstanceRef")
+			}
+		}
+	}
+
+	if ko.Spec.DataSourceParameters != nil {
+		if ko.Spec.DataSourceParameters.RedshiftParameters != nil {
+			if ko.Spec.DataSourceParameters.RedshiftParameters.IAMParameters != nil {
+				if ko.Spec.DataSourceParameters.RedshiftParameters.IAMParameters.RoleRef != nil && ko.Spec.DataSourceParameters.RedshiftParameters.IAMParameters.RoleARN != nil {
+					return ackerr.ResourceReferenceAndIDNotSupportedFor("DataSourceParameters.RedshiftParameters.IAMParameters.RoleARN", "DataSourceParameters.RedshiftParameters.IAMParameters.RoleRef")
+				}
+			}
+		}
+	}
+
+	if ko.Spec.DataSourceParameters != nil {
+		if ko.Spec.DataSourceParameters.S3KnowledgeBaseParameters != nil {
+			if ko.Spec.DataSourceParameters.S3KnowledgeBaseParameters.RoleRef != nil && ko.Spec.DataSourceParameters.S3KnowledgeBaseParameters.RoleARN != nil {
+				return ackerr.ResourceReferenceAndIDNotSupportedFor("DataSourceParameters.S3KnowledgeBaseParameters.RoleARN", "DataSourceParameters.S3KnowledgeBaseParameters.RoleRef")
+			}
+		}
+	}
+
+	if ko.Spec.DataSourceParameters != nil {
+		if ko.Spec.DataSourceParameters.S3Parameters != nil {
+			if ko.Spec.DataSourceParameters.S3Parameters.ManifestFileLocation != nil {
+				if ko.Spec.DataSourceParameters.S3Parameters.ManifestFileLocation.BucketRef != nil && ko.Spec.DataSourceParameters.S3Parameters.ManifestFileLocation.Bucket != nil {
+					return ackerr.ResourceReferenceAndIDNotSupportedFor("DataSourceParameters.S3Parameters.ManifestFileLocation.Bucket", "DataSourceParameters.S3Parameters.ManifestFileLocation.BucketRef")
+				}
+			}
+		}
+	}
+
+	if ko.Spec.DataSourceParameters != nil {
+		if ko.Spec.DataSourceParameters.S3Parameters != nil {
+			if ko.Spec.DataSourceParameters.S3Parameters.RoleRef != nil && ko.Spec.DataSourceParameters.S3Parameters.RoleARN != nil {
+				return ackerr.ResourceReferenceAndIDNotSupportedFor("DataSourceParameters.S3Parameters.RoleARN", "DataSourceParameters.S3Parameters.RoleRef")
+			}
+		}
+	}
 	return nil
+}
+
+// resolveReferenceForCredentials_SecretARN reads the resource referenced
+// from Credentials.SecretRef field and sets the Credentials.SecretARN
+// from referenced resource. Returns a boolean indicating whether a reference
+// contains references, or an error
+func (rm *resourceManager) resolveReferenceForCredentials_SecretARN(
+	ctx context.Context,
+	apiReader client.Reader,
+	ko *svcapitypes.DataSource,
+) (hasReferences bool, err error) {
+	if ko.Spec.Credentials != nil {
+		if ko.Spec.Credentials.SecretRef != nil && ko.Spec.Credentials.SecretRef.From != nil {
+			hasReferences = true
+			arr := ko.Spec.Credentials.SecretRef.From
+			if arr.Name == nil || *arr.Name == "" {
+				return hasReferences, fmt.Errorf("provided resource reference is nil or empty: Credentials.SecretRef")
+			}
+			namespace := ko.ObjectMeta.GetNamespace()
+			if arr.Namespace != nil && *arr.Namespace != "" {
+				namespace = *arr.Namespace
+			}
+			obj := &secretsmanagerapitypes.Secret{}
+			if err := getReferencedResourceState_Secret(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
+				return hasReferences, err
+			}
+			ko.Spec.Credentials.SecretARN = (*string)(obj.Status.ACKResourceMetadata.ARN)
+		}
+	}
+
+	return hasReferences, nil
+}
+
+// getReferencedResourceState_Secret looks up whether a referenced resource
+// exists and is in a ACK.ResourceSynced=True state. If the referenced resource does exist and is
+// in a Synced state, returns nil, otherwise returns `ackerr.ResourceReferenceTerminalFor` or
+// `ResourceReferenceNotSyncedFor` depending on if the resource is in a Terminal state.
+func getReferencedResourceState_Secret(
+	ctx context.Context,
+	apiReader client.Reader,
+	obj *secretsmanagerapitypes.Secret,
+	name string, // the Kubernetes name of the referenced resource
+	namespace string, // the Kubernetes namespace of the referenced resource
+) error {
+	namespacedName := types.NamespacedName{
+		Namespace: namespace,
+		Name:      name,
+	}
+	err := apiReader.Get(ctx, namespacedName, obj)
+	if err != nil {
+		return err
+	}
+	var refResourceTerminal bool
+	for _, cond := range obj.Status.Conditions {
+		if cond.Type == ackv1alpha1.ConditionTypeTerminal &&
+			cond.Status == corev1.ConditionTrue {
+			return ackerr.ResourceReferenceTerminalFor(
+				"Secret",
+				namespace, name)
+		}
+	}
+	if refResourceTerminal {
+		return ackerr.ResourceReferenceTerminalFor(
+			"Secret",
+			namespace, name)
+	}
+	var refResourceSynced bool
+	for _, cond := range obj.Status.Conditions {
+		if cond.Type == ackv1alpha1.ConditionTypeResourceSynced &&
+			cond.Status == corev1.ConditionTrue {
+			refResourceSynced = true
+		}
+	}
+	if !refResourceSynced {
+		return ackerr.ResourceReferenceNotSyncedFor(
+			"Secret",
+			namespace, name)
+	}
+	if obj.Status.ACKResourceMetadata == nil || obj.Status.ACKResourceMetadata.ARN == nil {
+		return ackerr.ResourceReferenceMissingTargetFieldFor(
+			"Secret",
+			namespace, name,
+			"Status.ACKResourceMetadata.ARN")
+	}
+	return nil
+}
+
+// resolveReferenceForDataSourceParameters_AthenaParameters_RoleARN reads the resource referenced
+// from DataSourceParameters.AthenaParameters.RoleRef field and sets the DataSourceParameters.AthenaParameters.RoleARN
+// from referenced resource. Returns a boolean indicating whether a reference
+// contains references, or an error
+func (rm *resourceManager) resolveReferenceForDataSourceParameters_AthenaParameters_RoleARN(
+	ctx context.Context,
+	apiReader client.Reader,
+	ko *svcapitypes.DataSource,
+) (hasReferences bool, err error) {
+	if ko.Spec.DataSourceParameters != nil {
+		if ko.Spec.DataSourceParameters.AthenaParameters != nil {
+			if ko.Spec.DataSourceParameters.AthenaParameters.RoleRef != nil && ko.Spec.DataSourceParameters.AthenaParameters.RoleRef.From != nil {
+				hasReferences = true
+				arr := ko.Spec.DataSourceParameters.AthenaParameters.RoleRef.From
+				if arr.Name == nil || *arr.Name == "" {
+					return hasReferences, fmt.Errorf("provided resource reference is nil or empty: DataSourceParameters.AthenaParameters.RoleRef")
+				}
+				namespace := ko.ObjectMeta.GetNamespace()
+				if arr.Namespace != nil && *arr.Namespace != "" {
+					namespace = *arr.Namespace
+				}
+				obj := &iamapitypes.Role{}
+				if err := getReferencedResourceState_Role(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
+					return hasReferences, err
+				}
+				ko.Spec.DataSourceParameters.AthenaParameters.RoleARN = (*string)(obj.Status.ACKResourceMetadata.ARN)
+			}
+		}
+	}
+
+	return hasReferences, nil
+}
+
+// getReferencedResourceState_Role looks up whether a referenced resource
+// exists and is in a ACK.ResourceSynced=True state. If the referenced resource does exist and is
+// in a Synced state, returns nil, otherwise returns `ackerr.ResourceReferenceTerminalFor` or
+// `ResourceReferenceNotSyncedFor` depending on if the resource is in a Terminal state.
+func getReferencedResourceState_Role(
+	ctx context.Context,
+	apiReader client.Reader,
+	obj *iamapitypes.Role,
+	name string, // the Kubernetes name of the referenced resource
+	namespace string, // the Kubernetes namespace of the referenced resource
+) error {
+	namespacedName := types.NamespacedName{
+		Namespace: namespace,
+		Name:      name,
+	}
+	err := apiReader.Get(ctx, namespacedName, obj)
+	if err != nil {
+		return err
+	}
+	var refResourceTerminal bool
+	for _, cond := range obj.Status.Conditions {
+		if cond.Type == ackv1alpha1.ConditionTypeTerminal &&
+			cond.Status == corev1.ConditionTrue {
+			return ackerr.ResourceReferenceTerminalFor(
+				"Role",
+				namespace, name)
+		}
+	}
+	if refResourceTerminal {
+		return ackerr.ResourceReferenceTerminalFor(
+			"Role",
+			namespace, name)
+	}
+	var refResourceSynced bool
+	for _, cond := range obj.Status.Conditions {
+		if cond.Type == ackv1alpha1.ConditionTypeResourceSynced &&
+			cond.Status == corev1.ConditionTrue {
+			refResourceSynced = true
+		}
+	}
+	if !refResourceSynced {
+		return ackerr.ResourceReferenceNotSyncedFor(
+			"Role",
+			namespace, name)
+	}
+	if obj.Status.ACKResourceMetadata == nil || obj.Status.ACKResourceMetadata.ARN == nil {
+		return ackerr.ResourceReferenceMissingTargetFieldFor(
+			"Role",
+			namespace, name,
+			"Status.ACKResourceMetadata.ARN")
+	}
+	return nil
+}
+
+// resolveReferenceForDataSourceParameters_RdsParameters_InstanceID reads the resource referenced
+// from DataSourceParameters.RdsParameters.InstanceRef field and sets the DataSourceParameters.RdsParameters.InstanceID
+// from referenced resource. Returns a boolean indicating whether a reference
+// contains references, or an error
+func (rm *resourceManager) resolveReferenceForDataSourceParameters_RdsParameters_InstanceID(
+	ctx context.Context,
+	apiReader client.Reader,
+	ko *svcapitypes.DataSource,
+) (hasReferences bool, err error) {
+	if ko.Spec.DataSourceParameters != nil {
+		if ko.Spec.DataSourceParameters.RdsParameters != nil {
+			if ko.Spec.DataSourceParameters.RdsParameters.InstanceRef != nil && ko.Spec.DataSourceParameters.RdsParameters.InstanceRef.From != nil {
+				hasReferences = true
+				arr := ko.Spec.DataSourceParameters.RdsParameters.InstanceRef.From
+				if arr.Name == nil || *arr.Name == "" {
+					return hasReferences, fmt.Errorf("provided resource reference is nil or empty: DataSourceParameters.RdsParameters.InstanceRef")
+				}
+				namespace := ko.ObjectMeta.GetNamespace()
+				if arr.Namespace != nil && *arr.Namespace != "" {
+					namespace = *arr.Namespace
+				}
+				obj := &rdsapitypes.DBInstance{}
+				if err := getReferencedResourceState_DBInstance(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
+					return hasReferences, err
+				}
+				ko.Spec.DataSourceParameters.RdsParameters.InstanceID = (*string)(obj.Spec.DBInstanceIdentifier)
+			}
+		}
+	}
+
+	return hasReferences, nil
+}
+
+// getReferencedResourceState_DBInstance looks up whether a referenced resource
+// exists and is in a ACK.ResourceSynced=True state. If the referenced resource does exist and is
+// in a Synced state, returns nil, otherwise returns `ackerr.ResourceReferenceTerminalFor` or
+// `ResourceReferenceNotSyncedFor` depending on if the resource is in a Terminal state.
+func getReferencedResourceState_DBInstance(
+	ctx context.Context,
+	apiReader client.Reader,
+	obj *rdsapitypes.DBInstance,
+	name string, // the Kubernetes name of the referenced resource
+	namespace string, // the Kubernetes namespace of the referenced resource
+) error {
+	namespacedName := types.NamespacedName{
+		Namespace: namespace,
+		Name:      name,
+	}
+	err := apiReader.Get(ctx, namespacedName, obj)
+	if err != nil {
+		return err
+	}
+	var refResourceTerminal bool
+	for _, cond := range obj.Status.Conditions {
+		if cond.Type == ackv1alpha1.ConditionTypeTerminal &&
+			cond.Status == corev1.ConditionTrue {
+			return ackerr.ResourceReferenceTerminalFor(
+				"DBInstance",
+				namespace, name)
+		}
+	}
+	if refResourceTerminal {
+		return ackerr.ResourceReferenceTerminalFor(
+			"DBInstance",
+			namespace, name)
+	}
+	var refResourceSynced bool
+	for _, cond := range obj.Status.Conditions {
+		if cond.Type == ackv1alpha1.ConditionTypeResourceSynced &&
+			cond.Status == corev1.ConditionTrue {
+			refResourceSynced = true
+		}
+	}
+	if !refResourceSynced {
+		return ackerr.ResourceReferenceNotSyncedFor(
+			"DBInstance",
+			namespace, name)
+	}
+	if obj.Spec.DBInstanceIdentifier == nil {
+		return ackerr.ResourceReferenceMissingTargetFieldFor(
+			"DBInstance",
+			namespace, name,
+			"Spec.DBInstanceIdentifier")
+	}
+	return nil
+}
+
+// resolveReferenceForDataSourceParameters_RedshiftParameters_IAMParameters_RoleARN reads the resource referenced
+// from DataSourceParameters.RedshiftParameters.IAMParameters.RoleRef field and sets the DataSourceParameters.RedshiftParameters.IAMParameters.RoleARN
+// from referenced resource. Returns a boolean indicating whether a reference
+// contains references, or an error
+func (rm *resourceManager) resolveReferenceForDataSourceParameters_RedshiftParameters_IAMParameters_RoleARN(
+	ctx context.Context,
+	apiReader client.Reader,
+	ko *svcapitypes.DataSource,
+) (hasReferences bool, err error) {
+	if ko.Spec.DataSourceParameters != nil {
+		if ko.Spec.DataSourceParameters.RedshiftParameters != nil {
+			if ko.Spec.DataSourceParameters.RedshiftParameters.IAMParameters != nil {
+				if ko.Spec.DataSourceParameters.RedshiftParameters.IAMParameters.RoleRef != nil && ko.Spec.DataSourceParameters.RedshiftParameters.IAMParameters.RoleRef.From != nil {
+					hasReferences = true
+					arr := ko.Spec.DataSourceParameters.RedshiftParameters.IAMParameters.RoleRef.From
+					if arr.Name == nil || *arr.Name == "" {
+						return hasReferences, fmt.Errorf("provided resource reference is nil or empty: DataSourceParameters.RedshiftParameters.IAMParameters.RoleRef")
+					}
+					namespace := ko.ObjectMeta.GetNamespace()
+					if arr.Namespace != nil && *arr.Namespace != "" {
+						namespace = *arr.Namespace
+					}
+					obj := &iamapitypes.Role{}
+					if err := getReferencedResourceState_Role(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
+						return hasReferences, err
+					}
+					ko.Spec.DataSourceParameters.RedshiftParameters.IAMParameters.RoleARN = (*string)(obj.Status.ACKResourceMetadata.ARN)
+				}
+			}
+		}
+	}
+
+	return hasReferences, nil
+}
+
+// resolveReferenceForDataSourceParameters_S3KnowledgeBaseParameters_RoleARN reads the resource referenced
+// from DataSourceParameters.S3KnowledgeBaseParameters.RoleRef field and sets the DataSourceParameters.S3KnowledgeBaseParameters.RoleARN
+// from referenced resource. Returns a boolean indicating whether a reference
+// contains references, or an error
+func (rm *resourceManager) resolveReferenceForDataSourceParameters_S3KnowledgeBaseParameters_RoleARN(
+	ctx context.Context,
+	apiReader client.Reader,
+	ko *svcapitypes.DataSource,
+) (hasReferences bool, err error) {
+	if ko.Spec.DataSourceParameters != nil {
+		if ko.Spec.DataSourceParameters.S3KnowledgeBaseParameters != nil {
+			if ko.Spec.DataSourceParameters.S3KnowledgeBaseParameters.RoleRef != nil && ko.Spec.DataSourceParameters.S3KnowledgeBaseParameters.RoleRef.From != nil {
+				hasReferences = true
+				arr := ko.Spec.DataSourceParameters.S3KnowledgeBaseParameters.RoleRef.From
+				if arr.Name == nil || *arr.Name == "" {
+					return hasReferences, fmt.Errorf("provided resource reference is nil or empty: DataSourceParameters.S3KnowledgeBaseParameters.RoleRef")
+				}
+				namespace := ko.ObjectMeta.GetNamespace()
+				if arr.Namespace != nil && *arr.Namespace != "" {
+					namespace = *arr.Namespace
+				}
+				obj := &iamapitypes.Role{}
+				if err := getReferencedResourceState_Role(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
+					return hasReferences, err
+				}
+				ko.Spec.DataSourceParameters.S3KnowledgeBaseParameters.RoleARN = (*string)(obj.Status.ACKResourceMetadata.ARN)
+			}
+		}
+	}
+
+	return hasReferences, nil
+}
+
+// resolveReferenceForDataSourceParameters_S3Parameters_ManifestFileLocation_Bucket reads the resource referenced
+// from DataSourceParameters.S3Parameters.ManifestFileLocation.BucketRef field and sets the DataSourceParameters.S3Parameters.ManifestFileLocation.Bucket
+// from referenced resource. Returns a boolean indicating whether a reference
+// contains references, or an error
+func (rm *resourceManager) resolveReferenceForDataSourceParameters_S3Parameters_ManifestFileLocation_Bucket(
+	ctx context.Context,
+	apiReader client.Reader,
+	ko *svcapitypes.DataSource,
+) (hasReferences bool, err error) {
+	if ko.Spec.DataSourceParameters != nil {
+		if ko.Spec.DataSourceParameters.S3Parameters != nil {
+			if ko.Spec.DataSourceParameters.S3Parameters.ManifestFileLocation != nil {
+				if ko.Spec.DataSourceParameters.S3Parameters.ManifestFileLocation.BucketRef != nil && ko.Spec.DataSourceParameters.S3Parameters.ManifestFileLocation.BucketRef.From != nil {
+					hasReferences = true
+					arr := ko.Spec.DataSourceParameters.S3Parameters.ManifestFileLocation.BucketRef.From
+					if arr.Name == nil || *arr.Name == "" {
+						return hasReferences, fmt.Errorf("provided resource reference is nil or empty: DataSourceParameters.S3Parameters.ManifestFileLocation.BucketRef")
+					}
+					namespace := ko.ObjectMeta.GetNamespace()
+					if arr.Namespace != nil && *arr.Namespace != "" {
+						namespace = *arr.Namespace
+					}
+					obj := &s3apitypes.Bucket{}
+					if err := getReferencedResourceState_Bucket(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
+						return hasReferences, err
+					}
+					ko.Spec.DataSourceParameters.S3Parameters.ManifestFileLocation.Bucket = (*string)(obj.Spec.Name)
+				}
+			}
+		}
+	}
+
+	return hasReferences, nil
+}
+
+// getReferencedResourceState_Bucket looks up whether a referenced resource
+// exists and is in a ACK.ResourceSynced=True state. If the referenced resource does exist and is
+// in a Synced state, returns nil, otherwise returns `ackerr.ResourceReferenceTerminalFor` or
+// `ResourceReferenceNotSyncedFor` depending on if the resource is in a Terminal state.
+func getReferencedResourceState_Bucket(
+	ctx context.Context,
+	apiReader client.Reader,
+	obj *s3apitypes.Bucket,
+	name string, // the Kubernetes name of the referenced resource
+	namespace string, // the Kubernetes namespace of the referenced resource
+) error {
+	namespacedName := types.NamespacedName{
+		Namespace: namespace,
+		Name:      name,
+	}
+	err := apiReader.Get(ctx, namespacedName, obj)
+	if err != nil {
+		return err
+	}
+	var refResourceTerminal bool
+	for _, cond := range obj.Status.Conditions {
+		if cond.Type == ackv1alpha1.ConditionTypeTerminal &&
+			cond.Status == corev1.ConditionTrue {
+			return ackerr.ResourceReferenceTerminalFor(
+				"Bucket",
+				namespace, name)
+		}
+	}
+	if refResourceTerminal {
+		return ackerr.ResourceReferenceTerminalFor(
+			"Bucket",
+			namespace, name)
+	}
+	var refResourceSynced bool
+	for _, cond := range obj.Status.Conditions {
+		if cond.Type == ackv1alpha1.ConditionTypeResourceSynced &&
+			cond.Status == corev1.ConditionTrue {
+			refResourceSynced = true
+		}
+	}
+	if !refResourceSynced {
+		return ackerr.ResourceReferenceNotSyncedFor(
+			"Bucket",
+			namespace, name)
+	}
+	if obj.Spec.Name == nil {
+		return ackerr.ResourceReferenceMissingTargetFieldFor(
+			"Bucket",
+			namespace, name,
+			"Spec.Name")
+	}
+	return nil
+}
+
+// resolveReferenceForDataSourceParameters_S3Parameters_RoleARN reads the resource referenced
+// from DataSourceParameters.S3Parameters.RoleRef field and sets the DataSourceParameters.S3Parameters.RoleARN
+// from referenced resource. Returns a boolean indicating whether a reference
+// contains references, or an error
+func (rm *resourceManager) resolveReferenceForDataSourceParameters_S3Parameters_RoleARN(
+	ctx context.Context,
+	apiReader client.Reader,
+	ko *svcapitypes.DataSource,
+) (hasReferences bool, err error) {
+	if ko.Spec.DataSourceParameters != nil {
+		if ko.Spec.DataSourceParameters.S3Parameters != nil {
+			if ko.Spec.DataSourceParameters.S3Parameters.RoleRef != nil && ko.Spec.DataSourceParameters.S3Parameters.RoleRef.From != nil {
+				hasReferences = true
+				arr := ko.Spec.DataSourceParameters.S3Parameters.RoleRef.From
+				if arr.Name == nil || *arr.Name == "" {
+					return hasReferences, fmt.Errorf("provided resource reference is nil or empty: DataSourceParameters.S3Parameters.RoleRef")
+				}
+				namespace := ko.ObjectMeta.GetNamespace()
+				if arr.Namespace != nil && *arr.Namespace != "" {
+					namespace = *arr.Namespace
+				}
+				obj := &iamapitypes.Role{}
+				if err := getReferencedResourceState_Role(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
+					return hasReferences, err
+				}
+				ko.Spec.DataSourceParameters.S3Parameters.RoleARN = (*string)(obj.Status.ACKResourceMetadata.ARN)
+			}
+		}
+	}
+
+	return hasReferences, nil
 }

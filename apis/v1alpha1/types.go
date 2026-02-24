@@ -378,7 +378,9 @@ type AthenaParameters struct {
 	// The parameters for an IAM Identity Center configuration.
 	IdentityCenterConfiguration *IdentityCenterConfiguration `json:"identityCenterConfiguration,omitempty"`
 	RoleARN                     *string                      `json:"roleARN,omitempty"`
-	WorkGroup                   *string                      `json:"workGroup,omitempty"`
+	// Reference field for RoleARN
+	RoleRef   *ackv1alpha1.AWSResourceReferenceWrapper `json:"roleRef,omitempty"`
+	WorkGroup *string                                  `json:"workGroup,omitempty"`
 }
 
 // Aggregation for attributes.
@@ -475,9 +477,9 @@ type CreateTopicReviewedAnswer struct {
 
 // The combination of user name and password that are used as credentials.
 type CredentialPair struct {
-	AlternateDataSourceParameters []*DataSourceParameters `json:"alternateDataSourceParameters,omitempty"`
-	Password                      *string                 `json:"password,omitempty"`
-	Username                      *string                 `json:"username,omitempty"`
+	AlternateDataSourceParameters []*DataSourceParameters         `json:"alternateDataSourceParameters,omitempty"`
+	Password                      *ackv1alpha1.SecretKeyReference `json:"password,omitempty"`
+	Username                      *string                         `json:"username,omitempty"`
 }
 
 // The parameters that are required to connect to a custom connection data source.
@@ -618,6 +620,8 @@ type DataSourceCredentials struct {
 	// credentials.
 	KeyPairCredentials *KeyPairCredentials `json:"keyPairCredentials,omitempty"`
 	SecretARN          *string             `json:"secretARN,omitempty"`
+	// Reference field for SecretARN
+	SecretRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"secretRef,omitempty"`
 	// The credentials for authenticating with a web proxy server.
 	WebProxyCredentials *WebProxyCredentials `json:"webProxyCredentials,omitempty"`
 }
@@ -955,9 +959,9 @@ type JoinKeyProperties struct {
 // The combination of username, private key and passphrase that are used as
 // credentials.
 type KeyPairCredentials struct {
-	KeyPairUsername      *string `json:"keyPairUsername,omitempty"`
-	PrivateKey           *string `json:"privateKey,omitempty"`
-	PrivateKeyPassphrase *string `json:"privateKeyPassphrase,omitempty"`
+	KeyPairUsername      *string                         `json:"keyPairUsername,omitempty"`
+	PrivateKey           *ackv1alpha1.SecretKeyReference `json:"privateKey,omitempty"`
+	PrivateKeyPassphrase *ackv1alpha1.SecretKeyReference `json:"privateKeyPassphrase,omitempty"`
 }
 
 // The share label options for the labels.
@@ -989,7 +993,9 @@ type LookbackWindow struct {
 // Amazon S3 manifest file location.
 type ManifestFileLocation struct {
 	Bucket *string `json:"bucket,omitempty"`
-	Key    *string `json:"key,omitempty"`
+	// Reference field for Bucket
+	BucketRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"bucketRef,omitempty"`
+	Key       *string                                  `json:"key,omitempty"`
 }
 
 // The display options for margins around the outside edge of sheets.
@@ -1150,6 +1156,8 @@ type QueueInfo struct {
 type RdsParameters struct {
 	Database   *string `json:"database,omitempty"`
 	InstanceID *string `json:"instanceID,omitempty"`
+	// Reference field for InstanceID
+	InstanceRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"instanceRef,omitempty"`
 }
 
 // Read-only metadata for IAM-based connections, containing role and source
@@ -1171,6 +1179,8 @@ type RedshiftIAMParameters struct {
 	DatabaseGroups         []*string `json:"databaseGroups,omitempty"`
 	DatabaseUser           *string   `json:"databaseUser,omitempty"`
 	RoleARN                *string   `json:"roleARN,omitempty"`
+	// Reference field for RoleARN
+	RoleRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"roleRef,omitempty"`
 }
 
 // The parameters for Amazon Redshift. The ClusterId field can be blank if Host
@@ -1246,6 +1256,8 @@ type S3KnowledgeBaseParameters struct {
 	BucketURL             *string `json:"bucketURL,omitempty"`
 	MetadataFilesLocation *string `json:"metadataFilesLocation,omitempty"`
 	RoleARN               *string `json:"roleARN,omitempty"`
+	// Reference field for RoleARN
+	RoleRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"roleRef,omitempty"`
 }
 
 // The parameters for S3.
@@ -1253,6 +1265,8 @@ type S3Parameters struct {
 	// Amazon S3 manifest file location.
 	ManifestFileLocation *ManifestFileLocation `json:"manifestFileLocation,omitempty"`
 	RoleARN              *string               `json:"roleARN,omitempty"`
+	// Reference field for RoleARN
+	RoleRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"roleRef,omitempty"`
 }
 
 // A physical table type for an S3 data source.
@@ -1718,8 +1732,8 @@ type WebCrawlerParameters struct {
 
 // The credentials for authenticating with a web proxy server.
 type WebProxyCredentials struct {
-	WebProxyPassword *string `json:"webProxyPassword,omitempty"`
-	WebProxyUsername *string `json:"webProxyUsername,omitempty"`
+	WebProxyPassword *ackv1alpha1.SecretKeyReference `json:"webProxyPassword,omitempty"`
+	WebProxyUsername *string                         `json:"webProxyUsername,omitempty"`
 }
 
 // Provides the forecast to meet the target for a particular date.

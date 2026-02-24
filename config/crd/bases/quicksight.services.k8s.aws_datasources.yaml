@@ -93,6 +93,20 @@ spec:
                                   type: object
                                 roleARN:
                                   type: string
+                                roleRef:
+                                  description: Reference field for RoleARN
+                                  properties:
+                                    from:
+                                      description: |-
+                                        AWSResourceReference provides all the values necessary to reference another
+                                        k8s resource for finding the identifier(Id/ARN/Name)
+                                      properties:
+                                        name:
+                                          type: string
+                                        namespace:
+                                          type: string
+                                      type: object
+                                  type: object
                                 workGroup:
                                   type: string
                               type: object
@@ -262,6 +276,20 @@ spec:
                                   type: string
                                 instanceID:
                                   type: string
+                                instanceRef:
+                                  description: Reference field for InstanceID
+                                  properties:
+                                    from:
+                                      description: |-
+                                        AWSResourceReference provides all the values necessary to reference another
+                                        k8s resource for finding the identifier(Id/ARN/Name)
+                                      properties:
+                                        name:
+                                          type: string
+                                        namespace:
+                                          type: string
+                                      type: object
+                                  type: object
                               type: object
                             redshiftParameters:
                               description: |-
@@ -291,6 +319,20 @@ spec:
                                       type: string
                                     roleARN:
                                       type: string
+                                    roleRef:
+                                      description: Reference field for RoleARN
+                                      properties:
+                                        from:
+                                          description: |-
+                                            AWSResourceReference provides all the values necessary to reference another
+                                            k8s resource for finding the identifier(Id/ARN/Name)
+                                          properties:
+                                            name:
+                                              type: string
+                                            namespace:
+                                              type: string
+                                          type: object
+                                      type: object
                                   type: object
                                 identityCenterConfiguration:
                                   description: The parameters for an IAM Identity
@@ -313,6 +355,20 @@ spec:
                                   type: string
                                 roleARN:
                                   type: string
+                                roleRef:
+                                  description: Reference field for RoleARN
+                                  properties:
+                                    from:
+                                      description: |-
+                                        AWSResourceReference provides all the values necessary to reference another
+                                        k8s resource for finding the identifier(Id/ARN/Name)
+                                      properties:
+                                        name:
+                                          type: string
+                                        namespace:
+                                          type: string
+                                      type: object
+                                  type: object
                               type: object
                             s3Parameters:
                               description: The parameters for S3.
@@ -322,11 +378,39 @@ spec:
                                   properties:
                                     bucket:
                                       type: string
+                                    bucketRef:
+                                      description: Reference field for Bucket
+                                      properties:
+                                        from:
+                                          description: |-
+                                            AWSResourceReference provides all the values necessary to reference another
+                                            k8s resource for finding the identifier(Id/ARN/Name)
+                                          properties:
+                                            name:
+                                              type: string
+                                            namespace:
+                                              type: string
+                                          type: object
+                                      type: object
                                     key:
                                       type: string
                                   type: object
                                 roleARN:
                                   type: string
+                                roleRef:
+                                  description: Reference field for RoleARN
+                                  properties:
+                                    from:
+                                      description: |-
+                                        AWSResourceReference provides all the values necessary to reference another
+                                        k8s resource for finding the identifier(Id/ARN/Name)
+                                      properties:
+                                        name:
+                                          type: string
+                                        namespace:
+                                          type: string
+                                      type: object
+                                  type: object
                               type: object
                             serviceNowParameters:
                               description: The parameters for ServiceNow.
@@ -480,7 +564,25 @@ spec:
                           type: object
                         type: array
                       password:
-                        type: string
+                        description: |-
+                          SecretKeyReference combines a k8s corev1.SecretReference with a
+                          specific key within the referred-to Secret
+                        properties:
+                          key:
+                            description: Key is the key within the secret
+                            type: string
+                          name:
+                            description: name is unique within a namespace to reference
+                              a secret resource.
+                            type: string
+                          namespace:
+                            description: namespace defines the space within which
+                              the secret name must be unique.
+                            type: string
+                        required:
+                        - key
+                        type: object
+                        x-kubernetes-map-type: atomic
                       username:
                         type: string
                     type: object
@@ -492,18 +594,86 @@ spec:
                       keyPairUsername:
                         type: string
                       privateKey:
-                        type: string
+                        description: |-
+                          SecretKeyReference combines a k8s corev1.SecretReference with a
+                          specific key within the referred-to Secret
+                        properties:
+                          key:
+                            description: Key is the key within the secret
+                            type: string
+                          name:
+                            description: name is unique within a namespace to reference
+                              a secret resource.
+                            type: string
+                          namespace:
+                            description: namespace defines the space within which
+                              the secret name must be unique.
+                            type: string
+                        required:
+                        - key
+                        type: object
+                        x-kubernetes-map-type: atomic
                       privateKeyPassphrase:
-                        type: string
+                        description: |-
+                          SecretKeyReference combines a k8s corev1.SecretReference with a
+                          specific key within the referred-to Secret
+                        properties:
+                          key:
+                            description: Key is the key within the secret
+                            type: string
+                          name:
+                            description: name is unique within a namespace to reference
+                              a secret resource.
+                            type: string
+                          namespace:
+                            description: namespace defines the space within which
+                              the secret name must be unique.
+                            type: string
+                        required:
+                        - key
+                        type: object
+                        x-kubernetes-map-type: atomic
                     type: object
                   secretARN:
                     type: string
+                  secretRef:
+                    description: Reference field for SecretARN
+                    properties:
+                      from:
+                        description: |-
+                          AWSResourceReference provides all the values necessary to reference another
+                          k8s resource for finding the identifier(Id/ARN/Name)
+                        properties:
+                          name:
+                            type: string
+                          namespace:
+                            type: string
+                        type: object
+                    type: object
                   webProxyCredentials:
                     description: The credentials for authenticating with a web proxy
                       server.
                     properties:
                       webProxyPassword:
-                        type: string
+                        description: |-
+                          SecretKeyReference combines a k8s corev1.SecretReference with a
+                          specific key within the referred-to Secret
+                        properties:
+                          key:
+                            description: Key is the key within the secret
+                            type: string
+                          name:
+                            description: name is unique within a namespace to reference
+                              a secret resource.
+                            type: string
+                          namespace:
+                            description: namespace defines the space within which
+                              the secret name must be unique.
+                            type: string
+                        required:
+                        - key
+                        type: object
+                        x-kubernetes-map-type: atomic
                       webProxyUsername:
                         type: string
                     type: object
@@ -541,6 +711,20 @@ spec:
                         type: object
                       roleARN:
                         type: string
+                      roleRef:
+                        description: Reference field for RoleARN
+                        properties:
+                          from:
+                            description: |-
+                              AWSResourceReference provides all the values necessary to reference another
+                              k8s resource for finding the identifier(Id/ARN/Name)
+                            properties:
+                              name:
+                                type: string
+                              namespace:
+                                type: string
+                            type: object
+                        type: object
                       workGroup:
                         type: string
                     type: object
@@ -710,6 +894,20 @@ spec:
                         type: string
                       instanceID:
                         type: string
+                      instanceRef:
+                        description: Reference field for InstanceID
+                        properties:
+                          from:
+                            description: |-
+                              AWSResourceReference provides all the values necessary to reference another
+                              k8s resource for finding the identifier(Id/ARN/Name)
+                            properties:
+                              name:
+                                type: string
+                              namespace:
+                                type: string
+                            type: object
+                        type: object
                     type: object
                   redshiftParameters:
                     description: |-
@@ -739,6 +937,20 @@ spec:
                             type: string
                           roleARN:
                             type: string
+                          roleRef:
+                            description: Reference field for RoleARN
+                            properties:
+                              from:
+                                description: |-
+                                  AWSResourceReference provides all the values necessary to reference another
+                                  k8s resource for finding the identifier(Id/ARN/Name)
+                                properties:
+                                  name:
+                                    type: string
+                                  namespace:
+                                    type: string
+                                type: object
+                            type: object
                         type: object
                       identityCenterConfiguration:
                         description: The parameters for an IAM Identity Center configuration.
@@ -760,6 +972,20 @@ spec:
                         type: string
                       roleARN:
                         type: string
+                      roleRef:
+                        description: Reference field for RoleARN
+                        properties:
+                          from:
+                            description: |-
+                              AWSResourceReference provides all the values necessary to reference another
+                              k8s resource for finding the identifier(Id/ARN/Name)
+                            properties:
+                              name:
+                                type: string
+                              namespace:
+                                type: string
+                            type: object
+                        type: object
                     type: object
                   s3Parameters:
                     description: The parameters for S3.
@@ -769,11 +995,39 @@ spec:
                         properties:
                           bucket:
                             type: string
+                          bucketRef:
+                            description: Reference field for Bucket
+                            properties:
+                              from:
+                                description: |-
+                                  AWSResourceReference provides all the values necessary to reference another
+                                  k8s resource for finding the identifier(Id/ARN/Name)
+                                properties:
+                                  name:
+                                    type: string
+                                  namespace:
+                                    type: string
+                                type: object
+                            type: object
                           key:
                             type: string
                         type: object
                       roleARN:
                         type: string
+                      roleRef:
+                        description: Reference field for RoleARN
+                        properties:
+                          from:
+                            description: |-
+                              AWSResourceReference provides all the values necessary to reference another
+                              k8s resource for finding the identifier(Id/ARN/Name)
+                            properties:
+                              name:
+                                type: string
+                              namespace:
+                                type: string
+                            type: object
+                        type: object
                     type: object
                   serviceNowParameters:
                     description: The parameters for ServiceNow.
