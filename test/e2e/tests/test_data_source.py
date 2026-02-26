@@ -155,6 +155,7 @@ class TestDataSource:
         
         # Wait for the update to sync
         assert k8s.wait_on_condition(ref, "ACK.ResourceSynced", "True", wait_periods=5)
+        cr = k8s.get_resource(ref)
         
         # Verify the update in AWS
         response = quicksight_client.describe_data_source(
