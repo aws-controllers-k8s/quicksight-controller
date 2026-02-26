@@ -2701,11 +2701,6 @@ func (in *DataSourceStatus) DeepCopyInto(out *DataSourceStatus) {
 		in, out := &in.CreatedTime, &out.CreatedTime
 		*out = (*in).DeepCopy()
 	}
-	if in.CreationStatus != nil {
-		in, out := &in.CreationStatus, &out.CreationStatus
-		*out = new(string)
-		**out = **in
-	}
 	if in.ErrorInfo != nil {
 		in, out := &in.ErrorInfo, &out.ErrorInfo
 		*out = new(DataSourceErrorInfo)

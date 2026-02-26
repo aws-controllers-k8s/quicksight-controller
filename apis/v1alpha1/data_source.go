@@ -82,16 +82,16 @@ type DataSourceStatus struct {
 	// The time that this data source was created.
 	// +kubebuilder:validation:Optional
 	CreatedTime *metav1.Time `json:"createdTime,omitempty"`
-	// The status of creating the data source.
-	// +kubebuilder:validation:Optional
-	CreationStatus *string `json:"creationStatus,omitempty"`
 	// Error information from the last update or the creation of the data source.
 	// +kubebuilder:validation:Optional
 	ErrorInfo *DataSourceErrorInfo `json:"errorInfo,omitempty"`
 	// The last time that this data source was updated.
 	// +kubebuilder:validation:Optional
 	LastUpdatedTime *metav1.Time `json:"lastUpdatedTime,omitempty"`
-	// The HTTP status of the request.
+	// The status of the data source. Possible values are CREATION_IN_PROGRESS,
+	// CREATION_SUCCESSFUL, CREATION_FAILED, UPDATE_IN_PROGRESS, UPDATE_SUCCESSFUL,
+	// UPDATE_FAILED, or DELETED. The resource is considered synced when the status
+	// is CREATION_SUCCESSFUL or UPDATE_SUCCESSFUL.
 	// +kubebuilder:validation:Optional
 	Status *string `json:"status,omitempty"`
 }

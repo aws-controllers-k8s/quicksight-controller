@@ -1,0 +1,9 @@
+resources:
+  DataSource:
+    fields:
+      Status:
+        override: |
+          The status of the data source. Possible values are CREATION_IN_PROGRESS,
+          CREATION_SUCCESSFUL, CREATION_FAILED, UPDATE_IN_PROGRESS, UPDATE_SUCCESSFUL,
+          UPDATE_FAILED, or DELETED. The resource is considered synced when the status
+          is CREATION_SUCCESSFUL or UPDATE_SUCCESSFUL.

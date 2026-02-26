@@ -773,9 +773,9 @@ func (rm *resourceManager) sdkCreate(
 		ko.Status.ACKResourceMetadata.ARN = &arn
 	}
 	if resp.CreationStatus != "" {
-		ko.Status.CreationStatus = aws.String(string(resp.CreationStatus))
+		ko.Status.Status = aws.String(string(resp.CreationStatus))
 	} else {
-		ko.Status.CreationStatus = nil
+		ko.Status.Status = nil
 	}
 	if resp.DataSourceId != nil {
 		ko.Spec.DataSourceID = resp.DataSourceId
@@ -785,9 +785,6 @@ func (rm *resourceManager) sdkCreate(
 
 	rm.setStatusDefaults(ko)
 
-	if resp.CreationStatus != "" {
-		ko.Status.Status = aws.String(string(resp.CreationStatus))
-	}
 	if ko.Spec.Tags != nil {
 		ackcondition.SetSynced(&resource{ko}, corev1.ConditionFalse, nil, nil)
 	}
@@ -2490,13 +2487,13 @@ func (rm *resourceManager) sdkUpdate(
 	} else {
 		ko.Spec.DataSourceID = nil
 	}
-
-	rm.setStatusDefaults(ko)
-
 	if resp.UpdateStatus != "" {
 		ko.Status.Status = aws.String(string(resp.UpdateStatus))
+	} else {
+		ko.Status.Status = nil
 	}
 
+	rm.setStatusDefaults(ko)
 	return &resource{ko}, nil
 }
 

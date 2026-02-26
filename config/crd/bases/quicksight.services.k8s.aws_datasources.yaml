@@ -1319,9 +1319,6 @@ spec:
                 description: The time that this data source was created.
                 format: date-time
                 type: string
-              creationStatus:
-                description: The status of creating the data source.
-                type: string
               errorInfo:
                 description: Error information from the last update or the creation
                   of the data source.
@@ -1336,7 +1333,11 @@ spec:
                 format: date-time
                 type: string
               status:
-                description: The HTTP status of the request.
+                description: |-
+                  The status of the data source. Possible values are CREATION_IN_PROGRESS,
+                  CREATION_SUCCESSFUL, CREATION_FAILED, UPDATE_IN_PROGRESS, UPDATE_SUCCESSFUL,
+                  UPDATE_FAILED, or DELETED. The resource is considered synced when the status
+                  is CREATION_SUCCESSFUL or UPDATE_SUCCESSFUL.
                 type: string
             type: object
         type: object
