@@ -70,6 +70,26 @@ rules:
   - list
   - watch
 - apiGroups:
+  - quicksight.services.k8s.aws
+  resources:
+  - dashboards
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - quicksight.services.k8s.aws
+  resources:
+  - dashboards/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
   - services.k8s.aws
   resources:
   - fieldexports

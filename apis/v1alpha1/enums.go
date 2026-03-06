@@ -15,56 +15,6 @@
 
 package v1alpha1
 
-type ActionConnectorErrorType string
-
-const (
-	ActionConnectorErrorType_INTERNAL_FAILURE ActionConnectorErrorType = "INTERNAL_FAILURE"
-)
-
-type ActionConnectorSearchFilterNameEnum string
-
-const (
-	ActionConnectorSearchFilterNameEnum_ACTION_CONNECTOR_NAME             ActionConnectorSearchFilterNameEnum = "ACTION_CONNECTOR_NAME"
-	ActionConnectorSearchFilterNameEnum_ACTION_CONNECTOR_TYPE             ActionConnectorSearchFilterNameEnum = "ACTION_CONNECTOR_TYPE"
-	ActionConnectorSearchFilterNameEnum_DIRECT_QUICKSIGHT_OWNER           ActionConnectorSearchFilterNameEnum = "DIRECT_QUICKSIGHT_OWNER"
-	ActionConnectorSearchFilterNameEnum_DIRECT_QUICKSIGHT_SOLE_OWNER      ActionConnectorSearchFilterNameEnum = "DIRECT_QUICKSIGHT_SOLE_OWNER"
-	ActionConnectorSearchFilterNameEnum_DIRECT_QUICKSIGHT_VIEWER_OR_OWNER ActionConnectorSearchFilterNameEnum = "DIRECT_QUICKSIGHT_VIEWER_OR_OWNER"
-	ActionConnectorSearchFilterNameEnum_QUICKSIGHT_OWNER                  ActionConnectorSearchFilterNameEnum = "QUICKSIGHT_OWNER"
-	ActionConnectorSearchFilterNameEnum_QUICKSIGHT_VIEWER_OR_OWNER        ActionConnectorSearchFilterNameEnum = "QUICKSIGHT_VIEWER_OR_OWNER"
-)
-
-type ActionConnectorType string
-
-const (
-	ActionConnectorType_AMAZON_BEDROCK_AGENT_RUNTIME           ActionConnectorType = "AMAZON_BEDROCK_AGENT_RUNTIME"
-	ActionConnectorType_AMAZON_BEDROCK_DATA_AUTOMATION_RUNTIME ActionConnectorType = "AMAZON_BEDROCK_DATA_AUTOMATION_RUNTIME"
-	ActionConnectorType_AMAZON_BEDROCK_RUNTIME                 ActionConnectorType = "AMAZON_BEDROCK_RUNTIME"
-	ActionConnectorType_AMAZON_COMPREHEND                      ActionConnectorType = "AMAZON_COMPREHEND"
-	ActionConnectorType_AMAZON_COMPREHEND_MEDICAL              ActionConnectorType = "AMAZON_COMPREHEND_MEDICAL"
-	ActionConnectorType_AMAZON_S3                              ActionConnectorType = "AMAZON_S3"
-	ActionConnectorType_AMAZON_TEXTRACT                        ActionConnectorType = "AMAZON_TEXTRACT"
-	ActionConnectorType_ASANA                                  ActionConnectorType = "ASANA"
-	ActionConnectorType_ATLASSIAN_CONFLUENCE                   ActionConnectorType = "ATLASSIAN_CONFLUENCE"
-	ActionConnectorType_BAMBOO_HR                              ActionConnectorType = "BAMBOO_HR"
-	ActionConnectorType_GENERIC_HTTP                           ActionConnectorType = "GENERIC_HTTP"
-	ActionConnectorType_JIRA_CLOUD                             ActionConnectorType = "JIRA_CLOUD"
-	ActionConnectorType_MICROSOFT_ONEDRIVE                     ActionConnectorType = "MICROSOFT_ONEDRIVE"
-	ActionConnectorType_MICROSOFT_OUTLOOK                      ActionConnectorType = "MICROSOFT_OUTLOOK"
-	ActionConnectorType_MICROSOFT_SHAREPOINT                   ActionConnectorType = "MICROSOFT_SHAREPOINT"
-	ActionConnectorType_MICROSOFT_TEAMS                        ActionConnectorType = "MICROSOFT_TEAMS"
-	ActionConnectorType_PAGERDUTY_ADVANCE                      ActionConnectorType = "PAGERDUTY_ADVANCE"
-	ActionConnectorType_SALESFORCE_CRM                         ActionConnectorType = "SALESFORCE_CRM"
-	ActionConnectorType_SAP_BILLOFMATERIALS                    ActionConnectorType = "SAP_BILLOFMATERIALS"
-	ActionConnectorType_SAP_BUSINESSPARTNER                    ActionConnectorType = "SAP_BUSINESSPARTNER"
-	ActionConnectorType_SAP_MATERIALSTOCK                      ActionConnectorType = "SAP_MATERIALSTOCK"
-	ActionConnectorType_SAP_PHYSICALINVENTORY                  ActionConnectorType = "SAP_PHYSICALINVENTORY"
-	ActionConnectorType_SAP_PRODUCTMASTERDATA                  ActionConnectorType = "SAP_PRODUCTMASTERDATA"
-	ActionConnectorType_SERVICENOW_NOW_PLATFORM                ActionConnectorType = "SERVICENOW_NOW_PLATFORM"
-	ActionConnectorType_SLACK                                  ActionConnectorType = "SLACK"
-	ActionConnectorType_SMARTSHEET                             ActionConnectorType = "SMARTSHEET"
-	ActionConnectorType_ZENDESK_SUITE                          ActionConnectorType = "ZENDESK_SUITE"
-)
-
 type AggType string
 
 const (
@@ -180,8 +130,7 @@ const (
 type AssetBundleExportJobDataSetPropertyToOverride string
 
 const (
-	AssetBundleExportJobDataSetPropertyToOverride_Name                           AssetBundleExportJobDataSetPropertyToOverride = "Name"
-	AssetBundleExportJobDataSetPropertyToOverride_RefreshFailureEmailAlertStatus AssetBundleExportJobDataSetPropertyToOverride = "RefreshFailureEmailAlertStatus"
+	AssetBundleExportJobDataSetPropertyToOverride_Name AssetBundleExportJobDataSetPropertyToOverride = "Name"
 )
 
 type AssetBundleExportJobDataSourcePropertyToOverride string
@@ -304,12 +253,6 @@ const (
 	AuthorSpecifiedAggregation_VARP           AuthorSpecifiedAggregation = "VARP"
 )
 
-type AuthorizationCodeGrantCredentialsSource string
-
-const (
-	AuthorizationCodeGrantCredentialsSource_PLAIN_CREDENTIALS AuthorizationCodeGrantCredentialsSource = "PLAIN_CREDENTIALS"
-)
-
 type AxisBinding string
 
 const (
@@ -409,12 +352,6 @@ const (
 	CategoryFilterType_CUSTOM_FILTER      CategoryFilterType = "CUSTOM_FILTER"
 	CategoryFilterType_CUSTOM_FILTER_LIST CategoryFilterType = "CUSTOM_FILTER_LIST"
 	CategoryFilterType_FILTER_LIST        CategoryFilterType = "FILTER_LIST"
-)
-
-type ClientCredentialsSource string
-
-const (
-	ClientCredentialsSource_PLAIN_CREDENTIALS ClientCredentialsSource = "PLAIN_CREDENTIALS"
 )
 
 type ColorFillType string
@@ -519,17 +456,6 @@ const (
 	ConditionalFormattingIconSetType_THREE_COLOR_ARROW   ConditionalFormattingIconSetType = "THREE_COLOR_ARROW"
 	ConditionalFormattingIconSetType_THREE_GRAY_ARROW    ConditionalFormattingIconSetType = "THREE_GRAY_ARROW"
 	ConditionalFormattingIconSetType_THREE_SHAPE         ConditionalFormattingIconSetType = "THREE_SHAPE"
-)
-
-type ConnectionAuthType string
-
-const (
-	ConnectionAuthType_API_KEY                   ConnectionAuthType = "API_KEY"
-	ConnectionAuthType_BASIC                     ConnectionAuthType = "BASIC"
-	ConnectionAuthType_IAM                       ConnectionAuthType = "IAM"
-	ConnectionAuthType_NONE                      ConnectionAuthType = "NONE"
-	ConnectionAuthType_OAUTH2_AUTHORIZATION_CODE ConnectionAuthType = "OAUTH2_AUTHORIZATION_CODE"
-	ConnectionAuthType_OAUTH2_CLIENT_CREDENTIALS ConnectionAuthType = "OAUTH2_CLIENT_CREDENTIALS"
 )
 
 type ConstantType string
@@ -654,26 +580,6 @@ const (
 	DataLabelPosition_TOP     DataLabelPosition = "TOP"
 )
 
-type DataPrepSimpleAggregationFunctionType string
-
-const (
-	DataPrepSimpleAggregationFunctionType_AVERAGE        DataPrepSimpleAggregationFunctionType = "AVERAGE"
-	DataPrepSimpleAggregationFunctionType_COUNT          DataPrepSimpleAggregationFunctionType = "COUNT"
-	DataPrepSimpleAggregationFunctionType_DISTINCT_COUNT DataPrepSimpleAggregationFunctionType = "DISTINCT_COUNT"
-	DataPrepSimpleAggregationFunctionType_MAX            DataPrepSimpleAggregationFunctionType = "MAX"
-	DataPrepSimpleAggregationFunctionType_MIN            DataPrepSimpleAggregationFunctionType = "MIN"
-	DataPrepSimpleAggregationFunctionType_SUM            DataPrepSimpleAggregationFunctionType = "SUM"
-)
-
-type DataSetDateComparisonFilterOperator string
-
-const (
-	DataSetDateComparisonFilterOperator_AFTER               DataSetDateComparisonFilterOperator = "AFTER"
-	DataSetDateComparisonFilterOperator_AFTER_OR_EQUALS_TO  DataSetDateComparisonFilterOperator = "AFTER_OR_EQUALS_TO"
-	DataSetDateComparisonFilterOperator_BEFORE              DataSetDateComparisonFilterOperator = "BEFORE"
-	DataSetDateComparisonFilterOperator_BEFORE_OR_EQUALS_TO DataSetDateComparisonFilterOperator = "BEFORE_OR_EQUALS_TO"
-)
-
 type DataSetFilterAttribute string
 
 const (
@@ -690,41 +596,6 @@ type DataSetImportMode string
 const (
 	DataSetImportMode_DIRECT_QUERY DataSetImportMode = "DIRECT_QUERY"
 	DataSetImportMode_SPICE        DataSetImportMode = "SPICE"
-)
-
-type DataSetNumericComparisonFilterOperator string
-
-const (
-	DataSetNumericComparisonFilterOperator_DOES_NOT_EQUAL            DataSetNumericComparisonFilterOperator = "DOES_NOT_EQUAL"
-	DataSetNumericComparisonFilterOperator_EQUALS                    DataSetNumericComparisonFilterOperator = "EQUALS"
-	DataSetNumericComparisonFilterOperator_GREATER_THAN              DataSetNumericComparisonFilterOperator = "GREATER_THAN"
-	DataSetNumericComparisonFilterOperator_GREATER_THAN_OR_EQUALS_TO DataSetNumericComparisonFilterOperator = "GREATER_THAN_OR_EQUALS_TO"
-	DataSetNumericComparisonFilterOperator_LESS_THAN                 DataSetNumericComparisonFilterOperator = "LESS_THAN"
-	DataSetNumericComparisonFilterOperator_LESS_THAN_OR_EQUALS_TO    DataSetNumericComparisonFilterOperator = "LESS_THAN_OR_EQUALS_TO"
-)
-
-type DataSetStringComparisonFilterOperator string
-
-const (
-	DataSetStringComparisonFilterOperator_CONTAINS         DataSetStringComparisonFilterOperator = "CONTAINS"
-	DataSetStringComparisonFilterOperator_DOES_NOT_CONTAIN DataSetStringComparisonFilterOperator = "DOES_NOT_CONTAIN"
-	DataSetStringComparisonFilterOperator_DOES_NOT_EQUAL   DataSetStringComparisonFilterOperator = "DOES_NOT_EQUAL"
-	DataSetStringComparisonFilterOperator_ENDS_WITH        DataSetStringComparisonFilterOperator = "ENDS_WITH"
-	DataSetStringComparisonFilterOperator_EQUALS           DataSetStringComparisonFilterOperator = "EQUALS"
-	DataSetStringComparisonFilterOperator_STARTS_WITH      DataSetStringComparisonFilterOperator = "STARTS_WITH"
-)
-
-type DataSetStringListFilterOperator string
-
-const (
-	DataSetStringListFilterOperator_EXCLUDE DataSetStringListFilterOperator = "EXCLUDE"
-	DataSetStringListFilterOperator_INCLUDE DataSetStringListFilterOperator = "INCLUDE"
-)
-
-type DataSetUseAs string
-
-const (
-	DataSetUseAs_RLS_RULES DataSetUseAs = "RLS_RULES"
 )
 
 type DataSourceErrorInfoType string
@@ -760,26 +631,19 @@ const (
 	DataSourceType_AURORA_POSTGRESQL    DataSourceType = "AURORA_POSTGRESQL"
 	DataSourceType_AWS_IOT_ANALYTICS    DataSourceType = "AWS_IOT_ANALYTICS"
 	DataSourceType_BIGQUERY             DataSourceType = "BIGQUERY"
-	DataSourceType_CONFLUENCE           DataSourceType = "CONFLUENCE"
 	DataSourceType_DATABRICKS           DataSourceType = "DATABRICKS"
 	DataSourceType_EXASOL               DataSourceType = "EXASOL"
 	DataSourceType_GITHUB               DataSourceType = "GITHUB"
-	DataSourceType_GOOGLESHEETS         DataSourceType = "GOOGLESHEETS"
-	DataSourceType_GOOGLE_DRIVE         DataSourceType = "GOOGLE_DRIVE"
 	DataSourceType_JIRA                 DataSourceType = "JIRA"
 	DataSourceType_MARIADB              DataSourceType = "MARIADB"
 	DataSourceType_MYSQL                DataSourceType = "MYSQL"
-	DataSourceType_ONE_DRIVE            DataSourceType = "ONE_DRIVE"
 	DataSourceType_ORACLE               DataSourceType = "ORACLE"
 	DataSourceType_POSTGRESQL           DataSourceType = "POSTGRESQL"
 	DataSourceType_PRESTO               DataSourceType = "PRESTO"
-	DataSourceType_QBUSINESS            DataSourceType = "QBUSINESS"
 	DataSourceType_REDSHIFT             DataSourceType = "REDSHIFT"
 	DataSourceType_S3                   DataSourceType = "S3"
-	DataSourceType_S3_KNOWLEDGE_BASE    DataSourceType = "S3_KNOWLEDGE_BASE"
 	DataSourceType_SALESFORCE           DataSourceType = "SALESFORCE"
 	DataSourceType_SERVICENOW           DataSourceType = "SERVICENOW"
-	DataSourceType_SHAREPOINT           DataSourceType = "SHAREPOINT"
 	DataSourceType_SNOWFLAKE            DataSourceType = "SNOWFLAKE"
 	DataSourceType_SPARK                DataSourceType = "SPARK"
 	DataSourceType_SQLSERVER            DataSourceType = "SQLSERVER"
@@ -788,7 +652,6 @@ const (
 	DataSourceType_TIMESTREAM           DataSourceType = "TIMESTREAM"
 	DataSourceType_TRINO                DataSourceType = "TRINO"
 	DataSourceType_TWITTER              DataSourceType = "TWITTER"
-	DataSourceType_WEB_CRAWLER          DataSourceType = "WEB_CRAWLER"
 )
 
 type DatasetParameterValueType string
@@ -847,13 +710,6 @@ const (
 	DefaultAggregation_VARP           DefaultAggregation = "VARP"
 )
 
-type DigitGroupingStyle string
-
-const (
-	DigitGroupingStyle_DEFAULT DigitGroupingStyle = "DEFAULT"
-	DigitGroupingStyle_LAKHS   DigitGroupingStyle = "LAKHS"
-)
-
 type DisplayFormat string
 
 const (
@@ -895,16 +751,6 @@ const (
 	ExceptionResourceType_VPC_CONNECTION       ExceptionResourceType = "VPC_CONNECTION"
 )
 
-type FieldName string
-
-const (
-	FieldName_DIRECT_QUICKSIGHT_OWNER           FieldName = "DIRECT_QUICKSIGHT_OWNER"
-	FieldName_DIRECT_QUICKSIGHT_SOLE_OWNER      FieldName = "DIRECT_QUICKSIGHT_SOLE_OWNER"
-	FieldName_DIRECT_QUICKSIGHT_VIEWER_OR_OWNER FieldName = "DIRECT_QUICKSIGHT_VIEWER_OR_OWNER"
-	FieldName_assetDescription                  FieldName = "assetDescription"
-	FieldName_assetName                         FieldName = "assetName"
-)
-
 type FileFormat string
 
 const (
@@ -944,14 +790,6 @@ type FilterVisualScope string
 const (
 	FilterVisualScope_ALL_VISUALS      FilterVisualScope = "ALL_VISUALS"
 	FilterVisualScope_SELECTED_VISUALS FilterVisualScope = "SELECTED_VISUALS"
-)
-
-type FlowPublishState string
-
-const (
-	FlowPublishState_DRAFT            FlowPublishState = "DRAFT"
-	FlowPublishState_PENDING_APPROVAL FlowPublishState = "PENDING_APPROVAL"
-	FlowPublishState_PUBLISHED        FlowPublishState = "PUBLISHED"
 )
 
 type FolderFilterAttribute string
@@ -1009,14 +847,6 @@ const (
 	FunnelChartMeasureDataLabelStyle_VALUE_AND_PERCENTAGE_BY_FIRST_STAGE    FunnelChartMeasureDataLabelStyle = "VALUE_AND_PERCENTAGE_BY_FIRST_STAGE"
 	FunnelChartMeasureDataLabelStyle_VALUE_AND_PERCENTAGE_BY_PREVIOUS_STAGE FunnelChartMeasureDataLabelStyle = "VALUE_AND_PERCENTAGE_BY_PREVIOUS_STAGE"
 	FunnelChartMeasureDataLabelStyle_VALUE_ONLY                             FunnelChartMeasureDataLabelStyle = "VALUE_ONLY"
-)
-
-type GeneratedAnswerStatus string
-
-const (
-	GeneratedAnswerStatus_ANSWER_DOWNGRADE GeneratedAnswerStatus = "ANSWER_DOWNGRADE"
-	GeneratedAnswerStatus_ANSWER_GENERATED GeneratedAnswerStatus = "ANSWER_GENERATED"
-	GeneratedAnswerStatus_ANSWER_RETRIEVED GeneratedAnswerStatus = "ANSWER_RETRIEVED"
 )
 
 type GeoSpatialCountryCode string
@@ -1155,20 +985,6 @@ const (
 	IncludeFolderMembers_RECURSE   IncludeFolderMembers = "RECURSE"
 )
 
-type IncludeGeneratedAnswer string
-
-const (
-	IncludeGeneratedAnswer_EXCLUDE IncludeGeneratedAnswer = "EXCLUDE"
-	IncludeGeneratedAnswer_INCLUDE IncludeGeneratedAnswer = "INCLUDE"
-)
-
-type IncludeQuickSightQIndex string
-
-const (
-	IncludeQuickSightQIndex_EXCLUDE IncludeQuickSightQIndex = "EXCLUDE"
-	IncludeQuickSightQIndex_INCLUDE IncludeQuickSightQIndex = "INCLUDE"
-)
-
 type IngestionErrorType string
 
 const (
@@ -1263,15 +1079,6 @@ const (
 	InputColumnDataType_INTEGER  InputColumnDataType = "INTEGER"
 	InputColumnDataType_JSON     InputColumnDataType = "JSON"
 	InputColumnDataType_STRING   InputColumnDataType = "STRING"
-)
-
-type JoinOperationType string
-
-const (
-	JoinOperationType_INNER JoinOperationType = "INNER"
-	JoinOperationType_LEFT  JoinOperationType = "LEFT"
-	JoinOperationType_OUTER JoinOperationType = "OUTER"
-	JoinOperationType_RIGHT JoinOperationType = "RIGHT"
 )
 
 type JoinType string
@@ -1437,7 +1244,6 @@ type NamedFilterType string
 const (
 	NamedFilterType_CATEGORY_FILTER         NamedFilterType = "CATEGORY_FILTER"
 	NamedFilterType_DATE_RANGE_FILTER       NamedFilterType = "DATE_RANGE_FILTER"
-	NamedFilterType_NULL_FILTER             NamedFilterType = "NULL_FILTER"
 	NamedFilterType_NUMERIC_EQUALITY_FILTER NamedFilterType = "NUMERIC_EQUALITY_FILTER"
 	NamedFilterType_NUMERIC_RANGE_FILTER    NamedFilterType = "NUMERIC_RANGE_FILTER"
 	NamedFilterType_RELATIVE_DATE_FILTER    NamedFilterType = "RELATIVE_DATE_FILTER"
@@ -1490,21 +1296,11 @@ const (
 	NullFilterOption_NULLS_ONLY     NullFilterOption = "NULLS_ONLY"
 )
 
-type NullFilterType string
-
-const (
-	NullFilterType_ALL_VALUES     NullFilterType = "ALL_VALUES"
-	NullFilterType_NON_NULLS_ONLY NullFilterType = "NON_NULLS_ONLY"
-	NullFilterType_NULLS_ONLY     NullFilterType = "NULLS_ONLY"
-)
-
 type NumberScale string
 
 const (
 	NumberScale_AUTO      NumberScale = "AUTO"
 	NumberScale_BILLIONS  NumberScale = "BILLIONS"
-	NumberScale_CRORES    NumberScale = "CRORES"
-	NumberScale_LAKHS     NumberScale = "LAKHS"
 	NumberScale_MILLIONS  NumberScale = "MILLIONS"
 	NumberScale_NONE      NumberScale = "NONE"
 	NumberScale_THOUSANDS NumberScale = "THOUSANDS"
@@ -1667,35 +1463,6 @@ const (
 	PurchaseMode_MANUAL        PurchaseMode = "MANUAL"
 )
 
-type QAResultType string
-
-const (
-	QAResultType_DASHBOARD_VISUAL QAResultType = "DASHBOARD_VISUAL"
-	QAResultType_GENERATED_ANSWER QAResultType = "GENERATED_ANSWER"
-	QAResultType_NO_ANSWER        QAResultType = "NO_ANSWER"
-)
-
-type QBusinessInsightsStatus string
-
-const (
-	QBusinessInsightsStatus_DISABLED QBusinessInsightsStatus = "DISABLED"
-	QBusinessInsightsStatus_ENABLED  QBusinessInsightsStatus = "ENABLED"
-)
-
-type QDataKeyType string
-
-const (
-	QDataKeyType_AWS_OWNED QDataKeyType = "AWS_OWNED"
-	QDataKeyType_CMK       QDataKeyType = "CMK"
-)
-
-type QSearchStatus string
-
-const (
-	QSearchStatus_DISABLED QSearchStatus = "DISABLED"
-	QSearchStatus_ENABLED  QSearchStatus = "ENABLED"
-)
-
 type QueryExecutionMode string
 
 const (
@@ -1753,13 +1520,6 @@ type ReferenceLineValueLabelRelativePosition string
 const (
 	ReferenceLineValueLabelRelativePosition_AFTER_CUSTOM_LABEL  ReferenceLineValueLabelRelativePosition = "AFTER_CUSTOM_LABEL"
 	ReferenceLineValueLabelRelativePosition_BEFORE_CUSTOM_LABEL ReferenceLineValueLabelRelativePosition = "BEFORE_CUSTOM_LABEL"
-)
-
-type RefreshFailureAlertStatus string
-
-const (
-	RefreshFailureAlertStatus_DISABLED RefreshFailureAlertStatus = "DISABLED"
-	RefreshFailureAlertStatus_ENABLED  RefreshFailureAlertStatus = "ENABLED"
 )
 
 type RefreshInterval string
@@ -1849,13 +1609,6 @@ const (
 	RowLevelPermissionPolicy_GRANT_ACCESS RowLevelPermissionPolicy = "GRANT_ACCESS"
 )
 
-type SearchFilterOperator string
-
-const (
-	SearchFilterOperator_StringEquals SearchFilterOperator = "StringEquals"
-	SearchFilterOperator_StringLike   SearchFilterOperator = "StringLike"
-)
-
 type SectionPageBreakStatus string
 
 const (
@@ -1885,9 +1638,7 @@ const (
 type ServiceType string
 
 const (
-	ServiceType_ATHENA    ServiceType = "ATHENA"
-	ServiceType_QBUSINESS ServiceType = "QBUSINESS"
-	ServiceType_REDSHIFT  ServiceType = "REDSHIFT"
+	ServiceType_REDSHIFT ServiceType = "REDSHIFT"
 )
 
 type SharingModel string
@@ -2113,12 +1864,6 @@ const (
 	TextQualifier_SINGLE_QUOTE TextQualifier = "SINGLE_QUOTE"
 )
 
-type TextTransform string
-
-const (
-	TextTransform_CAPITALIZE TextTransform = "CAPITALIZE"
-)
-
 type TextWrap string
 
 const (
@@ -2294,13 +2039,6 @@ const (
 	TopicUserExperienceVersion_NEW_READER_EXPERIENCE TopicUserExperienceVersion = "NEW_READER_EXPERIENCE"
 )
 
-type TransposedColumnType string
-
-const (
-	TransposedColumnType_ROW_HEADER_COLUMN TransposedColumnType = "ROW_HEADER_COLUMN"
-	TransposedColumnType_VALUE_COLUMN      TransposedColumnType = "VALUE_COLUMN"
-)
-
 type URLTargetConfiguration string
 
 const (
@@ -2388,14 +2126,6 @@ const (
 	VisualCustomActionTrigger_DATA_POINT_MENU  VisualCustomActionTrigger = "DATA_POINT_MENU"
 )
 
-type VisualHighlightTrigger string
-
-const (
-	VisualHighlightTrigger_DATA_POINT_CLICK VisualHighlightTrigger = "DATA_POINT_CLICK"
-	VisualHighlightTrigger_DATA_POINT_HOVER VisualHighlightTrigger = "DATA_POINT_HOVER"
-	VisualHighlightTrigger_NONE             VisualHighlightTrigger = "NONE"
-)
-
 type VisualRole string
 
 const (
@@ -2404,15 +2134,6 @@ const (
 	VisualRole_FRAGMENT      VisualRole = "FRAGMENT"
 	VisualRole_MULTI_INTENT  VisualRole = "MULTI_INTENT"
 	VisualRole_PRIMARY       VisualRole = "PRIMARY"
-)
-
-type WebCrawlerAuthType string
-
-const (
-	WebCrawlerAuthType_BASIC_AUTH WebCrawlerAuthType = "BASIC_AUTH"
-	WebCrawlerAuthType_FORM       WebCrawlerAuthType = "FORM"
-	WebCrawlerAuthType_NO_AUTH    WebCrawlerAuthType = "NO_AUTH"
-	WebCrawlerAuthType_SAML       WebCrawlerAuthType = "SAML"
 )
 
 type WidgetStatus string

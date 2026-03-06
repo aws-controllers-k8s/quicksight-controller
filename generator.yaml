@@ -3,7 +3,6 @@ ignore:
       - AccountCustomization
       - AccountSubscription
       - Analysis
-      - Dashboard
       - DataSet
       - DataSource
       - Folder
@@ -24,3 +23,6 @@ ignore:
       - VPCConnection
       - Brand
       - ActionConnector
+empty_shapes:
+  - AxisDisplayDataDrivenRange
+  - AllSheetsFilterScopeConfiguration

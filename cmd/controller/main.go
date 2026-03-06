@@ -39,6 +39,8 @@ import (
 	svctypes "github.com/aws-controllers-k8s/quicksight-controller/apis/v1alpha1"
 	svcresource "github.com/aws-controllers-k8s/quicksight-controller/pkg/resource"
 
+	_ "github.com/aws-controllers-k8s/quicksight-controller/pkg/resource/dashboard"
+
 	"github.com/aws-controllers-k8s/quicksight-controller/pkg/version"
 )
 
