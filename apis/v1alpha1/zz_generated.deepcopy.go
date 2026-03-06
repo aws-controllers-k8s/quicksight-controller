@@ -4563,7 +4563,7 @@ func (in *DateTimeDatasetParameterDefaultValues) DeepCopyInto(out *DateTimeDatas
 	*out = *in
 	if in.StaticValues != nil {
 		in, out := &in.StaticValues, &out.StaticValues
-		*out = make([]*v1.Time, len(*in))
+		*out = make([]v1.Time, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
@@ -6435,7 +6435,7 @@ func (in *NewDefaultValues) DeepCopyInto(out *NewDefaultValues) {
 	*out = *in
 	if in.DateTimeStaticValues != nil {
 		in, out := &in.DateTimeStaticValues, &out.DateTimeStaticValues
-		*out = make([]*v1.Time, len(*in))
+		*out = make([]v1.Time, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}

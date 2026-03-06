@@ -1056,7 +1056,7 @@ func (rm *resourceManager) newCreateRequestPayload(
 						f6elemf0f0f0 := []time.Time{}
 						for _, f6elemf0f0f0iter := range f6iter.DateTimeDatasetParameter.DefaultValues.StaticValues {
 							var f6elemf0f0f0elem time.Time
-							f6elemf0f0f0elem = &f6elemf0f0f0iter.Time
+							f6elemf0f0f0elem = f6elemf0f0f0iter.Time
 							f6elemf0f0f0 = append(f6elemf0f0f0, f6elemf0f0f0elem)
 						}
 						f6elemf0f0.StaticValues = f6elemf0f0f0
@@ -1402,7 +1402,7 @@ func (rm *resourceManager) newCreateRequestPayload(
 								f10valf1elemf3f0f0 := []time.Time{}
 								for _, f10valf1elemf3f0f0iter := range f10valf1iter.OverrideDatasetParameterOperation.NewDefaultValues.DateTimeStaticValues {
 									var f10valf1elemf3f0f0elem time.Time
-									f10valf1elemf3f0f0elem = &f10valf1elemf3f0f0iter.Time
+									f10valf1elemf3f0f0elem = f10valf1elemf3f0f0iter.Time
 									f10valf1elemf3f0f0 = append(f10valf1elemf3f0f0, f10valf1elemf3f0f0elem)
 								}
 								f10valf1elemf3f0.DateTimeStaticValues = f10valf1elemf3f0f0
@@ -1623,8 +1623,13 @@ func (rm *resourceManager) newCreateRequestPayload(
 	if r.ko.Spec.PhysicalTableMap != nil {
 		f14 := map[string]svcsdktypes.PhysicalTable{}
 		for f14key, f14valiter := range r.ko.Spec.PhysicalTableMap {
-			f14val := &svcsdktypes.PhysicalTable{}
+			var f14val svcsdktypes.PhysicalTable
+			isInterfaceSet := false
 			if f14valiter.CustomSQL != nil {
+				if isInterfaceSet {
+					return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for CustomSql"))
+				}
+				f14valf0Parent := &svcsdktypes.PhysicalTableMemberCustomSql{}
 				f14valf0 := &svcsdktypes.CustomSql{}
 				if f14valiter.CustomSQL.Columns != nil {
 					f14valf0f0 := []svcsdktypes.InputColumn{}
@@ -1655,9 +1660,15 @@ func (rm *resourceManager) newCreateRequestPayload(
 				if f14valiter.CustomSQL.SQLQuery != nil {
 					f14valf0.SqlQuery = f14valiter.CustomSQL.SQLQuery
 				}
-				f14val.CustomSql = f14valf0
+				f14valf0Parent.Value = *f14valf0
+				f14val = f14valf0Parent
+				isInterfaceSet = true
 			}
 			if f14valiter.RelationalTable != nil {
+				if isInterfaceSet {
+					return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for RelationalTable"))
+				}
+				f14valf1Parent := &svcsdktypes.PhysicalTableMemberRelationalTable{}
 				f14valf1 := &svcsdktypes.RelationalTable{}
 				if f14valiter.RelationalTable.Catalog != nil {
 					f14valf1.Catalog = f14valiter.RelationalTable.Catalog
@@ -1691,9 +1702,15 @@ func (rm *resourceManager) newCreateRequestPayload(
 				if f14valiter.RelationalTable.Schema != nil {
 					f14valf1.Schema = f14valiter.RelationalTable.Schema
 				}
-				f14val.RelationalTable = f14valf1
+				f14valf1Parent.Value = *f14valf1
+				f14val = f14valf1Parent
+				isInterfaceSet = true
 			}
 			if f14valiter.S3Source != nil {
+				if isInterfaceSet {
+					return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for S3Source"))
+				}
+				f14valf2Parent := &svcsdktypes.PhysicalTableMemberS3Source{}
 				f14valf2 := &svcsdktypes.S3Source{}
 				if f14valiter.S3Source.DataSourceARN != nil {
 					f14valf2.DataSourceArn = f14valiter.S3Source.DataSourceARN
@@ -1745,9 +1762,15 @@ func (rm *resourceManager) newCreateRequestPayload(
 					}
 					f14valf2.UploadSettings = f14valf2f2
 				}
-				f14val.S3Source = f14valf2
+				f14valf2Parent.Value = *f14valf2
+				f14val = f14valf2Parent
+				isInterfaceSet = true
 			}
 			if f14valiter.SaaSTable != nil {
+				if isInterfaceSet {
+					return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for SaaSTable"))
+				}
+				f14valf3Parent := &svcsdktypes.PhysicalTableMemberSaaSTable{}
 				f14valf3 := &svcsdktypes.SaaSTable{}
 				if f14valiter.SaaSTable.DataSourceARN != nil {
 					f14valf3.DataSourceArn = f14valiter.SaaSTable.DataSourceARN
@@ -1786,9 +1809,11 @@ func (rm *resourceManager) newCreateRequestPayload(
 					}
 					f14valf3.TablePath = f14valf3f2
 				}
-				f14val.SaaSTable = f14valf3
+				f14valf3Parent.Value = *f14valf3
+				f14val = f14valf3Parent
+				isInterfaceSet = true
 			}
-			f14[f14key] = *f14val
+			f14[f14key] = f14val
 		}
 		res.PhysicalTableMap = f14
 	}
@@ -2870,7 +2895,7 @@ func (rm *resourceManager) newUpdateRequestPayload(
 						f6elemf0f0f0 := []time.Time{}
 						for _, f6elemf0f0f0iter := range f6iter.DateTimeDatasetParameter.DefaultValues.StaticValues {
 							var f6elemf0f0f0elem time.Time
-							f6elemf0f0f0elem = &f6elemf0f0f0iter.Time
+							f6elemf0f0f0elem = f6elemf0f0f0iter.Time
 							f6elemf0f0f0 = append(f6elemf0f0f0, f6elemf0f0f0elem)
 						}
 						f6elemf0f0.StaticValues = f6elemf0f0f0
@@ -3213,7 +3238,7 @@ func (rm *resourceManager) newUpdateRequestPayload(
 								f9valf1elemf3f0f0 := []time.Time{}
 								for _, f9valf1elemf3f0f0iter := range f9valf1iter.OverrideDatasetParameterOperation.NewDefaultValues.DateTimeStaticValues {
 									var f9valf1elemf3f0f0elem time.Time
-									f9valf1elemf3f0f0elem = &f9valf1elemf3f0f0iter.Time
+									f9valf1elemf3f0f0elem = f9valf1elemf3f0f0iter.Time
 									f9valf1elemf3f0f0 = append(f9valf1elemf3f0f0, f9valf1elemf3f0f0elem)
 								}
 								f9valf1elemf3f0.DateTimeStaticValues = f9valf1elemf3f0f0
@@ -3420,8 +3445,13 @@ func (rm *resourceManager) newUpdateRequestPayload(
 	if r.ko.Spec.PhysicalTableMap != nil {
 		f12 := map[string]svcsdktypes.PhysicalTable{}
 		for f12key, f12valiter := range r.ko.Spec.PhysicalTableMap {
-			f12val := &svcsdktypes.PhysicalTable{}
+			var f12val svcsdktypes.PhysicalTable
+			isInterfaceSet := false
 			if f12valiter.CustomSQL != nil {
+				if isInterfaceSet {
+					return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for CustomSql"))
+				}
+				f12valf0Parent := &svcsdktypes.PhysicalTableMemberCustomSql{}
 				f12valf0 := &svcsdktypes.CustomSql{}
 				if f12valiter.CustomSQL.Columns != nil {
 					f12valf0f0 := []svcsdktypes.InputColumn{}
@@ -3452,9 +3482,15 @@ func (rm *resourceManager) newUpdateRequestPayload(
 				if f12valiter.CustomSQL.SQLQuery != nil {
 					f12valf0.SqlQuery = f12valiter.CustomSQL.SQLQuery
 				}
-				f12val.CustomSql = f12valf0
+				f12valf0Parent.Value = *f12valf0
+				f12val = f12valf0Parent
+				isInterfaceSet = true
 			}
 			if f12valiter.RelationalTable != nil {
+				if isInterfaceSet {
+					return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for RelationalTable"))
+				}
+				f12valf1Parent := &svcsdktypes.PhysicalTableMemberRelationalTable{}
 				f12valf1 := &svcsdktypes.RelationalTable{}
 				if f12valiter.RelationalTable.Catalog != nil {
 					f12valf1.Catalog = f12valiter.RelationalTable.Catalog
@@ -3488,9 +3524,15 @@ func (rm *resourceManager) newUpdateRequestPayload(
 				if f12valiter.RelationalTable.Schema != nil {
 					f12valf1.Schema = f12valiter.RelationalTable.Schema
 				}
-				f12val.RelationalTable = f12valf1
+				f12valf1Parent.Value = *f12valf1
+				f12val = f12valf1Parent
+				isInterfaceSet = true
 			}
 			if f12valiter.S3Source != nil {
+				if isInterfaceSet {
+					return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for S3Source"))
+				}
+				f12valf2Parent := &svcsdktypes.PhysicalTableMemberS3Source{}
 				f12valf2 := &svcsdktypes.S3Source{}
 				if f12valiter.S3Source.DataSourceARN != nil {
 					f12valf2.DataSourceArn = f12valiter.S3Source.DataSourceARN
@@ -3542,9 +3584,15 @@ func (rm *resourceManager) newUpdateRequestPayload(
 					}
 					f12valf2.UploadSettings = f12valf2f2
 				}
-				f12val.S3Source = f12valf2
+				f12valf2Parent.Value = *f12valf2
+				f12val = f12valf2Parent
+				isInterfaceSet = true
 			}
 			if f12valiter.SaaSTable != nil {
+				if isInterfaceSet {
+					return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for SaaSTable"))
+				}
+				f12valf3Parent := &svcsdktypes.PhysicalTableMemberSaaSTable{}
 				f12valf3 := &svcsdktypes.SaaSTable{}
 				if f12valiter.SaaSTable.DataSourceARN != nil {
 					f12valf3.DataSourceArn = f12valiter.SaaSTable.DataSourceARN
@@ -3583,9 +3631,11 @@ func (rm *resourceManager) newUpdateRequestPayload(
 					}
 					f12valf3.TablePath = f12valf3f2
 				}
-				f12val.SaaSTable = f12valf3
+				f12valf3Parent.Value = *f12valf3
+				f12val = f12valf3Parent
+				isInterfaceSet = true
 			}
-			f12[f12key] = *f12val
+			f12[f12key] = f12val
 		}
 		res.PhysicalTableMap = f12
 	}

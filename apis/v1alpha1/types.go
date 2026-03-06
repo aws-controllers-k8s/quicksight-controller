@@ -1134,7 +1134,7 @@ type DateTimeDatasetParameter struct {
 
 // The default values of a date time parameter.
 type DateTimeDatasetParameterDefaultValues struct {
-	StaticValues []*metav1.Time `json:"staticValues,omitempty"`
+	StaticValues []metav1.Time `json:"staticValues,omitempty"`
 }
 
 // A parameter declaration for the DateTime data type.
@@ -1626,10 +1626,10 @@ type NetworkInterface struct {
 // The configuration that overrides the existing default values for a dataset
 // parameter that is inherited from another dataset.
 type NewDefaultValues struct {
-	DateTimeStaticValues []*metav1.Time `json:"dateTimeStaticValues,omitempty"`
-	DecimalStaticValues  []*float64     `json:"decimalStaticValues,omitempty"`
-	IntegerStaticValues  []*int64       `json:"integerStaticValues,omitempty"`
-	StringStaticValues   []*string      `json:"stringStaticValues,omitempty"`
+	DateTimeStaticValues []metav1.Time `json:"dateTimeStaticValues,omitempty"`
+	DecimalStaticValues  []*float64    `json:"decimalStaticValues,omitempty"`
+	IntegerStaticValues  []*int64      `json:"integerStaticValues,omitempty"`
+	StringStaticValues   []*string     `json:"stringStaticValues,omitempty"`
 }
 
 // A NumericRangeFilter filters values that are within the value range.
