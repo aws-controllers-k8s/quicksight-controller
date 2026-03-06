@@ -1,0 +1,688 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.19.0
+  name: datasets.quicksight.services.k8s.aws
+spec:
+  group: quicksight.services.k8s.aws
+  names:
+    kind: DataSet
+    listKind: DataSetList
+    plural: datasets
+    singular: dataset
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: DataSet is the Schema for the DataSets API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: |-
+              DataSetSpec defines the desired state of DataSet.
+
+              Dataset.
+            properties:
+              awsAccountID:
+                description: |-
+                  The Amazon Web Services account ID.
+
+                  Regex Pattern: `^[0-9]{12}$`
+                type: string
+              columnGroups:
+                description: |-
+                  Groupings of columns that work together in certain Amazon QuickSight features.
+                  Currently, only geospatial hierarchy is supported.
+                items:
+                  description: |-
+                    Groupings of columns that work together in certain Amazon QuickSight features.
+                    This is a variant type structure. For this structure to be valid, only one
+                    of the attributes can be non-null.
+                  properties:
+                    geoSpatialColumnGroup:
+                      description: Geospatial column group that denotes a hierarchy.
+                      properties:
+                        columns:
+                          items:
+                            type: string
+                          type: array
+                        countryCode:
+                          type: string
+                        name:
+                          type: string
+                      type: object
+                  type: object
+                type: array
+              columnLevelPermissionRules:
+                description: A set of one or more definitions of a ColumnLevelPermissionRule
+                  (https://docs.aws.amazon.com/quicksight/latest/APIReference/API_ColumnLevelPermissionRule.html)
+                  .
+                items:
+                  description: |-
+                    A rule defined to grant access on one or more restricted columns. Each dataset
+                    can have multiple rules. To create a restricted column, you add it to one
+                    or more rules. Each rule must contain at least one column and at least one
+                    user or group. To be able to see a restricted column, a user or group needs
+                    to be added to a rule for that column.
+                  properties:
+                    columnNames:
+                      items:
+                        type: string
+                      type: array
+                    principals:
+                      items:
+                        type: string
+                      type: array
+                  type: object
+                type: array
+              dataSetID:
+                description: |-
+                  An ID for the dataset that you want to create. This ID is unique per Amazon
+                  Web Services Region for each Amazon Web Services account.
+                type: string
+              dataSetUsageConfiguration:
+                description: |-
+                  The usage configuration to apply to child datasets that reference this dataset
+                  as a source.
+                properties:
+                  disableUseAsDirectQuerySource:
+                    type: boolean
+                  disableUseAsImportedSource:
+                    type: boolean
+                type: object
+              datasetParameters:
+                description: The parameter declarations of the dataset.
+                items:
+                  description: |-
+                    A parameter that is created in a dataset. The parameter can be a string,
+                    integer, decimal, or datetime data type.
+                  properties:
+                    dateTimeDatasetParameter:
+                      description: A date time parameter for a dataset.
+                      properties:
+                        defaultValues:
+                          description: The default values of a date time parameter.
+                          properties:
+                            staticValues:
+                              items:
+                                format: date-time
+                                type: string
+                              type: array
+                          type: object
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        timeGranularity:
+                          type: string
+                        valueType:
+                          description: |-
+                            The value type of the parameter. The value type is used to validate the parameter
+                            before it is evaluated.
+                          type: string
+                      type: object
+                    decimalDatasetParameter:
+                      description: A decimal parameter for a dataset.
+                      properties:
+                        defaultValues:
+                          description: The default values of a decimal parameter.
+                          properties:
+                            staticValues:
+                              items:
+                                type: number
+                              type: array
+                          type: object
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        valueType:
+                          description: |-
+                            The value type of the parameter. The value type is used to validate the parameter
+                            before it is evaluated.
+                          type: string
+                      type: object
+                    integerDatasetParameter:
+                      description: An integer parameter for a dataset.
+                      properties:
+                        defaultValues:
+                          description: The default values of an integer parameter.
+                          properties:
+                            staticValues:
+                              items:
+                                format: int64
+                                type: integer
+                              type: array
+                          type: object
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        valueType:
+                          description: |-
+                            The value type of the parameter. The value type is used to validate the parameter
+                            before it is evaluated.
+                          type: string
+                      type: object
+                    stringDatasetParameter:
+                      description: A string parameter for a dataset.
+                      properties:
+                        defaultValues:
+                          description: The default values of a string parameter.
+                          properties:
+                            staticValues:
+                              items:
+                                type: string
+                              type: array
+                          type: object
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        valueType:
+                          description: |-
+                            The value type of the parameter. The value type is used to validate the parameter
+                            before it is evaluated.
+                          type: string
+                      type: object
+                  type: object
+                type: array
+              fieldFolders:
+                additionalProperties:
+                  description: A FieldFolder element is a folder that contains fields
+                    and nested subfolders.
+                  properties:
+                    columns:
+                      items:
+                        type: string
+                      type: array
+                    description:
+                      type: string
+                  type: object
+                description: The folder that contains fields and nested subfolders
+                  for your dataset.
+                type: object
+              folderARNs:
+                description: |-
+                  When you create the dataset, Amazon QuickSight adds the dataset to these
+                  folders.
+                items:
+                  type: string
+                type: array
+              importMode:
+                description: Indicates whether you want to import the data into SPICE.
+                type: string
+              logicalTableMap:
+                additionalProperties:
+                  description: |-
+                    A logical table is a unit that joins and that data transformations operate
+                    on. A logical table has a source, which can be either a physical table or
+                    result of a join. When a logical table points to a physical table, the logical
+                    table acts as a mutable copy of that physical table through transform operations.
+                  properties:
+                    alias:
+                      type: string
+                    dataTransforms:
+                      items:
+                        description: |-
+                          A data transformation on a logical table. This is a variant type structure.
+                          For this structure to be valid, only one of the attributes can be non-null.
+                        properties:
+                          castColumnTypeOperation:
+                            description: A transform operation that casts a column
+                              to a different type.
+                            properties:
+                              columnName:
+                                type: string
+                              format:
+                                type: string
+                              newColumnType:
+                                type: string
+                              subType:
+                                type: string
+                            type: object
+                          createColumnsOperation:
+                            description: |-
+                              A transform operation that creates calculated columns. Columns created in
+                              one such operation form a lexical closure.
+                            properties:
+                              columns:
+                                items:
+                                  description: A calculated column for a dataset.
+                                  properties:
+                                    columnID:
+                                      type: string
+                                    columnName:
+                                      type: string
+                                    expression:
+                                      type: string
+                                  type: object
+                                type: array
+                            type: object
+                          filterOperation:
+                            description: A transform operation that filters rows based
+                              on a condition.
+                            properties:
+                              conditionExpression:
+                                type: string
+                            type: object
+                          overrideDatasetParameterOperation:
+                            description: |-
+                              A transform operation that overrides the dataset parameter values that are
+                              defined in another dataset.
+                            properties:
+                              newDefaultValues:
+                                description: |-
+                                  The configuration that overrides the existing default values for a dataset
+                                  parameter that is inherited from another dataset.
+                                properties:
+                                  dateTimeStaticValues:
+                                    items:
+                                      format: date-time
+                                      type: string
+                                    type: array
+                                  decimalStaticValues:
+                                    items:
+                                      type: number
+                                    type: array
+                                  integerStaticValues:
+                                    items:
+                                      format: int64
+                                      type: integer
+                                    type: array
+                                  stringStaticValues:
+                                    items:
+                                      type: string
+                                    type: array
+                                type: object
+                              newParameterName:
+                                type: string
+                              parameterName:
+                                type: string
+                            type: object
+                          projectOperation:
+                            description: |-
+                              A transform operation that projects columns. Operations that come after a
+                              projection can only refer to projected columns.
+                            properties:
+                              projectedColumns:
+                                items:
+                                  type: string
+                                type: array
+                            type: object
+                          renameColumnOperation:
+                            description: A transform operation that renames a column.
+                            properties:
+                              columnName:
+                                type: string
+                              newColumnName:
+                                type: string
+                            type: object
+                          tagColumnOperation:
+                            description: A transform operation that tags a column
+                              with additional information.
+                            properties:
+                              columnName:
+                                type: string
+                              tags:
+                                items:
+                                  description: |-
+                                    A tag for a column in a TagColumnOperation (https://docs.aws.amazon.com/quicksight/latest/APIReference/API_TagColumnOperation.html)
+                                    structure. This is a variant type structure. For this structure to be valid,
+                                    only one of the attributes can be non-null.
+                                  properties:
+                                    columnDescription:
+                                      description: Metadata that contains a description
+                                        for a column.
+                                      properties:
+                                        text:
+                                          type: string
+                                      type: object
+                                    columnGeographicRole:
+                                      type: string
+                                  type: object
+                                type: array
+                            type: object
+                          untagColumnOperation:
+                            description: A transform operation that removes tags associated
+                              with a column.
+                            properties:
+                              columnName:
+                                type: string
+                              tagNames:
+                                items:
+                                  type: string
+                                type: array
+                            type: object
+                        type: object
+                      type: array
+                    source:
+                      description: |-
+                        Information about the source of a logical table. This is a variant type structure.
+                        For this structure to be valid, only one of the attributes can be non-null.
+                      properties:
+                        dataSetARN:
+                          type: string
+                        joinInstruction:
+                          description: The instructions associated with a join.
+                          properties:
+                            leftJoinKeyProperties:
+                              description: Properties associated with the columns
+                                participating in a join.
+                              properties:
+                                uniqueKey:
+                                  type: boolean
+                              type: object
+                            leftOperand:
+                              description: An identifier for the logical table that
+                                is defined in the dataset
+                              type: string
+                            onClause:
+                              type: string
+                            rightJoinKeyProperties:
+                              description: Properties associated with the columns
+                                participating in a join.
+                              properties:
+                                uniqueKey:
+                                  type: boolean
+                              type: object
+                            rightOperand:
+                              description: An identifier for the logical table that
+                                is defined in the dataset
+                              type: string
+                            type_:
+                              type: string
+                          type: object
+                        physicalTableID:
+                          type: string
+                      type: object
+                  type: object
+                description: |-
+                  Configures the combination and transformation of the data from the physical
+                  tables.
+                type: object
+              name:
+                description: The display name for the dataset.
+                type: string
+              permissions:
+                description: A list of resource permissions on the dataset.
+                items:
+                  description: Permission for the resource.
+                  properties:
+                    actions:
+                      items:
+                        type: string
+                      type: array
+                    principal:
+                      type: string
+                  type: object
+                type: array
+              physicalTableMap:
+                additionalProperties:
+                  description: |-
+                    A view of a data source that contains information about the shape of the
+                    data in the underlying source. This is a variant type structure. For this
+                    structure to be valid, only one of the attributes can be non-null.
+                  properties:
+                    customSQL:
+                      description: A physical table type built from the results of
+                        the custom SQL query.
+                      properties:
+                        columns:
+                          items:
+                            description: Metadata for a column that is used as the
+                              input of a transform operation.
+                            properties:
+                              name:
+                                type: string
+                              subType:
+                                type: string
+                              type_:
+                                type: string
+                            type: object
+                          type: array
+                        dataSourceARN:
+                          type: string
+                        name:
+                          type: string
+                        sqlQuery:
+                          type: string
+                      type: object
+                    relationalTable:
+                      description: A physical table type for relational data sources.
+                      properties:
+                        catalog:
+                          type: string
+                        dataSourceARN:
+                          type: string
+                        inputColumns:
+                          items:
+                            description: Metadata for a column that is used as the
+                              input of a transform operation.
+                            properties:
+                              name:
+                                type: string
+                              subType:
+                                type: string
+                              type_:
+                                type: string
+                            type: object
+                          type: array
+                        name:
+                          type: string
+                        schema:
+                          type: string
+                      type: object
+                    s3Source:
+                      description: A physical table type for an S3 data source.
+                      properties:
+                        dataSourceARN:
+                          type: string
+                        inputColumns:
+                          items:
+                            description: Metadata for a column that is used as the
+                              input of a transform operation.
+                            properties:
+                              name:
+                                type: string
+                              subType:
+                                type: string
+                              type_:
+                                type: string
+                            type: object
+                          type: array
+                        uploadSettings:
+                          description: Information about the format for a source file
+                            or files.
+                          properties:
+                            containsHeader:
+                              type: boolean
+                            delimiter:
+                              type: string
+                            format:
+                              type: string
+                            startFromRow:
+                              format: int64
+                              type: integer
+                            textQualifier:
+                              type: string
+                          type: object
+                      type: object
+                  type: object
+                description: Declares the physical tables that are available in the
+                  underlying data sources.
+                type: object
+              rowLevelPermissionDataSet:
+                description: The row-level security configuration for the data that
+                  you want to create.
+                properties:
+                  arn:
+                    type: string
+                  formatVersion:
+                    type: string
+                  namespace:
+                    type: string
+                  permissionPolicy:
+                    type: string
+                  status:
+                    type: string
+                type: object
+              rowLevelPermissionTagConfiguration:
+                description: |-
+                  The configuration of tags on a dataset to set row-level security. Row-level
+                  security tags are currently supported for anonymous embedding only.
+                properties:
+                  status:
+                    type: string
+                  tagRuleConfigurations:
+                    items:
+                      items:
+                        type: string
+                      type: array
+                    type: array
+                  tagRules:
+                    items:
+                      description: A set of rules associated with a tag.
+                      properties:
+                        columnName:
+                          type: string
+                        matchAllValue:
+                          type: string
+                        tagKey:
+                          type: string
+                        tagMultiValueDelimiter:
+                          type: string
+                      type: object
+                    type: array
+                type: object
+              tags:
+                description: |-
+                  Contains a map of the key-value pairs for the resource tag or tags assigned
+                  to the dataset.
+                items:
+                  description: |-
+                    The key or keys of the key-value pairs for the resource tag or tags assigned
+                    to the resource.
+                  properties:
+                    key:
+                      type: string
+                    value:
+                      type: string
+                  type: object
+                type: array
+            required:
+            - awsAccountID
+            - dataSetID
+            - importMode
+            - name
+            - physicalTableMap
+            type: object
+          status:
+            description: DataSetStatus defines the observed state of DataSet
+            properties:
+              ackResourceMetadata:
+                description: |-
+                  All CRs managed by ACK have a common `Status.ACKResourceMetadata` member
+                  that is used to contain resource sync state, account ownership,
+                  constructed ARN for the resource
+                properties:
+                  arn:
+                    description: |-
+                      ARN is the Amazon Resource Name for the resource. This is a
+                      globally-unique identifier and is set only by the ACK service controller
+                      once the controller has orchestrated the creation of the resource OR
+                      when it has verified that an "adopted" resource (a resource where the
+                      ARN annotation was set by the Kubernetes user on the CR) exists and
+                      matches the supplied CR's Spec field values.
+                      https://github.com/aws/aws-controllers-k8s/issues/270
+                    type: string
+                  ownerAccountID:
+                    description: |-
+                      OwnerAccountID is the AWS Account ID of the account that owns the
+                      backend AWS service API resource.
+                    type: string
+                  region:
+                    description: Region is the AWS region in which the resource exists
+                      or will exist.
+                    type: string
+                required:
+                - ownerAccountID
+                - region
+                type: object
+              conditions:
+                description: |-
+                  All CRs managed by ACK have a common `Status.Conditions` member that
+                  contains a collection of `ackv1alpha1.Condition` objects that describe
+                  the various terminal states of the CR and its backend AWS service API
+                  resource
+                items:
+                  description: |-
+                    Condition is the common struct used by all CRDs managed by ACK service
+                    controllers to indicate terminal states  of the CR and its backend AWS
+                    service API resource
+                  properties:
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status
+                        to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: A human readable message indicating details about
+                        the transition.
+                      type: string
+                    reason:
+                      description: The reason for the condition's last transition.
+                      type: string
+                    status:
+                      description: Status of the condition, one of True, False, Unknown.
+                      type: string
+                    type:
+                      description: Type is the type of the Condition
+                      type: string
+                  required:
+                  - status
+                  - type
+                  type: object
+                type: array
+              ingestionARN:
+                description: |-
+                  The ARN for the ingestion, which is triggered as a result of dataset creation
+                  if the import mode is SPICE.
+                type: string
+              ingestionID:
+                description: |-
+                  The ID of the ingestion, which is triggered as a result of dataset creation
+                  if the import mode is SPICE.
+                type: string
+              requestID:
+                description: The Amazon Web Services request ID for this operation.
+                type: string
+              status:
+                description: The HTTP status of the request.
+                format: int64
+                type: integer
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
