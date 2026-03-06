@@ -2,7 +2,6 @@ ignore:
   resource_names:
       - AccountCustomization
       - AccountSubscription
-      - Analysis
       - Dashboard
       - DataSet
       - DataSource
@@ -24,3 +23,43 @@ ignore:
       - VPCConnection
       - Brand
       - ActionConnector
+
+resources:
+  Analysis:
+    fields:
+      # Primary identifiers
+      AnalysisId:
+        is_primary_key: true
+        is_immutable: true
+      AwsAccountId:
+        is_immutable: true
+      
+      # Computed fields
+      Arn:
+        is_read_only: true
+      Status:
+        is_read_only: true
+      
+      # Reference fields
+      ThemeArn:
+        references:
+          resource: Theme
+          path: Status.ACKResourceMetadata.ARN
+    
+    # Configure exception handling
+    exceptions:
+      errors:
+        404:
+          code: ResourceNotFoundException
+      terminal_codes:
+        - AccessDeniedException
+        - ConflictException
+        - InvalidParameterValueException
+        - ResourceExistsException
+        - UnsupportedUserEditionException
+        - InvalidNextTokenException
+
+# Handle empty structures
+empty_shapes:
+  - AxisDisplayDataDrivenRange
+  - AllSheetsFilterScopeConfiguration
