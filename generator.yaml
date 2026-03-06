@@ -4,7 +4,6 @@ ignore:
       - AccountSubscription
       - Analysis
       - Dashboard
-      - DataSet
       - Folder
       - FolderMembership
       - Group
@@ -39,7 +38,10 @@ operations:
     output_wrapper_field_path: DataSource
 
 resources:
+  DataSet:
+    ignore_idempotency_token: true
   DataSource:
+    ignore_idempotency_token: true
     synced:
       when:
         - path: Status.Status
