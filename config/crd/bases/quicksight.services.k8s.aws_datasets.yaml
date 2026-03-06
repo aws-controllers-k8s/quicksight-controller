@@ -142,7 +142,7 @@ spec:
                                     type: string
                                   subType:
                                     type: string
-                                  type_:
+                                  type:
                                     type: string
                                 type: object
                               type: array
@@ -653,7 +653,7 @@ spec:
                                     type: object
                                   type: array
                               type: object
-                            type_:
+                            type:
                               type: string
                           type: object
                         pivotStep:
@@ -1358,7 +1358,7 @@ spec:
                               description: An identifier for the logical table that
                                 is defined in the dataset
                               type: string
-                            type_:
+                            type:
                               type: string
                           type: object
                         physicalTableID:
@@ -1424,7 +1424,7 @@ spec:
                                 type: string
                               subType:
                                 type: string
-                              type_:
+                              type:
                                 type: string
                             type: object
                           type: array
@@ -1453,7 +1453,7 @@ spec:
                                 type: string
                               subType:
                                 type: string
-                              type_:
+                              type:
                                 type: string
                             type: object
                           type: array
@@ -1478,7 +1478,7 @@ spec:
                                 type: string
                               subType:
                                 type: string
-                              type_:
+                              type:
                                 type: string
                             type: object
                           type: array
@@ -1519,7 +1519,7 @@ spec:
                                 type: string
                               subType:
                                 type: string
-                              type_:
+                              type:
                                 type: string
                             type: object
                           type: array

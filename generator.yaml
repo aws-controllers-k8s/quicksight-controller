@@ -40,6 +40,13 @@ operations:
 resources:
   DataSet:
     ignore_idempotency_token: true
+    fields:
+      PhysicalTableMap.RelationalTable.InputColumns.Type:
+        go_tag: json:"type,omitempty"
+      LogicalTableMap.Source.JoinInstruction.Type:
+        go_tag: json:"type,omitempty"
+      DataPrepConfiguration.TransformStepMap.JoinStep.Type:
+        go_tag: json:"type,omitempty"
   DataSource:
     ignore_idempotency_token: true
     synced:

@@ -1431,7 +1431,7 @@ type InputColumn struct {
 	ID      *string `json:"id,omitempty"`
 	Name    *string `json:"name,omitempty"`
 	SubType *string `json:"subType,omitempty"`
-	Type    *string `json:"type_,omitempty"`
+	Type    *string `json:"type,omitempty"`
 }
 
 // An integer parameter for a dataset.
@@ -1471,7 +1471,7 @@ type JoinInstruction struct {
 	RightJoinKeyProperties *JoinKeyProperties `json:"rightJoinKeyProperties,omitempty"`
 	// An identifier for the logical table that is defined in the dataset
 	RightOperand *string `json:"rightOperand,omitempty"`
-	Type         *string `json:"type_,omitempty"`
+	Type         *string `json:"type,omitempty"`
 }
 
 // Properties associated with the columns participating in a join.
@@ -1502,7 +1502,7 @@ type JoinOperation struct {
 	// Properties that control how columns are handled for a join operand, including
 	// column name overrides.
 	RightOperandProperties *JoinOperandProperties `json:"rightOperandProperties,omitempty"`
-	Type                   *string                `json:"type_,omitempty"`
+	Type                   *string                `json:"type,omitempty"`
 }
 
 // The combination of username, private key and passphrase that are used as
