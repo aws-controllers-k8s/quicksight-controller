@@ -25,7 +25,7 @@ from acktest.aws.identity import get_account_id
 from e2e import service_marker, CRD_GROUP, CRD_VERSION, load_resource
 from e2e.replacement_values import REPLACEMENT_VALUES
 from e2e.bootstrap_resources import get_bootstrap_resources
-from e2e.quicksight_iam import QuickSightTestRole
+from acktest.bootstrapping.iam import Role
 
 RESOURCE_PLURAL = "datasources"
 
@@ -37,10 +37,10 @@ def _create_data_source(resource_name: str):
     aws_account_id = get_account_id()
     
     bootstrap_resources = get_bootstrap_resources()
-    bucket = bootstrap_resources.DataSourceBucket
+    data_source = bootstrap_resources.DataSource
     qs_role = bootstrap_resources.QuickSightS3Role
     
-    if bucket is None or qs_role is None:
+    if data_source is None or qs_role is None:
         pytest.skip("Bootstrap resources not available. Run service_bootstrap.py first.")
     
     replacements = REPLACEMENT_VALUES.copy()
@@ -48,8 +48,8 @@ def _create_data_source(resource_name: str):
     replacements["DATA_SOURCE_ID"] = resource_name
     replacements["AWS_ACCOUNT_ID"] = aws_account_id
     replacements["DATA_SOURCE_TYPE"] = "S3"
-    replacements["S3_BUCKET_NAME"] = bucket.name
-    replacements["S3_MANIFEST_KEY"] = "manifest.json"
+    replacements["S3_BUCKET_NAME"] = data_source.bucket_name
+    replacements["S3_MANIFEST_KEY"] = data_source.manifest_key
     replacements["ROLE_ARN"] = qs_role.arn
     
     resource_data = load_resource(
@@ -181,7 +181,12 @@ class TestDataSource:
         data_source_id = cr["spec"]["id"]
         
         # Create a new IAM role for testing role update
-        new_role = QuickSightTestRole()
+        new_role = Role(
+            name_prefix="qs-test-role-update",
+            principal_service="quicksight.amazonaws.com",
+            description="Temporary role for QuickSight role update test",
+            managed_policies=["arn:aws:iam::aws:policy/AdministratorAccess"],
+        )
         try:
             new_role.bootstrap()
         except Exception as e:
@@ -193,7 +198,7 @@ class TestDataSource:
                 "spec": {
                     "parameters": {
                         "s3Parameters": {
-                            "roleARN": new_role.role_arn
+                            "roleARN": new_role.arn
                         }
                     }
                 }
@@ -211,7 +216,7 @@ class TestDataSource:
                 DataSourceId=data_source_id
             )
             
-            assert response["DataSource"]["DataSourceParameters"]["S3Parameters"]["RoleArn"] == new_role.role_arn
+            assert response["DataSource"]["DataSourceParameters"]["S3Parameters"]["RoleArn"] == new_role.arn
         finally:
             # Cleanup the temporary test role
             new_role.cleanup()

@@ -16,9 +16,7 @@ import pytest
 import logging
 
 from acktest import k8s
-from acktest.aws.identity import get_account_id
-from e2e.subscription import ensure_subscription
-import os
+from e2e.bootstrap_resources import get_bootstrap_resources
 
 def pytest_addoption(parser):
     parser.addoption("--runslow", action="store_true", default=False, help="run slow tests")
@@ -42,27 +40,28 @@ def pytest_collection_modifyitems(config, items):
         if "slow" in item.keywords:
             item.add_marker(skip_slow)
 
-# Session-scoped fixture to ensure QuickSight subscription exists before any tests run
 @pytest.fixture(scope='session', autouse=True)
 def quicksight_subscription():
-    """Ensures QuickSight subscription exists before running tests.
-    
-    This fixture runs once per test session and does NOT clean up the subscription
-    after tests complete, as requested.
+    """Ensures QuickSight subscription is available from bootstrap resources.
+
+    The subscription is created during the bootstrap phase (service_bootstrap.py).
+    This fixture validates it was bootstrapped and exposes subscription info.
     """
-    aws_account_id = get_account_id()
-    notification_email = os.environ.get('QUICKSIGHT_NOTIFICATION_EMAIL', f'quicksight-test@example.com')
-    edition = os.environ.get('QUICKSIGHT_EDITION', 'ENTERPRISE')
-    
-    logging.info(f"Bootstrapping QuickSight subscription for account {aws_account_id}")
-    try:
-        subscription_info = ensure_subscription(aws_account_id, notification_email, edition)
-        logging.info(f"QuickSight subscription ready: Edition={subscription_info.get('Edition', 'N/A')}")
-    except Exception as e:
-        pytest.skip(f"Failed to bootstrap QuickSight subscription: {e}")
-    
-    # Yield without cleanup - subscription persists after tests
-    yield subscription_info
+    bootstrap_resources = get_bootstrap_resources()
+    subscription = bootstrap_resources.QuickSightSubscription
+
+    if subscription is None or not subscription.account_id:
+        pytest.skip("QuickSight subscription not bootstrapped. Run service_bootstrap.py first.")
+
+    logging.info(
+        f"QuickSight subscription ready: account={subscription.account_id}, "
+        f"edition={subscription.subscription_edition}"
+    )
+
+    yield {
+        "AccountSubscriptionStatus": subscription.subscription_status,
+        "Edition": subscription.subscription_edition,
+    }
 
 # Provide a k8s client to interact with the integration test cluster
 @pytest.fixture(scope='class')
@@ -72,7 +71,7 @@ def k8s_client():
 @pytest.fixture(scope='module')
 def quicksight_client(quicksight_subscription):
     """Returns a QuickSight client.
-    
+
     Depends on quicksight_subscription to ensure subscription is ready before client is used.
     """
     return boto3.client('quicksight')
