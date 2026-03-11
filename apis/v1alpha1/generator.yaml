@@ -102,9 +102,7 @@ resources:
       DataPrepConfiguration.TransformStepMap.JoinStep.Type:
         go_tag: json:"type,omitempty"
       # Cross-resource references for DataSource ARN in physical tables
-      # NOTE: These cannot be added as references because they are nested
-      # inside map types (PhysicalTableMap, LogicalTableMap). The code
-      # generator does not support reference resolution for fields within
+      # NOTE: These are nested inside map types (PhysicalTableMap, LogicalTableMap).
       # PhysicalTableMap.CustomSQL.DataSourceARN:
       #   references:
       #     resource: DataSource
@@ -132,6 +130,11 @@ resources:
       #   references:
       #     resource: DataSet
       #     path: Status.ACKResourceMetadata.ARN
+    hooks:
+      sdk_update_pre_build_request:
+        template_path: hooks/data_set/sdk_update_pre_build_request.go.tpl
+      sdk_read_one_post_set_output:
+        template_path: hooks/data_set/sdk_read_one_post_set_output.go.tpl
   DataSource:
     ignore_idempotency_token: true
     synced:
