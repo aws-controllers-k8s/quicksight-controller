@@ -1,0 +1,30 @@
+apiVersion: quicksight.services.k8s.aws/v1alpha1
+kind: DataSet
+metadata:
+  name: $DATA_SET_NAME
+spec:
+  awsAccountID: "$AWS_ACCOUNT_ID"
+  id: $DATA_SET_ID
+  name: $DATA_SET_NAME
+  importMode: SPICE
+  physicalTableMap:
+    s3PhysicalTable:
+      s3Source:
+        dataSourceARN: $DATA_SOURCE_ARN
+        inputColumns:
+          - name: id
+            type: STRING
+          - name: name
+            type: STRING
+          - name: value
+            type: STRING
+          - name: category
+            type: STRING
+        uploadSettings:
+          format: CSV
+          startFromRow: 1
+          containsHeader: true
+          delimiter: ","
+  tags:
+    - key: environment
+      value: test
