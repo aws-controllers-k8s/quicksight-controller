@@ -864,118 +864,6 @@ spec:
                       type: object
                     type: object
                 type: object
-              dataSetID:
-                description: |-
-                  An ID for the dataset that you want to create. This ID is unique per Amazon
-                  Web Services Region for each Amazon Web Services account.
-                type: string
-              dataSetUsageConfiguration:
-                description: |-
-                  The usage configuration to apply to child datasets that reference this dataset
-                  as a source.
-                properties:
-                  disableUseAsDirectQuerySource:
-                    type: boolean
-                  disableUseAsImportedSource:
-                    type: boolean
-                type: object
-              datasetParameters:
-                description: The parameter declarations of the dataset.
-                items:
-                  description: |-
-                    A parameter that is created in a dataset. The parameter can be a string,
-                    integer, decimal, or datetime data type.
-                  properties:
-                    dateTimeDatasetParameter:
-                      description: A date time parameter for a dataset.
-                      properties:
-                        defaultValues:
-                          description: The default values of a date time parameter.
-                          properties:
-                            staticValues:
-                              items:
-                                format: date-time
-                                type: string
-                              type: array
-                          type: object
-                        id:
-                          type: string
-                        name:
-                          type: string
-                        timeGranularity:
-                          type: string
-                        valueType:
-                          description: |-
-                            The value type of the parameter. The value type is used to validate the parameter
-                            before it is evaluated.
-                          type: string
-                      type: object
-                    decimalDatasetParameter:
-                      description: A decimal parameter for a dataset.
-                      properties:
-                        defaultValues:
-                          description: The default values of a decimal parameter.
-                          properties:
-                            staticValues:
-                              items:
-                                type: number
-                              type: array
-                          type: object
-                        id:
-                          type: string
-                        name:
-                          type: string
-                        valueType:
-                          description: |-
-                            The value type of the parameter. The value type is used to validate the parameter
-                            before it is evaluated.
-                          type: string
-                      type: object
-                    integerDatasetParameter:
-                      description: An integer parameter for a dataset.
-                      properties:
-                        defaultValues:
-                          description: The default values of an integer parameter.
-                          properties:
-                            staticValues:
-                              items:
-                                format: int64
-                                type: integer
-                              type: array
-                          type: object
-                        id:
-                          type: string
-                        name:
-                          type: string
-                        valueType:
-                          description: |-
-                            The value type of the parameter. The value type is used to validate the parameter
-                            before it is evaluated.
-                          type: string
-                      type: object
-                    stringDatasetParameter:
-                      description: A string parameter for a dataset.
-                      properties:
-                        defaultValues:
-                          description: The default values of a string parameter.
-                          properties:
-                            staticValues:
-                              items:
-                                type: string
-                              type: array
-                          type: object
-                        id:
-                          type: string
-                        name:
-                          type: string
-                        valueType:
-                          description: |-
-                            The value type of the parameter. The value type is used to validate the parameter
-                            before it is evaluated.
-                          type: string
-                      type: object
-                  type: object
-                type: array
               fieldFolders:
                 additionalProperties:
                   description: A FieldFolder element is a folder that contains fields
@@ -998,6 +886,11 @@ spec:
                 items:
                   type: string
                 type: array
+              id:
+                description: |-
+                  An ID for the dataset that you want to create. This ID is unique per Amazon
+                  Web Services Region for each Amazon Web Services account.
+                type: string
               importMode:
                 description: Indicates whether you want to import the data into SPICE.
                 type: string
@@ -1372,6 +1265,103 @@ spec:
               name:
                 description: The display name for the dataset.
                 type: string
+              parameters:
+                description: The parameter declarations of the dataset.
+                items:
+                  description: |-
+                    A parameter that is created in a dataset. The parameter can be a string,
+                    integer, decimal, or datetime data type.
+                  properties:
+                    dateTimeDatasetParameter:
+                      description: A date time parameter for a dataset.
+                      properties:
+                        defaultValues:
+                          description: The default values of a date time parameter.
+                          properties:
+                            staticValues:
+                              items:
+                                format: date-time
+                                type: string
+                              type: array
+                          type: object
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        timeGranularity:
+                          type: string
+                        valueType:
+                          description: |-
+                            The value type of the parameter. The value type is used to validate the parameter
+                            before it is evaluated.
+                          type: string
+                      type: object
+                    decimalDatasetParameter:
+                      description: A decimal parameter for a dataset.
+                      properties:
+                        defaultValues:
+                          description: The default values of a decimal parameter.
+                          properties:
+                            staticValues:
+                              items:
+                                type: number
+                              type: array
+                          type: object
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        valueType:
+                          description: |-
+                            The value type of the parameter. The value type is used to validate the parameter
+                            before it is evaluated.
+                          type: string
+                      type: object
+                    integerDatasetParameter:
+                      description: An integer parameter for a dataset.
+                      properties:
+                        defaultValues:
+                          description: The default values of an integer parameter.
+                          properties:
+                            staticValues:
+                              items:
+                                format: int64
+                                type: integer
+                              type: array
+                          type: object
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        valueType:
+                          description: |-
+                            The value type of the parameter. The value type is used to validate the parameter
+                            before it is evaluated.
+                          type: string
+                      type: object
+                    stringDatasetParameter:
+                      description: A string parameter for a dataset.
+                      properties:
+                        defaultValues:
+                          description: The default values of a string parameter.
+                          properties:
+                            staticValues:
+                              items:
+                                type: string
+                              type: array
+                          type: object
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        valueType:
+                          description: |-
+                            The value type of the parameter. The value type is used to validate the parameter
+                            before it is evaluated.
+                          type: string
+                      type: object
+                  type: object
+                type: array
               performanceConfiguration:
                 description: |-
                   The configuration for the performance optimization of the dataset that contains
@@ -1672,6 +1662,16 @@ spec:
                       type: string
                   type: object
                 type: array
+              usageConfiguration:
+                description: |-
+                  The usage configuration to apply to child datasets that reference this dataset
+                  as a source.
+                properties:
+                  disableUseAsDirectQuerySource:
+                    type: boolean
+                  disableUseAsImportedSource:
+                    type: boolean
+                type: object
               useAs:
                 description: |-
                   The usage of the dataset. RLS_RULES must be specified for RLS permission
@@ -1679,7 +1679,7 @@ spec:
                 type: string
             required:
             - awsAccountID
-            - dataSetID
+            - id
             - importMode
             - name
             - physicalTableMap
@@ -1751,6 +1751,16 @@ spec:
                   - type
                   type: object
                 type: array
+              consumedSpiceCapacityInBytes:
+                description: |-
+                  The amount of SPICE capacity used by this dataset. This is 0 if the dataset
+                  isn't imported into SPICE.
+                format: int64
+                type: integer
+              createdTime:
+                description: The time that this dataset was created.
+                format: date-time
+                type: string
               ingestionARN:
                 description: |-
                   The ARN for the ingestion, which is triggered as a result of dataset creation
@@ -1761,13 +1771,29 @@ spec:
                   The ID of the ingestion, which is triggered as a result of dataset creation
                   if the import mode is SPICE.
                 type: string
-              requestID:
-                description: The Amazon Web Services request ID for this operation.
+              lastUpdatedTime:
+                description: The last time that this dataset was updated.
+                format: date-time
                 type: string
-              status:
-                description: The HTTP status of the request.
-                format: int64
-                type: integer
+              outputColumns:
+                description: |-
+                  The list of columns after all transforms. These columns are available in
+                  templates, analyses, and dashboards.
+                items:
+                  description: Output column.
+                  properties:
+                    description:
+                      type: string
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    subType:
+                      type: string
+                    type:
+                      type: string
+                  type: object
+                type: array
             type: object
         type: object
     served: true

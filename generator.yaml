@@ -27,11 +27,19 @@ ignore:
       - CreateDataSourceOutput.RequestId
       - UpdateDataSourceOutput.RequestId
       - DeleteDataSourceOutput.RequestId
+      - CreateDataSetOutput.RequestId
+      - UpdateDataSetOutput.RequestId
+      - DeleteDataSetOutput.RequestId
+      - DescribeDataSetOutput.RequestId
       # HTTP status codes are not useful for users
       - CreateDataSourceOutput.Status
       - UpdateDataSourceOutput.Status
       - DeleteDataSourceOutput.Status
       - DescribeDataSourceOutput.Status
+      - CreateDataSetOutput.Status
+      - UpdateDataSetOutput.Status
+      - DeleteDataSetOutput.Status
+      - DescribeDataSetOutput.Status
 
 operations:
   DescribeDataSource:
@@ -40,13 +48,90 @@ operations:
 resources:
   DataSet:
     ignore_idempotency_token: true
+    renames:
+      operations:
+        CreateDataSet:
+          input_fields:
+            DataSetId: ID
+            DataSetUsageConfiguration: UsageConfiguration
+            DatasetParameters: Parameters
+          output_fields:
+            DataSetId: ID
+        UpdateDataSet:
+          input_fields:
+            DataSetId: ID
+            DataSetUsageConfiguration: UsageConfiguration
+            DatasetParameters: Parameters
+          output_fields:
+            DataSetId: ID
+        DeleteDataSet:
+          input_fields:
+            DataSetId: ID
+        DescribeDataSet:
+          input_fields:
+            DataSetId: ID
     fields:
+      ID:
+        is_primary_key: true
+      ConsumedSpiceCapacityInBytes:
+        is_read_only: true
+        from:
+          operation: DescribeDataSet
+          path: DataSet.ConsumedSpiceCapacityInBytes
+      CreatedTime:
+        is_read_only: true
+        from:
+          operation: DescribeDataSet
+          path: DataSet.CreatedTime
+      LastUpdatedTime:
+        is_read_only: true
+        from:
+          operation: DescribeDataSet
+          path: DataSet.LastUpdatedTime
+      OutputColumns:
+        is_read_only: true
+        from:
+          operation: DescribeDataSet
+          path: DataSet.OutputColumns
+      OutputColumns.Type:
+        go_tag: json:"type,omitempty"
       PhysicalTableMap.RelationalTable.InputColumns.Type:
         go_tag: json:"type,omitempty"
       LogicalTableMap.Source.JoinInstruction.Type:
         go_tag: json:"type,omitempty"
       DataPrepConfiguration.TransformStepMap.JoinStep.Type:
         go_tag: json:"type,omitempty"
+      # Cross-resource references for DataSource ARN in physical tables
+      # NOTE: These cannot be added as references because they are nested
+      # inside map types (PhysicalTableMap, LogicalTableMap). The code
+      # generator does not support reference resolution for fields within
+      # PhysicalTableMap.CustomSQL.DataSourceARN:
+      #   references:
+      #     resource: DataSource
+      #     path: Status.ACKResourceMetadata.ARN
+      # PhysicalTableMap.RelationalTable.DataSourceARN:
+      #   references:
+      #     resource: DataSource
+      #     path: Status.ACKResourceMetadata.ARN
+      # PhysicalTableMap.S3Source.DataSourceARN:
+      #   references:
+      #     resource: DataSource
+      #     path: Status.ACKResourceMetadata.ARN
+      # PhysicalTableMap.SaaSTable.DataSourceARN:
+      #   references:
+      #     resource: DataSource
+      #     path: Status.ACKResourceMetadata.ARN
+      # LogicalTableMap.Source.DataSetARN:
+      #   references:
+      #     resource: DataSet
+      #     path: Status.ACKResourceMetadata.ARN
+      # NOTE: RowLevelPermissionDataSet.ARN cannot be a reference because
+      # the field name is just an identifier suffix (ARN). The code generator
+      # cannot derive a meaningful reference field name from it.
+      # RowLevelPermissionDataSet.ARN:
+      #   references:
+      #     resource: DataSet
+      #     path: Status.ACKResourceMetadata.ARN
   DataSource:
     ignore_idempotency_token: true
     synced:

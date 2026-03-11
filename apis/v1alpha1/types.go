@@ -1663,7 +1663,7 @@ type OutputColumn struct {
 	ID          *string `json:"id,omitempty"`
 	Name        *string `json:"name,omitempty"`
 	SubType     *string `json:"subType,omitempty"`
-	Type        *string `json:"type_,omitempty"`
+	Type        *string `json:"type,omitempty"`
 }
 
 // Specifies a mapping to override the name of an output column from a transform

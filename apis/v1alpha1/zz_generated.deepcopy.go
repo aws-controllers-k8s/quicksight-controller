@@ -3200,27 +3200,6 @@ func (in *DataSetSpec) DeepCopyInto(out *DataSetSpec) {
 		*out = new(DataPrepConfiguration)
 		(*in).DeepCopyInto(*out)
 	}
-	if in.DataSetID != nil {
-		in, out := &in.DataSetID, &out.DataSetID
-		*out = new(string)
-		**out = **in
-	}
-	if in.DataSetUsageConfiguration != nil {
-		in, out := &in.DataSetUsageConfiguration, &out.DataSetUsageConfiguration
-		*out = new(DataSetUsageConfiguration)
-		(*in).DeepCopyInto(*out)
-	}
-	if in.DatasetParameters != nil {
-		in, out := &in.DatasetParameters, &out.DatasetParameters
-		*out = make([]*DatasetParameter, len(*in))
-		for i := range *in {
-			if (*in)[i] != nil {
-				in, out := &(*in)[i], &(*out)[i]
-				*out = new(DatasetParameter)
-				(*in).DeepCopyInto(*out)
-			}
-		}
-	}
 	if in.FieldFolders != nil {
 		in, out := &in.FieldFolders, &out.FieldFolders
 		*out = make(map[string]*FieldFolder, len(*in))
@@ -3248,6 +3227,11 @@ func (in *DataSetSpec) DeepCopyInto(out *DataSetSpec) {
 			}
 		}
 	}
+	if in.ID != nil {
+		in, out := &in.ID, &out.ID
+		*out = new(string)
+		**out = **in
+	}
 	if in.ImportMode != nil {
 		in, out := &in.ImportMode, &out.ImportMode
 		*out = new(string)
@@ -3273,6 +3257,17 @@ func (in *DataSetSpec) DeepCopyInto(out *DataSetSpec) {
 		in, out := &in.Name, &out.Name
 		*out = new(string)
 		**out = **in
+	}
+	if in.Parameters != nil {
+		in, out := &in.Parameters, &out.Parameters
+		*out = make([]*DatasetParameter, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(DatasetParameter)
+				(*in).DeepCopyInto(*out)
+			}
+		}
 	}
 	if in.PerformanceConfiguration != nil {
 		in, out := &in.PerformanceConfiguration, &out.PerformanceConfiguration
@@ -3332,6 +3327,11 @@ func (in *DataSetSpec) DeepCopyInto(out *DataSetSpec) {
 			}
 		}
 	}
+	if in.UsageConfiguration != nil {
+		in, out := &in.UsageConfiguration, &out.UsageConfiguration
+		*out = new(DataSetUsageConfiguration)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.UseAs != nil {
 		in, out := &in.UseAs, &out.UseAs
 		*out = new(string)
@@ -3368,6 +3368,15 @@ func (in *DataSetStatus) DeepCopyInto(out *DataSetStatus) {
 			}
 		}
 	}
+	if in.ConsumedSpiceCapacityInBytes != nil {
+		in, out := &in.ConsumedSpiceCapacityInBytes, &out.ConsumedSpiceCapacityInBytes
+		*out = new(int64)
+		**out = **in
+	}
+	if in.CreatedTime != nil {
+		in, out := &in.CreatedTime, &out.CreatedTime
+		*out = (*in).DeepCopy()
+	}
 	if in.IngestionARN != nil {
 		in, out := &in.IngestionARN, &out.IngestionARN
 		*out = new(string)
@@ -3378,15 +3387,20 @@ func (in *DataSetStatus) DeepCopyInto(out *DataSetStatus) {
 		*out = new(string)
 		**out = **in
 	}
-	if in.RequestID != nil {
-		in, out := &in.RequestID, &out.RequestID
-		*out = new(string)
-		**out = **in
+	if in.LastUpdatedTime != nil {
+		in, out := &in.LastUpdatedTime, &out.LastUpdatedTime
+		*out = (*in).DeepCopy()
 	}
-	if in.Status != nil {
-		in, out := &in.Status, &out.Status
-		*out = new(int64)
-		**out = **in
+	if in.OutputColumns != nil {
+		in, out := &in.OutputColumns, &out.OutputColumns
+		*out = make([]*OutputColumn, len(*in))
+		for i := range *in {
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = new(OutputColumn)
+				(*in).DeepCopyInto(*out)
+			}
+		}
 	}
 }
 

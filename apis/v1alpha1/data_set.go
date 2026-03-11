@@ -39,18 +39,15 @@ type DataSetSpec struct {
 	// the source tables, transformation steps, and destination tables used to prepare
 	// the data. Required when using the new data preparation experience.
 	DataPrepConfiguration *DataPrepConfiguration `json:"dataPrepConfiguration,omitempty"`
-	// An ID for the dataset that you want to create. This ID is unique per Amazon
-	// Web Services Region for each Amazon Web Services account.
-	// +kubebuilder:validation:Required
-	DataSetID                 *string                    `json:"dataSetID"`
-	DataSetUsageConfiguration *DataSetUsageConfiguration `json:"dataSetUsageConfiguration,omitempty"`
-	// The parameter declarations of the dataset.
-	DatasetParameters []*DatasetParameter `json:"datasetParameters,omitempty"`
 	// The folder that contains fields and nested subfolders for your dataset.
 	FieldFolders map[string]*FieldFolder `json:"fieldFolders,omitempty"`
 	// When you create the dataset, Amazon Quick Sight adds the dataset to these
 	// folders.
 	FolderARNs []*string `json:"folderARNs,omitempty"`
+	// An ID for the dataset that you want to create. This ID is unique per Amazon
+	// Web Services Region for each Amazon Web Services account.
+	// +kubebuilder:validation:Required
+	ID *string `json:"id"`
 	// Indicates whether you want to import the data into SPICE.
 	// +kubebuilder:validation:Required
 	ImportMode *string `json:"importMode"`
@@ -60,6 +57,8 @@ type DataSetSpec struct {
 	// The display name for the dataset.
 	// +kubebuilder:validation:Required
 	Name *string `json:"name"`
+	// The parameter declarations of the dataset.
+	Parameters []*DatasetParameter `json:"parameters,omitempty"`
 	// The configuration for the performance optimization of the dataset that contains
 	// a UniqueKey configuration.
 	PerformanceConfiguration *PerformanceConfiguration `json:"performanceConfiguration,omitempty"`
@@ -82,7 +81,8 @@ type DataSetSpec struct {
 	SemanticModelConfiguration *SemanticModelConfiguration `json:"semanticModelConfiguration,omitempty"`
 	// Contains a map of the key-value pairs for the resource tag or tags assigned
 	// to the dataset.
-	Tags []*Tag `json:"tags,omitempty"`
+	Tags               []*Tag                     `json:"tags,omitempty"`
+	UsageConfiguration *DataSetUsageConfiguration `json:"usageConfiguration,omitempty"`
 	// The usage of the dataset. RLS_RULES must be specified for RLS permission
 	// datasets.
 	UseAs *string `json:"useAs,omitempty"`
@@ -101,6 +101,13 @@ type DataSetStatus struct {
 	// resource
 	// +kubebuilder:validation:Optional
 	Conditions []*ackv1alpha1.Condition `json:"conditions"`
+	// The amount of SPICE capacity used by this dataset. This is 0 if the dataset
+	// isn't imported into SPICE.
+	// +kubebuilder:validation:Optional
+	ConsumedSpiceCapacityInBytes *int64 `json:"consumedSpiceCapacityInBytes,omitempty"`
+	// The time that this dataset was created.
+	// +kubebuilder:validation:Optional
+	CreatedTime *metav1.Time `json:"createdTime,omitempty"`
 	// The ARN for the ingestion, which is triggered as a result of dataset creation
 	// if the import mode is SPICE.
 	// +kubebuilder:validation:Optional
@@ -109,12 +116,13 @@ type DataSetStatus struct {
 	// if the import mode is SPICE.
 	// +kubebuilder:validation:Optional
 	IngestionID *string `json:"ingestionID,omitempty"`
-	// The Amazon Web Services request ID for this operation.
+	// The last time that this dataset was updated.
 	// +kubebuilder:validation:Optional
-	RequestID *string `json:"requestID,omitempty"`
-	// The HTTP status of the request.
+	LastUpdatedTime *metav1.Time `json:"lastUpdatedTime,omitempty"`
+	// The list of columns after all transforms. These columns are available in
+	// templates, analyses, and dashboards.
 	// +kubebuilder:validation:Optional
-	Status *int64 `json:"status,omitempty"`
+	OutputColumns []*OutputColumn `json:"outputColumns,omitempty"`
 }
 
 // DataSet is the Schema for the DataSets API

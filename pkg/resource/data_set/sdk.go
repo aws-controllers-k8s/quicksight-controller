@@ -92,13 +92,1633 @@ func (rm *resourceManager) sdkFind(
 	// the original Kubernetes object we passed to the function
 	ko := r.ko.DeepCopy()
 
-	if resp.RequestId != nil {
-		ko.Status.RequestID = resp.RequestId
-	} else {
-		ko.Status.RequestID = nil
+	if ko.Status.ACKResourceMetadata == nil {
+		ko.Status.ACKResourceMetadata = &ackv1alpha1.ResourceMetadata{}
 	}
-	statusCopy := int64(resp.Status)
-	ko.Status.Status = &statusCopy
+	if resp.DataSet.Arn != nil {
+		arn := ackv1alpha1.AWSResourceName(*resp.DataSet.Arn)
+		ko.Status.ACKResourceMetadata.ARN = &arn
+	}
+	if resp.DataSet.ColumnGroups != nil {
+		f1 := []*svcapitypes.ColumnGroup{}
+		for _, f1iter := range resp.DataSet.ColumnGroups {
+			f1elem := &svcapitypes.ColumnGroup{}
+			if f1iter.GeoSpatialColumnGroup != nil {
+				f1elemf0 := &svcapitypes.GeoSpatialColumnGroup{}
+				if f1iter.GeoSpatialColumnGroup.Columns != nil {
+					f1elemf0.Columns = aws.StringSlice(f1iter.GeoSpatialColumnGroup.Columns)
+				}
+				if f1iter.GeoSpatialColumnGroup.CountryCode != "" {
+					f1elemf0.CountryCode = aws.String(string(f1iter.GeoSpatialColumnGroup.CountryCode))
+				}
+				if f1iter.GeoSpatialColumnGroup.Name != nil {
+					f1elemf0.Name = f1iter.GeoSpatialColumnGroup.Name
+				}
+				f1elem.GeoSpatialColumnGroup = f1elemf0
+			}
+			f1 = append(f1, f1elem)
+		}
+		ko.Spec.ColumnGroups = f1
+	} else {
+		ko.Spec.ColumnGroups = nil
+	}
+	if resp.DataSet.ColumnLevelPermissionRules != nil {
+		f2 := []*svcapitypes.ColumnLevelPermissionRule{}
+		for _, f2iter := range resp.DataSet.ColumnLevelPermissionRules {
+			f2elem := &svcapitypes.ColumnLevelPermissionRule{}
+			if f2iter.ColumnNames != nil {
+				f2elem.ColumnNames = aws.StringSlice(f2iter.ColumnNames)
+			}
+			if f2iter.Principals != nil {
+				f2elem.Principals = aws.StringSlice(f2iter.Principals)
+			}
+			f2 = append(f2, f2elem)
+		}
+		ko.Spec.ColumnLevelPermissionRules = f2
+	} else {
+		ko.Spec.ColumnLevelPermissionRules = nil
+	}
+	ko.Status.ConsumedSpiceCapacityInBytes = &resp.DataSet.ConsumedSpiceCapacityInBytes
+	if resp.DataSet.CreatedTime != nil {
+		ko.Status.CreatedTime = &metav1.Time{*resp.DataSet.CreatedTime}
+	} else {
+		ko.Status.CreatedTime = nil
+	}
+	if resp.DataSet.DataPrepConfiguration != nil {
+		f5 := &svcapitypes.DataPrepConfiguration{}
+		if resp.DataSet.DataPrepConfiguration.DestinationTableMap != nil {
+			f5f0 := map[string]*svcapitypes.DestinationTable{}
+			for f5f0key, f5f0valiter := range resp.DataSet.DataPrepConfiguration.DestinationTableMap {
+				f5f0val := &svcapitypes.DestinationTable{}
+				if f5f0valiter.Alias != nil {
+					f5f0val.Alias = f5f0valiter.Alias
+				}
+				if f5f0valiter.Source != nil {
+					f5f0valf1 := &svcapitypes.DestinationTableSource{}
+					if f5f0valiter.Source.TransformOperationId != nil {
+						f5f0valf1.TransformOperationID = f5f0valiter.Source.TransformOperationId
+					}
+					f5f0val.Source = f5f0valf1
+				}
+				f5f0[f5f0key] = f5f0val
+			}
+			f5.DestinationTableMap = f5f0
+		}
+		if resp.DataSet.DataPrepConfiguration.SourceTableMap != nil {
+			f5f1 := map[string]*svcapitypes.SourceTable{}
+			for f5f1key, f5f1valiter := range resp.DataSet.DataPrepConfiguration.SourceTableMap {
+				f5f1val := &svcapitypes.SourceTable{}
+				if f5f1valiter.DataSet != nil {
+					f5f1valf0 := &svcapitypes.ParentDataSet{}
+					if f5f1valiter.DataSet.DataSetArn != nil {
+						f5f1valf0.DataSetARN = f5f1valiter.DataSet.DataSetArn
+					}
+					if f5f1valiter.DataSet.InputColumns != nil {
+						f5f1valf0f1 := []*svcapitypes.InputColumn{}
+						for _, f5f1valf0f1iter := range f5f1valiter.DataSet.InputColumns {
+							f5f1valf0f1elem := &svcapitypes.InputColumn{}
+							if f5f1valf0f1iter.Id != nil {
+								f5f1valf0f1elem.ID = f5f1valf0f1iter.Id
+							}
+							if f5f1valf0f1iter.Name != nil {
+								f5f1valf0f1elem.Name = f5f1valf0f1iter.Name
+							}
+							if f5f1valf0f1iter.SubType != "" {
+								f5f1valf0f1elem.SubType = aws.String(string(f5f1valf0f1iter.SubType))
+							}
+							if f5f1valf0f1iter.Type != "" {
+								f5f1valf0f1elem.Type = aws.String(string(f5f1valf0f1iter.Type))
+							}
+							f5f1valf0f1 = append(f5f1valf0f1, f5f1valf0f1elem)
+						}
+						f5f1valf0.InputColumns = f5f1valf0f1
+					}
+					f5f1val.DataSet = f5f1valf0
+				}
+				if f5f1valiter.PhysicalTableId != nil {
+					f5f1val.PhysicalTableID = f5f1valiter.PhysicalTableId
+				}
+				f5f1[f5f1key] = f5f1val
+			}
+			f5.SourceTableMap = f5f1
+		}
+		if resp.DataSet.DataPrepConfiguration.TransformStepMap != nil {
+			f5f2 := map[string]*svcapitypes.TransformStep{}
+			for f5f2key, f5f2valiter := range resp.DataSet.DataPrepConfiguration.TransformStepMap {
+				f5f2val := &svcapitypes.TransformStep{}
+				if f5f2valiter.AggregateStep != nil {
+					f5f2valf0 := &svcapitypes.AggregateOperation{}
+					if f5f2valiter.AggregateStep.Aggregations != nil {
+						f5f2valf0f0 := []*svcapitypes.Aggregation{}
+						for _, f5f2valf0f0iter := range f5f2valiter.AggregateStep.Aggregations {
+							f5f2valf0f0elem := &svcapitypes.Aggregation{}
+							if f5f2valf0f0iter.AggregationFunction != nil {
+								f5f2valf0f0elemf0 := &svcapitypes.DataPrepAggregationFunction{}
+								if f5f2valf0f0iter.AggregationFunction.ListAggregation != nil {
+									f5f2valf0f0elemf0f0 := &svcapitypes.DataPrepListAggregationFunction{}
+									f5f2valf0f0elemf0f0.Distinct = &f5f2valf0f0iter.AggregationFunction.ListAggregation.Distinct
+									if f5f2valf0f0iter.AggregationFunction.ListAggregation.InputColumnName != nil {
+										f5f2valf0f0elemf0f0.InputColumnName = f5f2valf0f0iter.AggregationFunction.ListAggregation.InputColumnName
+									}
+									if f5f2valf0f0iter.AggregationFunction.ListAggregation.Separator != nil {
+										f5f2valf0f0elemf0f0.Separator = f5f2valf0f0iter.AggregationFunction.ListAggregation.Separator
+									}
+									f5f2valf0f0elemf0.ListAggregation = f5f2valf0f0elemf0f0
+								}
+								if f5f2valf0f0iter.AggregationFunction.SimpleAggregation != nil {
+									f5f2valf0f0elemf0f1 := &svcapitypes.DataPrepSimpleAggregationFunction{}
+									if f5f2valf0f0iter.AggregationFunction.SimpleAggregation.FunctionType != "" {
+										f5f2valf0f0elemf0f1.FunctionType = aws.String(string(f5f2valf0f0iter.AggregationFunction.SimpleAggregation.FunctionType))
+									}
+									if f5f2valf0f0iter.AggregationFunction.SimpleAggregation.InputColumnName != nil {
+										f5f2valf0f0elemf0f1.InputColumnName = f5f2valf0f0iter.AggregationFunction.SimpleAggregation.InputColumnName
+									}
+									f5f2valf0f0elemf0.SimpleAggregation = f5f2valf0f0elemf0f1
+								}
+								f5f2valf0f0elem.AggregationFunction = f5f2valf0f0elemf0
+							}
+							if f5f2valf0f0iter.NewColumnId != nil {
+								f5f2valf0f0elem.NewColumnID = f5f2valf0f0iter.NewColumnId
+							}
+							if f5f2valf0f0iter.NewColumnName != nil {
+								f5f2valf0f0elem.NewColumnName = f5f2valf0f0iter.NewColumnName
+							}
+							f5f2valf0f0 = append(f5f2valf0f0, f5f2valf0f0elem)
+						}
+						f5f2valf0.Aggregations = f5f2valf0f0
+					}
+					if f5f2valiter.AggregateStep.Alias != nil {
+						f5f2valf0.Alias = f5f2valiter.AggregateStep.Alias
+					}
+					if f5f2valiter.AggregateStep.GroupByColumnNames != nil {
+						f5f2valf0.GroupByColumnNames = aws.StringSlice(f5f2valiter.AggregateStep.GroupByColumnNames)
+					}
+					if f5f2valiter.AggregateStep.Source != nil {
+						f5f2valf0f3 := &svcapitypes.TransformOperationSource{}
+						if f5f2valiter.AggregateStep.Source.ColumnIdMappings != nil {
+							f5f2valf0f3f0 := []*svcapitypes.DataSetColumnIDMapping{}
+							for _, f5f2valf0f3f0iter := range f5f2valiter.AggregateStep.Source.ColumnIdMappings {
+								f5f2valf0f3f0elem := &svcapitypes.DataSetColumnIDMapping{}
+								if f5f2valf0f3f0iter.SourceColumnId != nil {
+									f5f2valf0f3f0elem.SourceColumnID = f5f2valf0f3f0iter.SourceColumnId
+								}
+								if f5f2valf0f3f0iter.TargetColumnId != nil {
+									f5f2valf0f3f0elem.TargetColumnID = f5f2valf0f3f0iter.TargetColumnId
+								}
+								f5f2valf0f3f0 = append(f5f2valf0f3f0, f5f2valf0f3f0elem)
+							}
+							f5f2valf0f3.ColumnIDMappings = f5f2valf0f3f0
+						}
+						if f5f2valiter.AggregateStep.Source.TransformOperationId != nil {
+							f5f2valf0f3.TransformOperationID = f5f2valiter.AggregateStep.Source.TransformOperationId
+						}
+						f5f2valf0.Source = f5f2valf0f3
+					}
+					f5f2val.AggregateStep = f5f2valf0
+				}
+				if f5f2valiter.AppendStep != nil {
+					f5f2valf1 := &svcapitypes.AppendOperation{}
+					if f5f2valiter.AppendStep.Alias != nil {
+						f5f2valf1.Alias = f5f2valiter.AppendStep.Alias
+					}
+					if f5f2valiter.AppendStep.AppendedColumns != nil {
+						f5f2valf1f1 := []*svcapitypes.AppendedColumn{}
+						for _, f5f2valf1f1iter := range f5f2valiter.AppendStep.AppendedColumns {
+							f5f2valf1f1elem := &svcapitypes.AppendedColumn{}
+							if f5f2valf1f1iter.ColumnName != nil {
+								f5f2valf1f1elem.ColumnName = f5f2valf1f1iter.ColumnName
+							}
+							if f5f2valf1f1iter.NewColumnId != nil {
+								f5f2valf1f1elem.NewColumnID = f5f2valf1f1iter.NewColumnId
+							}
+							f5f2valf1f1 = append(f5f2valf1f1, f5f2valf1f1elem)
+						}
+						f5f2valf1.AppendedColumns = f5f2valf1f1
+					}
+					if f5f2valiter.AppendStep.FirstSource != nil {
+						f5f2valf1f2 := &svcapitypes.TransformOperationSource{}
+						if f5f2valiter.AppendStep.FirstSource.ColumnIdMappings != nil {
+							f5f2valf1f2f0 := []*svcapitypes.DataSetColumnIDMapping{}
+							for _, f5f2valf1f2f0iter := range f5f2valiter.AppendStep.FirstSource.ColumnIdMappings {
+								f5f2valf1f2f0elem := &svcapitypes.DataSetColumnIDMapping{}
+								if f5f2valf1f2f0iter.SourceColumnId != nil {
+									f5f2valf1f2f0elem.SourceColumnID = f5f2valf1f2f0iter.SourceColumnId
+								}
+								if f5f2valf1f2f0iter.TargetColumnId != nil {
+									f5f2valf1f2f0elem.TargetColumnID = f5f2valf1f2f0iter.TargetColumnId
+								}
+								f5f2valf1f2f0 = append(f5f2valf1f2f0, f5f2valf1f2f0elem)
+							}
+							f5f2valf1f2.ColumnIDMappings = f5f2valf1f2f0
+						}
+						if f5f2valiter.AppendStep.FirstSource.TransformOperationId != nil {
+							f5f2valf1f2.TransformOperationID = f5f2valiter.AppendStep.FirstSource.TransformOperationId
+						}
+						f5f2valf1.FirstSource = f5f2valf1f2
+					}
+					if f5f2valiter.AppendStep.SecondSource != nil {
+						f5f2valf1f3 := &svcapitypes.TransformOperationSource{}
+						if f5f2valiter.AppendStep.SecondSource.ColumnIdMappings != nil {
+							f5f2valf1f3f0 := []*svcapitypes.DataSetColumnIDMapping{}
+							for _, f5f2valf1f3f0iter := range f5f2valiter.AppendStep.SecondSource.ColumnIdMappings {
+								f5f2valf1f3f0elem := &svcapitypes.DataSetColumnIDMapping{}
+								if f5f2valf1f3f0iter.SourceColumnId != nil {
+									f5f2valf1f3f0elem.SourceColumnID = f5f2valf1f3f0iter.SourceColumnId
+								}
+								if f5f2valf1f3f0iter.TargetColumnId != nil {
+									f5f2valf1f3f0elem.TargetColumnID = f5f2valf1f3f0iter.TargetColumnId
+								}
+								f5f2valf1f3f0 = append(f5f2valf1f3f0, f5f2valf1f3f0elem)
+							}
+							f5f2valf1f3.ColumnIDMappings = f5f2valf1f3f0
+						}
+						if f5f2valiter.AppendStep.SecondSource.TransformOperationId != nil {
+							f5f2valf1f3.TransformOperationID = f5f2valiter.AppendStep.SecondSource.TransformOperationId
+						}
+						f5f2valf1.SecondSource = f5f2valf1f3
+					}
+					f5f2val.AppendStep = f5f2valf1
+				}
+				if f5f2valiter.CastColumnTypesStep != nil {
+					f5f2valf2 := &svcapitypes.CastColumnTypesOperation{}
+					if f5f2valiter.CastColumnTypesStep.Alias != nil {
+						f5f2valf2.Alias = f5f2valiter.CastColumnTypesStep.Alias
+					}
+					if f5f2valiter.CastColumnTypesStep.CastColumnTypeOperations != nil {
+						f5f2valf2f1 := []*svcapitypes.CastColumnTypeOperation{}
+						for _, f5f2valf2f1iter := range f5f2valiter.CastColumnTypesStep.CastColumnTypeOperations {
+							f5f2valf2f1elem := &svcapitypes.CastColumnTypeOperation{}
+							if f5f2valf2f1iter.ColumnName != nil {
+								f5f2valf2f1elem.ColumnName = f5f2valf2f1iter.ColumnName
+							}
+							if f5f2valf2f1iter.Format != nil {
+								f5f2valf2f1elem.Format = f5f2valf2f1iter.Format
+							}
+							if f5f2valf2f1iter.NewColumnType != "" {
+								f5f2valf2f1elem.NewColumnType = aws.String(string(f5f2valf2f1iter.NewColumnType))
+							}
+							if f5f2valf2f1iter.SubType != "" {
+								f5f2valf2f1elem.SubType = aws.String(string(f5f2valf2f1iter.SubType))
+							}
+							f5f2valf2f1 = append(f5f2valf2f1, f5f2valf2f1elem)
+						}
+						f5f2valf2.CastColumnTypeOperations = f5f2valf2f1
+					}
+					if f5f2valiter.CastColumnTypesStep.Source != nil {
+						f5f2valf2f2 := &svcapitypes.TransformOperationSource{}
+						if f5f2valiter.CastColumnTypesStep.Source.ColumnIdMappings != nil {
+							f5f2valf2f2f0 := []*svcapitypes.DataSetColumnIDMapping{}
+							for _, f5f2valf2f2f0iter := range f5f2valiter.CastColumnTypesStep.Source.ColumnIdMappings {
+								f5f2valf2f2f0elem := &svcapitypes.DataSetColumnIDMapping{}
+								if f5f2valf2f2f0iter.SourceColumnId != nil {
+									f5f2valf2f2f0elem.SourceColumnID = f5f2valf2f2f0iter.SourceColumnId
+								}
+								if f5f2valf2f2f0iter.TargetColumnId != nil {
+									f5f2valf2f2f0elem.TargetColumnID = f5f2valf2f2f0iter.TargetColumnId
+								}
+								f5f2valf2f2f0 = append(f5f2valf2f2f0, f5f2valf2f2f0elem)
+							}
+							f5f2valf2f2.ColumnIDMappings = f5f2valf2f2f0
+						}
+						if f5f2valiter.CastColumnTypesStep.Source.TransformOperationId != nil {
+							f5f2valf2f2.TransformOperationID = f5f2valiter.CastColumnTypesStep.Source.TransformOperationId
+						}
+						f5f2valf2.Source = f5f2valf2f2
+					}
+					f5f2val.CastColumnTypesStep = f5f2valf2
+				}
+				if f5f2valiter.CreateColumnsStep != nil {
+					f5f2valf3 := &svcapitypes.CreateColumnsOperation{}
+					if f5f2valiter.CreateColumnsStep.Alias != nil {
+						f5f2valf3.Alias = f5f2valiter.CreateColumnsStep.Alias
+					}
+					if f5f2valiter.CreateColumnsStep.Columns != nil {
+						f5f2valf3f1 := []*svcapitypes.CalculatedColumn{}
+						for _, f5f2valf3f1iter := range f5f2valiter.CreateColumnsStep.Columns {
+							f5f2valf3f1elem := &svcapitypes.CalculatedColumn{}
+							if f5f2valf3f1iter.ColumnId != nil {
+								f5f2valf3f1elem.ColumnID = f5f2valf3f1iter.ColumnId
+							}
+							if f5f2valf3f1iter.ColumnName != nil {
+								f5f2valf3f1elem.ColumnName = f5f2valf3f1iter.ColumnName
+							}
+							if f5f2valf3f1iter.Expression != nil {
+								f5f2valf3f1elem.Expression = f5f2valf3f1iter.Expression
+							}
+							f5f2valf3f1 = append(f5f2valf3f1, f5f2valf3f1elem)
+						}
+						f5f2valf3.Columns = f5f2valf3f1
+					}
+					if f5f2valiter.CreateColumnsStep.Source != nil {
+						f5f2valf3f2 := &svcapitypes.TransformOperationSource{}
+						if f5f2valiter.CreateColumnsStep.Source.ColumnIdMappings != nil {
+							f5f2valf3f2f0 := []*svcapitypes.DataSetColumnIDMapping{}
+							for _, f5f2valf3f2f0iter := range f5f2valiter.CreateColumnsStep.Source.ColumnIdMappings {
+								f5f2valf3f2f0elem := &svcapitypes.DataSetColumnIDMapping{}
+								if f5f2valf3f2f0iter.SourceColumnId != nil {
+									f5f2valf3f2f0elem.SourceColumnID = f5f2valf3f2f0iter.SourceColumnId
+								}
+								if f5f2valf3f2f0iter.TargetColumnId != nil {
+									f5f2valf3f2f0elem.TargetColumnID = f5f2valf3f2f0iter.TargetColumnId
+								}
+								f5f2valf3f2f0 = append(f5f2valf3f2f0, f5f2valf3f2f0elem)
+							}
+							f5f2valf3f2.ColumnIDMappings = f5f2valf3f2f0
+						}
+						if f5f2valiter.CreateColumnsStep.Source.TransformOperationId != nil {
+							f5f2valf3f2.TransformOperationID = f5f2valiter.CreateColumnsStep.Source.TransformOperationId
+						}
+						f5f2valf3.Source = f5f2valf3f2
+					}
+					f5f2val.CreateColumnsStep = f5f2valf3
+				}
+				if f5f2valiter.FiltersStep != nil {
+					f5f2valf4 := &svcapitypes.FiltersOperation{}
+					if f5f2valiter.FiltersStep.Alias != nil {
+						f5f2valf4.Alias = f5f2valiter.FiltersStep.Alias
+					}
+					if f5f2valiter.FiltersStep.FilterOperations != nil {
+						f5f2valf4f1 := []*svcapitypes.FilterOperation{}
+						for _, f5f2valf4f1iter := range f5f2valiter.FiltersStep.FilterOperations {
+							f5f2valf4f1elem := &svcapitypes.FilterOperation{}
+							if f5f2valf4f1iter.ConditionExpression != nil {
+								f5f2valf4f1elem.ConditionExpression = f5f2valf4f1iter.ConditionExpression
+							}
+							if f5f2valf4f1iter.DateFilterCondition != nil {
+								f5f2valf4f1elemf1 := &svcapitypes.DataSetDateFilterCondition{}
+								if f5f2valf4f1iter.DateFilterCondition.ColumnName != nil {
+									f5f2valf4f1elemf1.ColumnName = f5f2valf4f1iter.DateFilterCondition.ColumnName
+								}
+								if f5f2valf4f1iter.DateFilterCondition.ComparisonFilterCondition != nil {
+									f5f2valf4f1elemf1f1 := &svcapitypes.DataSetDateComparisonFilterCondition{}
+									if f5f2valf4f1iter.DateFilterCondition.ComparisonFilterCondition.Operator != "" {
+										f5f2valf4f1elemf1f1.Operator = aws.String(string(f5f2valf4f1iter.DateFilterCondition.ComparisonFilterCondition.Operator))
+									}
+									if f5f2valf4f1iter.DateFilterCondition.ComparisonFilterCondition.Value != nil {
+										f5f2valf4f1elemf1f1f1 := &svcapitypes.DataSetDateFilterValue{}
+										if f5f2valf4f1iter.DateFilterCondition.ComparisonFilterCondition.Value.StaticValue != nil {
+											f5f2valf4f1elemf1f1f1.StaticValue = &metav1.Time{*f5f2valf4f1iter.DateFilterCondition.ComparisonFilterCondition.Value.StaticValue}
+										}
+										f5f2valf4f1elemf1f1.Value = f5f2valf4f1elemf1f1f1
+									}
+									f5f2valf4f1elemf1.ComparisonFilterCondition = f5f2valf4f1elemf1f1
+								}
+								if f5f2valf4f1iter.DateFilterCondition.RangeFilterCondition != nil {
+									f5f2valf4f1elemf1f2 := &svcapitypes.DataSetDateRangeFilterCondition{}
+									if f5f2valf4f1iter.DateFilterCondition.RangeFilterCondition.IncludeMaximum != nil {
+										f5f2valf4f1elemf1f2.IncludeMaximum = f5f2valf4f1iter.DateFilterCondition.RangeFilterCondition.IncludeMaximum
+									}
+									if f5f2valf4f1iter.DateFilterCondition.RangeFilterCondition.IncludeMinimum != nil {
+										f5f2valf4f1elemf1f2.IncludeMinimum = f5f2valf4f1iter.DateFilterCondition.RangeFilterCondition.IncludeMinimum
+									}
+									if f5f2valf4f1iter.DateFilterCondition.RangeFilterCondition.RangeMaximum != nil {
+										f5f2valf4f1elemf1f2f2 := &svcapitypes.DataSetDateFilterValue{}
+										if f5f2valf4f1iter.DateFilterCondition.RangeFilterCondition.RangeMaximum.StaticValue != nil {
+											f5f2valf4f1elemf1f2f2.StaticValue = &metav1.Time{*f5f2valf4f1iter.DateFilterCondition.RangeFilterCondition.RangeMaximum.StaticValue}
+										}
+										f5f2valf4f1elemf1f2.RangeMaximum = f5f2valf4f1elemf1f2f2
+									}
+									if f5f2valf4f1iter.DateFilterCondition.RangeFilterCondition.RangeMinimum != nil {
+										f5f2valf4f1elemf1f2f3 := &svcapitypes.DataSetDateFilterValue{}
+										if f5f2valf4f1iter.DateFilterCondition.RangeFilterCondition.RangeMinimum.StaticValue != nil {
+											f5f2valf4f1elemf1f2f3.StaticValue = &metav1.Time{*f5f2valf4f1iter.DateFilterCondition.RangeFilterCondition.RangeMinimum.StaticValue}
+										}
+										f5f2valf4f1elemf1f2.RangeMinimum = f5f2valf4f1elemf1f2f3
+									}
+									f5f2valf4f1elemf1.RangeFilterCondition = f5f2valf4f1elemf1f2
+								}
+								f5f2valf4f1elem.DateFilterCondition = f5f2valf4f1elemf1
+							}
+							if f5f2valf4f1iter.NumericFilterCondition != nil {
+								f5f2valf4f1elemf2 := &svcapitypes.DataSetNumericFilterCondition{}
+								if f5f2valf4f1iter.NumericFilterCondition.ColumnName != nil {
+									f5f2valf4f1elemf2.ColumnName = f5f2valf4f1iter.NumericFilterCondition.ColumnName
+								}
+								if f5f2valf4f1iter.NumericFilterCondition.ComparisonFilterCondition != nil {
+									f5f2valf4f1elemf2f1 := &svcapitypes.DataSetNumericComparisonFilterCondition{}
+									if f5f2valf4f1iter.NumericFilterCondition.ComparisonFilterCondition.Operator != "" {
+										f5f2valf4f1elemf2f1.Operator = aws.String(string(f5f2valf4f1iter.NumericFilterCondition.ComparisonFilterCondition.Operator))
+									}
+									if f5f2valf4f1iter.NumericFilterCondition.ComparisonFilterCondition.Value != nil {
+										f5f2valf4f1elemf2f1f1 := &svcapitypes.DataSetNumericFilterValue{}
+										if f5f2valf4f1iter.NumericFilterCondition.ComparisonFilterCondition.Value.StaticValue != nil {
+											f5f2valf4f1elemf2f1f1.StaticValue = f5f2valf4f1iter.NumericFilterCondition.ComparisonFilterCondition.Value.StaticValue
+										}
+										f5f2valf4f1elemf2f1.Value = f5f2valf4f1elemf2f1f1
+									}
+									f5f2valf4f1elemf2.ComparisonFilterCondition = f5f2valf4f1elemf2f1
+								}
+								if f5f2valf4f1iter.NumericFilterCondition.RangeFilterCondition != nil {
+									f5f2valf4f1elemf2f2 := &svcapitypes.DataSetNumericRangeFilterCondition{}
+									if f5f2valf4f1iter.NumericFilterCondition.RangeFilterCondition.IncludeMaximum != nil {
+										f5f2valf4f1elemf2f2.IncludeMaximum = f5f2valf4f1iter.NumericFilterCondition.RangeFilterCondition.IncludeMaximum
+									}
+									if f5f2valf4f1iter.NumericFilterCondition.RangeFilterCondition.IncludeMinimum != nil {
+										f5f2valf4f1elemf2f2.IncludeMinimum = f5f2valf4f1iter.NumericFilterCondition.RangeFilterCondition.IncludeMinimum
+									}
+									if f5f2valf4f1iter.NumericFilterCondition.RangeFilterCondition.RangeMaximum != nil {
+										f5f2valf4f1elemf2f2f2 := &svcapitypes.DataSetNumericFilterValue{}
+										if f5f2valf4f1iter.NumericFilterCondition.RangeFilterCondition.RangeMaximum.StaticValue != nil {
+											f5f2valf4f1elemf2f2f2.StaticValue = f5f2valf4f1iter.NumericFilterCondition.RangeFilterCondition.RangeMaximum.StaticValue
+										}
+										f5f2valf4f1elemf2f2.RangeMaximum = f5f2valf4f1elemf2f2f2
+									}
+									if f5f2valf4f1iter.NumericFilterCondition.RangeFilterCondition.RangeMinimum != nil {
+										f5f2valf4f1elemf2f2f3 := &svcapitypes.DataSetNumericFilterValue{}
+										if f5f2valf4f1iter.NumericFilterCondition.RangeFilterCondition.RangeMinimum.StaticValue != nil {
+											f5f2valf4f1elemf2f2f3.StaticValue = f5f2valf4f1iter.NumericFilterCondition.RangeFilterCondition.RangeMinimum.StaticValue
+										}
+										f5f2valf4f1elemf2f2.RangeMinimum = f5f2valf4f1elemf2f2f3
+									}
+									f5f2valf4f1elemf2.RangeFilterCondition = f5f2valf4f1elemf2f2
+								}
+								f5f2valf4f1elem.NumericFilterCondition = f5f2valf4f1elemf2
+							}
+							if f5f2valf4f1iter.StringFilterCondition != nil {
+								f5f2valf4f1elemf3 := &svcapitypes.DataSetStringFilterCondition{}
+								if f5f2valf4f1iter.StringFilterCondition.ColumnName != nil {
+									f5f2valf4f1elemf3.ColumnName = f5f2valf4f1iter.StringFilterCondition.ColumnName
+								}
+								if f5f2valf4f1iter.StringFilterCondition.ComparisonFilterCondition != nil {
+									f5f2valf4f1elemf3f1 := &svcapitypes.DataSetStringComparisonFilterCondition{}
+									if f5f2valf4f1iter.StringFilterCondition.ComparisonFilterCondition.Operator != "" {
+										f5f2valf4f1elemf3f1.Operator = aws.String(string(f5f2valf4f1iter.StringFilterCondition.ComparisonFilterCondition.Operator))
+									}
+									if f5f2valf4f1iter.StringFilterCondition.ComparisonFilterCondition.Value != nil {
+										f5f2valf4f1elemf3f1f1 := &svcapitypes.DataSetStringFilterValue{}
+										if f5f2valf4f1iter.StringFilterCondition.ComparisonFilterCondition.Value.StaticValue != nil {
+											f5f2valf4f1elemf3f1f1.StaticValue = f5f2valf4f1iter.StringFilterCondition.ComparisonFilterCondition.Value.StaticValue
+										}
+										f5f2valf4f1elemf3f1.Value = f5f2valf4f1elemf3f1f1
+									}
+									f5f2valf4f1elemf3.ComparisonFilterCondition = f5f2valf4f1elemf3f1
+								}
+								if f5f2valf4f1iter.StringFilterCondition.ListFilterCondition != nil {
+									f5f2valf4f1elemf3f2 := &svcapitypes.DataSetStringListFilterCondition{}
+									if f5f2valf4f1iter.StringFilterCondition.ListFilterCondition.Operator != "" {
+										f5f2valf4f1elemf3f2.Operator = aws.String(string(f5f2valf4f1iter.StringFilterCondition.ListFilterCondition.Operator))
+									}
+									if f5f2valf4f1iter.StringFilterCondition.ListFilterCondition.Values != nil {
+										f5f2valf4f1elemf3f2f1 := &svcapitypes.DataSetStringListFilterValue{}
+										if f5f2valf4f1iter.StringFilterCondition.ListFilterCondition.Values.StaticValues != nil {
+											f5f2valf4f1elemf3f2f1.StaticValues = aws.StringSlice(f5f2valf4f1iter.StringFilterCondition.ListFilterCondition.Values.StaticValues)
+										}
+										f5f2valf4f1elemf3f2.Values = f5f2valf4f1elemf3f2f1
+									}
+									f5f2valf4f1elemf3.ListFilterCondition = f5f2valf4f1elemf3f2
+								}
+								f5f2valf4f1elem.StringFilterCondition = f5f2valf4f1elemf3
+							}
+							f5f2valf4f1 = append(f5f2valf4f1, f5f2valf4f1elem)
+						}
+						f5f2valf4.FilterOperations = f5f2valf4f1
+					}
+					if f5f2valiter.FiltersStep.Source != nil {
+						f5f2valf4f2 := &svcapitypes.TransformOperationSource{}
+						if f5f2valiter.FiltersStep.Source.ColumnIdMappings != nil {
+							f5f2valf4f2f0 := []*svcapitypes.DataSetColumnIDMapping{}
+							for _, f5f2valf4f2f0iter := range f5f2valiter.FiltersStep.Source.ColumnIdMappings {
+								f5f2valf4f2f0elem := &svcapitypes.DataSetColumnIDMapping{}
+								if f5f2valf4f2f0iter.SourceColumnId != nil {
+									f5f2valf4f2f0elem.SourceColumnID = f5f2valf4f2f0iter.SourceColumnId
+								}
+								if f5f2valf4f2f0iter.TargetColumnId != nil {
+									f5f2valf4f2f0elem.TargetColumnID = f5f2valf4f2f0iter.TargetColumnId
+								}
+								f5f2valf4f2f0 = append(f5f2valf4f2f0, f5f2valf4f2f0elem)
+							}
+							f5f2valf4f2.ColumnIDMappings = f5f2valf4f2f0
+						}
+						if f5f2valiter.FiltersStep.Source.TransformOperationId != nil {
+							f5f2valf4f2.TransformOperationID = f5f2valiter.FiltersStep.Source.TransformOperationId
+						}
+						f5f2valf4.Source = f5f2valf4f2
+					}
+					f5f2val.FiltersStep = f5f2valf4
+				}
+				if f5f2valiter.ImportTableStep != nil {
+					f5f2valf5 := &svcapitypes.ImportTableOperation{}
+					if f5f2valiter.ImportTableStep.Alias != nil {
+						f5f2valf5.Alias = f5f2valiter.ImportTableStep.Alias
+					}
+					if f5f2valiter.ImportTableStep.Source != nil {
+						f5f2valf5f1 := &svcapitypes.ImportTableOperationSource{}
+						if f5f2valiter.ImportTableStep.Source.ColumnIdMappings != nil {
+							f5f2valf5f1f0 := []*svcapitypes.DataSetColumnIDMapping{}
+							for _, f5f2valf5f1f0iter := range f5f2valiter.ImportTableStep.Source.ColumnIdMappings {
+								f5f2valf5f1f0elem := &svcapitypes.DataSetColumnIDMapping{}
+								if f5f2valf5f1f0iter.SourceColumnId != nil {
+									f5f2valf5f1f0elem.SourceColumnID = f5f2valf5f1f0iter.SourceColumnId
+								}
+								if f5f2valf5f1f0iter.TargetColumnId != nil {
+									f5f2valf5f1f0elem.TargetColumnID = f5f2valf5f1f0iter.TargetColumnId
+								}
+								f5f2valf5f1f0 = append(f5f2valf5f1f0, f5f2valf5f1f0elem)
+							}
+							f5f2valf5f1.ColumnIDMappings = f5f2valf5f1f0
+						}
+						if f5f2valiter.ImportTableStep.Source.SourceTableId != nil {
+							f5f2valf5f1.SourceTableID = f5f2valiter.ImportTableStep.Source.SourceTableId
+						}
+						f5f2valf5.Source = f5f2valf5f1
+					}
+					f5f2val.ImportTableStep = f5f2valf5
+				}
+				if f5f2valiter.JoinStep != nil {
+					f5f2valf6 := &svcapitypes.JoinOperation{}
+					if f5f2valiter.JoinStep.Alias != nil {
+						f5f2valf6.Alias = f5f2valiter.JoinStep.Alias
+					}
+					if f5f2valiter.JoinStep.LeftOperand != nil {
+						f5f2valf6f1 := &svcapitypes.TransformOperationSource{}
+						if f5f2valiter.JoinStep.LeftOperand.ColumnIdMappings != nil {
+							f5f2valf6f1f0 := []*svcapitypes.DataSetColumnIDMapping{}
+							for _, f5f2valf6f1f0iter := range f5f2valiter.JoinStep.LeftOperand.ColumnIdMappings {
+								f5f2valf6f1f0elem := &svcapitypes.DataSetColumnIDMapping{}
+								if f5f2valf6f1f0iter.SourceColumnId != nil {
+									f5f2valf6f1f0elem.SourceColumnID = f5f2valf6f1f0iter.SourceColumnId
+								}
+								if f5f2valf6f1f0iter.TargetColumnId != nil {
+									f5f2valf6f1f0elem.TargetColumnID = f5f2valf6f1f0iter.TargetColumnId
+								}
+								f5f2valf6f1f0 = append(f5f2valf6f1f0, f5f2valf6f1f0elem)
+							}
+							f5f2valf6f1.ColumnIDMappings = f5f2valf6f1f0
+						}
+						if f5f2valiter.JoinStep.LeftOperand.TransformOperationId != nil {
+							f5f2valf6f1.TransformOperationID = f5f2valiter.JoinStep.LeftOperand.TransformOperationId
+						}
+						f5f2valf6.LeftOperand = f5f2valf6f1
+					}
+					if f5f2valiter.JoinStep.LeftOperandProperties != nil {
+						f5f2valf6f2 := &svcapitypes.JoinOperandProperties{}
+						if f5f2valiter.JoinStep.LeftOperandProperties.OutputColumnNameOverrides != nil {
+							f5f2valf6f2f0 := []*svcapitypes.OutputColumnNameOverride{}
+							for _, f5f2valf6f2f0iter := range f5f2valiter.JoinStep.LeftOperandProperties.OutputColumnNameOverrides {
+								f5f2valf6f2f0elem := &svcapitypes.OutputColumnNameOverride{}
+								if f5f2valf6f2f0iter.OutputColumnName != nil {
+									f5f2valf6f2f0elem.OutputColumnName = f5f2valf6f2f0iter.OutputColumnName
+								}
+								if f5f2valf6f2f0iter.SourceColumnName != nil {
+									f5f2valf6f2f0elem.SourceColumnName = f5f2valf6f2f0iter.SourceColumnName
+								}
+								f5f2valf6f2f0 = append(f5f2valf6f2f0, f5f2valf6f2f0elem)
+							}
+							f5f2valf6f2.OutputColumnNameOverrides = f5f2valf6f2f0
+						}
+						f5f2valf6.LeftOperandProperties = f5f2valf6f2
+					}
+					if f5f2valiter.JoinStep.OnClause != nil {
+						f5f2valf6.OnClause = f5f2valiter.JoinStep.OnClause
+					}
+					if f5f2valiter.JoinStep.RightOperand != nil {
+						f5f2valf6f4 := &svcapitypes.TransformOperationSource{}
+						if f5f2valiter.JoinStep.RightOperand.ColumnIdMappings != nil {
+							f5f2valf6f4f0 := []*svcapitypes.DataSetColumnIDMapping{}
+							for _, f5f2valf6f4f0iter := range f5f2valiter.JoinStep.RightOperand.ColumnIdMappings {
+								f5f2valf6f4f0elem := &svcapitypes.DataSetColumnIDMapping{}
+								if f5f2valf6f4f0iter.SourceColumnId != nil {
+									f5f2valf6f4f0elem.SourceColumnID = f5f2valf6f4f0iter.SourceColumnId
+								}
+								if f5f2valf6f4f0iter.TargetColumnId != nil {
+									f5f2valf6f4f0elem.TargetColumnID = f5f2valf6f4f0iter.TargetColumnId
+								}
+								f5f2valf6f4f0 = append(f5f2valf6f4f0, f5f2valf6f4f0elem)
+							}
+							f5f2valf6f4.ColumnIDMappings = f5f2valf6f4f0
+						}
+						if f5f2valiter.JoinStep.RightOperand.TransformOperationId != nil {
+							f5f2valf6f4.TransformOperationID = f5f2valiter.JoinStep.RightOperand.TransformOperationId
+						}
+						f5f2valf6.RightOperand = f5f2valf6f4
+					}
+					if f5f2valiter.JoinStep.RightOperandProperties != nil {
+						f5f2valf6f5 := &svcapitypes.JoinOperandProperties{}
+						if f5f2valiter.JoinStep.RightOperandProperties.OutputColumnNameOverrides != nil {
+							f5f2valf6f5f0 := []*svcapitypes.OutputColumnNameOverride{}
+							for _, f5f2valf6f5f0iter := range f5f2valiter.JoinStep.RightOperandProperties.OutputColumnNameOverrides {
+								f5f2valf6f5f0elem := &svcapitypes.OutputColumnNameOverride{}
+								if f5f2valf6f5f0iter.OutputColumnName != nil {
+									f5f2valf6f5f0elem.OutputColumnName = f5f2valf6f5f0iter.OutputColumnName
+								}
+								if f5f2valf6f5f0iter.SourceColumnName != nil {
+									f5f2valf6f5f0elem.SourceColumnName = f5f2valf6f5f0iter.SourceColumnName
+								}
+								f5f2valf6f5f0 = append(f5f2valf6f5f0, f5f2valf6f5f0elem)
+							}
+							f5f2valf6f5.OutputColumnNameOverrides = f5f2valf6f5f0
+						}
+						f5f2valf6.RightOperandProperties = f5f2valf6f5
+					}
+					if f5f2valiter.JoinStep.Type != "" {
+						f5f2valf6.Type = aws.String(string(f5f2valiter.JoinStep.Type))
+					}
+					f5f2val.JoinStep = f5f2valf6
+				}
+				if f5f2valiter.PivotStep != nil {
+					f5f2valf7 := &svcapitypes.PivotOperation{}
+					if f5f2valiter.PivotStep.Alias != nil {
+						f5f2valf7.Alias = f5f2valiter.PivotStep.Alias
+					}
+					if f5f2valiter.PivotStep.GroupByColumnNames != nil {
+						f5f2valf7.GroupByColumnNames = aws.StringSlice(f5f2valiter.PivotStep.GroupByColumnNames)
+					}
+					if f5f2valiter.PivotStep.PivotConfiguration != nil {
+						f5f2valf7f2 := &svcapitypes.PivotConfiguration{}
+						if f5f2valiter.PivotStep.PivotConfiguration.LabelColumnName != nil {
+							f5f2valf7f2.LabelColumnName = f5f2valiter.PivotStep.PivotConfiguration.LabelColumnName
+						}
+						if f5f2valiter.PivotStep.PivotConfiguration.PivotedLabels != nil {
+							f5f2valf7f2f1 := []*svcapitypes.PivotedLabel{}
+							for _, f5f2valf7f2f1iter := range f5f2valiter.PivotStep.PivotConfiguration.PivotedLabels {
+								f5f2valf7f2f1elem := &svcapitypes.PivotedLabel{}
+								if f5f2valf7f2f1iter.LabelName != nil {
+									f5f2valf7f2f1elem.LabelName = f5f2valf7f2f1iter.LabelName
+								}
+								if f5f2valf7f2f1iter.NewColumnId != nil {
+									f5f2valf7f2f1elem.NewColumnID = f5f2valf7f2f1iter.NewColumnId
+								}
+								if f5f2valf7f2f1iter.NewColumnName != nil {
+									f5f2valf7f2f1elem.NewColumnName = f5f2valf7f2f1iter.NewColumnName
+								}
+								f5f2valf7f2f1 = append(f5f2valf7f2f1, f5f2valf7f2f1elem)
+							}
+							f5f2valf7f2.PivotedLabels = f5f2valf7f2f1
+						}
+						f5f2valf7.PivotConfiguration = f5f2valf7f2
+					}
+					if f5f2valiter.PivotStep.Source != nil {
+						f5f2valf7f3 := &svcapitypes.TransformOperationSource{}
+						if f5f2valiter.PivotStep.Source.ColumnIdMappings != nil {
+							f5f2valf7f3f0 := []*svcapitypes.DataSetColumnIDMapping{}
+							for _, f5f2valf7f3f0iter := range f5f2valiter.PivotStep.Source.ColumnIdMappings {
+								f5f2valf7f3f0elem := &svcapitypes.DataSetColumnIDMapping{}
+								if f5f2valf7f3f0iter.SourceColumnId != nil {
+									f5f2valf7f3f0elem.SourceColumnID = f5f2valf7f3f0iter.SourceColumnId
+								}
+								if f5f2valf7f3f0iter.TargetColumnId != nil {
+									f5f2valf7f3f0elem.TargetColumnID = f5f2valf7f3f0iter.TargetColumnId
+								}
+								f5f2valf7f3f0 = append(f5f2valf7f3f0, f5f2valf7f3f0elem)
+							}
+							f5f2valf7f3.ColumnIDMappings = f5f2valf7f3f0
+						}
+						if f5f2valiter.PivotStep.Source.TransformOperationId != nil {
+							f5f2valf7f3.TransformOperationID = f5f2valiter.PivotStep.Source.TransformOperationId
+						}
+						f5f2valf7.Source = f5f2valf7f3
+					}
+					if f5f2valiter.PivotStep.ValueColumnConfiguration != nil {
+						f5f2valf7f4 := &svcapitypes.ValueColumnConfiguration{}
+						if f5f2valiter.PivotStep.ValueColumnConfiguration.AggregationFunction != nil {
+							f5f2valf7f4f0 := &svcapitypes.DataPrepAggregationFunction{}
+							if f5f2valiter.PivotStep.ValueColumnConfiguration.AggregationFunction.ListAggregation != nil {
+								f5f2valf7f4f0f0 := &svcapitypes.DataPrepListAggregationFunction{}
+								f5f2valf7f4f0f0.Distinct = &f5f2valiter.PivotStep.ValueColumnConfiguration.AggregationFunction.ListAggregation.Distinct
+								if f5f2valiter.PivotStep.ValueColumnConfiguration.AggregationFunction.ListAggregation.InputColumnName != nil {
+									f5f2valf7f4f0f0.InputColumnName = f5f2valiter.PivotStep.ValueColumnConfiguration.AggregationFunction.ListAggregation.InputColumnName
+								}
+								if f5f2valiter.PivotStep.ValueColumnConfiguration.AggregationFunction.ListAggregation.Separator != nil {
+									f5f2valf7f4f0f0.Separator = f5f2valiter.PivotStep.ValueColumnConfiguration.AggregationFunction.ListAggregation.Separator
+								}
+								f5f2valf7f4f0.ListAggregation = f5f2valf7f4f0f0
+							}
+							if f5f2valiter.PivotStep.ValueColumnConfiguration.AggregationFunction.SimpleAggregation != nil {
+								f5f2valf7f4f0f1 := &svcapitypes.DataPrepSimpleAggregationFunction{}
+								if f5f2valiter.PivotStep.ValueColumnConfiguration.AggregationFunction.SimpleAggregation.FunctionType != "" {
+									f5f2valf7f4f0f1.FunctionType = aws.String(string(f5f2valiter.PivotStep.ValueColumnConfiguration.AggregationFunction.SimpleAggregation.FunctionType))
+								}
+								if f5f2valiter.PivotStep.ValueColumnConfiguration.AggregationFunction.SimpleAggregation.InputColumnName != nil {
+									f5f2valf7f4f0f1.InputColumnName = f5f2valiter.PivotStep.ValueColumnConfiguration.AggregationFunction.SimpleAggregation.InputColumnName
+								}
+								f5f2valf7f4f0.SimpleAggregation = f5f2valf7f4f0f1
+							}
+							f5f2valf7f4.AggregationFunction = f5f2valf7f4f0
+						}
+						f5f2valf7.ValueColumnConfiguration = f5f2valf7f4
+					}
+					f5f2val.PivotStep = f5f2valf7
+				}
+				if f5f2valiter.ProjectStep != nil {
+					f5f2valf8 := &svcapitypes.ProjectOperation{}
+					if f5f2valiter.ProjectStep.Alias != nil {
+						f5f2valf8.Alias = f5f2valiter.ProjectStep.Alias
+					}
+					if f5f2valiter.ProjectStep.ProjectedColumns != nil {
+						f5f2valf8.ProjectedColumns = aws.StringSlice(f5f2valiter.ProjectStep.ProjectedColumns)
+					}
+					if f5f2valiter.ProjectStep.Source != nil {
+						f5f2valf8f2 := &svcapitypes.TransformOperationSource{}
+						if f5f2valiter.ProjectStep.Source.ColumnIdMappings != nil {
+							f5f2valf8f2f0 := []*svcapitypes.DataSetColumnIDMapping{}
+							for _, f5f2valf8f2f0iter := range f5f2valiter.ProjectStep.Source.ColumnIdMappings {
+								f5f2valf8f2f0elem := &svcapitypes.DataSetColumnIDMapping{}
+								if f5f2valf8f2f0iter.SourceColumnId != nil {
+									f5f2valf8f2f0elem.SourceColumnID = f5f2valf8f2f0iter.SourceColumnId
+								}
+								if f5f2valf8f2f0iter.TargetColumnId != nil {
+									f5f2valf8f2f0elem.TargetColumnID = f5f2valf8f2f0iter.TargetColumnId
+								}
+								f5f2valf8f2f0 = append(f5f2valf8f2f0, f5f2valf8f2f0elem)
+							}
+							f5f2valf8f2.ColumnIDMappings = f5f2valf8f2f0
+						}
+						if f5f2valiter.ProjectStep.Source.TransformOperationId != nil {
+							f5f2valf8f2.TransformOperationID = f5f2valiter.ProjectStep.Source.TransformOperationId
+						}
+						f5f2valf8.Source = f5f2valf8f2
+					}
+					f5f2val.ProjectStep = f5f2valf8
+				}
+				if f5f2valiter.RenameColumnsStep != nil {
+					f5f2valf9 := &svcapitypes.RenameColumnsOperation{}
+					if f5f2valiter.RenameColumnsStep.Alias != nil {
+						f5f2valf9.Alias = f5f2valiter.RenameColumnsStep.Alias
+					}
+					if f5f2valiter.RenameColumnsStep.RenameColumnOperations != nil {
+						f5f2valf9f1 := []*svcapitypes.RenameColumnOperation{}
+						for _, f5f2valf9f1iter := range f5f2valiter.RenameColumnsStep.RenameColumnOperations {
+							f5f2valf9f1elem := &svcapitypes.RenameColumnOperation{}
+							if f5f2valf9f1iter.ColumnName != nil {
+								f5f2valf9f1elem.ColumnName = f5f2valf9f1iter.ColumnName
+							}
+							if f5f2valf9f1iter.NewColumnName != nil {
+								f5f2valf9f1elem.NewColumnName = f5f2valf9f1iter.NewColumnName
+							}
+							f5f2valf9f1 = append(f5f2valf9f1, f5f2valf9f1elem)
+						}
+						f5f2valf9.RenameColumnOperations = f5f2valf9f1
+					}
+					if f5f2valiter.RenameColumnsStep.Source != nil {
+						f5f2valf9f2 := &svcapitypes.TransformOperationSource{}
+						if f5f2valiter.RenameColumnsStep.Source.ColumnIdMappings != nil {
+							f5f2valf9f2f0 := []*svcapitypes.DataSetColumnIDMapping{}
+							for _, f5f2valf9f2f0iter := range f5f2valiter.RenameColumnsStep.Source.ColumnIdMappings {
+								f5f2valf9f2f0elem := &svcapitypes.DataSetColumnIDMapping{}
+								if f5f2valf9f2f0iter.SourceColumnId != nil {
+									f5f2valf9f2f0elem.SourceColumnID = f5f2valf9f2f0iter.SourceColumnId
+								}
+								if f5f2valf9f2f0iter.TargetColumnId != nil {
+									f5f2valf9f2f0elem.TargetColumnID = f5f2valf9f2f0iter.TargetColumnId
+								}
+								f5f2valf9f2f0 = append(f5f2valf9f2f0, f5f2valf9f2f0elem)
+							}
+							f5f2valf9f2.ColumnIDMappings = f5f2valf9f2f0
+						}
+						if f5f2valiter.RenameColumnsStep.Source.TransformOperationId != nil {
+							f5f2valf9f2.TransformOperationID = f5f2valiter.RenameColumnsStep.Source.TransformOperationId
+						}
+						f5f2valf9.Source = f5f2valf9f2
+					}
+					f5f2val.RenameColumnsStep = f5f2valf9
+				}
+				if f5f2valiter.UnpivotStep != nil {
+					f5f2valf10 := &svcapitypes.UnpivotOperation{}
+					if f5f2valiter.UnpivotStep.Alias != nil {
+						f5f2valf10.Alias = f5f2valiter.UnpivotStep.Alias
+					}
+					if f5f2valiter.UnpivotStep.ColumnsToUnpivot != nil {
+						f5f2valf10f1 := []*svcapitypes.ColumnToUnpivot{}
+						for _, f5f2valf10f1iter := range f5f2valiter.UnpivotStep.ColumnsToUnpivot {
+							f5f2valf10f1elem := &svcapitypes.ColumnToUnpivot{}
+							if f5f2valf10f1iter.ColumnName != nil {
+								f5f2valf10f1elem.ColumnName = f5f2valf10f1iter.ColumnName
+							}
+							if f5f2valf10f1iter.NewValue != nil {
+								f5f2valf10f1elem.NewValue = f5f2valf10f1iter.NewValue
+							}
+							f5f2valf10f1 = append(f5f2valf10f1, f5f2valf10f1elem)
+						}
+						f5f2valf10.ColumnsToUnpivot = f5f2valf10f1
+					}
+					if f5f2valiter.UnpivotStep.Source != nil {
+						f5f2valf10f2 := &svcapitypes.TransformOperationSource{}
+						if f5f2valiter.UnpivotStep.Source.ColumnIdMappings != nil {
+							f5f2valf10f2f0 := []*svcapitypes.DataSetColumnIDMapping{}
+							for _, f5f2valf10f2f0iter := range f5f2valiter.UnpivotStep.Source.ColumnIdMappings {
+								f5f2valf10f2f0elem := &svcapitypes.DataSetColumnIDMapping{}
+								if f5f2valf10f2f0iter.SourceColumnId != nil {
+									f5f2valf10f2f0elem.SourceColumnID = f5f2valf10f2f0iter.SourceColumnId
+								}
+								if f5f2valf10f2f0iter.TargetColumnId != nil {
+									f5f2valf10f2f0elem.TargetColumnID = f5f2valf10f2f0iter.TargetColumnId
+								}
+								f5f2valf10f2f0 = append(f5f2valf10f2f0, f5f2valf10f2f0elem)
+							}
+							f5f2valf10f2.ColumnIDMappings = f5f2valf10f2f0
+						}
+						if f5f2valiter.UnpivotStep.Source.TransformOperationId != nil {
+							f5f2valf10f2.TransformOperationID = f5f2valiter.UnpivotStep.Source.TransformOperationId
+						}
+						f5f2valf10.Source = f5f2valf10f2
+					}
+					if f5f2valiter.UnpivotStep.UnpivotedLabelColumnId != nil {
+						f5f2valf10.UnpivotedLabelColumnID = f5f2valiter.UnpivotStep.UnpivotedLabelColumnId
+					}
+					if f5f2valiter.UnpivotStep.UnpivotedLabelColumnName != nil {
+						f5f2valf10.UnpivotedLabelColumnName = f5f2valiter.UnpivotStep.UnpivotedLabelColumnName
+					}
+					if f5f2valiter.UnpivotStep.UnpivotedValueColumnId != nil {
+						f5f2valf10.UnpivotedValueColumnID = f5f2valiter.UnpivotStep.UnpivotedValueColumnId
+					}
+					if f5f2valiter.UnpivotStep.UnpivotedValueColumnName != nil {
+						f5f2valf10.UnpivotedValueColumnName = f5f2valiter.UnpivotStep.UnpivotedValueColumnName
+					}
+					f5f2val.UnpivotStep = f5f2valf10
+				}
+				f5f2[f5f2key] = f5f2val
+			}
+			f5.TransformStepMap = f5f2
+		}
+		ko.Spec.DataPrepConfiguration = f5
+	} else {
+		ko.Spec.DataPrepConfiguration = nil
+	}
+	if resp.DataSet.DataSetId != nil {
+		ko.Spec.ID = resp.DataSet.DataSetId
+	} else {
+		ko.Spec.ID = nil
+	}
+	if resp.DataSet.FieldFolders != nil {
+		f9 := map[string]*svcapitypes.FieldFolder{}
+		for f9key, f9valiter := range resp.DataSet.FieldFolders {
+			f9val := &svcapitypes.FieldFolder{}
+			if f9valiter.Columns != nil {
+				f9val.Columns = aws.StringSlice(f9valiter.Columns)
+			}
+			if f9valiter.Description != nil {
+				f9val.Description = f9valiter.Description
+			}
+			f9[f9key] = f9val
+		}
+		ko.Spec.FieldFolders = f9
+	} else {
+		ko.Spec.FieldFolders = nil
+	}
+	if resp.DataSet.ImportMode != "" {
+		ko.Spec.ImportMode = aws.String(string(resp.DataSet.ImportMode))
+	} else {
+		ko.Spec.ImportMode = nil
+	}
+	if resp.DataSet.LastUpdatedTime != nil {
+		ko.Status.LastUpdatedTime = &metav1.Time{*resp.DataSet.LastUpdatedTime}
+	} else {
+		ko.Status.LastUpdatedTime = nil
+	}
+	if resp.DataSet.LogicalTableMap != nil {
+		f12 := map[string]*svcapitypes.LogicalTable{}
+		for f12key, f12valiter := range resp.DataSet.LogicalTableMap {
+			f12val := &svcapitypes.LogicalTable{}
+			if f12valiter.Alias != nil {
+				f12val.Alias = f12valiter.Alias
+			}
+			if f12valiter.DataTransforms != nil {
+				f12valf1 := []*svcapitypes.TransformOperation{}
+				for _, f12valf1iter := range f12valiter.DataTransforms {
+					f12valf1elem := &svcapitypes.TransformOperation{}
+					switch f12valf1iter.(type) {
+					case *svcsdktypes.TransformOperationMemberCastColumnTypeOperation:
+						f12valf1elemf0 := f12valf1iter.(*svcsdktypes.TransformOperationMemberCastColumnTypeOperation)
+						if f12valf1elemf0 != nil {
+							f12valf1elemf0f0 := &svcapitypes.CastColumnTypeOperation{}
+							if f12valf1elemf0.Value.ColumnName != nil {
+								f12valf1elemf0f0.ColumnName = f12valf1elemf0.Value.ColumnName
+							}
+							if f12valf1elemf0.Value.Format != nil {
+								f12valf1elemf0f0.Format = f12valf1elemf0.Value.Format
+							}
+							if f12valf1elemf0.Value.NewColumnType != "" {
+								f12valf1elemf0f0.NewColumnType = aws.String(string(f12valf1elemf0.Value.NewColumnType))
+							}
+							if f12valf1elemf0.Value.SubType != "" {
+								f12valf1elemf0f0.SubType = aws.String(string(f12valf1elemf0.Value.SubType))
+							}
+							f12valf1elem.CastColumnTypeOperation = f12valf1elemf0f0
+						}
+					case *svcsdktypes.TransformOperationMemberCreateColumnsOperation:
+						f12valf1elemf1 := f12valf1iter.(*svcsdktypes.TransformOperationMemberCreateColumnsOperation)
+						if f12valf1elemf1 != nil {
+							f12valf1elemf1f1 := &svcapitypes.CreateColumnsOperation{}
+							if f12valf1elemf1.Value.Alias != nil {
+								f12valf1elemf1f1.Alias = f12valf1elemf1.Value.Alias
+							}
+							if f12valf1elemf1.Value.Columns != nil {
+								f12valf1elemf1f1f1 := []*svcapitypes.CalculatedColumn{}
+								for _, f12valf1elemf1f1f1iter := range f12valf1elemf1.Value.Columns {
+									f12valf1elemf1f1f1elem := &svcapitypes.CalculatedColumn{}
+									if f12valf1elemf1f1f1iter.ColumnId != nil {
+										f12valf1elemf1f1f1elem.ColumnID = f12valf1elemf1f1f1iter.ColumnId
+									}
+									if f12valf1elemf1f1f1iter.ColumnName != nil {
+										f12valf1elemf1f1f1elem.ColumnName = f12valf1elemf1f1f1iter.ColumnName
+									}
+									if f12valf1elemf1f1f1iter.Expression != nil {
+										f12valf1elemf1f1f1elem.Expression = f12valf1elemf1f1f1iter.Expression
+									}
+									f12valf1elemf1f1f1 = append(f12valf1elemf1f1f1, f12valf1elemf1f1f1elem)
+								}
+								f12valf1elemf1f1.Columns = f12valf1elemf1f1f1
+							}
+							if f12valf1elemf1.Value.Source != nil {
+								f12valf1elemf1f1f2 := &svcapitypes.TransformOperationSource{}
+								if f12valf1elemf1.Value.Source.ColumnIdMappings != nil {
+									f12valf1elemf1f1f2f0 := []*svcapitypes.DataSetColumnIDMapping{}
+									for _, f12valf1elemf1f1f2f0iter := range f12valf1elemf1.Value.Source.ColumnIdMappings {
+										f12valf1elemf1f1f2f0elem := &svcapitypes.DataSetColumnIDMapping{}
+										if f12valf1elemf1f1f2f0iter.SourceColumnId != nil {
+											f12valf1elemf1f1f2f0elem.SourceColumnID = f12valf1elemf1f1f2f0iter.SourceColumnId
+										}
+										if f12valf1elemf1f1f2f0iter.TargetColumnId != nil {
+											f12valf1elemf1f1f2f0elem.TargetColumnID = f12valf1elemf1f1f2f0iter.TargetColumnId
+										}
+										f12valf1elemf1f1f2f0 = append(f12valf1elemf1f1f2f0, f12valf1elemf1f1f2f0elem)
+									}
+									f12valf1elemf1f1f2.ColumnIDMappings = f12valf1elemf1f1f2f0
+								}
+								if f12valf1elemf1.Value.Source.TransformOperationId != nil {
+									f12valf1elemf1f1f2.TransformOperationID = f12valf1elemf1.Value.Source.TransformOperationId
+								}
+								f12valf1elemf1f1.Source = f12valf1elemf1f1f2
+							}
+							f12valf1elem.CreateColumnsOperation = f12valf1elemf1f1
+						}
+					case *svcsdktypes.TransformOperationMemberFilterOperation:
+						f12valf1elemf2 := f12valf1iter.(*svcsdktypes.TransformOperationMemberFilterOperation)
+						if f12valf1elemf2 != nil {
+							f12valf1elemf2f2 := &svcapitypes.FilterOperation{}
+							if f12valf1elemf2.Value.ConditionExpression != nil {
+								f12valf1elemf2f2.ConditionExpression = f12valf1elemf2.Value.ConditionExpression
+							}
+							if f12valf1elemf2.Value.DateFilterCondition != nil {
+								f12valf1elemf2f2f1 := &svcapitypes.DataSetDateFilterCondition{}
+								if f12valf1elemf2.Value.DateFilterCondition.ColumnName != nil {
+									f12valf1elemf2f2f1.ColumnName = f12valf1elemf2.Value.DateFilterCondition.ColumnName
+								}
+								if f12valf1elemf2.Value.DateFilterCondition.ComparisonFilterCondition != nil {
+									f12valf1elemf2f2f1f1 := &svcapitypes.DataSetDateComparisonFilterCondition{}
+									if f12valf1elemf2.Value.DateFilterCondition.ComparisonFilterCondition.Operator != "" {
+										f12valf1elemf2f2f1f1.Operator = aws.String(string(f12valf1elemf2.Value.DateFilterCondition.ComparisonFilterCondition.Operator))
+									}
+									if f12valf1elemf2.Value.DateFilterCondition.ComparisonFilterCondition.Value != nil {
+										f12valf1elemf2f2f1f1f1 := &svcapitypes.DataSetDateFilterValue{}
+										if f12valf1elemf2.Value.DateFilterCondition.ComparisonFilterCondition.Value.StaticValue != nil {
+											f12valf1elemf2f2f1f1f1.StaticValue = &metav1.Time{*f12valf1elemf2.Value.DateFilterCondition.ComparisonFilterCondition.Value.StaticValue}
+										}
+										f12valf1elemf2f2f1f1.Value = f12valf1elemf2f2f1f1f1
+									}
+									f12valf1elemf2f2f1.ComparisonFilterCondition = f12valf1elemf2f2f1f1
+								}
+								if f12valf1elemf2.Value.DateFilterCondition.RangeFilterCondition != nil {
+									f12valf1elemf2f2f1f2 := &svcapitypes.DataSetDateRangeFilterCondition{}
+									if f12valf1elemf2.Value.DateFilterCondition.RangeFilterCondition.IncludeMaximum != nil {
+										f12valf1elemf2f2f1f2.IncludeMaximum = f12valf1elemf2.Value.DateFilterCondition.RangeFilterCondition.IncludeMaximum
+									}
+									if f12valf1elemf2.Value.DateFilterCondition.RangeFilterCondition.IncludeMinimum != nil {
+										f12valf1elemf2f2f1f2.IncludeMinimum = f12valf1elemf2.Value.DateFilterCondition.RangeFilterCondition.IncludeMinimum
+									}
+									if f12valf1elemf2.Value.DateFilterCondition.RangeFilterCondition.RangeMaximum != nil {
+										f12valf1elemf2f2f1f2f2 := &svcapitypes.DataSetDateFilterValue{}
+										if f12valf1elemf2.Value.DateFilterCondition.RangeFilterCondition.RangeMaximum.StaticValue != nil {
+											f12valf1elemf2f2f1f2f2.StaticValue = &metav1.Time{*f12valf1elemf2.Value.DateFilterCondition.RangeFilterCondition.RangeMaximum.StaticValue}
+										}
+										f12valf1elemf2f2f1f2.RangeMaximum = f12valf1elemf2f2f1f2f2
+									}
+									if f12valf1elemf2.Value.DateFilterCondition.RangeFilterCondition.RangeMinimum != nil {
+										f12valf1elemf2f2f1f2f3 := &svcapitypes.DataSetDateFilterValue{}
+										if f12valf1elemf2.Value.DateFilterCondition.RangeFilterCondition.RangeMinimum.StaticValue != nil {
+											f12valf1elemf2f2f1f2f3.StaticValue = &metav1.Time{*f12valf1elemf2.Value.DateFilterCondition.RangeFilterCondition.RangeMinimum.StaticValue}
+										}
+										f12valf1elemf2f2f1f2.RangeMinimum = f12valf1elemf2f2f1f2f3
+									}
+									f12valf1elemf2f2f1.RangeFilterCondition = f12valf1elemf2f2f1f2
+								}
+								f12valf1elemf2f2.DateFilterCondition = f12valf1elemf2f2f1
+							}
+							if f12valf1elemf2.Value.NumericFilterCondition != nil {
+								f12valf1elemf2f2f2 := &svcapitypes.DataSetNumericFilterCondition{}
+								if f12valf1elemf2.Value.NumericFilterCondition.ColumnName != nil {
+									f12valf1elemf2f2f2.ColumnName = f12valf1elemf2.Value.NumericFilterCondition.ColumnName
+								}
+								if f12valf1elemf2.Value.NumericFilterCondition.ComparisonFilterCondition != nil {
+									f12valf1elemf2f2f2f1 := &svcapitypes.DataSetNumericComparisonFilterCondition{}
+									if f12valf1elemf2.Value.NumericFilterCondition.ComparisonFilterCondition.Operator != "" {
+										f12valf1elemf2f2f2f1.Operator = aws.String(string(f12valf1elemf2.Value.NumericFilterCondition.ComparisonFilterCondition.Operator))
+									}
+									if f12valf1elemf2.Value.NumericFilterCondition.ComparisonFilterCondition.Value != nil {
+										f12valf1elemf2f2f2f1f1 := &svcapitypes.DataSetNumericFilterValue{}
+										if f12valf1elemf2.Value.NumericFilterCondition.ComparisonFilterCondition.Value.StaticValue != nil {
+											f12valf1elemf2f2f2f1f1.StaticValue = f12valf1elemf2.Value.NumericFilterCondition.ComparisonFilterCondition.Value.StaticValue
+										}
+										f12valf1elemf2f2f2f1.Value = f12valf1elemf2f2f2f1f1
+									}
+									f12valf1elemf2f2f2.ComparisonFilterCondition = f12valf1elemf2f2f2f1
+								}
+								if f12valf1elemf2.Value.NumericFilterCondition.RangeFilterCondition != nil {
+									f12valf1elemf2f2f2f2 := &svcapitypes.DataSetNumericRangeFilterCondition{}
+									if f12valf1elemf2.Value.NumericFilterCondition.RangeFilterCondition.IncludeMaximum != nil {
+										f12valf1elemf2f2f2f2.IncludeMaximum = f12valf1elemf2.Value.NumericFilterCondition.RangeFilterCondition.IncludeMaximum
+									}
+									if f12valf1elemf2.Value.NumericFilterCondition.RangeFilterCondition.IncludeMinimum != nil {
+										f12valf1elemf2f2f2f2.IncludeMinimum = f12valf1elemf2.Value.NumericFilterCondition.RangeFilterCondition.IncludeMinimum
+									}
+									if f12valf1elemf2.Value.NumericFilterCondition.RangeFilterCondition.RangeMaximum != nil {
+										f12valf1elemf2f2f2f2f2 := &svcapitypes.DataSetNumericFilterValue{}
+										if f12valf1elemf2.Value.NumericFilterCondition.RangeFilterCondition.RangeMaximum.StaticValue != nil {
+											f12valf1elemf2f2f2f2f2.StaticValue = f12valf1elemf2.Value.NumericFilterCondition.RangeFilterCondition.RangeMaximum.StaticValue
+										}
+										f12valf1elemf2f2f2f2.RangeMaximum = f12valf1elemf2f2f2f2f2
+									}
+									if f12valf1elemf2.Value.NumericFilterCondition.RangeFilterCondition.RangeMinimum != nil {
+										f12valf1elemf2f2f2f2f3 := &svcapitypes.DataSetNumericFilterValue{}
+										if f12valf1elemf2.Value.NumericFilterCondition.RangeFilterCondition.RangeMinimum.StaticValue != nil {
+											f12valf1elemf2f2f2f2f3.StaticValue = f12valf1elemf2.Value.NumericFilterCondition.RangeFilterCondition.RangeMinimum.StaticValue
+										}
+										f12valf1elemf2f2f2f2.RangeMinimum = f12valf1elemf2f2f2f2f3
+									}
+									f12valf1elemf2f2f2.RangeFilterCondition = f12valf1elemf2f2f2f2
+								}
+								f12valf1elemf2f2.NumericFilterCondition = f12valf1elemf2f2f2
+							}
+							if f12valf1elemf2.Value.StringFilterCondition != nil {
+								f12valf1elemf2f2f3 := &svcapitypes.DataSetStringFilterCondition{}
+								if f12valf1elemf2.Value.StringFilterCondition.ColumnName != nil {
+									f12valf1elemf2f2f3.ColumnName = f12valf1elemf2.Value.StringFilterCondition.ColumnName
+								}
+								if f12valf1elemf2.Value.StringFilterCondition.ComparisonFilterCondition != nil {
+									f12valf1elemf2f2f3f1 := &svcapitypes.DataSetStringComparisonFilterCondition{}
+									if f12valf1elemf2.Value.StringFilterCondition.ComparisonFilterCondition.Operator != "" {
+										f12valf1elemf2f2f3f1.Operator = aws.String(string(f12valf1elemf2.Value.StringFilterCondition.ComparisonFilterCondition.Operator))
+									}
+									if f12valf1elemf2.Value.StringFilterCondition.ComparisonFilterCondition.Value != nil {
+										f12valf1elemf2f2f3f1f1 := &svcapitypes.DataSetStringFilterValue{}
+										if f12valf1elemf2.Value.StringFilterCondition.ComparisonFilterCondition.Value.StaticValue != nil {
+											f12valf1elemf2f2f3f1f1.StaticValue = f12valf1elemf2.Value.StringFilterCondition.ComparisonFilterCondition.Value.StaticValue
+										}
+										f12valf1elemf2f2f3f1.Value = f12valf1elemf2f2f3f1f1
+									}
+									f12valf1elemf2f2f3.ComparisonFilterCondition = f12valf1elemf2f2f3f1
+								}
+								if f12valf1elemf2.Value.StringFilterCondition.ListFilterCondition != nil {
+									f12valf1elemf2f2f3f2 := &svcapitypes.DataSetStringListFilterCondition{}
+									if f12valf1elemf2.Value.StringFilterCondition.ListFilterCondition.Operator != "" {
+										f12valf1elemf2f2f3f2.Operator = aws.String(string(f12valf1elemf2.Value.StringFilterCondition.ListFilterCondition.Operator))
+									}
+									if f12valf1elemf2.Value.StringFilterCondition.ListFilterCondition.Values != nil {
+										f12valf1elemf2f2f3f2f1 := &svcapitypes.DataSetStringListFilterValue{}
+										if f12valf1elemf2.Value.StringFilterCondition.ListFilterCondition.Values.StaticValues != nil {
+											f12valf1elemf2f2f3f2f1.StaticValues = aws.StringSlice(f12valf1elemf2.Value.StringFilterCondition.ListFilterCondition.Values.StaticValues)
+										}
+										f12valf1elemf2f2f3f2.Values = f12valf1elemf2f2f3f2f1
+									}
+									f12valf1elemf2f2f3.ListFilterCondition = f12valf1elemf2f2f3f2
+								}
+								f12valf1elemf2f2.StringFilterCondition = f12valf1elemf2f2f3
+							}
+							f12valf1elem.FilterOperation = f12valf1elemf2f2
+						}
+					case *svcsdktypes.TransformOperationMemberOverrideDatasetParameterOperation:
+						f12valf1elemf3 := f12valf1iter.(*svcsdktypes.TransformOperationMemberOverrideDatasetParameterOperation)
+						if f12valf1elemf3 != nil {
+							f12valf1elemf3f3 := &svcapitypes.OverrideDatasetParameterOperation{}
+							if f12valf1elemf3.Value.NewDefaultValues != nil {
+								f12valf1elemf3f3f0 := &svcapitypes.NewDefaultValues{}
+								if f12valf1elemf3.Value.NewDefaultValues.DateTimeStaticValues != nil {
+									f12valf1elemf3f3f0f0 := []metav1.Time{}
+									for _, f12valf1elemf3f3f0f0iter := range f12valf1elemf3.Value.NewDefaultValues.DateTimeStaticValues {
+										var f12valf1elemf3f3f0f0elem metav1.Time
+										f12valf1elemf3f3f0f0elem = metav1.Time{f12valf1elemf3f3f0f0iter}
+										f12valf1elemf3f3f0f0 = append(f12valf1elemf3f3f0f0, f12valf1elemf3f3f0f0elem)
+									}
+									f12valf1elemf3f3f0.DateTimeStaticValues = f12valf1elemf3f3f0f0
+								}
+								if f12valf1elemf3.Value.NewDefaultValues.DecimalStaticValues != nil {
+									f12valf1elemf3f3f0.DecimalStaticValues = aws.Float64Slice(f12valf1elemf3.Value.NewDefaultValues.DecimalStaticValues)
+								}
+								if f12valf1elemf3.Value.NewDefaultValues.IntegerStaticValues != nil {
+									f12valf1elemf3f3f0.IntegerStaticValues = aws.Int64Slice(f12valf1elemf3.Value.NewDefaultValues.IntegerStaticValues)
+								}
+								if f12valf1elemf3.Value.NewDefaultValues.StringStaticValues != nil {
+									f12valf1elemf3f3f0.StringStaticValues = aws.StringSlice(f12valf1elemf3.Value.NewDefaultValues.StringStaticValues)
+								}
+								f12valf1elemf3f3.NewDefaultValues = f12valf1elemf3f3f0
+							}
+							if f12valf1elemf3.Value.NewParameterName != nil {
+								f12valf1elemf3f3.NewParameterName = f12valf1elemf3.Value.NewParameterName
+							}
+							if f12valf1elemf3.Value.ParameterName != nil {
+								f12valf1elemf3f3.ParameterName = f12valf1elemf3.Value.ParameterName
+							}
+							f12valf1elem.OverrideDatasetParameterOperation = f12valf1elemf3f3
+						}
+					case *svcsdktypes.TransformOperationMemberProjectOperation:
+						f12valf1elemf4 := f12valf1iter.(*svcsdktypes.TransformOperationMemberProjectOperation)
+						if f12valf1elemf4 != nil {
+							f12valf1elemf4f4 := &svcapitypes.ProjectOperation{}
+							if f12valf1elemf4.Value.Alias != nil {
+								f12valf1elemf4f4.Alias = f12valf1elemf4.Value.Alias
+							}
+							if f12valf1elemf4.Value.ProjectedColumns != nil {
+								f12valf1elemf4f4.ProjectedColumns = aws.StringSlice(f12valf1elemf4.Value.ProjectedColumns)
+							}
+							if f12valf1elemf4.Value.Source != nil {
+								f12valf1elemf4f4f2 := &svcapitypes.TransformOperationSource{}
+								if f12valf1elemf4.Value.Source.ColumnIdMappings != nil {
+									f12valf1elemf4f4f2f0 := []*svcapitypes.DataSetColumnIDMapping{}
+									for _, f12valf1elemf4f4f2f0iter := range f12valf1elemf4.Value.Source.ColumnIdMappings {
+										f12valf1elemf4f4f2f0elem := &svcapitypes.DataSetColumnIDMapping{}
+										if f12valf1elemf4f4f2f0iter.SourceColumnId != nil {
+											f12valf1elemf4f4f2f0elem.SourceColumnID = f12valf1elemf4f4f2f0iter.SourceColumnId
+										}
+										if f12valf1elemf4f4f2f0iter.TargetColumnId != nil {
+											f12valf1elemf4f4f2f0elem.TargetColumnID = f12valf1elemf4f4f2f0iter.TargetColumnId
+										}
+										f12valf1elemf4f4f2f0 = append(f12valf1elemf4f4f2f0, f12valf1elemf4f4f2f0elem)
+									}
+									f12valf1elemf4f4f2.ColumnIDMappings = f12valf1elemf4f4f2f0
+								}
+								if f12valf1elemf4.Value.Source.TransformOperationId != nil {
+									f12valf1elemf4f4f2.TransformOperationID = f12valf1elemf4.Value.Source.TransformOperationId
+								}
+								f12valf1elemf4f4.Source = f12valf1elemf4f4f2
+							}
+							f12valf1elem.ProjectOperation = f12valf1elemf4f4
+						}
+					case *svcsdktypes.TransformOperationMemberRenameColumnOperation:
+						f12valf1elemf5 := f12valf1iter.(*svcsdktypes.TransformOperationMemberRenameColumnOperation)
+						if f12valf1elemf5 != nil {
+							f12valf1elemf5f5 := &svcapitypes.RenameColumnOperation{}
+							if f12valf1elemf5.Value.ColumnName != nil {
+								f12valf1elemf5f5.ColumnName = f12valf1elemf5.Value.ColumnName
+							}
+							if f12valf1elemf5.Value.NewColumnName != nil {
+								f12valf1elemf5f5.NewColumnName = f12valf1elemf5.Value.NewColumnName
+							}
+							f12valf1elem.RenameColumnOperation = f12valf1elemf5f5
+						}
+					case *svcsdktypes.TransformOperationMemberTagColumnOperation:
+						f12valf1elemf6 := f12valf1iter.(*svcsdktypes.TransformOperationMemberTagColumnOperation)
+						if f12valf1elemf6 != nil {
+							f12valf1elemf6f6 := &svcapitypes.TagColumnOperation{}
+							if f12valf1elemf6.Value.ColumnName != nil {
+								f12valf1elemf6f6.ColumnName = f12valf1elemf6.Value.ColumnName
+							}
+							if f12valf1elemf6.Value.Tags != nil {
+								f12valf1elemf6f6f1 := []*svcapitypes.ColumnTag{}
+								for _, f12valf1elemf6f6f1iter := range f12valf1elemf6.Value.Tags {
+									f12valf1elemf6f6f1elem := &svcapitypes.ColumnTag{}
+									if f12valf1elemf6f6f1iter.ColumnDescription != nil {
+										f12valf1elemf6f6f1elemf0 := &svcapitypes.ColumnDescription{}
+										if f12valf1elemf6f6f1iter.ColumnDescription.Text != nil {
+											f12valf1elemf6f6f1elemf0.Text = f12valf1elemf6f6f1iter.ColumnDescription.Text
+										}
+										f12valf1elemf6f6f1elem.ColumnDescription = f12valf1elemf6f6f1elemf0
+									}
+									if f12valf1elemf6f6f1iter.ColumnGeographicRole != "" {
+										f12valf1elemf6f6f1elem.ColumnGeographicRole = aws.String(string(f12valf1elemf6f6f1iter.ColumnGeographicRole))
+									}
+									f12valf1elemf6f6f1 = append(f12valf1elemf6f6f1, f12valf1elemf6f6f1elem)
+								}
+								f12valf1elemf6f6.Tags = f12valf1elemf6f6f1
+							}
+							f12valf1elem.TagColumnOperation = f12valf1elemf6f6
+						}
+					case *svcsdktypes.TransformOperationMemberUntagColumnOperation:
+						f12valf1elemf7 := f12valf1iter.(*svcsdktypes.TransformOperationMemberUntagColumnOperation)
+						if f12valf1elemf7 != nil {
+							f12valf1elemf7f7 := &svcapitypes.UntagColumnOperation{}
+							if f12valf1elemf7.Value.ColumnName != nil {
+								f12valf1elemf7f7.ColumnName = f12valf1elemf7.Value.ColumnName
+							}
+							if f12valf1elemf7.Value.TagNames != nil {
+								f12valf1elemf7f7f1 := []*string{}
+								for _, f12valf1elemf7f7f1iter := range f12valf1elemf7.Value.TagNames {
+									var f12valf1elemf7f7f1elem *string
+									f12valf1elemf7f7f1elem = aws.String(string(f12valf1elemf7f7f1iter))
+									f12valf1elemf7f7f1 = append(f12valf1elemf7f7f1, f12valf1elemf7f7f1elem)
+								}
+								f12valf1elemf7f7.TagNames = f12valf1elemf7f7f1
+							}
+							f12valf1elem.UntagColumnOperation = f12valf1elemf7f7
+						}
+					}
+					f12valf1 = append(f12valf1, f12valf1elem)
+				}
+				f12val.DataTransforms = f12valf1
+			}
+			if f12valiter.Source != nil {
+				f12valf2 := &svcapitypes.LogicalTableSource{}
+				if f12valiter.Source.DataSetArn != nil {
+					f12valf2.DataSetARN = f12valiter.Source.DataSetArn
+				}
+				if f12valiter.Source.JoinInstruction != nil {
+					f12valf2f1 := &svcapitypes.JoinInstruction{}
+					if f12valiter.Source.JoinInstruction.LeftJoinKeyProperties != nil {
+						f12valf2f1f0 := &svcapitypes.JoinKeyProperties{}
+						if f12valiter.Source.JoinInstruction.LeftJoinKeyProperties.UniqueKey != nil {
+							f12valf2f1f0.UniqueKey = f12valiter.Source.JoinInstruction.LeftJoinKeyProperties.UniqueKey
+						}
+						f12valf2f1.LeftJoinKeyProperties = f12valf2f1f0
+					}
+					if f12valiter.Source.JoinInstruction.LeftOperand != nil {
+						f12valf2f1.LeftOperand = f12valiter.Source.JoinInstruction.LeftOperand
+					}
+					if f12valiter.Source.JoinInstruction.OnClause != nil {
+						f12valf2f1.OnClause = f12valiter.Source.JoinInstruction.OnClause
+					}
+					if f12valiter.Source.JoinInstruction.RightJoinKeyProperties != nil {
+						f12valf2f1f3 := &svcapitypes.JoinKeyProperties{}
+						if f12valiter.Source.JoinInstruction.RightJoinKeyProperties.UniqueKey != nil {
+							f12valf2f1f3.UniqueKey = f12valiter.Source.JoinInstruction.RightJoinKeyProperties.UniqueKey
+						}
+						f12valf2f1.RightJoinKeyProperties = f12valf2f1f3
+					}
+					if f12valiter.Source.JoinInstruction.RightOperand != nil {
+						f12valf2f1.RightOperand = f12valiter.Source.JoinInstruction.RightOperand
+					}
+					if f12valiter.Source.JoinInstruction.Type != "" {
+						f12valf2f1.Type = aws.String(string(f12valiter.Source.JoinInstruction.Type))
+					}
+					f12valf2.JoinInstruction = f12valf2f1
+				}
+				if f12valiter.Source.PhysicalTableId != nil {
+					f12valf2.PhysicalTableID = f12valiter.Source.PhysicalTableId
+				}
+				f12val.Source = f12valf2
+			}
+			f12[f12key] = f12val
+		}
+		ko.Spec.LogicalTableMap = f12
+	} else {
+		ko.Spec.LogicalTableMap = nil
+	}
+	if resp.DataSet.Name != nil {
+		ko.Spec.Name = resp.DataSet.Name
+	} else {
+		ko.Spec.Name = nil
+	}
+	if resp.DataSet.OutputColumns != nil {
+		f14 := []*svcapitypes.OutputColumn{}
+		for _, f14iter := range resp.DataSet.OutputColumns {
+			f14elem := &svcapitypes.OutputColumn{}
+			if f14iter.Description != nil {
+				f14elem.Description = f14iter.Description
+			}
+			if f14iter.Id != nil {
+				f14elem.ID = f14iter.Id
+			}
+			if f14iter.Name != nil {
+				f14elem.Name = f14iter.Name
+			}
+			if f14iter.SubType != "" {
+				f14elem.SubType = aws.String(string(f14iter.SubType))
+			}
+			if f14iter.Type != "" {
+				f14elem.Type = aws.String(string(f14iter.Type))
+			}
+			f14 = append(f14, f14elem)
+		}
+		ko.Status.OutputColumns = f14
+	} else {
+		ko.Status.OutputColumns = nil
+	}
+	if resp.DataSet.PerformanceConfiguration != nil {
+		f15 := &svcapitypes.PerformanceConfiguration{}
+		if resp.DataSet.PerformanceConfiguration.UniqueKeys != nil {
+			f15f0 := []*svcapitypes.UniqueKey{}
+			for _, f15f0iter := range resp.DataSet.PerformanceConfiguration.UniqueKeys {
+				f15f0elem := &svcapitypes.UniqueKey{}
+				if f15f0iter.ColumnNames != nil {
+					f15f0elem.ColumnNames = aws.StringSlice(f15f0iter.ColumnNames)
+				}
+				f15f0 = append(f15f0, f15f0elem)
+			}
+			f15.UniqueKeys = f15f0
+		}
+		ko.Spec.PerformanceConfiguration = f15
+	} else {
+		ko.Spec.PerformanceConfiguration = nil
+	}
+	if resp.DataSet.PhysicalTableMap != nil {
+		f16 := map[string]*svcapitypes.PhysicalTable{}
+		for f16key, f16valiter := range resp.DataSet.PhysicalTableMap {
+			f16val := &svcapitypes.PhysicalTable{}
+			switch f16valiter.(type) {
+			case *svcsdktypes.PhysicalTableMemberCustomSql:
+				f16valf0 := f16valiter.(*svcsdktypes.PhysicalTableMemberCustomSql)
+				if f16valf0 != nil {
+					f16valf0f0 := &svcapitypes.CustomSQL{}
+					if f16valf0.Value.Columns != nil {
+						f16valf0f0f0 := []*svcapitypes.InputColumn{}
+						for _, f16valf0f0f0iter := range f16valf0.Value.Columns {
+							f16valf0f0f0elem := &svcapitypes.InputColumn{}
+							if f16valf0f0f0iter.Id != nil {
+								f16valf0f0f0elem.ID = f16valf0f0f0iter.Id
+							}
+							if f16valf0f0f0iter.Name != nil {
+								f16valf0f0f0elem.Name = f16valf0f0f0iter.Name
+							}
+							if f16valf0f0f0iter.SubType != "" {
+								f16valf0f0f0elem.SubType = aws.String(string(f16valf0f0f0iter.SubType))
+							}
+							if f16valf0f0f0iter.Type != "" {
+								f16valf0f0f0elem.Type = aws.String(string(f16valf0f0f0iter.Type))
+							}
+							f16valf0f0f0 = append(f16valf0f0f0, f16valf0f0f0elem)
+						}
+						f16valf0f0.Columns = f16valf0f0f0
+					}
+					if f16valf0.Value.DataSourceArn != nil {
+						f16valf0f0.DataSourceARN = f16valf0.Value.DataSourceArn
+					}
+					if f16valf0.Value.Name != nil {
+						f16valf0f0.Name = f16valf0.Value.Name
+					}
+					if f16valf0.Value.SqlQuery != nil {
+						f16valf0f0.SQLQuery = f16valf0.Value.SqlQuery
+					}
+					f16val.CustomSQL = f16valf0f0
+				}
+			case *svcsdktypes.PhysicalTableMemberRelationalTable:
+				f16valf1 := f16valiter.(*svcsdktypes.PhysicalTableMemberRelationalTable)
+				if f16valf1 != nil {
+					f16valf1f1 := &svcapitypes.RelationalTable{}
+					if f16valf1.Value.Catalog != nil {
+						f16valf1f1.Catalog = f16valf1.Value.Catalog
+					}
+					if f16valf1.Value.DataSourceArn != nil {
+						f16valf1f1.DataSourceARN = f16valf1.Value.DataSourceArn
+					}
+					if f16valf1.Value.InputColumns != nil {
+						f16valf1f1f2 := []*svcapitypes.InputColumn{}
+						for _, f16valf1f1f2iter := range f16valf1.Value.InputColumns {
+							f16valf1f1f2elem := &svcapitypes.InputColumn{}
+							if f16valf1f1f2iter.Id != nil {
+								f16valf1f1f2elem.ID = f16valf1f1f2iter.Id
+							}
+							if f16valf1f1f2iter.Name != nil {
+								f16valf1f1f2elem.Name = f16valf1f1f2iter.Name
+							}
+							if f16valf1f1f2iter.SubType != "" {
+								f16valf1f1f2elem.SubType = aws.String(string(f16valf1f1f2iter.SubType))
+							}
+							if f16valf1f1f2iter.Type != "" {
+								f16valf1f1f2elem.Type = aws.String(string(f16valf1f1f2iter.Type))
+							}
+							f16valf1f1f2 = append(f16valf1f1f2, f16valf1f1f2elem)
+						}
+						f16valf1f1.InputColumns = f16valf1f1f2
+					}
+					if f16valf1.Value.Name != nil {
+						f16valf1f1.Name = f16valf1.Value.Name
+					}
+					if f16valf1.Value.Schema != nil {
+						f16valf1f1.Schema = f16valf1.Value.Schema
+					}
+					f16val.RelationalTable = f16valf1f1
+				}
+			case *svcsdktypes.PhysicalTableMemberS3Source:
+				f16valf2 := f16valiter.(*svcsdktypes.PhysicalTableMemberS3Source)
+				if f16valf2 != nil {
+					f16valf2f2 := &svcapitypes.S3Source{}
+					if f16valf2.Value.DataSourceArn != nil {
+						f16valf2f2.DataSourceARN = f16valf2.Value.DataSourceArn
+					}
+					if f16valf2.Value.InputColumns != nil {
+						f16valf2f2f1 := []*svcapitypes.InputColumn{}
+						for _, f16valf2f2f1iter := range f16valf2.Value.InputColumns {
+							f16valf2f2f1elem := &svcapitypes.InputColumn{}
+							if f16valf2f2f1iter.Id != nil {
+								f16valf2f2f1elem.ID = f16valf2f2f1iter.Id
+							}
+							if f16valf2f2f1iter.Name != nil {
+								f16valf2f2f1elem.Name = f16valf2f2f1iter.Name
+							}
+							if f16valf2f2f1iter.SubType != "" {
+								f16valf2f2f1elem.SubType = aws.String(string(f16valf2f2f1iter.SubType))
+							}
+							if f16valf2f2f1iter.Type != "" {
+								f16valf2f2f1elem.Type = aws.String(string(f16valf2f2f1iter.Type))
+							}
+							f16valf2f2f1 = append(f16valf2f2f1, f16valf2f2f1elem)
+						}
+						f16valf2f2.InputColumns = f16valf2f2f1
+					}
+					if f16valf2.Value.UploadSettings != nil {
+						f16valf2f2f2 := &svcapitypes.UploadSettings{}
+						if f16valf2.Value.UploadSettings.ContainsHeader != nil {
+							f16valf2f2f2.ContainsHeader = f16valf2.Value.UploadSettings.ContainsHeader
+						}
+						if f16valf2.Value.UploadSettings.CustomCellAddressRange != nil {
+							f16valf2f2f2.CustomCellAddressRange = f16valf2.Value.UploadSettings.CustomCellAddressRange
+						}
+						if f16valf2.Value.UploadSettings.Delimiter != nil {
+							f16valf2f2f2.Delimiter = f16valf2.Value.UploadSettings.Delimiter
+						}
+						if f16valf2.Value.UploadSettings.Format != "" {
+							f16valf2f2f2.Format = aws.String(string(f16valf2.Value.UploadSettings.Format))
+						}
+						if f16valf2.Value.UploadSettings.StartFromRow != nil {
+							startFromRowCopy := int64(*f16valf2.Value.UploadSettings.StartFromRow)
+							f16valf2f2f2.StartFromRow = &startFromRowCopy
+						}
+						if f16valf2.Value.UploadSettings.TextQualifier != "" {
+							f16valf2f2f2.TextQualifier = aws.String(string(f16valf2.Value.UploadSettings.TextQualifier))
+						}
+						f16valf2f2.UploadSettings = f16valf2f2f2
+					}
+					f16val.S3Source = f16valf2f2
+				}
+			case *svcsdktypes.PhysicalTableMemberSaaSTable:
+				f16valf3 := f16valiter.(*svcsdktypes.PhysicalTableMemberSaaSTable)
+				if f16valf3 != nil {
+					f16valf3f3 := &svcapitypes.SaaSTable{}
+					if f16valf3.Value.DataSourceArn != nil {
+						f16valf3f3.DataSourceARN = f16valf3.Value.DataSourceArn
+					}
+					if f16valf3.Value.InputColumns != nil {
+						f16valf3f3f1 := []*svcapitypes.InputColumn{}
+						for _, f16valf3f3f1iter := range f16valf3.Value.InputColumns {
+							f16valf3f3f1elem := &svcapitypes.InputColumn{}
+							if f16valf3f3f1iter.Id != nil {
+								f16valf3f3f1elem.ID = f16valf3f3f1iter.Id
+							}
+							if f16valf3f3f1iter.Name != nil {
+								f16valf3f3f1elem.Name = f16valf3f3f1iter.Name
+							}
+							if f16valf3f3f1iter.SubType != "" {
+								f16valf3f3f1elem.SubType = aws.String(string(f16valf3f3f1iter.SubType))
+							}
+							if f16valf3f3f1iter.Type != "" {
+								f16valf3f3f1elem.Type = aws.String(string(f16valf3f3f1iter.Type))
+							}
+							f16valf3f3f1 = append(f16valf3f3f1, f16valf3f3f1elem)
+						}
+						f16valf3f3.InputColumns = f16valf3f3f1
+					}
+					if f16valf3.Value.TablePath != nil {
+						f16valf3f3f2 := []*svcapitypes.TablePathElement{}
+						for _, f16valf3f3f2iter := range f16valf3.Value.TablePath {
+							f16valf3f3f2elem := &svcapitypes.TablePathElement{}
+							if f16valf3f3f2iter.Id != nil {
+								f16valf3f3f2elem.ID = f16valf3f3f2iter.Id
+							}
+							if f16valf3f3f2iter.Name != nil {
+								f16valf3f3f2elem.Name = f16valf3f3f2iter.Name
+							}
+							f16valf3f3f2 = append(f16valf3f3f2, f16valf3f3f2elem)
+						}
+						f16valf3f3.TablePath = f16valf3f3f2
+					}
+					f16val.SaaSTable = f16valf3f3
+				}
+			}
+			f16[f16key] = f16val
+		}
+		ko.Spec.PhysicalTableMap = f16
+	} else {
+		ko.Spec.PhysicalTableMap = nil
+	}
+	if resp.DataSet.RowLevelPermissionDataSet != nil {
+		f17 := &svcapitypes.RowLevelPermissionDataSet{}
+		if resp.DataSet.RowLevelPermissionDataSet.Arn != nil {
+			f17.ARN = resp.DataSet.RowLevelPermissionDataSet.Arn
+		}
+		if resp.DataSet.RowLevelPermissionDataSet.FormatVersion != "" {
+			f17.FormatVersion = aws.String(string(resp.DataSet.RowLevelPermissionDataSet.FormatVersion))
+		}
+		if resp.DataSet.RowLevelPermissionDataSet.Namespace != nil {
+			f17.Namespace = resp.DataSet.RowLevelPermissionDataSet.Namespace
+		}
+		if resp.DataSet.RowLevelPermissionDataSet.PermissionPolicy != "" {
+			f17.PermissionPolicy = aws.String(string(resp.DataSet.RowLevelPermissionDataSet.PermissionPolicy))
+		}
+		if resp.DataSet.RowLevelPermissionDataSet.Status != "" {
+			f17.Status = aws.String(string(resp.DataSet.RowLevelPermissionDataSet.Status))
+		}
+		ko.Spec.RowLevelPermissionDataSet = f17
+	} else {
+		ko.Spec.RowLevelPermissionDataSet = nil
+	}
+	if resp.DataSet.RowLevelPermissionTagConfiguration != nil {
+		f18 := &svcapitypes.RowLevelPermissionTagConfiguration{}
+		if resp.DataSet.RowLevelPermissionTagConfiguration.Status != "" {
+			f18.Status = aws.String(string(resp.DataSet.RowLevelPermissionTagConfiguration.Status))
+		}
+		if resp.DataSet.RowLevelPermissionTagConfiguration.TagRuleConfigurations != nil {
+			f18f1 := [][]*string{}
+			for _, f18f1iter := range resp.DataSet.RowLevelPermissionTagConfiguration.TagRuleConfigurations {
+				f18f1elem := aws.StringSlice(f18f1iter)
+				f18f1 = append(f18f1, f18f1elem)
+			}
+			f18.TagRuleConfigurations = f18f1
+		}
+		if resp.DataSet.RowLevelPermissionTagConfiguration.TagRules != nil {
+			f18f2 := []*svcapitypes.RowLevelPermissionTagRule{}
+			for _, f18f2iter := range resp.DataSet.RowLevelPermissionTagConfiguration.TagRules {
+				f18f2elem := &svcapitypes.RowLevelPermissionTagRule{}
+				if f18f2iter.ColumnName != nil {
+					f18f2elem.ColumnName = f18f2iter.ColumnName
+				}
+				if f18f2iter.MatchAllValue != nil {
+					f18f2elem.MatchAllValue = f18f2iter.MatchAllValue
+				}
+				if f18f2iter.TagKey != nil {
+					f18f2elem.TagKey = f18f2iter.TagKey
+				}
+				if f18f2iter.TagMultiValueDelimiter != nil {
+					f18f2elem.TagMultiValueDelimiter = f18f2iter.TagMultiValueDelimiter
+				}
+				f18f2 = append(f18f2, f18f2elem)
+			}
+			f18.TagRules = f18f2
+		}
+		ko.Spec.RowLevelPermissionTagConfiguration = f18
+	} else {
+		ko.Spec.RowLevelPermissionTagConfiguration = nil
+	}
+	if resp.DataSet.SemanticModelConfiguration != nil {
+		f19 := &svcapitypes.SemanticModelConfiguration{}
+		if resp.DataSet.SemanticModelConfiguration.TableMap != nil {
+			f19f0 := map[string]*svcapitypes.SemanticTable{}
+			for f19f0key, f19f0valiter := range resp.DataSet.SemanticModelConfiguration.TableMap {
+				f19f0val := &svcapitypes.SemanticTable{}
+				if f19f0valiter.Alias != nil {
+					f19f0val.Alias = f19f0valiter.Alias
+				}
+				if f19f0valiter.DestinationTableId != nil {
+					f19f0val.DestinationTableID = f19f0valiter.DestinationTableId
+				}
+				if f19f0valiter.RowLevelPermissionConfiguration != nil {
+					f19f0valf2 := &svcapitypes.RowLevelPermissionConfiguration{}
+					if f19f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet != nil {
+						f19f0valf2f0 := &svcapitypes.RowLevelPermissionDataSet{}
+						if f19f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.Arn != nil {
+							f19f0valf2f0.ARN = f19f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.Arn
+						}
+						if f19f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.FormatVersion != "" {
+							f19f0valf2f0.FormatVersion = aws.String(string(f19f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.FormatVersion))
+						}
+						if f19f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.Namespace != nil {
+							f19f0valf2f0.Namespace = f19f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.Namespace
+						}
+						if f19f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.PermissionPolicy != "" {
+							f19f0valf2f0.PermissionPolicy = aws.String(string(f19f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.PermissionPolicy))
+						}
+						if f19f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.Status != "" {
+							f19f0valf2f0.Status = aws.String(string(f19f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.Status))
+						}
+						f19f0valf2.RowLevelPermissionDataSet = f19f0valf2f0
+					}
+					if f19f0valiter.RowLevelPermissionConfiguration.TagConfiguration != nil {
+						f19f0valf2f1 := &svcapitypes.RowLevelPermissionTagConfiguration{}
+						if f19f0valiter.RowLevelPermissionConfiguration.TagConfiguration.Status != "" {
+							f19f0valf2f1.Status = aws.String(string(f19f0valiter.RowLevelPermissionConfiguration.TagConfiguration.Status))
+						}
+						if f19f0valiter.RowLevelPermissionConfiguration.TagConfiguration.TagRuleConfigurations != nil {
+							f19f0valf2f1f1 := [][]*string{}
+							for _, f19f0valf2f1f1iter := range f19f0valiter.RowLevelPermissionConfiguration.TagConfiguration.TagRuleConfigurations {
+								f19f0valf2f1f1elem := aws.StringSlice(f19f0valf2f1f1iter)
+								f19f0valf2f1f1 = append(f19f0valf2f1f1, f19f0valf2f1f1elem)
+							}
+							f19f0valf2f1.TagRuleConfigurations = f19f0valf2f1f1
+						}
+						if f19f0valiter.RowLevelPermissionConfiguration.TagConfiguration.TagRules != nil {
+							f19f0valf2f1f2 := []*svcapitypes.RowLevelPermissionTagRule{}
+							for _, f19f0valf2f1f2iter := range f19f0valiter.RowLevelPermissionConfiguration.TagConfiguration.TagRules {
+								f19f0valf2f1f2elem := &svcapitypes.RowLevelPermissionTagRule{}
+								if f19f0valf2f1f2iter.ColumnName != nil {
+									f19f0valf2f1f2elem.ColumnName = f19f0valf2f1f2iter.ColumnName
+								}
+								if f19f0valf2f1f2iter.MatchAllValue != nil {
+									f19f0valf2f1f2elem.MatchAllValue = f19f0valf2f1f2iter.MatchAllValue
+								}
+								if f19f0valf2f1f2iter.TagKey != nil {
+									f19f0valf2f1f2elem.TagKey = f19f0valf2f1f2iter.TagKey
+								}
+								if f19f0valf2f1f2iter.TagMultiValueDelimiter != nil {
+									f19f0valf2f1f2elem.TagMultiValueDelimiter = f19f0valf2f1f2iter.TagMultiValueDelimiter
+								}
+								f19f0valf2f1f2 = append(f19f0valf2f1f2, f19f0valf2f1f2elem)
+							}
+							f19f0valf2f1.TagRules = f19f0valf2f1f2
+						}
+						f19f0valf2.TagConfiguration = f19f0valf2f1
+					}
+					f19f0val.RowLevelPermissionConfiguration = f19f0valf2
+				}
+				f19f0[f19f0key] = f19f0val
+			}
+			f19.TableMap = f19f0
+		}
+		ko.Spec.SemanticModelConfiguration = f19
+	} else {
+		ko.Spec.SemanticModelConfiguration = nil
+	}
+	if resp.DataSet.UseAs != "" {
+		ko.Spec.UseAs = aws.String(string(resp.DataSet.UseAs))
+	} else {
+		ko.Spec.UseAs = nil
+	}
 
 	rm.setStatusDefaults(ko)
 	return &resource{ko}, nil
@@ -110,7 +1730,7 @@ func (rm *resourceManager) sdkFind(
 func (rm *resourceManager) requiredFieldsMissingFromReadOneInput(
 	r *resource,
 ) bool {
-	return r.ko.Spec.AWSAccountID == nil || r.ko.Spec.DataSetID == nil
+	return r.ko.Spec.AWSAccountID == nil || r.ko.Spec.ID == nil
 
 }
 
@@ -124,8 +1744,8 @@ func (rm *resourceManager) newDescribeRequestPayload(
 	if r.ko.Spec.AWSAccountID != nil {
 		res.AwsAccountId = r.ko.Spec.AWSAccountID
 	}
-	if r.ko.Spec.DataSetID != nil {
-		res.DataSetId = r.ko.Spec.DataSetID
+	if r.ko.Spec.ID != nil {
+		res.DataSetId = r.ko.Spec.ID
 	}
 
 	return res, nil
@@ -167,9 +1787,9 @@ func (rm *resourceManager) sdkCreate(
 		ko.Status.ACKResourceMetadata.ARN = &arn
 	}
 	if resp.DataSetId != nil {
-		ko.Spec.DataSetID = resp.DataSetId
+		ko.Spec.ID = resp.DataSetId
 	} else {
-		ko.Spec.DataSetID = nil
+		ko.Spec.ID = nil
 	}
 	if resp.IngestionArn != nil {
 		ko.Status.IngestionARN = resp.IngestionArn
@@ -181,13 +1801,6 @@ func (rm *resourceManager) sdkCreate(
 	} else {
 		ko.Status.IngestionID = nil
 	}
-	if resp.RequestId != nil {
-		ko.Status.RequestID = resp.RequestId
-	} else {
-		ko.Status.RequestID = nil
-	}
-	statusCopy := int64(resp.Status)
-	ko.Status.Status = &statusCopy
 
 	rm.setStatusDefaults(ko)
 	return &resource{ko}, nil
@@ -1031,22 +2644,22 @@ func (rm *resourceManager) newCreateRequestPayload(
 		}
 		res.DataPrepConfiguration = f3
 	}
-	if r.ko.Spec.DataSetID != nil {
-		res.DataSetId = r.ko.Spec.DataSetID
+	if r.ko.Spec.ID != nil {
+		res.DataSetId = r.ko.Spec.ID
 	}
-	if r.ko.Spec.DataSetUsageConfiguration != nil {
+	if r.ko.Spec.UsageConfiguration != nil {
 		f5 := &svcsdktypes.DataSetUsageConfiguration{}
-		if r.ko.Spec.DataSetUsageConfiguration.DisableUseAsDirectQuerySource != nil {
-			f5.DisableUseAsDirectQuerySource = *r.ko.Spec.DataSetUsageConfiguration.DisableUseAsDirectQuerySource
+		if r.ko.Spec.UsageConfiguration.DisableUseAsDirectQuerySource != nil {
+			f5.DisableUseAsDirectQuerySource = *r.ko.Spec.UsageConfiguration.DisableUseAsDirectQuerySource
 		}
-		if r.ko.Spec.DataSetUsageConfiguration.DisableUseAsImportedSource != nil {
-			f5.DisableUseAsImportedSource = *r.ko.Spec.DataSetUsageConfiguration.DisableUseAsImportedSource
+		if r.ko.Spec.UsageConfiguration.DisableUseAsImportedSource != nil {
+			f5.DisableUseAsImportedSource = *r.ko.Spec.UsageConfiguration.DisableUseAsImportedSource
 		}
 		res.DataSetUsageConfiguration = f5
 	}
-	if r.ko.Spec.DatasetParameters != nil {
+	if r.ko.Spec.Parameters != nil {
 		f6 := []svcsdktypes.DatasetParameter{}
-		for _, f6iter := range r.ko.Spec.DatasetParameters {
+		for _, f6iter := range r.ko.Spec.Parameters {
 			f6elem := &svcsdktypes.DatasetParameter{}
 			if f6iter.DateTimeDatasetParameter != nil {
 				f6elemf0 := &svcsdktypes.DateTimeDatasetParameter{}
@@ -2005,9 +3618,9 @@ func (rm *resourceManager) sdkUpdate(
 		ko.Status.ACKResourceMetadata.ARN = &arn
 	}
 	if resp.DataSetId != nil {
-		ko.Spec.DataSetID = resp.DataSetId
+		ko.Spec.ID = resp.DataSetId
 	} else {
-		ko.Spec.DataSetID = nil
+		ko.Spec.ID = nil
 	}
 	if resp.IngestionArn != nil {
 		ko.Status.IngestionARN = resp.IngestionArn
@@ -2019,13 +3632,6 @@ func (rm *resourceManager) sdkUpdate(
 	} else {
 		ko.Status.IngestionID = nil
 	}
-	if resp.RequestId != nil {
-		ko.Status.RequestID = resp.RequestId
-	} else {
-		ko.Status.RequestID = nil
-	}
-	statusCopy := int64(resp.Status)
-	ko.Status.Status = &statusCopy
 
 	rm.setStatusDefaults(ko)
 	return &resource{ko}, nil
@@ -2870,22 +4476,22 @@ func (rm *resourceManager) newUpdateRequestPayload(
 		}
 		res.DataPrepConfiguration = f3
 	}
-	if r.ko.Spec.DataSetID != nil {
-		res.DataSetId = r.ko.Spec.DataSetID
+	if r.ko.Spec.ID != nil {
+		res.DataSetId = r.ko.Spec.ID
 	}
-	if r.ko.Spec.DataSetUsageConfiguration != nil {
+	if r.ko.Spec.UsageConfiguration != nil {
 		f5 := &svcsdktypes.DataSetUsageConfiguration{}
-		if r.ko.Spec.DataSetUsageConfiguration.DisableUseAsDirectQuerySource != nil {
-			f5.DisableUseAsDirectQuerySource = *r.ko.Spec.DataSetUsageConfiguration.DisableUseAsDirectQuerySource
+		if r.ko.Spec.UsageConfiguration.DisableUseAsDirectQuerySource != nil {
+			f5.DisableUseAsDirectQuerySource = *r.ko.Spec.UsageConfiguration.DisableUseAsDirectQuerySource
 		}
-		if r.ko.Spec.DataSetUsageConfiguration.DisableUseAsImportedSource != nil {
-			f5.DisableUseAsImportedSource = *r.ko.Spec.DataSetUsageConfiguration.DisableUseAsImportedSource
+		if r.ko.Spec.UsageConfiguration.DisableUseAsImportedSource != nil {
+			f5.DisableUseAsImportedSource = *r.ko.Spec.UsageConfiguration.DisableUseAsImportedSource
 		}
 		res.DataSetUsageConfiguration = f5
 	}
-	if r.ko.Spec.DatasetParameters != nil {
+	if r.ko.Spec.Parameters != nil {
 		f6 := []svcsdktypes.DatasetParameter{}
-		for _, f6iter := range r.ko.Spec.DatasetParameters {
+		for _, f6iter := range r.ko.Spec.Parameters {
 			f6elem := &svcsdktypes.DatasetParameter{}
 			if f6iter.DateTimeDatasetParameter != nil {
 				f6elemf0 := &svcsdktypes.DateTimeDatasetParameter{}
@@ -3804,8 +5410,8 @@ func (rm *resourceManager) newDeleteRequestPayload(
 	if r.ko.Spec.AWSAccountID != nil {
 		res.AwsAccountId = r.ko.Spec.AWSAccountID
 	}
-	if r.ko.Spec.DataSetID != nil {
-		res.DataSetId = r.ko.Spec.DataSetID
+	if r.ko.Spec.ID != nil {
+		res.DataSetId = r.ko.Spec.ID
 	}
 
 	return res, nil

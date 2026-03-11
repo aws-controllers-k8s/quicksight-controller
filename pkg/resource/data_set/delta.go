@@ -88,38 +88,6 @@ func newResourceDelta(
 			}
 		}
 	}
-	if ackcompare.HasNilDifference(a.ko.Spec.DataSetID, b.ko.Spec.DataSetID) {
-		delta.Add("Spec.DataSetID", a.ko.Spec.DataSetID, b.ko.Spec.DataSetID)
-	} else if a.ko.Spec.DataSetID != nil && b.ko.Spec.DataSetID != nil {
-		if *a.ko.Spec.DataSetID != *b.ko.Spec.DataSetID {
-			delta.Add("Spec.DataSetID", a.ko.Spec.DataSetID, b.ko.Spec.DataSetID)
-		}
-	}
-	if ackcompare.HasNilDifference(a.ko.Spec.DataSetUsageConfiguration, b.ko.Spec.DataSetUsageConfiguration) {
-		delta.Add("Spec.DataSetUsageConfiguration", a.ko.Spec.DataSetUsageConfiguration, b.ko.Spec.DataSetUsageConfiguration)
-	} else if a.ko.Spec.DataSetUsageConfiguration != nil && b.ko.Spec.DataSetUsageConfiguration != nil {
-		if ackcompare.HasNilDifference(a.ko.Spec.DataSetUsageConfiguration.DisableUseAsDirectQuerySource, b.ko.Spec.DataSetUsageConfiguration.DisableUseAsDirectQuerySource) {
-			delta.Add("Spec.DataSetUsageConfiguration.DisableUseAsDirectQuerySource", a.ko.Spec.DataSetUsageConfiguration.DisableUseAsDirectQuerySource, b.ko.Spec.DataSetUsageConfiguration.DisableUseAsDirectQuerySource)
-		} else if a.ko.Spec.DataSetUsageConfiguration.DisableUseAsDirectQuerySource != nil && b.ko.Spec.DataSetUsageConfiguration.DisableUseAsDirectQuerySource != nil {
-			if *a.ko.Spec.DataSetUsageConfiguration.DisableUseAsDirectQuerySource != *b.ko.Spec.DataSetUsageConfiguration.DisableUseAsDirectQuerySource {
-				delta.Add("Spec.DataSetUsageConfiguration.DisableUseAsDirectQuerySource", a.ko.Spec.DataSetUsageConfiguration.DisableUseAsDirectQuerySource, b.ko.Spec.DataSetUsageConfiguration.DisableUseAsDirectQuerySource)
-			}
-		}
-		if ackcompare.HasNilDifference(a.ko.Spec.DataSetUsageConfiguration.DisableUseAsImportedSource, b.ko.Spec.DataSetUsageConfiguration.DisableUseAsImportedSource) {
-			delta.Add("Spec.DataSetUsageConfiguration.DisableUseAsImportedSource", a.ko.Spec.DataSetUsageConfiguration.DisableUseAsImportedSource, b.ko.Spec.DataSetUsageConfiguration.DisableUseAsImportedSource)
-		} else if a.ko.Spec.DataSetUsageConfiguration.DisableUseAsImportedSource != nil && b.ko.Spec.DataSetUsageConfiguration.DisableUseAsImportedSource != nil {
-			if *a.ko.Spec.DataSetUsageConfiguration.DisableUseAsImportedSource != *b.ko.Spec.DataSetUsageConfiguration.DisableUseAsImportedSource {
-				delta.Add("Spec.DataSetUsageConfiguration.DisableUseAsImportedSource", a.ko.Spec.DataSetUsageConfiguration.DisableUseAsImportedSource, b.ko.Spec.DataSetUsageConfiguration.DisableUseAsImportedSource)
-			}
-		}
-	}
-	if len(a.ko.Spec.DatasetParameters) != len(b.ko.Spec.DatasetParameters) {
-		delta.Add("Spec.DatasetParameters", a.ko.Spec.DatasetParameters, b.ko.Spec.DatasetParameters)
-	} else if len(a.ko.Spec.DatasetParameters) > 0 {
-		if !equality.Semantic.Equalities.DeepEqual(a.ko.Spec.DatasetParameters, b.ko.Spec.DatasetParameters) {
-			delta.Add("Spec.DatasetParameters", a.ko.Spec.DatasetParameters, b.ko.Spec.DatasetParameters)
-		}
-	}
 	if len(a.ko.Spec.FieldFolders) != len(b.ko.Spec.FieldFolders) {
 		delta.Add("Spec.FieldFolders", a.ko.Spec.FieldFolders, b.ko.Spec.FieldFolders)
 	} else if len(a.ko.Spec.FieldFolders) > 0 {
@@ -132,6 +100,13 @@ func newResourceDelta(
 	} else if len(a.ko.Spec.FolderARNs) > 0 {
 		if !ackcompare.SliceStringPEqual(a.ko.Spec.FolderARNs, b.ko.Spec.FolderARNs) {
 			delta.Add("Spec.FolderARNs", a.ko.Spec.FolderARNs, b.ko.Spec.FolderARNs)
+		}
+	}
+	if ackcompare.HasNilDifference(a.ko.Spec.ID, b.ko.Spec.ID) {
+		delta.Add("Spec.ID", a.ko.Spec.ID, b.ko.Spec.ID)
+	} else if a.ko.Spec.ID != nil && b.ko.Spec.ID != nil {
+		if *a.ko.Spec.ID != *b.ko.Spec.ID {
+			delta.Add("Spec.ID", a.ko.Spec.ID, b.ko.Spec.ID)
 		}
 	}
 	if ackcompare.HasNilDifference(a.ko.Spec.ImportMode, b.ko.Spec.ImportMode) {
@@ -153,6 +128,13 @@ func newResourceDelta(
 	} else if a.ko.Spec.Name != nil && b.ko.Spec.Name != nil {
 		if *a.ko.Spec.Name != *b.ko.Spec.Name {
 			delta.Add("Spec.Name", a.ko.Spec.Name, b.ko.Spec.Name)
+		}
+	}
+	if len(a.ko.Spec.Parameters) != len(b.ko.Spec.Parameters) {
+		delta.Add("Spec.Parameters", a.ko.Spec.Parameters, b.ko.Spec.Parameters)
+	} else if len(a.ko.Spec.Parameters) > 0 {
+		if !equality.Semantic.Equalities.DeepEqual(a.ko.Spec.Parameters, b.ko.Spec.Parameters) {
+			delta.Add("Spec.Parameters", a.ko.Spec.Parameters, b.ko.Spec.Parameters)
 		}
 	}
 	if ackcompare.HasNilDifference(a.ko.Spec.PerformanceConfiguration, b.ko.Spec.PerformanceConfiguration) {
@@ -259,6 +241,24 @@ func newResourceDelta(
 	latestACKTags, _ := convertToOrderedACKTags(b.ko.Spec.Tags)
 	if !ackcompare.MapStringStringEqual(desiredACKTags, latestACKTags) {
 		delta.Add("Spec.Tags", a.ko.Spec.Tags, b.ko.Spec.Tags)
+	}
+	if ackcompare.HasNilDifference(a.ko.Spec.UsageConfiguration, b.ko.Spec.UsageConfiguration) {
+		delta.Add("Spec.UsageConfiguration", a.ko.Spec.UsageConfiguration, b.ko.Spec.UsageConfiguration)
+	} else if a.ko.Spec.UsageConfiguration != nil && b.ko.Spec.UsageConfiguration != nil {
+		if ackcompare.HasNilDifference(a.ko.Spec.UsageConfiguration.DisableUseAsDirectQuerySource, b.ko.Spec.UsageConfiguration.DisableUseAsDirectQuerySource) {
+			delta.Add("Spec.UsageConfiguration.DisableUseAsDirectQuerySource", a.ko.Spec.UsageConfiguration.DisableUseAsDirectQuerySource, b.ko.Spec.UsageConfiguration.DisableUseAsDirectQuerySource)
+		} else if a.ko.Spec.UsageConfiguration.DisableUseAsDirectQuerySource != nil && b.ko.Spec.UsageConfiguration.DisableUseAsDirectQuerySource != nil {
+			if *a.ko.Spec.UsageConfiguration.DisableUseAsDirectQuerySource != *b.ko.Spec.UsageConfiguration.DisableUseAsDirectQuerySource {
+				delta.Add("Spec.UsageConfiguration.DisableUseAsDirectQuerySource", a.ko.Spec.UsageConfiguration.DisableUseAsDirectQuerySource, b.ko.Spec.UsageConfiguration.DisableUseAsDirectQuerySource)
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.UsageConfiguration.DisableUseAsImportedSource, b.ko.Spec.UsageConfiguration.DisableUseAsImportedSource) {
+			delta.Add("Spec.UsageConfiguration.DisableUseAsImportedSource", a.ko.Spec.UsageConfiguration.DisableUseAsImportedSource, b.ko.Spec.UsageConfiguration.DisableUseAsImportedSource)
+		} else if a.ko.Spec.UsageConfiguration.DisableUseAsImportedSource != nil && b.ko.Spec.UsageConfiguration.DisableUseAsImportedSource != nil {
+			if *a.ko.Spec.UsageConfiguration.DisableUseAsImportedSource != *b.ko.Spec.UsageConfiguration.DisableUseAsImportedSource {
+				delta.Add("Spec.UsageConfiguration.DisableUseAsImportedSource", a.ko.Spec.UsageConfiguration.DisableUseAsImportedSource, b.ko.Spec.UsageConfiguration.DisableUseAsImportedSource)
+			}
+		}
 	}
 	if ackcompare.HasNilDifference(a.ko.Spec.UseAs, b.ko.Spec.UseAs) {
 		delta.Add("Spec.UseAs", a.ko.Spec.UseAs, b.ko.Spec.UseAs)
