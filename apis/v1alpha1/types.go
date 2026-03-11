@@ -63,6 +63,7 @@ type AccountInfo struct {
 // The Quick Sight settings associated with your Amazon Web Services account.
 type AccountSettings struct {
 	AccountName                  *string `json:"accountName,omitempty"`
+	DefaultNamespace             *string `json:"defaultNamespace,omitempty"`
 	NotificationEmail            *string `json:"notificationEmail,omitempty"`
 	PublicSharingEnabled         *bool   `json:"publicSharingEnabled,omitempty"`
 	TerminationProtectionEnabled *bool   `json:"terminationProtectionEnabled,omitempty"`
@@ -102,6 +103,32 @@ type ActiveIAMPolicyAssignment struct {
 	PolicyARN *string `json:"policyARN,omitempty"`
 }
 
+// A transform operation that groups rows by specified columns and applies aggregation
+// functions to calculate summary values.
+type AggregateOperation struct {
+	Aggregations       []*Aggregation `json:"aggregations,omitempty"`
+	Alias              *string        `json:"alias,omitempty"`
+	GroupByColumnNames []*string      `json:"groupByColumnNames,omitempty"`
+	// Specifies the source of data for a transform operation, including the source
+	// operation and column mappings.
+	Source *TransformOperationSource `json:"source,omitempty"`
+}
+
+// Defines an aggregation function to be applied to grouped data, creating a
+// new column with the calculated result.
+type Aggregation struct {
+	// Defines the type of aggregation function to apply to data during data preparation,
+	// supporting simple and list aggregations.
+	AggregationFunction *DataPrepAggregationFunction `json:"aggregationFunction,omitempty"`
+	NewColumnID         *string                      `json:"newColumnID,omitempty"`
+	NewColumnName       *string                      `json:"newColumnName,omitempty"`
+}
+
+// The definition of an AggregationPartitionBy.
+type AggregationPartitionBy struct {
+	TimeGranularity *string `json:"timeGranularity,omitempty"`
+}
+
 // The parameters for OpenSearch.
 type AmazonElasticsearchParameters struct {
 	Domain *string `json:"domain,omitempty"`
@@ -137,6 +164,31 @@ type AnalysisSummary struct {
 	CreatedTime     *metav1.Time `json:"createdTime,omitempty"`
 	LastUpdatedTime *metav1.Time `json:"lastUpdatedTime,omitempty"`
 	Status          *string      `json:"status,omitempty"`
+}
+
+// The definition of the Anchor.
+type Anchor struct {
+	TimeGranularity *string `json:"timeGranularity,omitempty"`
+}
+
+// A transform operation that combines rows from two data sources by stacking
+// them vertically (union operation).
+type AppendOperation struct {
+	Alias           *string           `json:"alias,omitempty"`
+	AppendedColumns []*AppendedColumn `json:"appendedColumns,omitempty"`
+	// Specifies the source of data for a transform operation, including the source
+	// operation and column mappings.
+	FirstSource *TransformOperationSource `json:"firstSource,omitempty"`
+	// Specifies the source of data for a transform operation, including the source
+	// operation and column mappings.
+	SecondSource *TransformOperationSource `json:"secondSource,omitempty"`
+}
+
+// Represents a column that will be included in the result of an append operation,
+// combining data from multiple sources.
+type AppendedColumn struct {
+	ColumnName  *string `json:"columnName,omitempty"`
+	NewColumnID *string `json:"newColumnID,omitempty"`
 }
 
 // Controls how a specific Analysis resource is parameterized in the returned
@@ -438,9 +490,57 @@ type BrandSummary struct {
 	LastUpdatedTime *metav1.Time `json:"lastUpdatedTime,omitempty"`
 }
 
+// A calculated column for a dataset.
+type CalculatedColumn struct {
+	ColumnID   *string `json:"columnID,omitempty"`
+	ColumnName *string `json:"columnName,omitempty"`
+	Expression *string `json:"expression,omitempty"`
+}
+
+// The calculated field of an analysis.
+type CalculatedField struct {
+	Name *string `json:"name,omitempty"`
+}
+
+// The table calculation measure field for pivot tables.
+type CalculatedMeasureField struct {
+	Expression *string `json:"expression,omitempty"`
+}
+
 // The source controls that are used in a CascadingControlConfiguration.
 type CascadingControlSource struct {
 	SourceSheetControlID *string `json:"sourceSheetControlID,omitempty"`
+}
+
+// A transform operation that casts a column to a different type.
+type CastColumnTypeOperation struct {
+	ColumnName    *string `json:"columnName,omitempty"`
+	Format        *string `json:"format,omitempty"`
+	NewColumnType *string `json:"newColumnType,omitempty"`
+	SubType       *string `json:"subType,omitempty"`
+}
+
+// A transform operation that changes the data types of one or more columns
+// in the dataset.
+type CastColumnTypesOperation struct {
+	Alias                    *string                    `json:"alias,omitempty"`
+	CastColumnTypeOperations []*CastColumnTypeOperation `json:"castColumnTypeOperations,omitempty"`
+	// Specifies the source of data for a transform operation, including the source
+	// operation and column mappings.
+	Source *TransformOperationSource `json:"source,omitempty"`
+}
+
+// Metadata that contains a description for a column.
+type ColumnDescription struct {
+	Text *string `json:"text,omitempty"`
+}
+
+// Groupings of columns that work together in certain Quick Sight features.
+// This is a variant type structure. For this structure to be valid, only one
+// of the attributes can be non-null.
+type ColumnGroup struct {
+	// Geospatial column group that denotes a hierarchy.
+	GeoSpatialColumnGroup *GeoSpatialColumnGroup `json:"geoSpatialColumnGroup,omitempty"`
 }
 
 // A structure describing the name, data type, and geographic role of the columns.
@@ -453,6 +553,21 @@ type ColumnGroupSchema struct {
 	Name *string `json:"name,omitempty"`
 }
 
+// A column of a data set.
+type ColumnIdentifier struct {
+	ColumnName *string `json:"columnName,omitempty"`
+}
+
+// A rule defined to grant access on one or more restricted columns. Each dataset
+// can have multiple rules. To create a restricted column, you add it to one
+// or more rules. Each rule must contain at least one column and at least one
+// user or group. To be able to see a restricted column, a user or group needs
+// to be added to a rule for that column.
+type ColumnLevelPermissionRule struct {
+	ColumnNames []*string `json:"columnNames,omitempty"`
+	Principals  []*string `json:"principals,omitempty"`
+}
+
 // The column schema.
 type ColumnSchema struct {
 	DataType       *string `json:"dataType,omitempty"`
@@ -460,14 +575,60 @@ type ColumnSchema struct {
 	Name           *string `json:"name,omitempty"`
 }
 
+// A tag for a column in a TagColumnOperation (https://docs.aws.amazon.com/quicksight/latest/APIReference/API_TagColumnOperation.html)
+// structure. This is a variant type structure. For this structure to be valid,
+// only one of the attributes can be non-null.
+type ColumnTag struct {
+	// Metadata that contains a description for a column.
+	ColumnDescription    *ColumnDescription `json:"columnDescription,omitempty"`
+	ColumnGeographicRole *string            `json:"columnGeographicRole,omitempty"`
+}
+
+// Specifies a column to be unpivoted, transforming it from a column into rows
+// with associated values.
+type ColumnToUnpivot struct {
+	ColumnName *string `json:"columnName,omitempty"`
+	NewValue   *string `json:"newValue,omitempty"`
+}
+
 // The tooltip item for the columns that are not part of a field well.
 type ColumnTooltipItem struct {
 	Label *string `json:"label,omitempty"`
 }
 
+// Determines the custom condition for an icon set.
+type ConditionalFormattingCustomIconCondition struct {
+	Expression *string `json:"expression,omitempty"`
+}
+
+// Formatting configuration for gradient color.
+type ConditionalFormattingGradientColor struct {
+	Expression *string `json:"expression,omitempty"`
+}
+
+// Formatting configuration for icon set.
+type ConditionalFormattingIconSet struct {
+	Expression *string `json:"expression,omitempty"`
+}
+
+// Formatting configuration for solid color.
+type ConditionalFormattingSolidColor struct {
+	Expression *string `json:"expression,omitempty"`
+}
+
 // The parameters that are required to connect to a Confluence data source
 type ConfluenceParameters struct {
 	ConfluenceURL *string `json:"confluenceURL,omitempty"`
+}
+
+// A transform operation that creates calculated columns. Columns created in
+// one such operation form a lexical closure.
+type CreateColumnsOperation struct {
+	Alias   *string             `json:"alias,omitempty"`
+	Columns []*CalculatedColumn `json:"columns,omitempty"`
+	// Specifies the source of data for a transform operation, including the source
+	// operation and column mappings.
+	Source *TransformOperationSource `json:"source,omitempty"`
 }
 
 // The definition for a CreateTopicReviewedAnswer.
@@ -494,7 +655,10 @@ type CustomPermissions struct {
 
 // A physical table type built from the results of the custom SQL query.
 type CustomSQL struct {
-	DataSourceARN *string `json:"dataSourceARN,omitempty"`
+	Columns       []*InputColumn `json:"columns,omitempty"`
+	DataSourceARN *string        `json:"dataSourceARN,omitempty"`
+	Name          *string        `json:"name,omitempty"`
+	SQLQuery      *string        `json:"sqlQuery,omitempty"`
 }
 
 // Dashboard.
@@ -540,10 +704,43 @@ type DashboardVersionSummary struct {
 	Status          *string      `json:"status,omitempty"`
 }
 
+// The color map that determines the color options for a particular element.
+type DataPathColor struct {
+	TimeGranularity *string `json:"timeGranularity,omitempty"`
+}
+
+// Defines the type of aggregation function to apply to data during data preparation,
+// supporting simple and list aggregations.
+type DataPrepAggregationFunction struct {
+	// An aggregation function that concatenates values from multiple rows into
+	// a single string with a specified separator.
+	ListAggregation *DataPrepListAggregationFunction `json:"listAggregation,omitempty"`
+	// A simple aggregation function that performs standard statistical operations
+	// on a column.
+	SimpleAggregation *DataPrepSimpleAggregationFunction `json:"simpleAggregation,omitempty"`
+}
+
+// Configuration for data preparation operations, defining the complete pipeline
+// from source tables through transformations to destination tables.
+type DataPrepConfiguration struct {
+	DestinationTableMap map[string]*DestinationTable `json:"destinationTableMap,omitempty"`
+	SourceTableMap      map[string]*SourceTable      `json:"sourceTableMap,omitempty"`
+	TransformStepMap    map[string]*TransformStep    `json:"transformStepMap,omitempty"`
+}
+
 // An aggregation function that concatenates values from multiple rows into
 // a single string with a specified separator.
 type DataPrepListAggregationFunction struct {
-	Distinct *bool `json:"distinct,omitempty"`
+	Distinct        *bool   `json:"distinct,omitempty"`
+	InputColumnName *string `json:"inputColumnName,omitempty"`
+	Separator       *string `json:"separator,omitempty"`
+}
+
+// A simple aggregation function that performs standard statistical operations
+// on a column.
+type DataPrepSimpleAggregationFunction struct {
+	FunctionType    *string `json:"functionType,omitempty"`
+	InputColumnName *string `json:"inputColumnName,omitempty"`
 }
 
 // The generative Q&A settings of an embedded Quick Sight console.
@@ -551,13 +748,11 @@ type DataQnAConfigurations struct {
 	Enabled *bool `json:"enabled,omitempty"`
 }
 
-// Dataset.
-type DataSet struct {
-	ARN             *string      `json:"arn,omitempty"`
-	CreatedTime     *metav1.Time `json:"createdTime,omitempty"`
-	DataSetID       *string      `json:"dataSetID,omitempty"`
-	LastUpdatedTime *metav1.Time `json:"lastUpdatedTime,omitempty"`
-	Name            *string      `json:"name,omitempty"`
+// Maps a source column identifier to a target column identifier during transform
+// operations.
+type DataSetColumnIDMapping struct {
+	SourceColumnID *string `json:"sourceColumnID,omitempty"`
+	TargetColumnID *string `json:"targetColumnID,omitempty"`
 }
 
 // Dataset configuration.
@@ -565,10 +760,38 @@ type DataSetConfiguration struct {
 	Placeholder *string `json:"placeholder,omitempty"`
 }
 
+// A filter condition that compares date values using operators like BEFORE,
+// AFTER, or their inclusive variants.
+type DataSetDateComparisonFilterCondition struct {
+	Operator *string `json:"operator,omitempty"`
+	// Represents a date value used in filter conditions.
+	Value *DataSetDateFilterValue `json:"value,omitempty"`
+}
+
+// A filter condition for date columns, supporting both comparison and range-based
+// filtering.
+type DataSetDateFilterCondition struct {
+	ColumnName *string `json:"columnName,omitempty"`
+	// A filter condition that compares date values using operators like BEFORE,
+	// AFTER, or their inclusive variants.
+	ComparisonFilterCondition *DataSetDateComparisonFilterCondition `json:"comparisonFilterCondition,omitempty"`
+	// A filter condition that filters date values within a specified range.
+	RangeFilterCondition *DataSetDateRangeFilterCondition `json:"rangeFilterCondition,omitempty"`
+}
+
+// Represents a date value used in filter conditions.
+type DataSetDateFilterValue struct {
+	StaticValue *metav1.Time `json:"staticValue,omitempty"`
+}
+
 // A filter condition that filters date values within a specified range.
 type DataSetDateRangeFilterCondition struct {
 	IncludeMaximum *bool `json:"includeMaximum,omitempty"`
 	IncludeMinimum *bool `json:"includeMinimum,omitempty"`
+	// Represents a date value used in filter conditions.
+	RangeMaximum *DataSetDateFilterValue `json:"rangeMaximum,omitempty"`
+	// Represents a date value used in filter conditions.
+	RangeMinimum *DataSetDateFilterValue `json:"rangeMinimum,omitempty"`
 }
 
 // A data set.
@@ -576,10 +799,38 @@ type DataSetIdentifierDeclaration struct {
 	DataSetARN *string `json:"dataSetARN,omitempty"`
 }
 
+// A filter condition that compares numeric values using operators like EQUALS,
+// GREATER_THAN, or LESS_THAN.
+type DataSetNumericComparisonFilterCondition struct {
+	Operator *string `json:"operator,omitempty"`
+	// Represents a numeric value used in filter conditions.
+	Value *DataSetNumericFilterValue `json:"value,omitempty"`
+}
+
+// A filter condition for numeric columns, supporting both comparison and range-based
+// filtering.
+type DataSetNumericFilterCondition struct {
+	ColumnName *string `json:"columnName,omitempty"`
+	// A filter condition that compares numeric values using operators like EQUALS,
+	// GREATER_THAN, or LESS_THAN.
+	ComparisonFilterCondition *DataSetNumericComparisonFilterCondition `json:"comparisonFilterCondition,omitempty"`
+	// A filter condition that filters numeric values within a specified range.
+	RangeFilterCondition *DataSetNumericRangeFilterCondition `json:"rangeFilterCondition,omitempty"`
+}
+
+// Represents a numeric value used in filter conditions.
+type DataSetNumericFilterValue struct {
+	StaticValue *float64 `json:"staticValue,omitempty"`
+}
+
 // A filter condition that filters numeric values within a specified range.
 type DataSetNumericRangeFilterCondition struct {
 	IncludeMaximum *bool `json:"includeMaximum,omitempty"`
 	IncludeMinimum *bool `json:"includeMinimum,omitempty"`
+	// Represents a numeric value used in filter conditions.
+	RangeMaximum *DataSetNumericFilterValue `json:"rangeMaximum,omitempty"`
+	// Represents a numeric value used in filter conditions.
+	RangeMinimum *DataSetNumericFilterValue `json:"rangeMinimum,omitempty"`
 }
 
 // Dataset reference.
@@ -592,15 +843,64 @@ type DataSetSearchFilter struct {
 	Value *string `json:"value,omitempty"`
 }
 
+// A filter condition that compares string values using operators like EQUALS,
+// CONTAINS, or STARTS_WITH.
+type DataSetStringComparisonFilterCondition struct {
+	Operator *string `json:"operator,omitempty"`
+	// Represents a string value used in filter conditions.
+	Value *DataSetStringFilterValue `json:"value,omitempty"`
+}
+
+// A filter condition for string columns, supporting both comparison and list-based
+// filtering.
+type DataSetStringFilterCondition struct {
+	ColumnName *string `json:"columnName,omitempty"`
+	// A filter condition that compares string values using operators like EQUALS,
+	// CONTAINS, or STARTS_WITH.
+	ComparisonFilterCondition *DataSetStringComparisonFilterCondition `json:"comparisonFilterCondition,omitempty"`
+	// A filter condition that includes or excludes string values from a specified
+	// list.
+	ListFilterCondition *DataSetStringListFilterCondition `json:"listFilterCondition,omitempty"`
+}
+
+// Represents a string value used in filter conditions.
+type DataSetStringFilterValue struct {
+	StaticValue *string `json:"staticValue,omitempty"`
+}
+
+// A filter condition that includes or excludes string values from a specified
+// list.
+type DataSetStringListFilterCondition struct {
+	Operator *string `json:"operator,omitempty"`
+	// Represents a list of string values used in filter conditions.
+	Values *DataSetStringListFilterValue `json:"values,omitempty"`
+}
+
+// Represents a list of string values used in filter conditions.
+type DataSetStringListFilterValue struct {
+	StaticValues []*string `json:"staticValues,omitempty"`
+}
+
 // Dataset summary.
 type DataSetSummary struct {
-	ARN                                       *string      `json:"arn,omitempty"`
-	ColumnLevelPermissionRulesApplied         *bool        `json:"columnLevelPermissionRulesApplied,omitempty"`
-	CreatedTime                               *metav1.Time `json:"createdTime,omitempty"`
-	DataSetID                                 *string      `json:"dataSetID,omitempty"`
-	LastUpdatedTime                           *metav1.Time `json:"lastUpdatedTime,omitempty"`
-	Name                                      *string      `json:"name,omitempty"`
-	RowLevelPermissionTagConfigurationApplied *bool        `json:"rowLevelPermissionTagConfigurationApplied,omitempty"`
+	ARN                               *string      `json:"arn,omitempty"`
+	ColumnLevelPermissionRulesApplied *bool        `json:"columnLevelPermissionRulesApplied,omitempty"`
+	CreatedTime                       *metav1.Time `json:"createdTime,omitempty"`
+	DataSetID                         *string      `json:"dataSetID,omitempty"`
+	ImportMode                        *string      `json:"importMode,omitempty"`
+	LastUpdatedTime                   *metav1.Time `json:"lastUpdatedTime,omitempty"`
+	Name                              *string      `json:"name,omitempty"`
+	// Information about a dataset that contains permissions for row-level security
+	// (RLS). The permissions dataset maps fields to users or groups. For more information,
+	// see Using Row-Level Security (RLS) to Restrict Access to a Dataset (https://docs.aws.amazon.com/quicksight/latest/user/restrict-access-to-a-data-set-using-row-level-security.html)
+	// in the Quick Sight User Guide.
+	//
+	// The option to deny permissions by setting PermissionPolicy to DENY_ACCESS
+	// is not supported for new RLS datasets.
+	RowLevelPermissionDataSet                 *RowLevelPermissionDataSet            `json:"rowLevelPermissionDataSet,omitempty"`
+	RowLevelPermissionDataSetMap              map[string]*RowLevelPermissionDataSet `json:"rowLevelPermissionDataSetMap,omitempty"`
+	RowLevelPermissionTagConfigurationApplied *bool                                 `json:"rowLevelPermissionTagConfigurationApplied,omitempty"`
+	UseAs                                     *string                               `json:"useAs,omitempty"`
 }
 
 // The usage configuration to apply to child datasets that reference this dataset
@@ -608,6 +908,47 @@ type DataSetSummary struct {
 type DataSetUsageConfiguration struct {
 	DisableUseAsDirectQuerySource *bool `json:"disableUseAsDirectQuerySource,omitempty"`
 	DisableUseAsImportedSource    *bool `json:"disableUseAsImportedSource,omitempty"`
+}
+
+// Dataset.
+type DataSet_SDK struct {
+	ARN                          *string                      `json:"arn,omitempty"`
+	ColumnGroups                 []*ColumnGroup               `json:"columnGroups,omitempty"`
+	ColumnLevelPermissionRules   []*ColumnLevelPermissionRule `json:"columnLevelPermissionRules,omitempty"`
+	ConsumedSpiceCapacityInBytes *int64                       `json:"consumedSpiceCapacityInBytes,omitempty"`
+	CreatedTime                  *metav1.Time                 `json:"createdTime,omitempty"`
+	// Configuration for data preparation operations, defining the complete pipeline
+	// from source tables through transformations to destination tables.
+	DataPrepConfiguration *DataPrepConfiguration `json:"dataPrepConfiguration,omitempty"`
+	DataSetID             *string                `json:"dataSetID,omitempty"`
+	// The usage configuration to apply to child datasets that reference this dataset
+	// as a source.
+	DataSetUsageConfiguration *DataSetUsageConfiguration `json:"dataSetUsageConfiguration,omitempty"`
+	DatasetParameters         []*DatasetParameter        `json:"datasetParameters,omitempty"`
+	FieldFolders              map[string]*FieldFolder    `json:"fieldFolders,omitempty"`
+	ImportMode                *string                    `json:"importMode,omitempty"`
+	LastUpdatedTime           *metav1.Time               `json:"lastUpdatedTime,omitempty"`
+	LogicalTableMap           map[string]*LogicalTable   `json:"logicalTableMap,omitempty"`
+	Name                      *string                    `json:"name,omitempty"`
+	OutputColumns             []*OutputColumn            `json:"outputColumns,omitempty"`
+	// The configuration for the performance optimization of the dataset that contains
+	// a UniqueKey configuration.
+	PerformanceConfiguration *PerformanceConfiguration `json:"performanceConfiguration,omitempty"`
+	PhysicalTableMap         map[string]*PhysicalTable `json:"physicalTableMap,omitempty"`
+	// Information about a dataset that contains permissions for row-level security
+	// (RLS). The permissions dataset maps fields to users or groups. For more information,
+	// see Using Row-Level Security (RLS) to Restrict Access to a Dataset (https://docs.aws.amazon.com/quicksight/latest/user/restrict-access-to-a-data-set-using-row-level-security.html)
+	// in the Quick Sight User Guide.
+	//
+	// The option to deny permissions by setting PermissionPolicy to DENY_ACCESS
+	// is not supported for new RLS datasets.
+	RowLevelPermissionDataSet *RowLevelPermissionDataSet `json:"rowLevelPermissionDataSet,omitempty"`
+	// The configuration of tags on a dataset to set row-level security.
+	RowLevelPermissionTagConfiguration *RowLevelPermissionTagConfiguration `json:"rowLevelPermissionTagConfiguration,omitempty"`
+	// Configuration for the semantic model that defines how prepared data is structured
+	// for analysis and reporting.
+	SemanticModelConfiguration *SemanticModelConfiguration `json:"semanticModelConfiguration,omitempty"`
+	UseAs                      *string                     `json:"useAs,omitempty"`
 }
 
 // Data source credentials. This is a variant type structure. For this structure
@@ -761,12 +1102,95 @@ type DatasetMetadata struct {
 	DatasetARN *string `json:"datasetARN,omitempty"`
 }
 
+// A parameter that is created in a dataset. The parameter can be a string,
+// integer, decimal, or datetime data type.
+type DatasetParameter struct {
+	// A date time parameter for a dataset.
+	DateTimeDatasetParameter *DateTimeDatasetParameter `json:"dateTimeDatasetParameter,omitempty"`
+	// A decimal parameter for a dataset.
+	DecimalDatasetParameter *DecimalDatasetParameter `json:"decimalDatasetParameter,omitempty"`
+	// An integer parameter for a dataset.
+	IntegerDatasetParameter *IntegerDatasetParameter `json:"integerDatasetParameter,omitempty"`
+	// A string parameter for a dataset.
+	StringDatasetParameter *StringDatasetParameter `json:"stringDatasetParameter,omitempty"`
+}
+
+// The dimension type field with date type columns.
+type DateDimensionField struct {
+	DateGranularity *string `json:"dateGranularity,omitempty"`
+}
+
+// A date time parameter for a dataset.
+type DateTimeDatasetParameter struct {
+	// The default values of a date time parameter.
+	DefaultValues   *DateTimeDatasetParameterDefaultValues `json:"defaultValues,omitempty"`
+	ID              *string                                `json:"id,omitempty"`
+	Name            *string                                `json:"name,omitempty"`
+	TimeGranularity *string                                `json:"timeGranularity,omitempty"`
+	// The value type of the parameter. The value type is used to validate the parameter
+	// before it is evaluated.
+	ValueType *string `json:"valueType,omitempty"`
+}
+
+// The default values of a date time parameter.
+type DateTimeDatasetParameterDefaultValues struct {
+	StaticValues []metav1.Time `json:"staticValues,omitempty"`
+}
+
+// A parameter declaration for the DateTime data type.
+type DateTimeParameterDeclaration struct {
+	TimeGranularity *string `json:"timeGranularity,omitempty"`
+}
+
+// The configuration that defines the default value of a DateTime parameter
+// when a value has not been set.
+type DateTimeValueWhenUnsetConfiguration struct {
+	CustomValue *metav1.Time `json:"customValue,omitempty"`
+}
+
+// A decimal parameter for a dataset.
+type DecimalDatasetParameter struct {
+	// The default values of a decimal parameter.
+	DefaultValues *DecimalDatasetParameterDefaultValues `json:"defaultValues,omitempty"`
+	ID            *string                               `json:"id,omitempty"`
+	Name          *string                               `json:"name,omitempty"`
+	// The value type of the parameter. The value type is used to validate the parameter
+	// before it is evaluated.
+	ValueType *string `json:"valueType,omitempty"`
+}
+
+// The default values of a decimal parameter.
+type DecimalDatasetParameterDefaultValues struct {
+	StaticValues []*float64 `json:"staticValues,omitempty"`
+}
+
+// The configuration that defines the default value of a Decimal parameter when
+// a value has not been set.
+type DecimalValueWhenUnsetConfiguration struct {
+	CustomValue *float64 `json:"customValue,omitempty"`
+}
+
 // The configuration of destination parameter values.
 //
 // This is a union type structure. For this structure to be valid, only one
 // of the attributes can be defined.
 type DestinationParameterValueConfiguration struct {
 	SourceParameterName *string `json:"sourceParameterName,omitempty"`
+}
+
+// Defines a destination table in data preparation that receives the final transformed
+// data.
+type DestinationTable struct {
+	Alias *string `json:"alias,omitempty"`
+	// Specifies the source of data for a destination table, including the transform
+	// operation and column mappings.
+	Source *DestinationTableSource `json:"source,omitempty"`
+}
+
+// Specifies the source of data for a destination table, including the transform
+// operation and column mappings.
+type DestinationTableSource struct {
+	TransformOperationID *string `json:"transformOperationID,omitempty"`
 }
 
 // A structure that represents additional options for display formatting.
@@ -786,6 +1210,11 @@ type ExasolParameters struct {
 	Port *int64  `json:"port,omitempty"`
 }
 
+// The exclude period of TimeRangeFilter or RelativeDatesFilter.
+type ExcludePeriodConfiguration struct {
+	Granularity *string `json:"granularity,omitempty"`
+}
+
 // The executive summary settings of an embedded Quick Sight console or dashboard.
 type ExecutiveSummaryConfigurations struct {
 	Enabled *bool `json:"enabled,omitempty"`
@@ -798,9 +1227,38 @@ type FailedKeyRegistrationEntry struct {
 	StatusCode  *int64  `json:"statusCode,omitempty"`
 }
 
+// A FieldFolder element is a folder that contains fields and nested subfolders.
+type FieldFolder struct {
+	Columns     []*string `json:"columns,omitempty"`
+	Description *string   `json:"description,omitempty"`
+}
+
 // The tooltip item for the fields.
 type FieldTooltipItem struct {
 	Label *string `json:"label,omitempty"`
+}
+
+// A transform operation that filters rows based on a condition.
+type FilterOperation struct {
+	ConditionExpression *string `json:"conditionExpression,omitempty"`
+	// A filter condition for date columns, supporting both comparison and range-based
+	// filtering.
+	DateFilterCondition *DataSetDateFilterCondition `json:"dateFilterCondition,omitempty"`
+	// A filter condition for numeric columns, supporting both comparison and range-based
+	// filtering.
+	NumericFilterCondition *DataSetNumericFilterCondition `json:"numericFilterCondition,omitempty"`
+	// A filter condition for string columns, supporting both comparison and list-based
+	// filtering.
+	StringFilterCondition *DataSetStringFilterCondition `json:"stringFilterCondition,omitempty"`
+}
+
+// A transform operation that applies one or more filter conditions.
+type FiltersOperation struct {
+	Alias            *string            `json:"alias,omitempty"`
+	FilterOperations []*FilterOperation `json:"filterOperations,omitempty"`
+	// Specifies the source of data for a transform operation, including the source
+	// operation and column mappings.
+	Source *TransformOperationSource `json:"source,omitempty"`
 }
 
 // The basic information of the flow exluding its definition specifying the
@@ -857,6 +1315,13 @@ type GeneratedAnswerResult struct {
 // The generative BI authoring settings of an embedded Quick Sight console.
 type GenerativeAuthoringConfigurations struct {
 	Enabled *bool `json:"enabled,omitempty"`
+}
+
+// Geospatial column group that denotes a hierarchy.
+type GeoSpatialColumnGroup struct {
+	Columns     []*string `json:"columns,omitempty"`
+	CountryCode *string   `json:"countryCode,omitempty"`
+	Name        *string   `json:"name,omitempty"`
 }
 
 // The categorical data color for a single category.
@@ -940,10 +1405,54 @@ type ImpalaParameters struct {
 	SQLEndpointPath *string `json:"sqlEndpointPath,omitempty"`
 }
 
+// A transform operation that imports data from a source table.
+type ImportTableOperation struct {
+	Alias *string `json:"alias,omitempty"`
+	// Specifies the source table and column mappings for an import table operation.
+	Source *ImportTableOperationSource `json:"source,omitempty"`
+}
+
+// Specifies the source table and column mappings for an import table operation.
+type ImportTableOperationSource struct {
+	ColumnIDMappings []*DataSetColumnIDMapping `json:"columnIDMappings,omitempty"`
+	SourceTableID    *string                   `json:"sourceTableID,omitempty"`
+}
+
 // Information about the SPICE ingestion for a dataset.
 type Ingestion struct {
-	ARN         *string      `json:"arn,omitempty"`
-	CreatedTime *metav1.Time `json:"createdTime,omitempty"`
+	ARN                    *string      `json:"arn,omitempty"`
+	CreatedTime            *metav1.Time `json:"createdTime,omitempty"`
+	IngestionSizeInBytes   *int64       `json:"ingestionSizeInBytes,omitempty"`
+	IngestionTimeInSeconds *int64       `json:"ingestionTimeInSeconds,omitempty"`
+}
+
+// Metadata for a column that is used as the input of a transform operation.
+type InputColumn struct {
+	ID      *string `json:"id,omitempty"`
+	Name    *string `json:"name,omitempty"`
+	SubType *string `json:"subType,omitempty"`
+	Type    *string `json:"type,omitempty"`
+}
+
+// An integer parameter for a dataset.
+type IntegerDatasetParameter struct {
+	// The default values of an integer parameter.
+	DefaultValues *IntegerDatasetParameterDefaultValues `json:"defaultValues,omitempty"`
+	ID            *string                               `json:"id,omitempty"`
+	Name          *string                               `json:"name,omitempty"`
+	// The value type of the parameter. The value type is used to validate the parameter
+	// before it is evaluated.
+	ValueType *string `json:"valueType,omitempty"`
+}
+
+// The default values of an integer parameter.
+type IntegerDatasetParameterDefaultValues struct {
+	StaticValues []*int64 `json:"staticValues,omitempty"`
+}
+
+// The limit configuration of the visual display for an axis.
+type ItemsLimitConfiguration struct {
+	ItemsLimit *int64 `json:"itemsLimit,omitempty"`
 }
 
 // The parameters for Jira.
@@ -951,9 +1460,49 @@ type JiraParameters struct {
 	SiteBaseURL *string `json:"siteBaseURL,omitempty"`
 }
 
+// The instructions associated with a join.
+type JoinInstruction struct {
+	// Properties associated with the columns participating in a join.
+	LeftJoinKeyProperties *JoinKeyProperties `json:"leftJoinKeyProperties,omitempty"`
+	// An identifier for the logical table that is defined in the dataset
+	LeftOperand *string `json:"leftOperand,omitempty"`
+	OnClause    *string `json:"onClause,omitempty"`
+	// Properties associated with the columns participating in a join.
+	RightJoinKeyProperties *JoinKeyProperties `json:"rightJoinKeyProperties,omitempty"`
+	// An identifier for the logical table that is defined in the dataset
+	RightOperand *string `json:"rightOperand,omitempty"`
+	Type         *string `json:"type,omitempty"`
+}
+
 // Properties associated with the columns participating in a join.
 type JoinKeyProperties struct {
 	UniqueKey *bool `json:"uniqueKey,omitempty"`
+}
+
+// Properties that control how columns are handled for a join operand, including
+// column name overrides.
+type JoinOperandProperties struct {
+	OutputColumnNameOverrides []*OutputColumnNameOverride `json:"outputColumnNameOverrides,omitempty"`
+}
+
+// A transform operation that combines data from two sources based on specified
+// join conditions.
+type JoinOperation struct {
+	Alias *string `json:"alias,omitempty"`
+	// Specifies the source of data for a transform operation, including the source
+	// operation and column mappings.
+	LeftOperand *TransformOperationSource `json:"leftOperand,omitempty"`
+	// Properties that control how columns are handled for a join operand, including
+	// column name overrides.
+	LeftOperandProperties *JoinOperandProperties `json:"leftOperandProperties,omitempty"`
+	OnClause              *string                `json:"onClause,omitempty"`
+	// Specifies the source of data for a transform operation, including the source
+	// operation and column mappings.
+	RightOperand *TransformOperationSource `json:"rightOperand,omitempty"`
+	// Properties that control how columns are handled for a join operand, including
+	// column name overrides.
+	RightOperandProperties *JoinOperandProperties `json:"rightOperandProperties,omitempty"`
+	Type                   *string                `json:"type,omitempty"`
 }
 
 // The combination of username, private key and passphrase that are used as
@@ -974,10 +1523,25 @@ type LinkSharingConfiguration struct {
 	Permissions []*ResourcePermission `json:"permissions,omitempty"`
 }
 
+// A logical table is a unit that joins and that data transformations operate
+// on. A logical table has a source, which can be either a physical table or
+// result of a join. When a logical table points to a physical table, the logical
+// table acts as a mutable copy of that physical table through transform operations.
+type LogicalTable struct {
+	Alias          *string               `json:"alias,omitempty"`
+	DataTransforms []*TransformOperation `json:"dataTransforms,omitempty"`
+	// Information about the source of a logical table. This is a variant type structure.
+	// For this structure to be valid, only one of the attributes can be non-null.
+	Source *LogicalTableSource `json:"source,omitempty"`
+}
+
 // Information about the source of a logical table. This is a variant type structure.
 // For this structure to be valid, only one of the attributes can be non-null.
 type LogicalTableSource struct {
 	DataSetARN *string `json:"dataSetARN,omitempty"`
+	// The instructions associated with a join.
+	JoinInstruction *JoinInstruction `json:"joinInstruction,omitempty"`
+	PhysicalTableID *string          `json:"physicalTableID,omitempty"`
 }
 
 // The logo configuration.
@@ -1044,6 +1608,7 @@ type NamespaceInfoV2 struct {
 	CapacityRegion                  *string `json:"capacityRegion,omitempty"`
 	IAMIdentityCenterApplicationARN *string `json:"iamIdentityCenterApplicationARN,omitempty"`
 	IAMIdentityCenterInstanceARN    *string `json:"iamIdentityCenterInstanceARN,omitempty"`
+	Name                            *string `json:"name,omitempty"`
 }
 
 // A NestedFilter filters data with a subset of data that is defined by the
@@ -1056,6 +1621,15 @@ type NestedFilter struct {
 type NetworkInterface struct {
 	AvailabilityZone *string `json:"availabilityZone,omitempty"`
 	ErrorMessage     *string `json:"errorMessage,omitempty"`
+}
+
+// The configuration that overrides the existing default values for a dataset
+// parameter that is inherited from another dataset.
+type NewDefaultValues struct {
+	DateTimeStaticValues []metav1.Time `json:"dateTimeStaticValues,omitempty"`
+	DecimalStaticValues  []*float64    `json:"decimalStaticValues,omitempty"`
+	IntegerStaticValues  []*int64      `json:"integerStaticValues,omitempty"`
+	StringStaticValues   []*string     `json:"stringStaticValues,omitempty"`
 }
 
 // A NumericRangeFilter filters values that are within the value range.
@@ -1083,10 +1657,48 @@ type OracleParameters struct {
 	UseServiceName *bool   `json:"useServiceName,omitempty"`
 }
 
+// Output column.
+type OutputColumn struct {
+	Description *string `json:"description,omitempty"`
+	ID          *string `json:"id,omitempty"`
+	Name        *string `json:"name,omitempty"`
+	SubType     *string `json:"subType,omitempty"`
+	Type        *string `json:"type,omitempty"`
+}
+
+// Specifies a mapping to override the name of an output column from a transform
+// operation.
+type OutputColumnNameOverride struct {
+	OutputColumnName *string `json:"outputColumnName,omitempty"`
+	SourceColumnName *string `json:"sourceColumnName,omitempty"`
+}
+
+// A transform operation that overrides the dataset parameter values that are
+// defined in another dataset.
+type OverrideDatasetParameterOperation struct {
+	// The configuration that overrides the existing default values for a dataset
+	// parameter that is inherited from another dataset.
+	NewDefaultValues *NewDefaultValues `json:"newDefaultValues,omitempty"`
+	NewParameterName *string           `json:"newParameterName,omitempty"`
+	ParameterName    *string           `json:"parameterName,omitempty"`
+}
+
+// The pagination configuration for a table visual or boxplot.
+type PaginationConfiguration struct {
+	PageSize *int64 `json:"pageSize,omitempty"`
+}
+
 // References a parent dataset that serves as a data source, including its columns
 // and metadata.
 type ParentDataSet struct {
-	DataSetARN *string `json:"dataSetARN,omitempty"`
+	DataSetARN   *string        `json:"dataSetARN,omitempty"`
+	InputColumns []*InputColumn `json:"inputColumns,omitempty"`
+}
+
+// The configuration for the performance optimization of the dataset that contains
+// a UniqueKey configuration.
+type PerformanceConfiguration struct {
+	UniqueKeys []*UniqueKey `json:"uniqueKeys,omitempty"`
 }
 
 // The period over period computation configuration.
@@ -1096,7 +1708,45 @@ type PeriodOverPeriodComputation struct {
 
 // The period to date computation configuration.
 type PeriodToDateComputation struct {
-	Name *string `json:"name,omitempty"`
+	Name                  *string `json:"name,omitempty"`
+	PeriodTimeGranularity *string `json:"periodTimeGranularity,omitempty"`
+}
+
+// A view of a data source that contains information about the shape of the
+// data in the underlying source. This is a variant type structure. For this
+// structure to be valid, only one of the attributes can be non-null.
+type PhysicalTable struct {
+	// A physical table type built from the results of the custom SQL query.
+	CustomSQL *CustomSQL `json:"customSQL,omitempty"`
+	// A physical table type for relational data sources.
+	RelationalTable *RelationalTable `json:"relationalTable,omitempty"`
+	// A physical table type for an S3 data source.
+	S3Source *S3Source `json:"s3Source,omitempty"`
+	// A table from a Software-as-a-Service (SaaS) data source, including connection
+	// details and column definitions.
+	SaaSTable *SaaSTable `json:"saaSTable,omitempty"`
+}
+
+// Configuration for a pivot operation, specifying which column contains labels
+// and how to pivot them.
+type PivotConfiguration struct {
+	LabelColumnName *string         `json:"labelColumnName,omitempty"`
+	PivotedLabels   []*PivotedLabel `json:"pivotedLabels,omitempty"`
+}
+
+// A transform operation that pivots data by converting row values into columns.
+type PivotOperation struct {
+	Alias              *string   `json:"alias,omitempty"`
+	GroupByColumnNames []*string `json:"groupByColumnNames,omitempty"`
+	// Configuration for a pivot operation, specifying which column contains labels
+	// and how to pivot them.
+	PivotConfiguration *PivotConfiguration `json:"pivotConfiguration,omitempty"`
+	// Specifies the source of data for a transform operation, including the source
+	// operation and column mappings.
+	Source *TransformOperationSource `json:"source,omitempty"`
+	// Configuration for how to handle value columns in pivot operations, including
+	// aggregation settings.
+	ValueColumnConfiguration *ValueColumnConfiguration `json:"valueColumnConfiguration,omitempty"`
 }
 
 // The target of a pivot table field collapse state.
@@ -1109,10 +1759,23 @@ type PivotTotalOptions struct {
 	CustomLabel *string `json:"customLabel,omitempty"`
 }
 
+// Specifies a label value to be pivoted into a separate column, including the
+// new column name and identifier.
+type PivotedLabel struct {
+	LabelName     *string `json:"labelName,omitempty"`
+	NewColumnID   *string `json:"newColumnID,omitempty"`
+	NewColumnName *string `json:"newColumnName,omitempty"`
+}
+
 // A flexible visualization type that allows engineers to create new custom
 // charts in Quick Sight.
 type PluginVisual struct {
 	PluginARN *string `json:"pluginARN,omitempty"`
+}
+
+// A query limits configuration.
+type PluginVisualItemsLimitConfiguration struct {
+	ItemsLimit *int64 `json:"itemsLimit,omitempty"`
 }
 
 // The key value pair of the persisted property.
@@ -1133,6 +1796,16 @@ type PrestoParameters struct {
 	Catalog *string `json:"catalog,omitempty"`
 	Host    *string `json:"host,omitempty"`
 	Port    *int64  `json:"port,omitempty"`
+}
+
+// A transform operation that projects columns. Operations that come after a
+// projection can only refer to projected columns.
+type ProjectOperation struct {
+	Alias            *string   `json:"alias,omitempty"`
+	ProjectedColumns []*string `json:"projectedColumns,omitempty"`
+	// Specifies the source of data for a transform operation, including the source
+	// operation and column mappings.
+	Source *TransformOperationSource `json:"source,omitempty"`
 }
 
 // The parameters that are required to connect to an Amazon Q Business data
@@ -1199,6 +1872,11 @@ type RedshiftParameters struct {
 	Port                        *int64                       `json:"port,omitempty"`
 }
 
+// The static data configuration of the reference line data configuration.
+type ReferenceLineStaticDataConfiguration struct {
+	Value *float64 `json:"value,omitempty"`
+}
+
 // Specifies the interval between each scheduled refresh of a dataset.
 type RefreshFrequency struct {
 	TimeOfTheDay *string `json:"timeOfTheDay,omitempty"`
@@ -1226,13 +1904,64 @@ type RegisteredCustomerManagedKey struct {
 
 // A physical table type for relational data sources.
 type RelationalTable struct {
-	DataSourceARN *string `json:"dataSourceARN,omitempty"`
+	Catalog       *string        `json:"catalog,omitempty"`
+	DataSourceARN *string        `json:"dataSourceARN,omitempty"`
+	InputColumns  []*InputColumn `json:"inputColumns,omitempty"`
+	Name          *string        `json:"name,omitempty"`
+	Schema        *string        `json:"schema,omitempty"`
+}
+
+// A RelativeDatesFilter filters relative dates values.
+type RelativeDatesFilter struct {
+	MinimumGranularity *string `json:"minimumGranularity,omitempty"`
+	TimeGranularity    *string `json:"timeGranularity,omitempty"`
+}
+
+// A transform operation that renames a column.
+type RenameColumnOperation struct {
+	ColumnName    *string `json:"columnName,omitempty"`
+	NewColumnName *string `json:"newColumnName,omitempty"`
+}
+
+// A transform operation that renames one or more columns in the dataset.
+type RenameColumnsOperation struct {
+	Alias                  *string                  `json:"alias,omitempty"`
+	RenameColumnOperations []*RenameColumnOperation `json:"renameColumnOperations,omitempty"`
+	// Specifies the source of data for a transform operation, including the source
+	// operation and column mappings.
+	Source *TransformOperationSource `json:"source,omitempty"`
 }
 
 // Permission for the resource.
 type ResourcePermission struct {
 	Actions   []*string `json:"actions,omitempty"`
 	Principal *string   `json:"principal,omitempty"`
+}
+
+// The rolling date configuration of a date time filter.
+type RollingDateConfiguration struct {
+	Expression *string `json:"expression,omitempty"`
+}
+
+// Information about rows for a data set SPICE ingestion.
+type RowInfo struct {
+	RowsDropped        *int64 `json:"rowsDropped,omitempty"`
+	RowsIngested       *int64 `json:"rowsIngested,omitempty"`
+	TotalRowsInDataset *int64 `json:"totalRowsInDataset,omitempty"`
+}
+
+// Configuration for row level security.
+type RowLevelPermissionConfiguration struct {
+	// Information about a dataset that contains permissions for row-level security
+	// (RLS). The permissions dataset maps fields to users or groups. For more information,
+	// see Using Row-Level Security (RLS) to Restrict Access to a Dataset (https://docs.aws.amazon.com/quicksight/latest/user/restrict-access-to-a-data-set-using-row-level-security.html)
+	// in the Quick Sight User Guide.
+	//
+	// The option to deny permissions by setting PermissionPolicy to DENY_ACCESS
+	// is not supported for new RLS datasets.
+	RowLevelPermissionDataSet *RowLevelPermissionDataSet `json:"rowLevelPermissionDataSet,omitempty"`
+	// The configuration of tags on a dataset to set row-level security.
+	TagConfiguration *RowLevelPermissionTagConfiguration `json:"tagConfiguration,omitempty"`
 }
 
 // Information about a dataset that contains permissions for row-level security
@@ -1243,12 +1972,26 @@ type ResourcePermission struct {
 // The option to deny permissions by setting PermissionPolicy to DENY_ACCESS
 // is not supported for new RLS datasets.
 type RowLevelPermissionDataSet struct {
-	ARN *string `json:"arn,omitempty"`
+	ARN              *string `json:"arn,omitempty"`
+	FormatVersion    *string `json:"formatVersion,omitempty"`
+	Namespace        *string `json:"namespace,omitempty"`
+	PermissionPolicy *string `json:"permissionPolicy,omitempty"`
+	Status           *string `json:"status,omitempty"`
+}
+
+// The configuration of tags on a dataset to set row-level security.
+type RowLevelPermissionTagConfiguration struct {
+	Status                *string                      `json:"status,omitempty"`
+	TagRuleConfigurations [][]*string                  `json:"tagRuleConfigurations,omitempty"`
+	TagRules              []*RowLevelPermissionTagRule `json:"tagRules,omitempty"`
 }
 
 // A set of rules associated with a tag.
 type RowLevelPermissionTagRule struct {
-	ColumnName *string `json:"columnName,omitempty"`
+	ColumnName             *string `json:"columnName,omitempty"`
+	MatchAllValue          *string `json:"matchAllValue,omitempty"`
+	TagKey                 *string `json:"tagKey,omitempty"`
+	TagMultiValueDelimiter *string `json:"tagMultiValueDelimiter,omitempty"`
 }
 
 // The parameters that are required to connect to a S3 Knowledge Base data source.
@@ -1271,7 +2014,10 @@ type S3Parameters struct {
 
 // A physical table type for an S3 data source.
 type S3Source struct {
-	DataSourceARN *string `json:"dataSourceARN,omitempty"`
+	DataSourceARN *string        `json:"dataSourceARN,omitempty"`
+	InputColumns  []*InputColumn `json:"inputColumns,omitempty"`
+	// Information about the format for a source file or files.
+	UploadSettings *UploadSettings `json:"uploadSettings,omitempty"`
 }
 
 // The parameters for SQL Server.
@@ -1290,7 +2036,9 @@ type SSLProperties struct {
 // A table from a Software-as-a-Service (SaaS) data source, including connection
 // details and column definitions.
 type SaaSTable struct {
-	DataSourceARN *string `json:"dataSourceARN,omitempty"`
+	DataSourceARN *string             `json:"dataSourceARN,omitempty"`
+	InputColumns  []*InputColumn      `json:"inputColumns,omitempty"`
+	TablePath     []*TablePathElement `json:"tablePath,omitempty"`
 }
 
 // The schedules configuration for an embedded Quick Sight dashboard.
@@ -1305,14 +2053,36 @@ type SearchFlowsFilter struct {
 
 // Details of a self-upgrade request.
 type SelfUpgradeRequestDetail struct {
+	CreationTime            *int64  `json:"creationTime,omitempty"`
+	LastUpdateAttemptTime   *int64  `json:"lastUpdateAttemptTime,omitempty"`
 	LastUpdateFailureReason *string `json:"lastUpdateFailureReason,omitempty"`
 	RequestNote             *string `json:"requestNote,omitempty"`
 	UpgradeRequestID        *string `json:"upgradeRequestID,omitempty"`
 }
 
+// Configuration for the semantic model that defines how prepared data is structured
+// for analysis and reporting.
+type SemanticModelConfiguration struct {
+	TableMap map[string]*SemanticTable `json:"tableMap,omitempty"`
+}
+
+// A semantic table that represents the final analytical structure of the data.
+type SemanticTable struct {
+	Alias              *string `json:"alias,omitempty"`
+	DestinationTableID *string `json:"destinationTableID,omitempty"`
+	// Configuration for row level security.
+	RowLevelPermissionConfiguration *RowLevelPermissionConfiguration `json:"rowLevelPermissionConfiguration,omitempty"`
+}
+
 // The parameters for ServiceNow.
 type ServiceNowParameters struct {
 	SiteBaseURL *string `json:"siteBaseURL,omitempty"`
+}
+
+// The key-value pair used for the row-level security tags feature.
+type SessionTag struct {
+	Key   *string `json:"key,omitempty"`
+	Value *string `json:"value,omitempty"`
 }
 
 // The shared view settings of an embedded dashboard.
@@ -1323,6 +2093,11 @@ type SharedViewConfigurations struct {
 // The background configuration for sheets.
 type SheetBackgroundStyle struct {
 	Gradient *string `json:"gradient,omitempty"`
+}
+
+// The rendering rules of a sheet that uses a free-form layout.
+type SheetElementRenderingRule struct {
+	Expression *string `json:"expression,omitempty"`
 }
 
 // A SignupResponse object that contains a summary of a newly created account.
@@ -1359,6 +2134,15 @@ type SnowflakeParameters struct {
 	// connections that are made with Snowflake and Starburst.
 	OAuthParameters *OAuthParameters `json:"oAuthParameters,omitempty"`
 	Warehouse       *string          `json:"warehouse,omitempty"`
+}
+
+// A source table that provides initial data from either a physical table or
+// parent dataset.
+type SourceTable struct {
+	// References a parent dataset that serves as a data source, including its columns
+	// and metadata.
+	DataSet         *ParentDataSet `json:"dataSet,omitempty"`
+	PhysicalTableID *string        `json:"physicalTableID,omitempty"`
 }
 
 // The parameters for Spark.
@@ -1399,6 +2183,22 @@ type StaticFileURLSourceOptions struct {
 	URL *string `json:"url,omitempty"`
 }
 
+// A string parameter for a dataset.
+type StringDatasetParameter struct {
+	// The default values of a string parameter.
+	DefaultValues *StringDatasetParameterDefaultValues `json:"defaultValues,omitempty"`
+	ID            *string                              `json:"id,omitempty"`
+	Name          *string                              `json:"name,omitempty"`
+	// The value type of the parameter. The value type is used to validate the parameter
+	// before it is evaluated.
+	ValueType *string `json:"valueType,omitempty"`
+}
+
+// The default values of a string parameter.
+type StringDatasetParameterDefaultValues struct {
+	StaticValues []*string `json:"staticValues,omitempty"`
+}
+
 // The subtotal options.
 type SubtotalOptions struct {
 	CustomLabel *string `json:"customLabel,omitempty"`
@@ -1417,11 +2217,24 @@ type TableFieldCustomTextContent struct {
 	Value *string `json:"value,omitempty"`
 }
 
+// An element in the hierarchical path to a table within a data source, containing
+// both name and identifier.
+type TablePathElement struct {
+	ID   *string `json:"id,omitempty"`
+	Name *string `json:"name,omitempty"`
+}
+
 // The key or keys of the key-value pairs for the resource tag or tags assigned
 // to the resource.
 type Tag struct {
 	Key   *string `json:"key,omitempty"`
 	Value *string `json:"value,omitempty"`
+}
+
+// A transform operation that tags a column with additional information.
+type TagColumnOperation struct {
+	ColumnName *string      `json:"columnName,omitempty"`
+	Tags       []*ColumnTag `json:"tags,omitempty"`
 }
 
 // A template object. A template is an entity in Quick Sight that encapsulates
@@ -1524,19 +2337,22 @@ type ThresholdAlertsConfigurations struct {
 
 // A TimeEqualityFilter filters values that are equal to a given value.
 type TimeEqualityFilter struct {
-	Value *metav1.Time `json:"value,omitempty"`
+	TimeGranularity *string      `json:"timeGranularity,omitempty"`
+	Value           *metav1.Time `json:"value,omitempty"`
 }
 
 // The time range drill down filter.
 type TimeRangeDrillDownFilter struct {
-	RangeMaximum *metav1.Time `json:"rangeMaximum,omitempty"`
-	RangeMinimum *metav1.Time `json:"rangeMinimum,omitempty"`
+	RangeMaximum    *metav1.Time `json:"rangeMaximum,omitempty"`
+	RangeMinimum    *metav1.Time `json:"rangeMinimum,omitempty"`
+	TimeGranularity *string      `json:"timeGranularity,omitempty"`
 }
 
 // A TimeRangeFilter filters values that are between two specified values.
 type TimeRangeFilter struct {
-	IncludeMaximum *bool `json:"includeMaximum,omitempty"`
-	IncludeMinimum *bool `json:"includeMinimum,omitempty"`
+	IncludeMaximum  *bool   `json:"includeMaximum,omitempty"`
+	IncludeMinimum  *bool   `json:"includeMinimum,omitempty"`
+	TimeGranularity *string `json:"timeGranularity,omitempty"`
 }
 
 // The value of a time range filter.
@@ -1545,6 +2361,11 @@ type TimeRangeFilter struct {
 // of the attributes can be defined.
 type TimeRangeFilterValue struct {
 	StaticValue *metav1.Time `json:"staticValue,omitempty"`
+}
+
+// A TopBottomFilter filters values that are at the top or the bottom.
+type TopBottomFilter struct {
+	TimeGranularity *string `json:"timeGranularity,omitempty"`
 }
 
 // The top movers and bottom movers computation setup.
@@ -1559,8 +2380,9 @@ type TopBottomRankedComputation struct {
 
 // A structure that represents a calculated field.
 type TopicCalculatedField struct {
-	IsIncludedInTopic      *bool `json:"isIncludedInTopic,omitempty"`
-	NeverAggregateInFilter *bool `json:"neverAggregateInFilter,omitempty"`
+	Expression             *string `json:"expression,omitempty"`
+	IsIncludedInTopic      *bool   `json:"isIncludedInTopic,omitempty"`
+	NeverAggregateInFilter *bool   `json:"neverAggregateInFilter,omitempty"`
 }
 
 // A structure that represents a category filter.
@@ -1587,8 +2409,14 @@ type TopicDetails struct {
 
 // The definition for a TopicIRFilterOption.
 type TopicIRFilterOption struct {
-	Inclusive *bool `json:"inclusive,omitempty"`
-	Inverse   *bool `json:"inverse,omitempty"`
+	Inclusive       *bool   `json:"inclusive,omitempty"`
+	Inverse         *bool   `json:"inverse,omitempty"`
+	TimeGranularity *string `json:"timeGranularity,omitempty"`
+}
+
+// The definition for a TopicIRMetric.
+type TopicIRMetric struct {
+	Expression *string `json:"expression,omitempty"`
 }
 
 // The structure that represents a null filter.
@@ -1647,6 +2475,70 @@ type TotalOptions struct {
 	CustomLabel *string `json:"customLabel,omitempty"`
 }
 
+// A data transformation on a logical table. This is a variant type structure.
+// For this structure to be valid, only one of the attributes can be non-null.
+type TransformOperation struct {
+	// A transform operation that casts a column to a different type.
+	CastColumnTypeOperation *CastColumnTypeOperation `json:"castColumnTypeOperation,omitempty"`
+	// A transform operation that creates calculated columns. Columns created in
+	// one such operation form a lexical closure.
+	CreateColumnsOperation *CreateColumnsOperation `json:"createColumnsOperation,omitempty"`
+	// A transform operation that filters rows based on a condition.
+	FilterOperation *FilterOperation `json:"filterOperation,omitempty"`
+	// A transform operation that overrides the dataset parameter values that are
+	// defined in another dataset.
+	OverrideDatasetParameterOperation *OverrideDatasetParameterOperation `json:"overrideDatasetParameterOperation,omitempty"`
+	// A transform operation that projects columns. Operations that come after a
+	// projection can only refer to projected columns.
+	ProjectOperation *ProjectOperation `json:"projectOperation,omitempty"`
+	// A transform operation that renames a column.
+	RenameColumnOperation *RenameColumnOperation `json:"renameColumnOperation,omitempty"`
+	// A transform operation that tags a column with additional information.
+	TagColumnOperation *TagColumnOperation `json:"tagColumnOperation,omitempty"`
+	// A transform operation that removes tags associated with a column.
+	UntagColumnOperation *UntagColumnOperation `json:"untagColumnOperation,omitempty"`
+}
+
+// Specifies the source of data for a transform operation, including the source
+// operation and column mappings.
+type TransformOperationSource struct {
+	ColumnIDMappings     []*DataSetColumnIDMapping `json:"columnIDMappings,omitempty"`
+	TransformOperationID *string                   `json:"transformOperationID,omitempty"`
+}
+
+// A step in data preparation that performs a specific operation on the data.
+type TransformStep struct {
+	// A transform operation that groups rows by specified columns and applies aggregation
+	// functions to calculate summary values.
+	AggregateStep *AggregateOperation `json:"aggregateStep,omitempty"`
+	// A transform operation that combines rows from two data sources by stacking
+	// them vertically (union operation).
+	AppendStep *AppendOperation `json:"appendStep,omitempty"`
+	// A transform operation that changes the data types of one or more columns
+	// in the dataset.
+	CastColumnTypesStep *CastColumnTypesOperation `json:"castColumnTypesStep,omitempty"`
+	// A transform operation that creates calculated columns. Columns created in
+	// one such operation form a lexical closure.
+	CreateColumnsStep *CreateColumnsOperation `json:"createColumnsStep,omitempty"`
+	// A transform operation that applies one or more filter conditions.
+	FiltersStep *FiltersOperation `json:"filtersStep,omitempty"`
+	// A transform operation that imports data from a source table.
+	ImportTableStep *ImportTableOperation `json:"importTableStep,omitempty"`
+	// A transform operation that combines data from two sources based on specified
+	// join conditions.
+	JoinStep *JoinOperation `json:"joinStep,omitempty"`
+	// A transform operation that pivots data by converting row values into columns.
+	PivotStep *PivotOperation `json:"pivotStep,omitempty"`
+	// A transform operation that projects columns. Operations that come after a
+	// projection can only refer to projected columns.
+	ProjectStep *ProjectOperation `json:"projectStep,omitempty"`
+	// A transform operation that renames one or more columns in the dataset.
+	RenameColumnsStep *RenameColumnsOperation `json:"renameColumnsStep,omitempty"`
+	// A transform operation that converts columns into rows, normalizing the data
+	// structure.
+	UnpivotStep *UnpivotOperation `json:"unpivotStep,omitempty"`
+}
+
 // The parameters that are required to connect to a Trino data source.
 type TrinoParameters struct {
 	Catalog *string `json:"catalog,omitempty"`
@@ -1660,16 +2552,44 @@ type TwitterParameters struct {
 	Query   *string `json:"query,omitempty"`
 }
 
+// A UniqueKey configuration that references a dataset column.
+type UniqueKey struct {
+	ColumnNames []*string `json:"columnNames,omitempty"`
+}
+
 // The unique values computation configuration.
 type UniqueValuesComputation struct {
 	Name *string `json:"name,omitempty"`
+}
+
+// A transform operation that converts columns into rows, normalizing the data
+// structure.
+type UnpivotOperation struct {
+	Alias            *string            `json:"alias,omitempty"`
+	ColumnsToUnpivot []*ColumnToUnpivot `json:"columnsToUnpivot,omitempty"`
+	// Specifies the source of data for a transform operation, including the source
+	// operation and column mappings.
+	Source                   *TransformOperationSource `json:"source,omitempty"`
+	UnpivotedLabelColumnID   *string                   `json:"unpivotedLabelColumnID,omitempty"`
+	UnpivotedLabelColumnName *string                   `json:"unpivotedLabelColumnName,omitempty"`
+	UnpivotedValueColumnID   *string                   `json:"unpivotedValueColumnID,omitempty"`
+	UnpivotedValueColumnName *string                   `json:"unpivotedValueColumnName,omitempty"`
+}
+
+// A transform operation that removes tags associated with a column.
+type UntagColumnOperation struct {
+	ColumnName *string   `json:"columnName,omitempty"`
+	TagNames   []*string `json:"tagNames,omitempty"`
 }
 
 // Information about the format for a source file or files.
 type UploadSettings struct {
 	ContainsHeader         *bool   `json:"containsHeader,omitempty"`
 	CustomCellAddressRange *string `json:"customCellAddressRange,omitempty"`
+	Delimiter              *string `json:"delimiter,omitempty"`
+	Format                 *string `json:"format,omitempty"`
 	StartFromRow           *int64  `json:"startFromRow,omitempty"`
+	TextQualifier          *string `json:"textQualifier,omitempty"`
 }
 
 // A registered user of Quick Sight.
@@ -1711,6 +2631,14 @@ type VPCConnectionSummary struct {
 	Name            *string      `json:"name,omitempty"`
 	RoleARN         *string      `json:"roleARN,omitempty"`
 	VPCID           *string      `json:"vpcID,omitempty"`
+}
+
+// Configuration for how to handle value columns in pivot operations, including
+// aggregation settings.
+type ValueColumnConfiguration struct {
+	// Defines the type of aggregation function to apply to data during data preparation,
+	// supporting simple and list aggregations.
+	AggregationFunction *DataPrepAggregationFunction `json:"aggregationFunction,omitempty"`
 }
 
 // The options that determine the presentation of a waterfall visual.
