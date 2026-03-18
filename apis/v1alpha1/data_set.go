@@ -28,6 +28,7 @@ type DataSetSpec struct {
 	// The Amazon Web Services account ID.
 	//
 	// Regex Pattern: `^[0-9]{12}$`
+	// +kubebuilder:validation:XValidation:rule="self == oldSelf",message="Value is immutable once set"
 	// +kubebuilder:validation:Required
 	AWSAccountID *string `json:"awsAccountID"`
 	// Groupings of columns that work together in certain Amazon Quick Sight features.
@@ -46,6 +47,7 @@ type DataSetSpec struct {
 	FolderARNs []*string `json:"folderARNs,omitempty"`
 	// An ID for the dataset that you want to create. This ID is unique per Amazon
 	// Web Services Region for each Amazon Web Services account.
+	// +kubebuilder:validation:XValidation:rule="self == oldSelf",message="Value is immutable once set"
 	// +kubebuilder:validation:Required
 	ID *string `json:"id"`
 	// Indicates whether you want to import the data into SPICE.

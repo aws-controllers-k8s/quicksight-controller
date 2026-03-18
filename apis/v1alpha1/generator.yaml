@@ -48,6 +48,14 @@ operations:
 resources:
   DataSet:
     ignore_idempotency_token: true
+    exceptions:
+      errors:
+        404:
+          code: ResourceNotFoundException
+      terminal_codes:
+        - InvalidParameterValueException
+        - UnsupportedUserEditionException
+        - LimitExceededException
     renames:
       operations:
         CreateDataSet:
@@ -73,6 +81,9 @@ resources:
     fields:
       ID:
         is_primary_key: true
+        is_immutable: true
+      AwsAccountId:
+        is_immutable: true
       ConsumedSpiceCapacityInBytes:
         is_read_only: true
         from:

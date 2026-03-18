@@ -48,6 +48,9 @@ spec:
 
                   Regex Pattern: `^[0-9]{12}$`
                 type: string
+                x-kubernetes-validations:
+                - message: Value is immutable once set
+                  rule: self == oldSelf
               columnGroups:
                 description: |-
                   Groupings of columns that work together in certain Amazon Quick Sight features.
@@ -891,6 +894,9 @@ spec:
                   An ID for the dataset that you want to create. This ID is unique per Amazon
                   Web Services Region for each Amazon Web Services account.
                 type: string
+                x-kubernetes-validations:
+                - message: Value is immutable once set
+                  rule: self == oldSelf
               importMode:
                 description: Indicates whether you want to import the data into SPICE.
                 type: string
