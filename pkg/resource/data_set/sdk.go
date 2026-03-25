@@ -4152,8 +4152,7 @@ func (rm *resourceManager) terminalAWSError(err error) bool {
 	}
 	switch terminalErr.ErrorCode() {
 	case "InvalidParameterValueException",
-		"UnsupportedUserEditionException",
-		"LimitExceededException":
+		"UnsupportedUserEditionException":
 		return true
 	default:
 		return false
