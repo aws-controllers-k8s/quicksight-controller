@@ -116,13 +116,6 @@ func newResourceDelta(
 			delta.Add("Spec.ImportMode", a.ko.Spec.ImportMode, b.ko.Spec.ImportMode)
 		}
 	}
-	if len(a.ko.Spec.LogicalTableMap) != len(b.ko.Spec.LogicalTableMap) {
-		delta.Add("Spec.LogicalTableMap", a.ko.Spec.LogicalTableMap, b.ko.Spec.LogicalTableMap)
-	} else if len(a.ko.Spec.LogicalTableMap) > 0 {
-		if !equality.Semantic.Equalities.DeepEqual(a.ko.Spec.LogicalTableMap, b.ko.Spec.LogicalTableMap) {
-			delta.Add("Spec.LogicalTableMap", a.ko.Spec.LogicalTableMap, b.ko.Spec.LogicalTableMap)
-		}
-	}
 	if ackcompare.HasNilDifference(a.ko.Spec.Name, b.ko.Spec.Name) {
 		delta.Add("Spec.Name", a.ko.Spec.Name, b.ko.Spec.Name)
 	} else if a.ko.Spec.Name != nil && b.ko.Spec.Name != nil {
@@ -160,70 +153,6 @@ func newResourceDelta(
 	} else if len(a.ko.Spec.PhysicalTableMap) > 0 {
 		if !equality.Semantic.Equalities.DeepEqual(a.ko.Spec.PhysicalTableMap, b.ko.Spec.PhysicalTableMap) {
 			delta.Add("Spec.PhysicalTableMap", a.ko.Spec.PhysicalTableMap, b.ko.Spec.PhysicalTableMap)
-		}
-	}
-	if ackcompare.HasNilDifference(a.ko.Spec.RowLevelPermissionDataSet, b.ko.Spec.RowLevelPermissionDataSet) {
-		delta.Add("Spec.RowLevelPermissionDataSet", a.ko.Spec.RowLevelPermissionDataSet, b.ko.Spec.RowLevelPermissionDataSet)
-	} else if a.ko.Spec.RowLevelPermissionDataSet != nil && b.ko.Spec.RowLevelPermissionDataSet != nil {
-		if ackcompare.HasNilDifference(a.ko.Spec.RowLevelPermissionDataSet.ARN, b.ko.Spec.RowLevelPermissionDataSet.ARN) {
-			delta.Add("Spec.RowLevelPermissionDataSet.ARN", a.ko.Spec.RowLevelPermissionDataSet.ARN, b.ko.Spec.RowLevelPermissionDataSet.ARN)
-		} else if a.ko.Spec.RowLevelPermissionDataSet.ARN != nil && b.ko.Spec.RowLevelPermissionDataSet.ARN != nil {
-			if *a.ko.Spec.RowLevelPermissionDataSet.ARN != *b.ko.Spec.RowLevelPermissionDataSet.ARN {
-				delta.Add("Spec.RowLevelPermissionDataSet.ARN", a.ko.Spec.RowLevelPermissionDataSet.ARN, b.ko.Spec.RowLevelPermissionDataSet.ARN)
-			}
-		}
-		if ackcompare.HasNilDifference(a.ko.Spec.RowLevelPermissionDataSet.FormatVersion, b.ko.Spec.RowLevelPermissionDataSet.FormatVersion) {
-			delta.Add("Spec.RowLevelPermissionDataSet.FormatVersion", a.ko.Spec.RowLevelPermissionDataSet.FormatVersion, b.ko.Spec.RowLevelPermissionDataSet.FormatVersion)
-		} else if a.ko.Spec.RowLevelPermissionDataSet.FormatVersion != nil && b.ko.Spec.RowLevelPermissionDataSet.FormatVersion != nil {
-			if *a.ko.Spec.RowLevelPermissionDataSet.FormatVersion != *b.ko.Spec.RowLevelPermissionDataSet.FormatVersion {
-				delta.Add("Spec.RowLevelPermissionDataSet.FormatVersion", a.ko.Spec.RowLevelPermissionDataSet.FormatVersion, b.ko.Spec.RowLevelPermissionDataSet.FormatVersion)
-			}
-		}
-		if ackcompare.HasNilDifference(a.ko.Spec.RowLevelPermissionDataSet.Namespace, b.ko.Spec.RowLevelPermissionDataSet.Namespace) {
-			delta.Add("Spec.RowLevelPermissionDataSet.Namespace", a.ko.Spec.RowLevelPermissionDataSet.Namespace, b.ko.Spec.RowLevelPermissionDataSet.Namespace)
-		} else if a.ko.Spec.RowLevelPermissionDataSet.Namespace != nil && b.ko.Spec.RowLevelPermissionDataSet.Namespace != nil {
-			if *a.ko.Spec.RowLevelPermissionDataSet.Namespace != *b.ko.Spec.RowLevelPermissionDataSet.Namespace {
-				delta.Add("Spec.RowLevelPermissionDataSet.Namespace", a.ko.Spec.RowLevelPermissionDataSet.Namespace, b.ko.Spec.RowLevelPermissionDataSet.Namespace)
-			}
-		}
-		if ackcompare.HasNilDifference(a.ko.Spec.RowLevelPermissionDataSet.PermissionPolicy, b.ko.Spec.RowLevelPermissionDataSet.PermissionPolicy) {
-			delta.Add("Spec.RowLevelPermissionDataSet.PermissionPolicy", a.ko.Spec.RowLevelPermissionDataSet.PermissionPolicy, b.ko.Spec.RowLevelPermissionDataSet.PermissionPolicy)
-		} else if a.ko.Spec.RowLevelPermissionDataSet.PermissionPolicy != nil && b.ko.Spec.RowLevelPermissionDataSet.PermissionPolicy != nil {
-			if *a.ko.Spec.RowLevelPermissionDataSet.PermissionPolicy != *b.ko.Spec.RowLevelPermissionDataSet.PermissionPolicy {
-				delta.Add("Spec.RowLevelPermissionDataSet.PermissionPolicy", a.ko.Spec.RowLevelPermissionDataSet.PermissionPolicy, b.ko.Spec.RowLevelPermissionDataSet.PermissionPolicy)
-			}
-		}
-		if ackcompare.HasNilDifference(a.ko.Spec.RowLevelPermissionDataSet.Status, b.ko.Spec.RowLevelPermissionDataSet.Status) {
-			delta.Add("Spec.RowLevelPermissionDataSet.Status", a.ko.Spec.RowLevelPermissionDataSet.Status, b.ko.Spec.RowLevelPermissionDataSet.Status)
-		} else if a.ko.Spec.RowLevelPermissionDataSet.Status != nil && b.ko.Spec.RowLevelPermissionDataSet.Status != nil {
-			if *a.ko.Spec.RowLevelPermissionDataSet.Status != *b.ko.Spec.RowLevelPermissionDataSet.Status {
-				delta.Add("Spec.RowLevelPermissionDataSet.Status", a.ko.Spec.RowLevelPermissionDataSet.Status, b.ko.Spec.RowLevelPermissionDataSet.Status)
-			}
-		}
-	}
-	if ackcompare.HasNilDifference(a.ko.Spec.RowLevelPermissionTagConfiguration, b.ko.Spec.RowLevelPermissionTagConfiguration) {
-		delta.Add("Spec.RowLevelPermissionTagConfiguration", a.ko.Spec.RowLevelPermissionTagConfiguration, b.ko.Spec.RowLevelPermissionTagConfiguration)
-	} else if a.ko.Spec.RowLevelPermissionTagConfiguration != nil && b.ko.Spec.RowLevelPermissionTagConfiguration != nil {
-		if ackcompare.HasNilDifference(a.ko.Spec.RowLevelPermissionTagConfiguration.Status, b.ko.Spec.RowLevelPermissionTagConfiguration.Status) {
-			delta.Add("Spec.RowLevelPermissionTagConfiguration.Status", a.ko.Spec.RowLevelPermissionTagConfiguration.Status, b.ko.Spec.RowLevelPermissionTagConfiguration.Status)
-		} else if a.ko.Spec.RowLevelPermissionTagConfiguration.Status != nil && b.ko.Spec.RowLevelPermissionTagConfiguration.Status != nil {
-			if *a.ko.Spec.RowLevelPermissionTagConfiguration.Status != *b.ko.Spec.RowLevelPermissionTagConfiguration.Status {
-				delta.Add("Spec.RowLevelPermissionTagConfiguration.Status", a.ko.Spec.RowLevelPermissionTagConfiguration.Status, b.ko.Spec.RowLevelPermissionTagConfiguration.Status)
-			}
-		}
-		if len(a.ko.Spec.RowLevelPermissionTagConfiguration.TagRuleConfigurations) != len(b.ko.Spec.RowLevelPermissionTagConfiguration.TagRuleConfigurations) {
-			delta.Add("Spec.RowLevelPermissionTagConfiguration.TagRuleConfigurations", a.ko.Spec.RowLevelPermissionTagConfiguration.TagRuleConfigurations, b.ko.Spec.RowLevelPermissionTagConfiguration.TagRuleConfigurations)
-		} else if len(a.ko.Spec.RowLevelPermissionTagConfiguration.TagRuleConfigurations) > 0 {
-			if !equality.Semantic.Equalities.DeepEqual(a.ko.Spec.RowLevelPermissionTagConfiguration.TagRuleConfigurations, b.ko.Spec.RowLevelPermissionTagConfiguration.TagRuleConfigurations) {
-				delta.Add("Spec.RowLevelPermissionTagConfiguration.TagRuleConfigurations", a.ko.Spec.RowLevelPermissionTagConfiguration.TagRuleConfigurations, b.ko.Spec.RowLevelPermissionTagConfiguration.TagRuleConfigurations)
-			}
-		}
-		if len(a.ko.Spec.RowLevelPermissionTagConfiguration.TagRules) != len(b.ko.Spec.RowLevelPermissionTagConfiguration.TagRules) {
-			delta.Add("Spec.RowLevelPermissionTagConfiguration.TagRules", a.ko.Spec.RowLevelPermissionTagConfiguration.TagRules, b.ko.Spec.RowLevelPermissionTagConfiguration.TagRules)
-		} else if len(a.ko.Spec.RowLevelPermissionTagConfiguration.TagRules) > 0 {
-			if !equality.Semantic.Equalities.DeepEqual(a.ko.Spec.RowLevelPermissionTagConfiguration.TagRules, b.ko.Spec.RowLevelPermissionTagConfiguration.TagRules) {
-				delta.Add("Spec.RowLevelPermissionTagConfiguration.TagRules", a.ko.Spec.RowLevelPermissionTagConfiguration.TagRules, b.ko.Spec.RowLevelPermissionTagConfiguration.TagRules)
-			}
 		}
 	}
 	if ackcompare.HasNilDifference(a.ko.Spec.SemanticModelConfiguration, b.ko.Spec.SemanticModelConfiguration) {

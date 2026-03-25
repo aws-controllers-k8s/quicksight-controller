@@ -965,392 +965,6 @@ func (rm *resourceManager) sdkFind(
 	} else {
 		ko.Status.LastUpdatedTime = nil
 	}
-	if resp.DataSet.LogicalTableMap != nil {
-		f12 := map[string]*svcapitypes.LogicalTable{}
-		for f12key, f12valiter := range resp.DataSet.LogicalTableMap {
-			f12val := &svcapitypes.LogicalTable{}
-			if f12valiter.Alias != nil {
-				f12val.Alias = f12valiter.Alias
-			}
-			if f12valiter.DataTransforms != nil {
-				f12valf1 := []*svcapitypes.TransformOperation{}
-				for _, f12valf1iter := range f12valiter.DataTransforms {
-					f12valf1elem := &svcapitypes.TransformOperation{}
-					switch f12valf1iter.(type) {
-					case *svcsdktypes.TransformOperationMemberCastColumnTypeOperation:
-						f12valf1elemf0 := f12valf1iter.(*svcsdktypes.TransformOperationMemberCastColumnTypeOperation)
-						if f12valf1elemf0 != nil {
-							f12valf1elemf0f0 := &svcapitypes.CastColumnTypeOperation{}
-							if f12valf1elemf0.Value.ColumnName != nil {
-								f12valf1elemf0f0.ColumnName = f12valf1elemf0.Value.ColumnName
-							}
-							if f12valf1elemf0.Value.Format != nil {
-								f12valf1elemf0f0.Format = f12valf1elemf0.Value.Format
-							}
-							if f12valf1elemf0.Value.NewColumnType != "" {
-								f12valf1elemf0f0.NewColumnType = aws.String(string(f12valf1elemf0.Value.NewColumnType))
-							}
-							if f12valf1elemf0.Value.SubType != "" {
-								f12valf1elemf0f0.SubType = aws.String(string(f12valf1elemf0.Value.SubType))
-							}
-							f12valf1elem.CastColumnTypeOperation = f12valf1elemf0f0
-						}
-					case *svcsdktypes.TransformOperationMemberCreateColumnsOperation:
-						f12valf1elemf1 := f12valf1iter.(*svcsdktypes.TransformOperationMemberCreateColumnsOperation)
-						if f12valf1elemf1 != nil {
-							f12valf1elemf1f1 := &svcapitypes.CreateColumnsOperation{}
-							if f12valf1elemf1.Value.Alias != nil {
-								f12valf1elemf1f1.Alias = f12valf1elemf1.Value.Alias
-							}
-							if f12valf1elemf1.Value.Columns != nil {
-								f12valf1elemf1f1f1 := []*svcapitypes.CalculatedColumn{}
-								for _, f12valf1elemf1f1f1iter := range f12valf1elemf1.Value.Columns {
-									f12valf1elemf1f1f1elem := &svcapitypes.CalculatedColumn{}
-									if f12valf1elemf1f1f1iter.ColumnId != nil {
-										f12valf1elemf1f1f1elem.ColumnID = f12valf1elemf1f1f1iter.ColumnId
-									}
-									if f12valf1elemf1f1f1iter.ColumnName != nil {
-										f12valf1elemf1f1f1elem.ColumnName = f12valf1elemf1f1f1iter.ColumnName
-									}
-									if f12valf1elemf1f1f1iter.Expression != nil {
-										f12valf1elemf1f1f1elem.Expression = f12valf1elemf1f1f1iter.Expression
-									}
-									f12valf1elemf1f1f1 = append(f12valf1elemf1f1f1, f12valf1elemf1f1f1elem)
-								}
-								f12valf1elemf1f1.Columns = f12valf1elemf1f1f1
-							}
-							if f12valf1elemf1.Value.Source != nil {
-								f12valf1elemf1f1f2 := &svcapitypes.TransformOperationSource{}
-								if f12valf1elemf1.Value.Source.ColumnIdMappings != nil {
-									f12valf1elemf1f1f2f0 := []*svcapitypes.DataSetColumnIDMapping{}
-									for _, f12valf1elemf1f1f2f0iter := range f12valf1elemf1.Value.Source.ColumnIdMappings {
-										f12valf1elemf1f1f2f0elem := &svcapitypes.DataSetColumnIDMapping{}
-										if f12valf1elemf1f1f2f0iter.SourceColumnId != nil {
-											f12valf1elemf1f1f2f0elem.SourceColumnID = f12valf1elemf1f1f2f0iter.SourceColumnId
-										}
-										if f12valf1elemf1f1f2f0iter.TargetColumnId != nil {
-											f12valf1elemf1f1f2f0elem.TargetColumnID = f12valf1elemf1f1f2f0iter.TargetColumnId
-										}
-										f12valf1elemf1f1f2f0 = append(f12valf1elemf1f1f2f0, f12valf1elemf1f1f2f0elem)
-									}
-									f12valf1elemf1f1f2.ColumnIDMappings = f12valf1elemf1f1f2f0
-								}
-								if f12valf1elemf1.Value.Source.TransformOperationId != nil {
-									f12valf1elemf1f1f2.TransformOperationID = f12valf1elemf1.Value.Source.TransformOperationId
-								}
-								f12valf1elemf1f1.Source = f12valf1elemf1f1f2
-							}
-							f12valf1elem.CreateColumnsOperation = f12valf1elemf1f1
-						}
-					case *svcsdktypes.TransformOperationMemberFilterOperation:
-						f12valf1elemf2 := f12valf1iter.(*svcsdktypes.TransformOperationMemberFilterOperation)
-						if f12valf1elemf2 != nil {
-							f12valf1elemf2f2 := &svcapitypes.FilterOperation{}
-							if f12valf1elemf2.Value.ConditionExpression != nil {
-								f12valf1elemf2f2.ConditionExpression = f12valf1elemf2.Value.ConditionExpression
-							}
-							if f12valf1elemf2.Value.DateFilterCondition != nil {
-								f12valf1elemf2f2f1 := &svcapitypes.DataSetDateFilterCondition{}
-								if f12valf1elemf2.Value.DateFilterCondition.ColumnName != nil {
-									f12valf1elemf2f2f1.ColumnName = f12valf1elemf2.Value.DateFilterCondition.ColumnName
-								}
-								if f12valf1elemf2.Value.DateFilterCondition.ComparisonFilterCondition != nil {
-									f12valf1elemf2f2f1f1 := &svcapitypes.DataSetDateComparisonFilterCondition{}
-									if f12valf1elemf2.Value.DateFilterCondition.ComparisonFilterCondition.Operator != "" {
-										f12valf1elemf2f2f1f1.Operator = aws.String(string(f12valf1elemf2.Value.DateFilterCondition.ComparisonFilterCondition.Operator))
-									}
-									if f12valf1elemf2.Value.DateFilterCondition.ComparisonFilterCondition.Value != nil {
-										f12valf1elemf2f2f1f1f1 := &svcapitypes.DataSetDateFilterValue{}
-										if f12valf1elemf2.Value.DateFilterCondition.ComparisonFilterCondition.Value.StaticValue != nil {
-											f12valf1elemf2f2f1f1f1.StaticValue = &metav1.Time{*f12valf1elemf2.Value.DateFilterCondition.ComparisonFilterCondition.Value.StaticValue}
-										}
-										f12valf1elemf2f2f1f1.Value = f12valf1elemf2f2f1f1f1
-									}
-									f12valf1elemf2f2f1.ComparisonFilterCondition = f12valf1elemf2f2f1f1
-								}
-								if f12valf1elemf2.Value.DateFilterCondition.RangeFilterCondition != nil {
-									f12valf1elemf2f2f1f2 := &svcapitypes.DataSetDateRangeFilterCondition{}
-									if f12valf1elemf2.Value.DateFilterCondition.RangeFilterCondition.IncludeMaximum != nil {
-										f12valf1elemf2f2f1f2.IncludeMaximum = f12valf1elemf2.Value.DateFilterCondition.RangeFilterCondition.IncludeMaximum
-									}
-									if f12valf1elemf2.Value.DateFilterCondition.RangeFilterCondition.IncludeMinimum != nil {
-										f12valf1elemf2f2f1f2.IncludeMinimum = f12valf1elemf2.Value.DateFilterCondition.RangeFilterCondition.IncludeMinimum
-									}
-									if f12valf1elemf2.Value.DateFilterCondition.RangeFilterCondition.RangeMaximum != nil {
-										f12valf1elemf2f2f1f2f2 := &svcapitypes.DataSetDateFilterValue{}
-										if f12valf1elemf2.Value.DateFilterCondition.RangeFilterCondition.RangeMaximum.StaticValue != nil {
-											f12valf1elemf2f2f1f2f2.StaticValue = &metav1.Time{*f12valf1elemf2.Value.DateFilterCondition.RangeFilterCondition.RangeMaximum.StaticValue}
-										}
-										f12valf1elemf2f2f1f2.RangeMaximum = f12valf1elemf2f2f1f2f2
-									}
-									if f12valf1elemf2.Value.DateFilterCondition.RangeFilterCondition.RangeMinimum != nil {
-										f12valf1elemf2f2f1f2f3 := &svcapitypes.DataSetDateFilterValue{}
-										if f12valf1elemf2.Value.DateFilterCondition.RangeFilterCondition.RangeMinimum.StaticValue != nil {
-											f12valf1elemf2f2f1f2f3.StaticValue = &metav1.Time{*f12valf1elemf2.Value.DateFilterCondition.RangeFilterCondition.RangeMinimum.StaticValue}
-										}
-										f12valf1elemf2f2f1f2.RangeMinimum = f12valf1elemf2f2f1f2f3
-									}
-									f12valf1elemf2f2f1.RangeFilterCondition = f12valf1elemf2f2f1f2
-								}
-								f12valf1elemf2f2.DateFilterCondition = f12valf1elemf2f2f1
-							}
-							if f12valf1elemf2.Value.NumericFilterCondition != nil {
-								f12valf1elemf2f2f2 := &svcapitypes.DataSetNumericFilterCondition{}
-								if f12valf1elemf2.Value.NumericFilterCondition.ColumnName != nil {
-									f12valf1elemf2f2f2.ColumnName = f12valf1elemf2.Value.NumericFilterCondition.ColumnName
-								}
-								if f12valf1elemf2.Value.NumericFilterCondition.ComparisonFilterCondition != nil {
-									f12valf1elemf2f2f2f1 := &svcapitypes.DataSetNumericComparisonFilterCondition{}
-									if f12valf1elemf2.Value.NumericFilterCondition.ComparisonFilterCondition.Operator != "" {
-										f12valf1elemf2f2f2f1.Operator = aws.String(string(f12valf1elemf2.Value.NumericFilterCondition.ComparisonFilterCondition.Operator))
-									}
-									if f12valf1elemf2.Value.NumericFilterCondition.ComparisonFilterCondition.Value != nil {
-										f12valf1elemf2f2f2f1f1 := &svcapitypes.DataSetNumericFilterValue{}
-										if f12valf1elemf2.Value.NumericFilterCondition.ComparisonFilterCondition.Value.StaticValue != nil {
-											f12valf1elemf2f2f2f1f1.StaticValue = f12valf1elemf2.Value.NumericFilterCondition.ComparisonFilterCondition.Value.StaticValue
-										}
-										f12valf1elemf2f2f2f1.Value = f12valf1elemf2f2f2f1f1
-									}
-									f12valf1elemf2f2f2.ComparisonFilterCondition = f12valf1elemf2f2f2f1
-								}
-								if f12valf1elemf2.Value.NumericFilterCondition.RangeFilterCondition != nil {
-									f12valf1elemf2f2f2f2 := &svcapitypes.DataSetNumericRangeFilterCondition{}
-									if f12valf1elemf2.Value.NumericFilterCondition.RangeFilterCondition.IncludeMaximum != nil {
-										f12valf1elemf2f2f2f2.IncludeMaximum = f12valf1elemf2.Value.NumericFilterCondition.RangeFilterCondition.IncludeMaximum
-									}
-									if f12valf1elemf2.Value.NumericFilterCondition.RangeFilterCondition.IncludeMinimum != nil {
-										f12valf1elemf2f2f2f2.IncludeMinimum = f12valf1elemf2.Value.NumericFilterCondition.RangeFilterCondition.IncludeMinimum
-									}
-									if f12valf1elemf2.Value.NumericFilterCondition.RangeFilterCondition.RangeMaximum != nil {
-										f12valf1elemf2f2f2f2f2 := &svcapitypes.DataSetNumericFilterValue{}
-										if f12valf1elemf2.Value.NumericFilterCondition.RangeFilterCondition.RangeMaximum.StaticValue != nil {
-											f12valf1elemf2f2f2f2f2.StaticValue = f12valf1elemf2.Value.NumericFilterCondition.RangeFilterCondition.RangeMaximum.StaticValue
-										}
-										f12valf1elemf2f2f2f2.RangeMaximum = f12valf1elemf2f2f2f2f2
-									}
-									if f12valf1elemf2.Value.NumericFilterCondition.RangeFilterCondition.RangeMinimum != nil {
-										f12valf1elemf2f2f2f2f3 := &svcapitypes.DataSetNumericFilterValue{}
-										if f12valf1elemf2.Value.NumericFilterCondition.RangeFilterCondition.RangeMinimum.StaticValue != nil {
-											f12valf1elemf2f2f2f2f3.StaticValue = f12valf1elemf2.Value.NumericFilterCondition.RangeFilterCondition.RangeMinimum.StaticValue
-										}
-										f12valf1elemf2f2f2f2.RangeMinimum = f12valf1elemf2f2f2f2f3
-									}
-									f12valf1elemf2f2f2.RangeFilterCondition = f12valf1elemf2f2f2f2
-								}
-								f12valf1elemf2f2.NumericFilterCondition = f12valf1elemf2f2f2
-							}
-							if f12valf1elemf2.Value.StringFilterCondition != nil {
-								f12valf1elemf2f2f3 := &svcapitypes.DataSetStringFilterCondition{}
-								if f12valf1elemf2.Value.StringFilterCondition.ColumnName != nil {
-									f12valf1elemf2f2f3.ColumnName = f12valf1elemf2.Value.StringFilterCondition.ColumnName
-								}
-								if f12valf1elemf2.Value.StringFilterCondition.ComparisonFilterCondition != nil {
-									f12valf1elemf2f2f3f1 := &svcapitypes.DataSetStringComparisonFilterCondition{}
-									if f12valf1elemf2.Value.StringFilterCondition.ComparisonFilterCondition.Operator != "" {
-										f12valf1elemf2f2f3f1.Operator = aws.String(string(f12valf1elemf2.Value.StringFilterCondition.ComparisonFilterCondition.Operator))
-									}
-									if f12valf1elemf2.Value.StringFilterCondition.ComparisonFilterCondition.Value != nil {
-										f12valf1elemf2f2f3f1f1 := &svcapitypes.DataSetStringFilterValue{}
-										if f12valf1elemf2.Value.StringFilterCondition.ComparisonFilterCondition.Value.StaticValue != nil {
-											f12valf1elemf2f2f3f1f1.StaticValue = f12valf1elemf2.Value.StringFilterCondition.ComparisonFilterCondition.Value.StaticValue
-										}
-										f12valf1elemf2f2f3f1.Value = f12valf1elemf2f2f3f1f1
-									}
-									f12valf1elemf2f2f3.ComparisonFilterCondition = f12valf1elemf2f2f3f1
-								}
-								if f12valf1elemf2.Value.StringFilterCondition.ListFilterCondition != nil {
-									f12valf1elemf2f2f3f2 := &svcapitypes.DataSetStringListFilterCondition{}
-									if f12valf1elemf2.Value.StringFilterCondition.ListFilterCondition.Operator != "" {
-										f12valf1elemf2f2f3f2.Operator = aws.String(string(f12valf1elemf2.Value.StringFilterCondition.ListFilterCondition.Operator))
-									}
-									if f12valf1elemf2.Value.StringFilterCondition.ListFilterCondition.Values != nil {
-										f12valf1elemf2f2f3f2f1 := &svcapitypes.DataSetStringListFilterValue{}
-										if f12valf1elemf2.Value.StringFilterCondition.ListFilterCondition.Values.StaticValues != nil {
-											f12valf1elemf2f2f3f2f1.StaticValues = aws.StringSlice(f12valf1elemf2.Value.StringFilterCondition.ListFilterCondition.Values.StaticValues)
-										}
-										f12valf1elemf2f2f3f2.Values = f12valf1elemf2f2f3f2f1
-									}
-									f12valf1elemf2f2f3.ListFilterCondition = f12valf1elemf2f2f3f2
-								}
-								f12valf1elemf2f2.StringFilterCondition = f12valf1elemf2f2f3
-							}
-							f12valf1elem.FilterOperation = f12valf1elemf2f2
-						}
-					case *svcsdktypes.TransformOperationMemberOverrideDatasetParameterOperation:
-						f12valf1elemf3 := f12valf1iter.(*svcsdktypes.TransformOperationMemberOverrideDatasetParameterOperation)
-						if f12valf1elemf3 != nil {
-							f12valf1elemf3f3 := &svcapitypes.OverrideDatasetParameterOperation{}
-							if f12valf1elemf3.Value.NewDefaultValues != nil {
-								f12valf1elemf3f3f0 := &svcapitypes.NewDefaultValues{}
-								if f12valf1elemf3.Value.NewDefaultValues.DateTimeStaticValues != nil {
-									f12valf1elemf3f3f0f0 := []metav1.Time{}
-									for _, f12valf1elemf3f3f0f0iter := range f12valf1elemf3.Value.NewDefaultValues.DateTimeStaticValues {
-										var f12valf1elemf3f3f0f0elem metav1.Time
-										f12valf1elemf3f3f0f0elem = metav1.Time{f12valf1elemf3f3f0f0iter}
-										f12valf1elemf3f3f0f0 = append(f12valf1elemf3f3f0f0, f12valf1elemf3f3f0f0elem)
-									}
-									f12valf1elemf3f3f0.DateTimeStaticValues = f12valf1elemf3f3f0f0
-								}
-								if f12valf1elemf3.Value.NewDefaultValues.DecimalStaticValues != nil {
-									f12valf1elemf3f3f0.DecimalStaticValues = aws.Float64Slice(f12valf1elemf3.Value.NewDefaultValues.DecimalStaticValues)
-								}
-								if f12valf1elemf3.Value.NewDefaultValues.IntegerStaticValues != nil {
-									f12valf1elemf3f3f0.IntegerStaticValues = aws.Int64Slice(f12valf1elemf3.Value.NewDefaultValues.IntegerStaticValues)
-								}
-								if f12valf1elemf3.Value.NewDefaultValues.StringStaticValues != nil {
-									f12valf1elemf3f3f0.StringStaticValues = aws.StringSlice(f12valf1elemf3.Value.NewDefaultValues.StringStaticValues)
-								}
-								f12valf1elemf3f3.NewDefaultValues = f12valf1elemf3f3f0
-							}
-							if f12valf1elemf3.Value.NewParameterName != nil {
-								f12valf1elemf3f3.NewParameterName = f12valf1elemf3.Value.NewParameterName
-							}
-							if f12valf1elemf3.Value.ParameterName != nil {
-								f12valf1elemf3f3.ParameterName = f12valf1elemf3.Value.ParameterName
-							}
-							f12valf1elem.OverrideDatasetParameterOperation = f12valf1elemf3f3
-						}
-					case *svcsdktypes.TransformOperationMemberProjectOperation:
-						f12valf1elemf4 := f12valf1iter.(*svcsdktypes.TransformOperationMemberProjectOperation)
-						if f12valf1elemf4 != nil {
-							f12valf1elemf4f4 := &svcapitypes.ProjectOperation{}
-							if f12valf1elemf4.Value.Alias != nil {
-								f12valf1elemf4f4.Alias = f12valf1elemf4.Value.Alias
-							}
-							if f12valf1elemf4.Value.ProjectedColumns != nil {
-								f12valf1elemf4f4.ProjectedColumns = aws.StringSlice(f12valf1elemf4.Value.ProjectedColumns)
-							}
-							if f12valf1elemf4.Value.Source != nil {
-								f12valf1elemf4f4f2 := &svcapitypes.TransformOperationSource{}
-								if f12valf1elemf4.Value.Source.ColumnIdMappings != nil {
-									f12valf1elemf4f4f2f0 := []*svcapitypes.DataSetColumnIDMapping{}
-									for _, f12valf1elemf4f4f2f0iter := range f12valf1elemf4.Value.Source.ColumnIdMappings {
-										f12valf1elemf4f4f2f0elem := &svcapitypes.DataSetColumnIDMapping{}
-										if f12valf1elemf4f4f2f0iter.SourceColumnId != nil {
-											f12valf1elemf4f4f2f0elem.SourceColumnID = f12valf1elemf4f4f2f0iter.SourceColumnId
-										}
-										if f12valf1elemf4f4f2f0iter.TargetColumnId != nil {
-											f12valf1elemf4f4f2f0elem.TargetColumnID = f12valf1elemf4f4f2f0iter.TargetColumnId
-										}
-										f12valf1elemf4f4f2f0 = append(f12valf1elemf4f4f2f0, f12valf1elemf4f4f2f0elem)
-									}
-									f12valf1elemf4f4f2.ColumnIDMappings = f12valf1elemf4f4f2f0
-								}
-								if f12valf1elemf4.Value.Source.TransformOperationId != nil {
-									f12valf1elemf4f4f2.TransformOperationID = f12valf1elemf4.Value.Source.TransformOperationId
-								}
-								f12valf1elemf4f4.Source = f12valf1elemf4f4f2
-							}
-							f12valf1elem.ProjectOperation = f12valf1elemf4f4
-						}
-					case *svcsdktypes.TransformOperationMemberRenameColumnOperation:
-						f12valf1elemf5 := f12valf1iter.(*svcsdktypes.TransformOperationMemberRenameColumnOperation)
-						if f12valf1elemf5 != nil {
-							f12valf1elemf5f5 := &svcapitypes.RenameColumnOperation{}
-							if f12valf1elemf5.Value.ColumnName != nil {
-								f12valf1elemf5f5.ColumnName = f12valf1elemf5.Value.ColumnName
-							}
-							if f12valf1elemf5.Value.NewColumnName != nil {
-								f12valf1elemf5f5.NewColumnName = f12valf1elemf5.Value.NewColumnName
-							}
-							f12valf1elem.RenameColumnOperation = f12valf1elemf5f5
-						}
-					case *svcsdktypes.TransformOperationMemberTagColumnOperation:
-						f12valf1elemf6 := f12valf1iter.(*svcsdktypes.TransformOperationMemberTagColumnOperation)
-						if f12valf1elemf6 != nil {
-							f12valf1elemf6f6 := &svcapitypes.TagColumnOperation{}
-							if f12valf1elemf6.Value.ColumnName != nil {
-								f12valf1elemf6f6.ColumnName = f12valf1elemf6.Value.ColumnName
-							}
-							if f12valf1elemf6.Value.Tags != nil {
-								f12valf1elemf6f6f1 := []*svcapitypes.ColumnTag{}
-								for _, f12valf1elemf6f6f1iter := range f12valf1elemf6.Value.Tags {
-									f12valf1elemf6f6f1elem := &svcapitypes.ColumnTag{}
-									if f12valf1elemf6f6f1iter.ColumnDescription != nil {
-										f12valf1elemf6f6f1elemf0 := &svcapitypes.ColumnDescription{}
-										if f12valf1elemf6f6f1iter.ColumnDescription.Text != nil {
-											f12valf1elemf6f6f1elemf0.Text = f12valf1elemf6f6f1iter.ColumnDescription.Text
-										}
-										f12valf1elemf6f6f1elem.ColumnDescription = f12valf1elemf6f6f1elemf0
-									}
-									if f12valf1elemf6f6f1iter.ColumnGeographicRole != "" {
-										f12valf1elemf6f6f1elem.ColumnGeographicRole = aws.String(string(f12valf1elemf6f6f1iter.ColumnGeographicRole))
-									}
-									f12valf1elemf6f6f1 = append(f12valf1elemf6f6f1, f12valf1elemf6f6f1elem)
-								}
-								f12valf1elemf6f6.Tags = f12valf1elemf6f6f1
-							}
-							f12valf1elem.TagColumnOperation = f12valf1elemf6f6
-						}
-					case *svcsdktypes.TransformOperationMemberUntagColumnOperation:
-						f12valf1elemf7 := f12valf1iter.(*svcsdktypes.TransformOperationMemberUntagColumnOperation)
-						if f12valf1elemf7 != nil {
-							f12valf1elemf7f7 := &svcapitypes.UntagColumnOperation{}
-							if f12valf1elemf7.Value.ColumnName != nil {
-								f12valf1elemf7f7.ColumnName = f12valf1elemf7.Value.ColumnName
-							}
-							if f12valf1elemf7.Value.TagNames != nil {
-								f12valf1elemf7f7f1 := []*string{}
-								for _, f12valf1elemf7f7f1iter := range f12valf1elemf7.Value.TagNames {
-									var f12valf1elemf7f7f1elem *string
-									f12valf1elemf7f7f1elem = aws.String(string(f12valf1elemf7f7f1iter))
-									f12valf1elemf7f7f1 = append(f12valf1elemf7f7f1, f12valf1elemf7f7f1elem)
-								}
-								f12valf1elemf7f7.TagNames = f12valf1elemf7f7f1
-							}
-							f12valf1elem.UntagColumnOperation = f12valf1elemf7f7
-						}
-					}
-					f12valf1 = append(f12valf1, f12valf1elem)
-				}
-				f12val.DataTransforms = f12valf1
-			}
-			if f12valiter.Source != nil {
-				f12valf2 := &svcapitypes.LogicalTableSource{}
-				if f12valiter.Source.DataSetArn != nil {
-					f12valf2.DataSetARN = f12valiter.Source.DataSetArn
-				}
-				if f12valiter.Source.JoinInstruction != nil {
-					f12valf2f1 := &svcapitypes.JoinInstruction{}
-					if f12valiter.Source.JoinInstruction.LeftJoinKeyProperties != nil {
-						f12valf2f1f0 := &svcapitypes.JoinKeyProperties{}
-						if f12valiter.Source.JoinInstruction.LeftJoinKeyProperties.UniqueKey != nil {
-							f12valf2f1f0.UniqueKey = f12valiter.Source.JoinInstruction.LeftJoinKeyProperties.UniqueKey
-						}
-						f12valf2f1.LeftJoinKeyProperties = f12valf2f1f0
-					}
-					if f12valiter.Source.JoinInstruction.LeftOperand != nil {
-						f12valf2f1.LeftOperand = f12valiter.Source.JoinInstruction.LeftOperand
-					}
-					if f12valiter.Source.JoinInstruction.OnClause != nil {
-						f12valf2f1.OnClause = f12valiter.Source.JoinInstruction.OnClause
-					}
-					if f12valiter.Source.JoinInstruction.RightJoinKeyProperties != nil {
-						f12valf2f1f3 := &svcapitypes.JoinKeyProperties{}
-						if f12valiter.Source.JoinInstruction.RightJoinKeyProperties.UniqueKey != nil {
-							f12valf2f1f3.UniqueKey = f12valiter.Source.JoinInstruction.RightJoinKeyProperties.UniqueKey
-						}
-						f12valf2f1.RightJoinKeyProperties = f12valf2f1f3
-					}
-					if f12valiter.Source.JoinInstruction.RightOperand != nil {
-						f12valf2f1.RightOperand = f12valiter.Source.JoinInstruction.RightOperand
-					}
-					if f12valiter.Source.JoinInstruction.Type != "" {
-						f12valf2f1.Type = aws.String(string(f12valiter.Source.JoinInstruction.Type))
-					}
-					f12valf2.JoinInstruction = f12valf2f1
-				}
-				if f12valiter.Source.PhysicalTableId != nil {
-					f12valf2.PhysicalTableID = f12valiter.Source.PhysicalTableId
-				}
-				f12val.Source = f12valf2
-			}
-			f12[f12key] = f12val
-		}
-		ko.Spec.LogicalTableMap = f12
-	} else {
-		ko.Spec.LogicalTableMap = nil
-	}
 	if resp.DataSet.Name != nil {
 		ko.Spec.Name = resp.DataSet.Name
 	} else {
@@ -1577,64 +1191,6 @@ func (rm *resourceManager) sdkFind(
 		ko.Spec.PhysicalTableMap = f16
 	} else {
 		ko.Spec.PhysicalTableMap = nil
-	}
-	if resp.DataSet.RowLevelPermissionDataSet != nil {
-		f17 := &svcapitypes.RowLevelPermissionDataSet{}
-		if resp.DataSet.RowLevelPermissionDataSet.Arn != nil {
-			f17.ARN = resp.DataSet.RowLevelPermissionDataSet.Arn
-		}
-		if resp.DataSet.RowLevelPermissionDataSet.FormatVersion != "" {
-			f17.FormatVersion = aws.String(string(resp.DataSet.RowLevelPermissionDataSet.FormatVersion))
-		}
-		if resp.DataSet.RowLevelPermissionDataSet.Namespace != nil {
-			f17.Namespace = resp.DataSet.RowLevelPermissionDataSet.Namespace
-		}
-		if resp.DataSet.RowLevelPermissionDataSet.PermissionPolicy != "" {
-			f17.PermissionPolicy = aws.String(string(resp.DataSet.RowLevelPermissionDataSet.PermissionPolicy))
-		}
-		if resp.DataSet.RowLevelPermissionDataSet.Status != "" {
-			f17.Status = aws.String(string(resp.DataSet.RowLevelPermissionDataSet.Status))
-		}
-		ko.Spec.RowLevelPermissionDataSet = f17
-	} else {
-		ko.Spec.RowLevelPermissionDataSet = nil
-	}
-	if resp.DataSet.RowLevelPermissionTagConfiguration != nil {
-		f18 := &svcapitypes.RowLevelPermissionTagConfiguration{}
-		if resp.DataSet.RowLevelPermissionTagConfiguration.Status != "" {
-			f18.Status = aws.String(string(resp.DataSet.RowLevelPermissionTagConfiguration.Status))
-		}
-		if resp.DataSet.RowLevelPermissionTagConfiguration.TagRuleConfigurations != nil {
-			f18f1 := [][]*string{}
-			for _, f18f1iter := range resp.DataSet.RowLevelPermissionTagConfiguration.TagRuleConfigurations {
-				f18f1elem := aws.StringSlice(f18f1iter)
-				f18f1 = append(f18f1, f18f1elem)
-			}
-			f18.TagRuleConfigurations = f18f1
-		}
-		if resp.DataSet.RowLevelPermissionTagConfiguration.TagRules != nil {
-			f18f2 := []*svcapitypes.RowLevelPermissionTagRule{}
-			for _, f18f2iter := range resp.DataSet.RowLevelPermissionTagConfiguration.TagRules {
-				f18f2elem := &svcapitypes.RowLevelPermissionTagRule{}
-				if f18f2iter.ColumnName != nil {
-					f18f2elem.ColumnName = f18f2iter.ColumnName
-				}
-				if f18f2iter.MatchAllValue != nil {
-					f18f2elem.MatchAllValue = f18f2iter.MatchAllValue
-				}
-				if f18f2iter.TagKey != nil {
-					f18f2elem.TagKey = f18f2iter.TagKey
-				}
-				if f18f2iter.TagMultiValueDelimiter != nil {
-					f18f2elem.TagMultiValueDelimiter = f18f2iter.TagMultiValueDelimiter
-				}
-				f18f2 = append(f18f2, f18f2elem)
-			}
-			f18.TagRules = f18f2
-		}
-		ko.Spec.RowLevelPermissionTagConfiguration = f18
-	} else {
-		ko.Spec.RowLevelPermissionTagConfiguration = nil
 	}
 	if resp.DataSet.SemanticModelConfiguration != nil {
 		f19 := &svcapitypes.SemanticModelConfiguration{}
@@ -2785,799 +2341,324 @@ func (rm *resourceManager) newCreateRequestPayload(
 	if r.ko.Spec.ImportMode != nil {
 		res.ImportMode = svcsdktypes.DataSetImportMode(*r.ko.Spec.ImportMode)
 	}
-	if r.ko.Spec.LogicalTableMap != nil {
-		f10 := map[string]svcsdktypes.LogicalTable{}
-		for f10key, f10valiter := range r.ko.Spec.LogicalTableMap {
-			f10val := &svcsdktypes.LogicalTable{}
-			if f10valiter.Alias != nil {
-				f10val.Alias = f10valiter.Alias
-			}
-			if f10valiter.DataTransforms != nil {
-				f10valf1 := []svcsdktypes.TransformOperation{}
-				for _, f10valf1iter := range f10valiter.DataTransforms {
-					var f10valf1elem svcsdktypes.TransformOperation
-					isInterfaceSet := false
-					if f10valf1iter.CastColumnTypeOperation != nil {
-						if isInterfaceSet {
-							return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for CastColumnTypeOperation"))
-						}
-						f10valf1elemf0Parent := &svcsdktypes.TransformOperationMemberCastColumnTypeOperation{}
-						f10valf1elemf0 := &svcsdktypes.CastColumnTypeOperation{}
-						if f10valf1iter.CastColumnTypeOperation.ColumnName != nil {
-							f10valf1elemf0.ColumnName = f10valf1iter.CastColumnTypeOperation.ColumnName
-						}
-						if f10valf1iter.CastColumnTypeOperation.Format != nil {
-							f10valf1elemf0.Format = f10valf1iter.CastColumnTypeOperation.Format
-						}
-						if f10valf1iter.CastColumnTypeOperation.NewColumnType != nil {
-							f10valf1elemf0.NewColumnType = svcsdktypes.ColumnDataType(*f10valf1iter.CastColumnTypeOperation.NewColumnType)
-						}
-						if f10valf1iter.CastColumnTypeOperation.SubType != nil {
-							f10valf1elemf0.SubType = svcsdktypes.ColumnDataSubType(*f10valf1iter.CastColumnTypeOperation.SubType)
-						}
-						f10valf1elemf0Parent.Value = *f10valf1elemf0
-						f10valf1elem = f10valf1elemf0Parent
-						isInterfaceSet = true
-					}
-					if f10valf1iter.CreateColumnsOperation != nil {
-						if isInterfaceSet {
-							return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for CreateColumnsOperation"))
-						}
-						f10valf1elemf1Parent := &svcsdktypes.TransformOperationMemberCreateColumnsOperation{}
-						f10valf1elemf1 := &svcsdktypes.CreateColumnsOperation{}
-						if f10valf1iter.CreateColumnsOperation.Alias != nil {
-							f10valf1elemf1.Alias = f10valf1iter.CreateColumnsOperation.Alias
-						}
-						if f10valf1iter.CreateColumnsOperation.Columns != nil {
-							f10valf1elemf1f1 := []svcsdktypes.CalculatedColumn{}
-							for _, f10valf1elemf1f1iter := range f10valf1iter.CreateColumnsOperation.Columns {
-								f10valf1elemf1f1elem := &svcsdktypes.CalculatedColumn{}
-								if f10valf1elemf1f1iter.ColumnID != nil {
-									f10valf1elemf1f1elem.ColumnId = f10valf1elemf1f1iter.ColumnID
-								}
-								if f10valf1elemf1f1iter.ColumnName != nil {
-									f10valf1elemf1f1elem.ColumnName = f10valf1elemf1f1iter.ColumnName
-								}
-								if f10valf1elemf1f1iter.Expression != nil {
-									f10valf1elemf1f1elem.Expression = f10valf1elemf1f1iter.Expression
-								}
-								f10valf1elemf1f1 = append(f10valf1elemf1f1, *f10valf1elemf1f1elem)
-							}
-							f10valf1elemf1.Columns = f10valf1elemf1f1
-						}
-						if f10valf1iter.CreateColumnsOperation.Source != nil {
-							f10valf1elemf1f2 := &svcsdktypes.TransformOperationSource{}
-							if f10valf1iter.CreateColumnsOperation.Source.ColumnIDMappings != nil {
-								f10valf1elemf1f2f0 := []svcsdktypes.DataSetColumnIdMapping{}
-								for _, f10valf1elemf1f2f0iter := range f10valf1iter.CreateColumnsOperation.Source.ColumnIDMappings {
-									f10valf1elemf1f2f0elem := &svcsdktypes.DataSetColumnIdMapping{}
-									if f10valf1elemf1f2f0iter.SourceColumnID != nil {
-										f10valf1elemf1f2f0elem.SourceColumnId = f10valf1elemf1f2f0iter.SourceColumnID
-									}
-									if f10valf1elemf1f2f0iter.TargetColumnID != nil {
-										f10valf1elemf1f2f0elem.TargetColumnId = f10valf1elemf1f2f0iter.TargetColumnID
-									}
-									f10valf1elemf1f2f0 = append(f10valf1elemf1f2f0, *f10valf1elemf1f2f0elem)
-								}
-								f10valf1elemf1f2.ColumnIdMappings = f10valf1elemf1f2f0
-							}
-							if f10valf1iter.CreateColumnsOperation.Source.TransformOperationID != nil {
-								f10valf1elemf1f2.TransformOperationId = f10valf1iter.CreateColumnsOperation.Source.TransformOperationID
-							}
-							f10valf1elemf1.Source = f10valf1elemf1f2
-						}
-						f10valf1elemf1Parent.Value = *f10valf1elemf1
-						f10valf1elem = f10valf1elemf1Parent
-						isInterfaceSet = true
-					}
-					if f10valf1iter.FilterOperation != nil {
-						if isInterfaceSet {
-							return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for FilterOperation"))
-						}
-						f10valf1elemf2Parent := &svcsdktypes.TransformOperationMemberFilterOperation{}
-						f10valf1elemf2 := &svcsdktypes.FilterOperation{}
-						if f10valf1iter.FilterOperation.ConditionExpression != nil {
-							f10valf1elemf2.ConditionExpression = f10valf1iter.FilterOperation.ConditionExpression
-						}
-						if f10valf1iter.FilterOperation.DateFilterCondition != nil {
-							f10valf1elemf2f1 := &svcsdktypes.DataSetDateFilterCondition{}
-							if f10valf1iter.FilterOperation.DateFilterCondition.ColumnName != nil {
-								f10valf1elemf2f1.ColumnName = f10valf1iter.FilterOperation.DateFilterCondition.ColumnName
-							}
-							if f10valf1iter.FilterOperation.DateFilterCondition.ComparisonFilterCondition != nil {
-								f10valf1elemf2f1f1 := &svcsdktypes.DataSetDateComparisonFilterCondition{}
-								if f10valf1iter.FilterOperation.DateFilterCondition.ComparisonFilterCondition.Operator != nil {
-									f10valf1elemf2f1f1.Operator = svcsdktypes.DataSetDateComparisonFilterOperator(*f10valf1iter.FilterOperation.DateFilterCondition.ComparisonFilterCondition.Operator)
-								}
-								if f10valf1iter.FilterOperation.DateFilterCondition.ComparisonFilterCondition.Value != nil {
-									f10valf1elemf2f1f1f1 := &svcsdktypes.DataSetDateFilterValue{}
-									if f10valf1iter.FilterOperation.DateFilterCondition.ComparisonFilterCondition.Value.StaticValue != nil {
-										f10valf1elemf2f1f1f1.StaticValue = &f10valf1iter.FilterOperation.DateFilterCondition.ComparisonFilterCondition.Value.StaticValue.Time
-									}
-									f10valf1elemf2f1f1.Value = f10valf1elemf2f1f1f1
-								}
-								f10valf1elemf2f1.ComparisonFilterCondition = f10valf1elemf2f1f1
-							}
-							if f10valf1iter.FilterOperation.DateFilterCondition.RangeFilterCondition != nil {
-								f10valf1elemf2f1f2 := &svcsdktypes.DataSetDateRangeFilterCondition{}
-								if f10valf1iter.FilterOperation.DateFilterCondition.RangeFilterCondition.IncludeMaximum != nil {
-									f10valf1elemf2f1f2.IncludeMaximum = f10valf1iter.FilterOperation.DateFilterCondition.RangeFilterCondition.IncludeMaximum
-								}
-								if f10valf1iter.FilterOperation.DateFilterCondition.RangeFilterCondition.IncludeMinimum != nil {
-									f10valf1elemf2f1f2.IncludeMinimum = f10valf1iter.FilterOperation.DateFilterCondition.RangeFilterCondition.IncludeMinimum
-								}
-								if f10valf1iter.FilterOperation.DateFilterCondition.RangeFilterCondition.RangeMaximum != nil {
-									f10valf1elemf2f1f2f2 := &svcsdktypes.DataSetDateFilterValue{}
-									if f10valf1iter.FilterOperation.DateFilterCondition.RangeFilterCondition.RangeMaximum.StaticValue != nil {
-										f10valf1elemf2f1f2f2.StaticValue = &f10valf1iter.FilterOperation.DateFilterCondition.RangeFilterCondition.RangeMaximum.StaticValue.Time
-									}
-									f10valf1elemf2f1f2.RangeMaximum = f10valf1elemf2f1f2f2
-								}
-								if f10valf1iter.FilterOperation.DateFilterCondition.RangeFilterCondition.RangeMinimum != nil {
-									f10valf1elemf2f1f2f3 := &svcsdktypes.DataSetDateFilterValue{}
-									if f10valf1iter.FilterOperation.DateFilterCondition.RangeFilterCondition.RangeMinimum.StaticValue != nil {
-										f10valf1elemf2f1f2f3.StaticValue = &f10valf1iter.FilterOperation.DateFilterCondition.RangeFilterCondition.RangeMinimum.StaticValue.Time
-									}
-									f10valf1elemf2f1f2.RangeMinimum = f10valf1elemf2f1f2f3
-								}
-								f10valf1elemf2f1.RangeFilterCondition = f10valf1elemf2f1f2
-							}
-							f10valf1elemf2.DateFilterCondition = f10valf1elemf2f1
-						}
-						if f10valf1iter.FilterOperation.NumericFilterCondition != nil {
-							f10valf1elemf2f2 := &svcsdktypes.DataSetNumericFilterCondition{}
-							if f10valf1iter.FilterOperation.NumericFilterCondition.ColumnName != nil {
-								f10valf1elemf2f2.ColumnName = f10valf1iter.FilterOperation.NumericFilterCondition.ColumnName
-							}
-							if f10valf1iter.FilterOperation.NumericFilterCondition.ComparisonFilterCondition != nil {
-								f10valf1elemf2f2f1 := &svcsdktypes.DataSetNumericComparisonFilterCondition{}
-								if f10valf1iter.FilterOperation.NumericFilterCondition.ComparisonFilterCondition.Operator != nil {
-									f10valf1elemf2f2f1.Operator = svcsdktypes.DataSetNumericComparisonFilterOperator(*f10valf1iter.FilterOperation.NumericFilterCondition.ComparisonFilterCondition.Operator)
-								}
-								if f10valf1iter.FilterOperation.NumericFilterCondition.ComparisonFilterCondition.Value != nil {
-									f10valf1elemf2f2f1f1 := &svcsdktypes.DataSetNumericFilterValue{}
-									if f10valf1iter.FilterOperation.NumericFilterCondition.ComparisonFilterCondition.Value.StaticValue != nil {
-										f10valf1elemf2f2f1f1.StaticValue = f10valf1iter.FilterOperation.NumericFilterCondition.ComparisonFilterCondition.Value.StaticValue
-									}
-									f10valf1elemf2f2f1.Value = f10valf1elemf2f2f1f1
-								}
-								f10valf1elemf2f2.ComparisonFilterCondition = f10valf1elemf2f2f1
-							}
-							if f10valf1iter.FilterOperation.NumericFilterCondition.RangeFilterCondition != nil {
-								f10valf1elemf2f2f2 := &svcsdktypes.DataSetNumericRangeFilterCondition{}
-								if f10valf1iter.FilterOperation.NumericFilterCondition.RangeFilterCondition.IncludeMaximum != nil {
-									f10valf1elemf2f2f2.IncludeMaximum = f10valf1iter.FilterOperation.NumericFilterCondition.RangeFilterCondition.IncludeMaximum
-								}
-								if f10valf1iter.FilterOperation.NumericFilterCondition.RangeFilterCondition.IncludeMinimum != nil {
-									f10valf1elemf2f2f2.IncludeMinimum = f10valf1iter.FilterOperation.NumericFilterCondition.RangeFilterCondition.IncludeMinimum
-								}
-								if f10valf1iter.FilterOperation.NumericFilterCondition.RangeFilterCondition.RangeMaximum != nil {
-									f10valf1elemf2f2f2f2 := &svcsdktypes.DataSetNumericFilterValue{}
-									if f10valf1iter.FilterOperation.NumericFilterCondition.RangeFilterCondition.RangeMaximum.StaticValue != nil {
-										f10valf1elemf2f2f2f2.StaticValue = f10valf1iter.FilterOperation.NumericFilterCondition.RangeFilterCondition.RangeMaximum.StaticValue
-									}
-									f10valf1elemf2f2f2.RangeMaximum = f10valf1elemf2f2f2f2
-								}
-								if f10valf1iter.FilterOperation.NumericFilterCondition.RangeFilterCondition.RangeMinimum != nil {
-									f10valf1elemf2f2f2f3 := &svcsdktypes.DataSetNumericFilterValue{}
-									if f10valf1iter.FilterOperation.NumericFilterCondition.RangeFilterCondition.RangeMinimum.StaticValue != nil {
-										f10valf1elemf2f2f2f3.StaticValue = f10valf1iter.FilterOperation.NumericFilterCondition.RangeFilterCondition.RangeMinimum.StaticValue
-									}
-									f10valf1elemf2f2f2.RangeMinimum = f10valf1elemf2f2f2f3
-								}
-								f10valf1elemf2f2.RangeFilterCondition = f10valf1elemf2f2f2
-							}
-							f10valf1elemf2.NumericFilterCondition = f10valf1elemf2f2
-						}
-						if f10valf1iter.FilterOperation.StringFilterCondition != nil {
-							f10valf1elemf2f3 := &svcsdktypes.DataSetStringFilterCondition{}
-							if f10valf1iter.FilterOperation.StringFilterCondition.ColumnName != nil {
-								f10valf1elemf2f3.ColumnName = f10valf1iter.FilterOperation.StringFilterCondition.ColumnName
-							}
-							if f10valf1iter.FilterOperation.StringFilterCondition.ComparisonFilterCondition != nil {
-								f10valf1elemf2f3f1 := &svcsdktypes.DataSetStringComparisonFilterCondition{}
-								if f10valf1iter.FilterOperation.StringFilterCondition.ComparisonFilterCondition.Operator != nil {
-									f10valf1elemf2f3f1.Operator = svcsdktypes.DataSetStringComparisonFilterOperator(*f10valf1iter.FilterOperation.StringFilterCondition.ComparisonFilterCondition.Operator)
-								}
-								if f10valf1iter.FilterOperation.StringFilterCondition.ComparisonFilterCondition.Value != nil {
-									f10valf1elemf2f3f1f1 := &svcsdktypes.DataSetStringFilterValue{}
-									if f10valf1iter.FilterOperation.StringFilterCondition.ComparisonFilterCondition.Value.StaticValue != nil {
-										f10valf1elemf2f3f1f1.StaticValue = f10valf1iter.FilterOperation.StringFilterCondition.ComparisonFilterCondition.Value.StaticValue
-									}
-									f10valf1elemf2f3f1.Value = f10valf1elemf2f3f1f1
-								}
-								f10valf1elemf2f3.ComparisonFilterCondition = f10valf1elemf2f3f1
-							}
-							if f10valf1iter.FilterOperation.StringFilterCondition.ListFilterCondition != nil {
-								f10valf1elemf2f3f2 := &svcsdktypes.DataSetStringListFilterCondition{}
-								if f10valf1iter.FilterOperation.StringFilterCondition.ListFilterCondition.Operator != nil {
-									f10valf1elemf2f3f2.Operator = svcsdktypes.DataSetStringListFilterOperator(*f10valf1iter.FilterOperation.StringFilterCondition.ListFilterCondition.Operator)
-								}
-								if f10valf1iter.FilterOperation.StringFilterCondition.ListFilterCondition.Values != nil {
-									f10valf1elemf2f3f2f1 := &svcsdktypes.DataSetStringListFilterValue{}
-									if f10valf1iter.FilterOperation.StringFilterCondition.ListFilterCondition.Values.StaticValues != nil {
-										f10valf1elemf2f3f2f1.StaticValues = aws.ToStringSlice(f10valf1iter.FilterOperation.StringFilterCondition.ListFilterCondition.Values.StaticValues)
-									}
-									f10valf1elemf2f3f2.Values = f10valf1elemf2f3f2f1
-								}
-								f10valf1elemf2f3.ListFilterCondition = f10valf1elemf2f3f2
-							}
-							f10valf1elemf2.StringFilterCondition = f10valf1elemf2f3
-						}
-						f10valf1elemf2Parent.Value = *f10valf1elemf2
-						f10valf1elem = f10valf1elemf2Parent
-						isInterfaceSet = true
-					}
-					if f10valf1iter.OverrideDatasetParameterOperation != nil {
-						if isInterfaceSet {
-							return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for OverrideDatasetParameterOperation"))
-						}
-						f10valf1elemf3Parent := &svcsdktypes.TransformOperationMemberOverrideDatasetParameterOperation{}
-						f10valf1elemf3 := &svcsdktypes.OverrideDatasetParameterOperation{}
-						if f10valf1iter.OverrideDatasetParameterOperation.NewDefaultValues != nil {
-							f10valf1elemf3f0 := &svcsdktypes.NewDefaultValues{}
-							if f10valf1iter.OverrideDatasetParameterOperation.NewDefaultValues.DateTimeStaticValues != nil {
-								f10valf1elemf3f0f0 := []time.Time{}
-								for _, f10valf1elemf3f0f0iter := range f10valf1iter.OverrideDatasetParameterOperation.NewDefaultValues.DateTimeStaticValues {
-									var f10valf1elemf3f0f0elem time.Time
-									f10valf1elemf3f0f0elem = f10valf1elemf3f0f0iter.Time
-									f10valf1elemf3f0f0 = append(f10valf1elemf3f0f0, f10valf1elemf3f0f0elem)
-								}
-								f10valf1elemf3f0.DateTimeStaticValues = f10valf1elemf3f0f0
-							}
-							if f10valf1iter.OverrideDatasetParameterOperation.NewDefaultValues.DecimalStaticValues != nil {
-								f10valf1elemf3f0f1 := []float64{}
-								for _, f10valf1elemf3f0f1iter := range f10valf1iter.OverrideDatasetParameterOperation.NewDefaultValues.DecimalStaticValues {
-									var f10valf1elemf3f0f1elem float64
-									f10valf1elemf3f0f1elem = *f10valf1elemf3f0f1iter
-									f10valf1elemf3f0f1 = append(f10valf1elemf3f0f1, f10valf1elemf3f0f1elem)
-								}
-								f10valf1elemf3f0.DecimalStaticValues = f10valf1elemf3f0f1
-							}
-							if f10valf1iter.OverrideDatasetParameterOperation.NewDefaultValues.IntegerStaticValues != nil {
-								f10valf1elemf3f0.IntegerStaticValues = aws.ToInt64Slice(f10valf1iter.OverrideDatasetParameterOperation.NewDefaultValues.IntegerStaticValues)
-							}
-							if f10valf1iter.OverrideDatasetParameterOperation.NewDefaultValues.StringStaticValues != nil {
-								f10valf1elemf3f0.StringStaticValues = aws.ToStringSlice(f10valf1iter.OverrideDatasetParameterOperation.NewDefaultValues.StringStaticValues)
-							}
-							f10valf1elemf3.NewDefaultValues = f10valf1elemf3f0
-						}
-						if f10valf1iter.OverrideDatasetParameterOperation.NewParameterName != nil {
-							f10valf1elemf3.NewParameterName = f10valf1iter.OverrideDatasetParameterOperation.NewParameterName
-						}
-						if f10valf1iter.OverrideDatasetParameterOperation.ParameterName != nil {
-							f10valf1elemf3.ParameterName = f10valf1iter.OverrideDatasetParameterOperation.ParameterName
-						}
-						f10valf1elemf3Parent.Value = *f10valf1elemf3
-						f10valf1elem = f10valf1elemf3Parent
-						isInterfaceSet = true
-					}
-					if f10valf1iter.ProjectOperation != nil {
-						if isInterfaceSet {
-							return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for ProjectOperation"))
-						}
-						f10valf1elemf4Parent := &svcsdktypes.TransformOperationMemberProjectOperation{}
-						f10valf1elemf4 := &svcsdktypes.ProjectOperation{}
-						if f10valf1iter.ProjectOperation.Alias != nil {
-							f10valf1elemf4.Alias = f10valf1iter.ProjectOperation.Alias
-						}
-						if f10valf1iter.ProjectOperation.ProjectedColumns != nil {
-							f10valf1elemf4.ProjectedColumns = aws.ToStringSlice(f10valf1iter.ProjectOperation.ProjectedColumns)
-						}
-						if f10valf1iter.ProjectOperation.Source != nil {
-							f10valf1elemf4f2 := &svcsdktypes.TransformOperationSource{}
-							if f10valf1iter.ProjectOperation.Source.ColumnIDMappings != nil {
-								f10valf1elemf4f2f0 := []svcsdktypes.DataSetColumnIdMapping{}
-								for _, f10valf1elemf4f2f0iter := range f10valf1iter.ProjectOperation.Source.ColumnIDMappings {
-									f10valf1elemf4f2f0elem := &svcsdktypes.DataSetColumnIdMapping{}
-									if f10valf1elemf4f2f0iter.SourceColumnID != nil {
-										f10valf1elemf4f2f0elem.SourceColumnId = f10valf1elemf4f2f0iter.SourceColumnID
-									}
-									if f10valf1elemf4f2f0iter.TargetColumnID != nil {
-										f10valf1elemf4f2f0elem.TargetColumnId = f10valf1elemf4f2f0iter.TargetColumnID
-									}
-									f10valf1elemf4f2f0 = append(f10valf1elemf4f2f0, *f10valf1elemf4f2f0elem)
-								}
-								f10valf1elemf4f2.ColumnIdMappings = f10valf1elemf4f2f0
-							}
-							if f10valf1iter.ProjectOperation.Source.TransformOperationID != nil {
-								f10valf1elemf4f2.TransformOperationId = f10valf1iter.ProjectOperation.Source.TransformOperationID
-							}
-							f10valf1elemf4.Source = f10valf1elemf4f2
-						}
-						f10valf1elemf4Parent.Value = *f10valf1elemf4
-						f10valf1elem = f10valf1elemf4Parent
-						isInterfaceSet = true
-					}
-					if f10valf1iter.RenameColumnOperation != nil {
-						if isInterfaceSet {
-							return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for RenameColumnOperation"))
-						}
-						f10valf1elemf5Parent := &svcsdktypes.TransformOperationMemberRenameColumnOperation{}
-						f10valf1elemf5 := &svcsdktypes.RenameColumnOperation{}
-						if f10valf1iter.RenameColumnOperation.ColumnName != nil {
-							f10valf1elemf5.ColumnName = f10valf1iter.RenameColumnOperation.ColumnName
-						}
-						if f10valf1iter.RenameColumnOperation.NewColumnName != nil {
-							f10valf1elemf5.NewColumnName = f10valf1iter.RenameColumnOperation.NewColumnName
-						}
-						f10valf1elemf5Parent.Value = *f10valf1elemf5
-						f10valf1elem = f10valf1elemf5Parent
-						isInterfaceSet = true
-					}
-					if f10valf1iter.TagColumnOperation != nil {
-						if isInterfaceSet {
-							return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for TagColumnOperation"))
-						}
-						f10valf1elemf6Parent := &svcsdktypes.TransformOperationMemberTagColumnOperation{}
-						f10valf1elemf6 := &svcsdktypes.TagColumnOperation{}
-						if f10valf1iter.TagColumnOperation.ColumnName != nil {
-							f10valf1elemf6.ColumnName = f10valf1iter.TagColumnOperation.ColumnName
-						}
-						if f10valf1iter.TagColumnOperation.Tags != nil {
-							f10valf1elemf6f1 := []svcsdktypes.ColumnTag{}
-							for _, f10valf1elemf6f1iter := range f10valf1iter.TagColumnOperation.Tags {
-								f10valf1elemf6f1elem := &svcsdktypes.ColumnTag{}
-								if f10valf1elemf6f1iter.ColumnDescription != nil {
-									f10valf1elemf6f1elemf0 := &svcsdktypes.ColumnDescription{}
-									if f10valf1elemf6f1iter.ColumnDescription.Text != nil {
-										f10valf1elemf6f1elemf0.Text = f10valf1elemf6f1iter.ColumnDescription.Text
-									}
-									f10valf1elemf6f1elem.ColumnDescription = f10valf1elemf6f1elemf0
-								}
-								if f10valf1elemf6f1iter.ColumnGeographicRole != nil {
-									f10valf1elemf6f1elem.ColumnGeographicRole = svcsdktypes.GeoSpatialDataRole(*f10valf1elemf6f1iter.ColumnGeographicRole)
-								}
-								f10valf1elemf6f1 = append(f10valf1elemf6f1, *f10valf1elemf6f1elem)
-							}
-							f10valf1elemf6.Tags = f10valf1elemf6f1
-						}
-						f10valf1elemf6Parent.Value = *f10valf1elemf6
-						f10valf1elem = f10valf1elemf6Parent
-						isInterfaceSet = true
-					}
-					if f10valf1iter.UntagColumnOperation != nil {
-						if isInterfaceSet {
-							return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for UntagColumnOperation"))
-						}
-						f10valf1elemf7Parent := &svcsdktypes.TransformOperationMemberUntagColumnOperation{}
-						f10valf1elemf7 := &svcsdktypes.UntagColumnOperation{}
-						if f10valf1iter.UntagColumnOperation.ColumnName != nil {
-							f10valf1elemf7.ColumnName = f10valf1iter.UntagColumnOperation.ColumnName
-						}
-						if f10valf1iter.UntagColumnOperation.TagNames != nil {
-							f10valf1elemf7f1 := []svcsdktypes.ColumnTagName{}
-							for _, f10valf1elemf7f1iter := range f10valf1iter.UntagColumnOperation.TagNames {
-								var f10valf1elemf7f1elem string
-								f10valf1elemf7f1elem = string(*f10valf1elemf7f1iter)
-								f10valf1elemf7f1 = append(f10valf1elemf7f1, svcsdktypes.ColumnTagName(f10valf1elemf7f1elem))
-							}
-							f10valf1elemf7.TagNames = f10valf1elemf7f1
-						}
-						f10valf1elemf7Parent.Value = *f10valf1elemf7
-						f10valf1elem = f10valf1elemf7Parent
-						isInterfaceSet = true
-					}
-					f10valf1 = append(f10valf1, f10valf1elem)
-				}
-				f10val.DataTransforms = f10valf1
-			}
-			if f10valiter.Source != nil {
-				f10valf2 := &svcsdktypes.LogicalTableSource{}
-				if f10valiter.Source.DataSetARN != nil {
-					f10valf2.DataSetArn = f10valiter.Source.DataSetARN
-				}
-				if f10valiter.Source.JoinInstruction != nil {
-					f10valf2f1 := &svcsdktypes.JoinInstruction{}
-					if f10valiter.Source.JoinInstruction.LeftJoinKeyProperties != nil {
-						f10valf2f1f0 := &svcsdktypes.JoinKeyProperties{}
-						if f10valiter.Source.JoinInstruction.LeftJoinKeyProperties.UniqueKey != nil {
-							f10valf2f1f0.UniqueKey = f10valiter.Source.JoinInstruction.LeftJoinKeyProperties.UniqueKey
-						}
-						f10valf2f1.LeftJoinKeyProperties = f10valf2f1f0
-					}
-					if f10valiter.Source.JoinInstruction.LeftOperand != nil {
-						f10valf2f1.LeftOperand = f10valiter.Source.JoinInstruction.LeftOperand
-					}
-					if f10valiter.Source.JoinInstruction.OnClause != nil {
-						f10valf2f1.OnClause = f10valiter.Source.JoinInstruction.OnClause
-					}
-					if f10valiter.Source.JoinInstruction.RightJoinKeyProperties != nil {
-						f10valf2f1f3 := &svcsdktypes.JoinKeyProperties{}
-						if f10valiter.Source.JoinInstruction.RightJoinKeyProperties.UniqueKey != nil {
-							f10valf2f1f3.UniqueKey = f10valiter.Source.JoinInstruction.RightJoinKeyProperties.UniqueKey
-						}
-						f10valf2f1.RightJoinKeyProperties = f10valf2f1f3
-					}
-					if f10valiter.Source.JoinInstruction.RightOperand != nil {
-						f10valf2f1.RightOperand = f10valiter.Source.JoinInstruction.RightOperand
-					}
-					if f10valiter.Source.JoinInstruction.Type != nil {
-						f10valf2f1.Type = svcsdktypes.JoinType(*f10valiter.Source.JoinInstruction.Type)
-					}
-					f10valf2.JoinInstruction = f10valf2f1
-				}
-				if f10valiter.Source.PhysicalTableID != nil {
-					f10valf2.PhysicalTableId = f10valiter.Source.PhysicalTableID
-				}
-				f10val.Source = f10valf2
-			}
-			f10[f10key] = *f10val
-		}
-		res.LogicalTableMap = f10
-	}
 	if r.ko.Spec.Name != nil {
 		res.Name = r.ko.Spec.Name
 	}
 	if r.ko.Spec.PerformanceConfiguration != nil {
-		f12 := &svcsdktypes.PerformanceConfiguration{}
+		f11 := &svcsdktypes.PerformanceConfiguration{}
 		if r.ko.Spec.PerformanceConfiguration.UniqueKeys != nil {
-			f12f0 := []svcsdktypes.UniqueKey{}
-			for _, f12f0iter := range r.ko.Spec.PerformanceConfiguration.UniqueKeys {
-				f12f0elem := &svcsdktypes.UniqueKey{}
-				if f12f0iter.ColumnNames != nil {
-					f12f0elem.ColumnNames = aws.ToStringSlice(f12f0iter.ColumnNames)
+			f11f0 := []svcsdktypes.UniqueKey{}
+			for _, f11f0iter := range r.ko.Spec.PerformanceConfiguration.UniqueKeys {
+				f11f0elem := &svcsdktypes.UniqueKey{}
+				if f11f0iter.ColumnNames != nil {
+					f11f0elem.ColumnNames = aws.ToStringSlice(f11f0iter.ColumnNames)
 				}
-				f12f0 = append(f12f0, *f12f0elem)
+				f11f0 = append(f11f0, *f11f0elem)
 			}
-			f12.UniqueKeys = f12f0
+			f11.UniqueKeys = f11f0
 		}
-		res.PerformanceConfiguration = f12
+		res.PerformanceConfiguration = f11
 	}
 	if r.ko.Spec.Permissions != nil {
-		f13 := []svcsdktypes.ResourcePermission{}
-		for _, f13iter := range r.ko.Spec.Permissions {
-			f13elem := &svcsdktypes.ResourcePermission{}
-			if f13iter.Actions != nil {
-				f13elem.Actions = aws.ToStringSlice(f13iter.Actions)
+		f12 := []svcsdktypes.ResourcePermission{}
+		for _, f12iter := range r.ko.Spec.Permissions {
+			f12elem := &svcsdktypes.ResourcePermission{}
+			if f12iter.Actions != nil {
+				f12elem.Actions = aws.ToStringSlice(f12iter.Actions)
 			}
-			if f13iter.Principal != nil {
-				f13elem.Principal = f13iter.Principal
+			if f12iter.Principal != nil {
+				f12elem.Principal = f12iter.Principal
 			}
-			f13 = append(f13, *f13elem)
+			f12 = append(f12, *f12elem)
 		}
-		res.Permissions = f13
+		res.Permissions = f12
 	}
 	if r.ko.Spec.PhysicalTableMap != nil {
-		f14 := map[string]svcsdktypes.PhysicalTable{}
-		for f14key, f14valiter := range r.ko.Spec.PhysicalTableMap {
-			var f14val svcsdktypes.PhysicalTable
+		f13 := map[string]svcsdktypes.PhysicalTable{}
+		for f13key, f13valiter := range r.ko.Spec.PhysicalTableMap {
+			var f13val svcsdktypes.PhysicalTable
 			isInterfaceSet := false
-			if f14valiter.CustomSQL != nil {
+			if f13valiter.CustomSQL != nil {
 				if isInterfaceSet {
 					return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for CustomSql"))
 				}
-				f14valf0Parent := &svcsdktypes.PhysicalTableMemberCustomSql{}
-				f14valf0 := &svcsdktypes.CustomSql{}
-				if f14valiter.CustomSQL.Columns != nil {
-					f14valf0f0 := []svcsdktypes.InputColumn{}
-					for _, f14valf0f0iter := range f14valiter.CustomSQL.Columns {
-						f14valf0f0elem := &svcsdktypes.InputColumn{}
-						if f14valf0f0iter.ID != nil {
-							f14valf0f0elem.Id = f14valf0f0iter.ID
+				f13valf0Parent := &svcsdktypes.PhysicalTableMemberCustomSql{}
+				f13valf0 := &svcsdktypes.CustomSql{}
+				if f13valiter.CustomSQL.Columns != nil {
+					f13valf0f0 := []svcsdktypes.InputColumn{}
+					for _, f13valf0f0iter := range f13valiter.CustomSQL.Columns {
+						f13valf0f0elem := &svcsdktypes.InputColumn{}
+						if f13valf0f0iter.ID != nil {
+							f13valf0f0elem.Id = f13valf0f0iter.ID
 						}
-						if f14valf0f0iter.Name != nil {
-							f14valf0f0elem.Name = f14valf0f0iter.Name
+						if f13valf0f0iter.Name != nil {
+							f13valf0f0elem.Name = f13valf0f0iter.Name
 						}
-						if f14valf0f0iter.SubType != nil {
-							f14valf0f0elem.SubType = svcsdktypes.ColumnDataSubType(*f14valf0f0iter.SubType)
+						if f13valf0f0iter.SubType != nil {
+							f13valf0f0elem.SubType = svcsdktypes.ColumnDataSubType(*f13valf0f0iter.SubType)
 						}
-						if f14valf0f0iter.Type != nil {
-							f14valf0f0elem.Type = svcsdktypes.InputColumnDataType(*f14valf0f0iter.Type)
+						if f13valf0f0iter.Type != nil {
+							f13valf0f0elem.Type = svcsdktypes.InputColumnDataType(*f13valf0f0iter.Type)
 						}
-						f14valf0f0 = append(f14valf0f0, *f14valf0f0elem)
+						f13valf0f0 = append(f13valf0f0, *f13valf0f0elem)
 					}
-					f14valf0.Columns = f14valf0f0
+					f13valf0.Columns = f13valf0f0
 				}
-				if f14valiter.CustomSQL.DataSourceARN != nil {
-					f14valf0.DataSourceArn = f14valiter.CustomSQL.DataSourceARN
+				if f13valiter.CustomSQL.DataSourceARN != nil {
+					f13valf0.DataSourceArn = f13valiter.CustomSQL.DataSourceARN
 				}
-				if f14valiter.CustomSQL.Name != nil {
-					f14valf0.Name = f14valiter.CustomSQL.Name
+				if f13valiter.CustomSQL.Name != nil {
+					f13valf0.Name = f13valiter.CustomSQL.Name
 				}
-				if f14valiter.CustomSQL.SQLQuery != nil {
-					f14valf0.SqlQuery = f14valiter.CustomSQL.SQLQuery
+				if f13valiter.CustomSQL.SQLQuery != nil {
+					f13valf0.SqlQuery = f13valiter.CustomSQL.SQLQuery
 				}
-				f14valf0Parent.Value = *f14valf0
-				f14val = f14valf0Parent
+				f13valf0Parent.Value = *f13valf0
+				f13val = f13valf0Parent
 				isInterfaceSet = true
 			}
-			if f14valiter.RelationalTable != nil {
+			if f13valiter.RelationalTable != nil {
 				if isInterfaceSet {
 					return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for RelationalTable"))
 				}
-				f14valf1Parent := &svcsdktypes.PhysicalTableMemberRelationalTable{}
-				f14valf1 := &svcsdktypes.RelationalTable{}
-				if f14valiter.RelationalTable.Catalog != nil {
-					f14valf1.Catalog = f14valiter.RelationalTable.Catalog
+				f13valf1Parent := &svcsdktypes.PhysicalTableMemberRelationalTable{}
+				f13valf1 := &svcsdktypes.RelationalTable{}
+				if f13valiter.RelationalTable.Catalog != nil {
+					f13valf1.Catalog = f13valiter.RelationalTable.Catalog
 				}
-				if f14valiter.RelationalTable.DataSourceARN != nil {
-					f14valf1.DataSourceArn = f14valiter.RelationalTable.DataSourceARN
+				if f13valiter.RelationalTable.DataSourceARN != nil {
+					f13valf1.DataSourceArn = f13valiter.RelationalTable.DataSourceARN
 				}
-				if f14valiter.RelationalTable.InputColumns != nil {
-					f14valf1f2 := []svcsdktypes.InputColumn{}
-					for _, f14valf1f2iter := range f14valiter.RelationalTable.InputColumns {
-						f14valf1f2elem := &svcsdktypes.InputColumn{}
-						if f14valf1f2iter.ID != nil {
-							f14valf1f2elem.Id = f14valf1f2iter.ID
+				if f13valiter.RelationalTable.InputColumns != nil {
+					f13valf1f2 := []svcsdktypes.InputColumn{}
+					for _, f13valf1f2iter := range f13valiter.RelationalTable.InputColumns {
+						f13valf1f2elem := &svcsdktypes.InputColumn{}
+						if f13valf1f2iter.ID != nil {
+							f13valf1f2elem.Id = f13valf1f2iter.ID
 						}
-						if f14valf1f2iter.Name != nil {
-							f14valf1f2elem.Name = f14valf1f2iter.Name
+						if f13valf1f2iter.Name != nil {
+							f13valf1f2elem.Name = f13valf1f2iter.Name
 						}
-						if f14valf1f2iter.SubType != nil {
-							f14valf1f2elem.SubType = svcsdktypes.ColumnDataSubType(*f14valf1f2iter.SubType)
+						if f13valf1f2iter.SubType != nil {
+							f13valf1f2elem.SubType = svcsdktypes.ColumnDataSubType(*f13valf1f2iter.SubType)
 						}
-						if f14valf1f2iter.Type != nil {
-							f14valf1f2elem.Type = svcsdktypes.InputColumnDataType(*f14valf1f2iter.Type)
+						if f13valf1f2iter.Type != nil {
+							f13valf1f2elem.Type = svcsdktypes.InputColumnDataType(*f13valf1f2iter.Type)
 						}
-						f14valf1f2 = append(f14valf1f2, *f14valf1f2elem)
+						f13valf1f2 = append(f13valf1f2, *f13valf1f2elem)
 					}
-					f14valf1.InputColumns = f14valf1f2
+					f13valf1.InputColumns = f13valf1f2
 				}
-				if f14valiter.RelationalTable.Name != nil {
-					f14valf1.Name = f14valiter.RelationalTable.Name
+				if f13valiter.RelationalTable.Name != nil {
+					f13valf1.Name = f13valiter.RelationalTable.Name
 				}
-				if f14valiter.RelationalTable.Schema != nil {
-					f14valf1.Schema = f14valiter.RelationalTable.Schema
+				if f13valiter.RelationalTable.Schema != nil {
+					f13valf1.Schema = f13valiter.RelationalTable.Schema
 				}
-				f14valf1Parent.Value = *f14valf1
-				f14val = f14valf1Parent
+				f13valf1Parent.Value = *f13valf1
+				f13val = f13valf1Parent
 				isInterfaceSet = true
 			}
-			if f14valiter.S3Source != nil {
+			if f13valiter.S3Source != nil {
 				if isInterfaceSet {
 					return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for S3Source"))
 				}
-				f14valf2Parent := &svcsdktypes.PhysicalTableMemberS3Source{}
-				f14valf2 := &svcsdktypes.S3Source{}
-				if f14valiter.S3Source.DataSourceARN != nil {
-					f14valf2.DataSourceArn = f14valiter.S3Source.DataSourceARN
+				f13valf2Parent := &svcsdktypes.PhysicalTableMemberS3Source{}
+				f13valf2 := &svcsdktypes.S3Source{}
+				if f13valiter.S3Source.DataSourceARN != nil {
+					f13valf2.DataSourceArn = f13valiter.S3Source.DataSourceARN
 				}
-				if f14valiter.S3Source.InputColumns != nil {
-					f14valf2f1 := []svcsdktypes.InputColumn{}
-					for _, f14valf2f1iter := range f14valiter.S3Source.InputColumns {
-						f14valf2f1elem := &svcsdktypes.InputColumn{}
-						if f14valf2f1iter.ID != nil {
-							f14valf2f1elem.Id = f14valf2f1iter.ID
+				if f13valiter.S3Source.InputColumns != nil {
+					f13valf2f1 := []svcsdktypes.InputColumn{}
+					for _, f13valf2f1iter := range f13valiter.S3Source.InputColumns {
+						f13valf2f1elem := &svcsdktypes.InputColumn{}
+						if f13valf2f1iter.ID != nil {
+							f13valf2f1elem.Id = f13valf2f1iter.ID
 						}
-						if f14valf2f1iter.Name != nil {
-							f14valf2f1elem.Name = f14valf2f1iter.Name
+						if f13valf2f1iter.Name != nil {
+							f13valf2f1elem.Name = f13valf2f1iter.Name
 						}
-						if f14valf2f1iter.SubType != nil {
-							f14valf2f1elem.SubType = svcsdktypes.ColumnDataSubType(*f14valf2f1iter.SubType)
+						if f13valf2f1iter.SubType != nil {
+							f13valf2f1elem.SubType = svcsdktypes.ColumnDataSubType(*f13valf2f1iter.SubType)
 						}
-						if f14valf2f1iter.Type != nil {
-							f14valf2f1elem.Type = svcsdktypes.InputColumnDataType(*f14valf2f1iter.Type)
+						if f13valf2f1iter.Type != nil {
+							f13valf2f1elem.Type = svcsdktypes.InputColumnDataType(*f13valf2f1iter.Type)
 						}
-						f14valf2f1 = append(f14valf2f1, *f14valf2f1elem)
+						f13valf2f1 = append(f13valf2f1, *f13valf2f1elem)
 					}
-					f14valf2.InputColumns = f14valf2f1
+					f13valf2.InputColumns = f13valf2f1
 				}
-				if f14valiter.S3Source.UploadSettings != nil {
-					f14valf2f2 := &svcsdktypes.UploadSettings{}
-					if f14valiter.S3Source.UploadSettings.ContainsHeader != nil {
-						f14valf2f2.ContainsHeader = f14valiter.S3Source.UploadSettings.ContainsHeader
+				if f13valiter.S3Source.UploadSettings != nil {
+					f13valf2f2 := &svcsdktypes.UploadSettings{}
+					if f13valiter.S3Source.UploadSettings.ContainsHeader != nil {
+						f13valf2f2.ContainsHeader = f13valiter.S3Source.UploadSettings.ContainsHeader
 					}
-					if f14valiter.S3Source.UploadSettings.CustomCellAddressRange != nil {
-						f14valf2f2.CustomCellAddressRange = f14valiter.S3Source.UploadSettings.CustomCellAddressRange
+					if f13valiter.S3Source.UploadSettings.CustomCellAddressRange != nil {
+						f13valf2f2.CustomCellAddressRange = f13valiter.S3Source.UploadSettings.CustomCellAddressRange
 					}
-					if f14valiter.S3Source.UploadSettings.Delimiter != nil {
-						f14valf2f2.Delimiter = f14valiter.S3Source.UploadSettings.Delimiter
+					if f13valiter.S3Source.UploadSettings.Delimiter != nil {
+						f13valf2f2.Delimiter = f13valiter.S3Source.UploadSettings.Delimiter
 					}
-					if f14valiter.S3Source.UploadSettings.Format != nil {
-						f14valf2f2.Format = svcsdktypes.FileFormat(*f14valiter.S3Source.UploadSettings.Format)
+					if f13valiter.S3Source.UploadSettings.Format != nil {
+						f13valf2f2.Format = svcsdktypes.FileFormat(*f13valiter.S3Source.UploadSettings.Format)
 					}
-					if f14valiter.S3Source.UploadSettings.StartFromRow != nil {
-						startFromRowCopy0 := *f14valiter.S3Source.UploadSettings.StartFromRow
+					if f13valiter.S3Source.UploadSettings.StartFromRow != nil {
+						startFromRowCopy0 := *f13valiter.S3Source.UploadSettings.StartFromRow
 						if startFromRowCopy0 > math.MaxInt32 || startFromRowCopy0 < math.MinInt32 {
 							return nil, fmt.Errorf("error: field StartFromRow is of type int32")
 						}
 						startFromRowCopy := int32(startFromRowCopy0)
-						f14valf2f2.StartFromRow = &startFromRowCopy
+						f13valf2f2.StartFromRow = &startFromRowCopy
 					}
-					if f14valiter.S3Source.UploadSettings.TextQualifier != nil {
-						f14valf2f2.TextQualifier = svcsdktypes.TextQualifier(*f14valiter.S3Source.UploadSettings.TextQualifier)
+					if f13valiter.S3Source.UploadSettings.TextQualifier != nil {
+						f13valf2f2.TextQualifier = svcsdktypes.TextQualifier(*f13valiter.S3Source.UploadSettings.TextQualifier)
 					}
-					f14valf2.UploadSettings = f14valf2f2
+					f13valf2.UploadSettings = f13valf2f2
 				}
-				f14valf2Parent.Value = *f14valf2
-				f14val = f14valf2Parent
+				f13valf2Parent.Value = *f13valf2
+				f13val = f13valf2Parent
 				isInterfaceSet = true
 			}
-			if f14valiter.SaaSTable != nil {
+			if f13valiter.SaaSTable != nil {
 				if isInterfaceSet {
 					return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for SaaSTable"))
 				}
-				f14valf3Parent := &svcsdktypes.PhysicalTableMemberSaaSTable{}
-				f14valf3 := &svcsdktypes.SaaSTable{}
-				if f14valiter.SaaSTable.DataSourceARN != nil {
-					f14valf3.DataSourceArn = f14valiter.SaaSTable.DataSourceARN
+				f13valf3Parent := &svcsdktypes.PhysicalTableMemberSaaSTable{}
+				f13valf3 := &svcsdktypes.SaaSTable{}
+				if f13valiter.SaaSTable.DataSourceARN != nil {
+					f13valf3.DataSourceArn = f13valiter.SaaSTable.DataSourceARN
 				}
-				if f14valiter.SaaSTable.InputColumns != nil {
-					f14valf3f1 := []svcsdktypes.InputColumn{}
-					for _, f14valf3f1iter := range f14valiter.SaaSTable.InputColumns {
-						f14valf3f1elem := &svcsdktypes.InputColumn{}
-						if f14valf3f1iter.ID != nil {
-							f14valf3f1elem.Id = f14valf3f1iter.ID
+				if f13valiter.SaaSTable.InputColumns != nil {
+					f13valf3f1 := []svcsdktypes.InputColumn{}
+					for _, f13valf3f1iter := range f13valiter.SaaSTable.InputColumns {
+						f13valf3f1elem := &svcsdktypes.InputColumn{}
+						if f13valf3f1iter.ID != nil {
+							f13valf3f1elem.Id = f13valf3f1iter.ID
 						}
-						if f14valf3f1iter.Name != nil {
-							f14valf3f1elem.Name = f14valf3f1iter.Name
+						if f13valf3f1iter.Name != nil {
+							f13valf3f1elem.Name = f13valf3f1iter.Name
 						}
-						if f14valf3f1iter.SubType != nil {
-							f14valf3f1elem.SubType = svcsdktypes.ColumnDataSubType(*f14valf3f1iter.SubType)
+						if f13valf3f1iter.SubType != nil {
+							f13valf3f1elem.SubType = svcsdktypes.ColumnDataSubType(*f13valf3f1iter.SubType)
 						}
-						if f14valf3f1iter.Type != nil {
-							f14valf3f1elem.Type = svcsdktypes.InputColumnDataType(*f14valf3f1iter.Type)
+						if f13valf3f1iter.Type != nil {
+							f13valf3f1elem.Type = svcsdktypes.InputColumnDataType(*f13valf3f1iter.Type)
 						}
-						f14valf3f1 = append(f14valf3f1, *f14valf3f1elem)
+						f13valf3f1 = append(f13valf3f1, *f13valf3f1elem)
 					}
-					f14valf3.InputColumns = f14valf3f1
+					f13valf3.InputColumns = f13valf3f1
 				}
-				if f14valiter.SaaSTable.TablePath != nil {
-					f14valf3f2 := []svcsdktypes.TablePathElement{}
-					for _, f14valf3f2iter := range f14valiter.SaaSTable.TablePath {
-						f14valf3f2elem := &svcsdktypes.TablePathElement{}
-						if f14valf3f2iter.ID != nil {
-							f14valf3f2elem.Id = f14valf3f2iter.ID
+				if f13valiter.SaaSTable.TablePath != nil {
+					f13valf3f2 := []svcsdktypes.TablePathElement{}
+					for _, f13valf3f2iter := range f13valiter.SaaSTable.TablePath {
+						f13valf3f2elem := &svcsdktypes.TablePathElement{}
+						if f13valf3f2iter.ID != nil {
+							f13valf3f2elem.Id = f13valf3f2iter.ID
 						}
-						if f14valf3f2iter.Name != nil {
-							f14valf3f2elem.Name = f14valf3f2iter.Name
+						if f13valf3f2iter.Name != nil {
+							f13valf3f2elem.Name = f13valf3f2iter.Name
 						}
-						f14valf3f2 = append(f14valf3f2, *f14valf3f2elem)
+						f13valf3f2 = append(f13valf3f2, *f13valf3f2elem)
 					}
-					f14valf3.TablePath = f14valf3f2
+					f13valf3.TablePath = f13valf3f2
 				}
-				f14valf3Parent.Value = *f14valf3
-				f14val = f14valf3Parent
+				f13valf3Parent.Value = *f13valf3
+				f13val = f13valf3Parent
 				isInterfaceSet = true
 			}
-			f14[f14key] = f14val
+			f13[f13key] = f13val
 		}
-		res.PhysicalTableMap = f14
-	}
-	if r.ko.Spec.RowLevelPermissionDataSet != nil {
-		f15 := &svcsdktypes.RowLevelPermissionDataSet{}
-		if r.ko.Spec.RowLevelPermissionDataSet.ARN != nil {
-			f15.Arn = r.ko.Spec.RowLevelPermissionDataSet.ARN
-		}
-		if r.ko.Spec.RowLevelPermissionDataSet.FormatVersion != nil {
-			f15.FormatVersion = svcsdktypes.RowLevelPermissionFormatVersion(*r.ko.Spec.RowLevelPermissionDataSet.FormatVersion)
-		}
-		if r.ko.Spec.RowLevelPermissionDataSet.Namespace != nil {
-			f15.Namespace = r.ko.Spec.RowLevelPermissionDataSet.Namespace
-		}
-		if r.ko.Spec.RowLevelPermissionDataSet.PermissionPolicy != nil {
-			f15.PermissionPolicy = svcsdktypes.RowLevelPermissionPolicy(*r.ko.Spec.RowLevelPermissionDataSet.PermissionPolicy)
-		}
-		if r.ko.Spec.RowLevelPermissionDataSet.Status != nil {
-			f15.Status = svcsdktypes.Status(*r.ko.Spec.RowLevelPermissionDataSet.Status)
-		}
-		res.RowLevelPermissionDataSet = f15
-	}
-	if r.ko.Spec.RowLevelPermissionTagConfiguration != nil {
-		f16 := &svcsdktypes.RowLevelPermissionTagConfiguration{}
-		if r.ko.Spec.RowLevelPermissionTagConfiguration.Status != nil {
-			f16.Status = svcsdktypes.Status(*r.ko.Spec.RowLevelPermissionTagConfiguration.Status)
-		}
-		if r.ko.Spec.RowLevelPermissionTagConfiguration.TagRuleConfigurations != nil {
-			f16f1 := [][]string{}
-			for _, f16f1iter := range r.ko.Spec.RowLevelPermissionTagConfiguration.TagRuleConfigurations {
-				f16f1elem := aws.ToStringSlice(f16f1iter)
-				f16f1 = append(f16f1, f16f1elem)
-			}
-			f16.TagRuleConfigurations = f16f1
-		}
-		if r.ko.Spec.RowLevelPermissionTagConfiguration.TagRules != nil {
-			f16f2 := []svcsdktypes.RowLevelPermissionTagRule{}
-			for _, f16f2iter := range r.ko.Spec.RowLevelPermissionTagConfiguration.TagRules {
-				f16f2elem := &svcsdktypes.RowLevelPermissionTagRule{}
-				if f16f2iter.ColumnName != nil {
-					f16f2elem.ColumnName = f16f2iter.ColumnName
-				}
-				if f16f2iter.MatchAllValue != nil {
-					f16f2elem.MatchAllValue = f16f2iter.MatchAllValue
-				}
-				if f16f2iter.TagKey != nil {
-					f16f2elem.TagKey = f16f2iter.TagKey
-				}
-				if f16f2iter.TagMultiValueDelimiter != nil {
-					f16f2elem.TagMultiValueDelimiter = f16f2iter.TagMultiValueDelimiter
-				}
-				f16f2 = append(f16f2, *f16f2elem)
-			}
-			f16.TagRules = f16f2
-		}
-		res.RowLevelPermissionTagConfiguration = f16
+		res.PhysicalTableMap = f13
 	}
 	if r.ko.Spec.SemanticModelConfiguration != nil {
-		f17 := &svcsdktypes.SemanticModelConfiguration{}
+		f14 := &svcsdktypes.SemanticModelConfiguration{}
 		if r.ko.Spec.SemanticModelConfiguration.TableMap != nil {
-			f17f0 := map[string]svcsdktypes.SemanticTable{}
-			for f17f0key, f17f0valiter := range r.ko.Spec.SemanticModelConfiguration.TableMap {
-				f17f0val := &svcsdktypes.SemanticTable{}
-				if f17f0valiter.Alias != nil {
-					f17f0val.Alias = f17f0valiter.Alias
+			f14f0 := map[string]svcsdktypes.SemanticTable{}
+			for f14f0key, f14f0valiter := range r.ko.Spec.SemanticModelConfiguration.TableMap {
+				f14f0val := &svcsdktypes.SemanticTable{}
+				if f14f0valiter.Alias != nil {
+					f14f0val.Alias = f14f0valiter.Alias
 				}
-				if f17f0valiter.DestinationTableID != nil {
-					f17f0val.DestinationTableId = f17f0valiter.DestinationTableID
+				if f14f0valiter.DestinationTableID != nil {
+					f14f0val.DestinationTableId = f14f0valiter.DestinationTableID
 				}
-				if f17f0valiter.RowLevelPermissionConfiguration != nil {
-					f17f0valf2 := &svcsdktypes.RowLevelPermissionConfiguration{}
-					if f17f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet != nil {
-						f17f0valf2f0 := &svcsdktypes.RowLevelPermissionDataSet{}
-						if f17f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.ARN != nil {
-							f17f0valf2f0.Arn = f17f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.ARN
+				if f14f0valiter.RowLevelPermissionConfiguration != nil {
+					f14f0valf2 := &svcsdktypes.RowLevelPermissionConfiguration{}
+					if f14f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet != nil {
+						f14f0valf2f0 := &svcsdktypes.RowLevelPermissionDataSet{}
+						if f14f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.ARN != nil {
+							f14f0valf2f0.Arn = f14f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.ARN
 						}
-						if f17f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.FormatVersion != nil {
-							f17f0valf2f0.FormatVersion = svcsdktypes.RowLevelPermissionFormatVersion(*f17f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.FormatVersion)
+						if f14f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.FormatVersion != nil {
+							f14f0valf2f0.FormatVersion = svcsdktypes.RowLevelPermissionFormatVersion(*f14f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.FormatVersion)
 						}
-						if f17f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.Namespace != nil {
-							f17f0valf2f0.Namespace = f17f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.Namespace
+						if f14f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.Namespace != nil {
+							f14f0valf2f0.Namespace = f14f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.Namespace
 						}
-						if f17f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.PermissionPolicy != nil {
-							f17f0valf2f0.PermissionPolicy = svcsdktypes.RowLevelPermissionPolicy(*f17f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.PermissionPolicy)
+						if f14f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.PermissionPolicy != nil {
+							f14f0valf2f0.PermissionPolicy = svcsdktypes.RowLevelPermissionPolicy(*f14f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.PermissionPolicy)
 						}
-						if f17f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.Status != nil {
-							f17f0valf2f0.Status = svcsdktypes.Status(*f17f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.Status)
+						if f14f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.Status != nil {
+							f14f0valf2f0.Status = svcsdktypes.Status(*f14f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.Status)
 						}
-						f17f0valf2.RowLevelPermissionDataSet = f17f0valf2f0
+						f14f0valf2.RowLevelPermissionDataSet = f14f0valf2f0
 					}
-					if f17f0valiter.RowLevelPermissionConfiguration.TagConfiguration != nil {
-						f17f0valf2f1 := &svcsdktypes.RowLevelPermissionTagConfiguration{}
-						if f17f0valiter.RowLevelPermissionConfiguration.TagConfiguration.Status != nil {
-							f17f0valf2f1.Status = svcsdktypes.Status(*f17f0valiter.RowLevelPermissionConfiguration.TagConfiguration.Status)
+					if f14f0valiter.RowLevelPermissionConfiguration.TagConfiguration != nil {
+						f14f0valf2f1 := &svcsdktypes.RowLevelPermissionTagConfiguration{}
+						if f14f0valiter.RowLevelPermissionConfiguration.TagConfiguration.Status != nil {
+							f14f0valf2f1.Status = svcsdktypes.Status(*f14f0valiter.RowLevelPermissionConfiguration.TagConfiguration.Status)
 						}
-						if f17f0valiter.RowLevelPermissionConfiguration.TagConfiguration.TagRuleConfigurations != nil {
-							f17f0valf2f1f1 := [][]string{}
-							for _, f17f0valf2f1f1iter := range f17f0valiter.RowLevelPermissionConfiguration.TagConfiguration.TagRuleConfigurations {
-								f17f0valf2f1f1elem := aws.ToStringSlice(f17f0valf2f1f1iter)
-								f17f0valf2f1f1 = append(f17f0valf2f1f1, f17f0valf2f1f1elem)
+						if f14f0valiter.RowLevelPermissionConfiguration.TagConfiguration.TagRuleConfigurations != nil {
+							f14f0valf2f1f1 := [][]string{}
+							for _, f14f0valf2f1f1iter := range f14f0valiter.RowLevelPermissionConfiguration.TagConfiguration.TagRuleConfigurations {
+								f14f0valf2f1f1elem := aws.ToStringSlice(f14f0valf2f1f1iter)
+								f14f0valf2f1f1 = append(f14f0valf2f1f1, f14f0valf2f1f1elem)
 							}
-							f17f0valf2f1.TagRuleConfigurations = f17f0valf2f1f1
+							f14f0valf2f1.TagRuleConfigurations = f14f0valf2f1f1
 						}
-						if f17f0valiter.RowLevelPermissionConfiguration.TagConfiguration.TagRules != nil {
-							f17f0valf2f1f2 := []svcsdktypes.RowLevelPermissionTagRule{}
-							for _, f17f0valf2f1f2iter := range f17f0valiter.RowLevelPermissionConfiguration.TagConfiguration.TagRules {
-								f17f0valf2f1f2elem := &svcsdktypes.RowLevelPermissionTagRule{}
-								if f17f0valf2f1f2iter.ColumnName != nil {
-									f17f0valf2f1f2elem.ColumnName = f17f0valf2f1f2iter.ColumnName
+						if f14f0valiter.RowLevelPermissionConfiguration.TagConfiguration.TagRules != nil {
+							f14f0valf2f1f2 := []svcsdktypes.RowLevelPermissionTagRule{}
+							for _, f14f0valf2f1f2iter := range f14f0valiter.RowLevelPermissionConfiguration.TagConfiguration.TagRules {
+								f14f0valf2f1f2elem := &svcsdktypes.RowLevelPermissionTagRule{}
+								if f14f0valf2f1f2iter.ColumnName != nil {
+									f14f0valf2f1f2elem.ColumnName = f14f0valf2f1f2iter.ColumnName
 								}
-								if f17f0valf2f1f2iter.MatchAllValue != nil {
-									f17f0valf2f1f2elem.MatchAllValue = f17f0valf2f1f2iter.MatchAllValue
+								if f14f0valf2f1f2iter.MatchAllValue != nil {
+									f14f0valf2f1f2elem.MatchAllValue = f14f0valf2f1f2iter.MatchAllValue
 								}
-								if f17f0valf2f1f2iter.TagKey != nil {
-									f17f0valf2f1f2elem.TagKey = f17f0valf2f1f2iter.TagKey
+								if f14f0valf2f1f2iter.TagKey != nil {
+									f14f0valf2f1f2elem.TagKey = f14f0valf2f1f2iter.TagKey
 								}
-								if f17f0valf2f1f2iter.TagMultiValueDelimiter != nil {
-									f17f0valf2f1f2elem.TagMultiValueDelimiter = f17f0valf2f1f2iter.TagMultiValueDelimiter
+								if f14f0valf2f1f2iter.TagMultiValueDelimiter != nil {
+									f14f0valf2f1f2elem.TagMultiValueDelimiter = f14f0valf2f1f2iter.TagMultiValueDelimiter
 								}
-								f17f0valf2f1f2 = append(f17f0valf2f1f2, *f17f0valf2f1f2elem)
+								f14f0valf2f1f2 = append(f14f0valf2f1f2, *f14f0valf2f1f2elem)
 							}
-							f17f0valf2f1.TagRules = f17f0valf2f1f2
+							f14f0valf2f1.TagRules = f14f0valf2f1f2
 						}
-						f17f0valf2.TagConfiguration = f17f0valf2f1
+						f14f0valf2.TagConfiguration = f14f0valf2f1
 					}
-					f17f0val.RowLevelPermissionConfiguration = f17f0valf2
+					f14f0val.RowLevelPermissionConfiguration = f14f0valf2
 				}
-				f17f0[f17f0key] = *f17f0val
+				f14f0[f14f0key] = *f14f0val
 			}
-			f17.TableMap = f17f0
+			f14.TableMap = f14f0
 		}
-		res.SemanticModelConfiguration = f17
+		res.SemanticModelConfiguration = f14
 	}
 	if r.ko.Spec.Tags != nil {
-		f18 := []svcsdktypes.Tag{}
-		for _, f18iter := range r.ko.Spec.Tags {
-			f18elem := &svcsdktypes.Tag{}
-			if f18iter.Key != nil {
-				f18elem.Key = f18iter.Key
+		f15 := []svcsdktypes.Tag{}
+		for _, f15iter := range r.ko.Spec.Tags {
+			f15elem := &svcsdktypes.Tag{}
+			if f15iter.Key != nil {
+				f15elem.Key = f15iter.Key
 			}
-			if f18iter.Value != nil {
-				f18elem.Value = f18iter.Value
+			if f15iter.Value != nil {
+				f15elem.Value = f15iter.Value
 			}
-			f18 = append(f18, *f18elem)
+			f15 = append(f15, *f15elem)
 		}
-		res.Tags = f18
+		res.Tags = f15
 	}
 	if r.ko.Spec.UseAs != nil {
 		res.UseAs = svcsdktypes.DataSetUseAs(*r.ko.Spec.UseAs)
@@ -4629,771 +3710,296 @@ func (rm *resourceManager) newUpdateRequestPayload(
 	if r.ko.Spec.ImportMode != nil {
 		res.ImportMode = svcsdktypes.DataSetImportMode(*r.ko.Spec.ImportMode)
 	}
-	if r.ko.Spec.LogicalTableMap != nil {
-		f9 := map[string]svcsdktypes.LogicalTable{}
-		for f9key, f9valiter := range r.ko.Spec.LogicalTableMap {
-			f9val := &svcsdktypes.LogicalTable{}
-			if f9valiter.Alias != nil {
-				f9val.Alias = f9valiter.Alias
-			}
-			if f9valiter.DataTransforms != nil {
-				f9valf1 := []svcsdktypes.TransformOperation{}
-				for _, f9valf1iter := range f9valiter.DataTransforms {
-					var f9valf1elem svcsdktypes.TransformOperation
-					isInterfaceSet := false
-					if f9valf1iter.CastColumnTypeOperation != nil {
-						if isInterfaceSet {
-							return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for CastColumnTypeOperation"))
-						}
-						f9valf1elemf0Parent := &svcsdktypes.TransformOperationMemberCastColumnTypeOperation{}
-						f9valf1elemf0 := &svcsdktypes.CastColumnTypeOperation{}
-						if f9valf1iter.CastColumnTypeOperation.ColumnName != nil {
-							f9valf1elemf0.ColumnName = f9valf1iter.CastColumnTypeOperation.ColumnName
-						}
-						if f9valf1iter.CastColumnTypeOperation.Format != nil {
-							f9valf1elemf0.Format = f9valf1iter.CastColumnTypeOperation.Format
-						}
-						if f9valf1iter.CastColumnTypeOperation.NewColumnType != nil {
-							f9valf1elemf0.NewColumnType = svcsdktypes.ColumnDataType(*f9valf1iter.CastColumnTypeOperation.NewColumnType)
-						}
-						if f9valf1iter.CastColumnTypeOperation.SubType != nil {
-							f9valf1elemf0.SubType = svcsdktypes.ColumnDataSubType(*f9valf1iter.CastColumnTypeOperation.SubType)
-						}
-						f9valf1elemf0Parent.Value = *f9valf1elemf0
-						f9valf1elem = f9valf1elemf0Parent
-						isInterfaceSet = true
-					}
-					if f9valf1iter.CreateColumnsOperation != nil {
-						if isInterfaceSet {
-							return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for CreateColumnsOperation"))
-						}
-						f9valf1elemf1Parent := &svcsdktypes.TransformOperationMemberCreateColumnsOperation{}
-						f9valf1elemf1 := &svcsdktypes.CreateColumnsOperation{}
-						if f9valf1iter.CreateColumnsOperation.Alias != nil {
-							f9valf1elemf1.Alias = f9valf1iter.CreateColumnsOperation.Alias
-						}
-						if f9valf1iter.CreateColumnsOperation.Columns != nil {
-							f9valf1elemf1f1 := []svcsdktypes.CalculatedColumn{}
-							for _, f9valf1elemf1f1iter := range f9valf1iter.CreateColumnsOperation.Columns {
-								f9valf1elemf1f1elem := &svcsdktypes.CalculatedColumn{}
-								if f9valf1elemf1f1iter.ColumnID != nil {
-									f9valf1elemf1f1elem.ColumnId = f9valf1elemf1f1iter.ColumnID
-								}
-								if f9valf1elemf1f1iter.ColumnName != nil {
-									f9valf1elemf1f1elem.ColumnName = f9valf1elemf1f1iter.ColumnName
-								}
-								if f9valf1elemf1f1iter.Expression != nil {
-									f9valf1elemf1f1elem.Expression = f9valf1elemf1f1iter.Expression
-								}
-								f9valf1elemf1f1 = append(f9valf1elemf1f1, *f9valf1elemf1f1elem)
-							}
-							f9valf1elemf1.Columns = f9valf1elemf1f1
-						}
-						if f9valf1iter.CreateColumnsOperation.Source != nil {
-							f9valf1elemf1f2 := &svcsdktypes.TransformOperationSource{}
-							if f9valf1iter.CreateColumnsOperation.Source.ColumnIDMappings != nil {
-								f9valf1elemf1f2f0 := []svcsdktypes.DataSetColumnIdMapping{}
-								for _, f9valf1elemf1f2f0iter := range f9valf1iter.CreateColumnsOperation.Source.ColumnIDMappings {
-									f9valf1elemf1f2f0elem := &svcsdktypes.DataSetColumnIdMapping{}
-									if f9valf1elemf1f2f0iter.SourceColumnID != nil {
-										f9valf1elemf1f2f0elem.SourceColumnId = f9valf1elemf1f2f0iter.SourceColumnID
-									}
-									if f9valf1elemf1f2f0iter.TargetColumnID != nil {
-										f9valf1elemf1f2f0elem.TargetColumnId = f9valf1elemf1f2f0iter.TargetColumnID
-									}
-									f9valf1elemf1f2f0 = append(f9valf1elemf1f2f0, *f9valf1elemf1f2f0elem)
-								}
-								f9valf1elemf1f2.ColumnIdMappings = f9valf1elemf1f2f0
-							}
-							if f9valf1iter.CreateColumnsOperation.Source.TransformOperationID != nil {
-								f9valf1elemf1f2.TransformOperationId = f9valf1iter.CreateColumnsOperation.Source.TransformOperationID
-							}
-							f9valf1elemf1.Source = f9valf1elemf1f2
-						}
-						f9valf1elemf1Parent.Value = *f9valf1elemf1
-						f9valf1elem = f9valf1elemf1Parent
-						isInterfaceSet = true
-					}
-					if f9valf1iter.FilterOperation != nil {
-						if isInterfaceSet {
-							return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for FilterOperation"))
-						}
-						f9valf1elemf2Parent := &svcsdktypes.TransformOperationMemberFilterOperation{}
-						f9valf1elemf2 := &svcsdktypes.FilterOperation{}
-						if f9valf1iter.FilterOperation.ConditionExpression != nil {
-							f9valf1elemf2.ConditionExpression = f9valf1iter.FilterOperation.ConditionExpression
-						}
-						if f9valf1iter.FilterOperation.DateFilterCondition != nil {
-							f9valf1elemf2f1 := &svcsdktypes.DataSetDateFilterCondition{}
-							if f9valf1iter.FilterOperation.DateFilterCondition.ColumnName != nil {
-								f9valf1elemf2f1.ColumnName = f9valf1iter.FilterOperation.DateFilterCondition.ColumnName
-							}
-							if f9valf1iter.FilterOperation.DateFilterCondition.ComparisonFilterCondition != nil {
-								f9valf1elemf2f1f1 := &svcsdktypes.DataSetDateComparisonFilterCondition{}
-								if f9valf1iter.FilterOperation.DateFilterCondition.ComparisonFilterCondition.Operator != nil {
-									f9valf1elemf2f1f1.Operator = svcsdktypes.DataSetDateComparisonFilterOperator(*f9valf1iter.FilterOperation.DateFilterCondition.ComparisonFilterCondition.Operator)
-								}
-								if f9valf1iter.FilterOperation.DateFilterCondition.ComparisonFilterCondition.Value != nil {
-									f9valf1elemf2f1f1f1 := &svcsdktypes.DataSetDateFilterValue{}
-									if f9valf1iter.FilterOperation.DateFilterCondition.ComparisonFilterCondition.Value.StaticValue != nil {
-										f9valf1elemf2f1f1f1.StaticValue = &f9valf1iter.FilterOperation.DateFilterCondition.ComparisonFilterCondition.Value.StaticValue.Time
-									}
-									f9valf1elemf2f1f1.Value = f9valf1elemf2f1f1f1
-								}
-								f9valf1elemf2f1.ComparisonFilterCondition = f9valf1elemf2f1f1
-							}
-							if f9valf1iter.FilterOperation.DateFilterCondition.RangeFilterCondition != nil {
-								f9valf1elemf2f1f2 := &svcsdktypes.DataSetDateRangeFilterCondition{}
-								if f9valf1iter.FilterOperation.DateFilterCondition.RangeFilterCondition.IncludeMaximum != nil {
-									f9valf1elemf2f1f2.IncludeMaximum = f9valf1iter.FilterOperation.DateFilterCondition.RangeFilterCondition.IncludeMaximum
-								}
-								if f9valf1iter.FilterOperation.DateFilterCondition.RangeFilterCondition.IncludeMinimum != nil {
-									f9valf1elemf2f1f2.IncludeMinimum = f9valf1iter.FilterOperation.DateFilterCondition.RangeFilterCondition.IncludeMinimum
-								}
-								if f9valf1iter.FilterOperation.DateFilterCondition.RangeFilterCondition.RangeMaximum != nil {
-									f9valf1elemf2f1f2f2 := &svcsdktypes.DataSetDateFilterValue{}
-									if f9valf1iter.FilterOperation.DateFilterCondition.RangeFilterCondition.RangeMaximum.StaticValue != nil {
-										f9valf1elemf2f1f2f2.StaticValue = &f9valf1iter.FilterOperation.DateFilterCondition.RangeFilterCondition.RangeMaximum.StaticValue.Time
-									}
-									f9valf1elemf2f1f2.RangeMaximum = f9valf1elemf2f1f2f2
-								}
-								if f9valf1iter.FilterOperation.DateFilterCondition.RangeFilterCondition.RangeMinimum != nil {
-									f9valf1elemf2f1f2f3 := &svcsdktypes.DataSetDateFilterValue{}
-									if f9valf1iter.FilterOperation.DateFilterCondition.RangeFilterCondition.RangeMinimum.StaticValue != nil {
-										f9valf1elemf2f1f2f3.StaticValue = &f9valf1iter.FilterOperation.DateFilterCondition.RangeFilterCondition.RangeMinimum.StaticValue.Time
-									}
-									f9valf1elemf2f1f2.RangeMinimum = f9valf1elemf2f1f2f3
-								}
-								f9valf1elemf2f1.RangeFilterCondition = f9valf1elemf2f1f2
-							}
-							f9valf1elemf2.DateFilterCondition = f9valf1elemf2f1
-						}
-						if f9valf1iter.FilterOperation.NumericFilterCondition != nil {
-							f9valf1elemf2f2 := &svcsdktypes.DataSetNumericFilterCondition{}
-							if f9valf1iter.FilterOperation.NumericFilterCondition.ColumnName != nil {
-								f9valf1elemf2f2.ColumnName = f9valf1iter.FilterOperation.NumericFilterCondition.ColumnName
-							}
-							if f9valf1iter.FilterOperation.NumericFilterCondition.ComparisonFilterCondition != nil {
-								f9valf1elemf2f2f1 := &svcsdktypes.DataSetNumericComparisonFilterCondition{}
-								if f9valf1iter.FilterOperation.NumericFilterCondition.ComparisonFilterCondition.Operator != nil {
-									f9valf1elemf2f2f1.Operator = svcsdktypes.DataSetNumericComparisonFilterOperator(*f9valf1iter.FilterOperation.NumericFilterCondition.ComparisonFilterCondition.Operator)
-								}
-								if f9valf1iter.FilterOperation.NumericFilterCondition.ComparisonFilterCondition.Value != nil {
-									f9valf1elemf2f2f1f1 := &svcsdktypes.DataSetNumericFilterValue{}
-									if f9valf1iter.FilterOperation.NumericFilterCondition.ComparisonFilterCondition.Value.StaticValue != nil {
-										f9valf1elemf2f2f1f1.StaticValue = f9valf1iter.FilterOperation.NumericFilterCondition.ComparisonFilterCondition.Value.StaticValue
-									}
-									f9valf1elemf2f2f1.Value = f9valf1elemf2f2f1f1
-								}
-								f9valf1elemf2f2.ComparisonFilterCondition = f9valf1elemf2f2f1
-							}
-							if f9valf1iter.FilterOperation.NumericFilterCondition.RangeFilterCondition != nil {
-								f9valf1elemf2f2f2 := &svcsdktypes.DataSetNumericRangeFilterCondition{}
-								if f9valf1iter.FilterOperation.NumericFilterCondition.RangeFilterCondition.IncludeMaximum != nil {
-									f9valf1elemf2f2f2.IncludeMaximum = f9valf1iter.FilterOperation.NumericFilterCondition.RangeFilterCondition.IncludeMaximum
-								}
-								if f9valf1iter.FilterOperation.NumericFilterCondition.RangeFilterCondition.IncludeMinimum != nil {
-									f9valf1elemf2f2f2.IncludeMinimum = f9valf1iter.FilterOperation.NumericFilterCondition.RangeFilterCondition.IncludeMinimum
-								}
-								if f9valf1iter.FilterOperation.NumericFilterCondition.RangeFilterCondition.RangeMaximum != nil {
-									f9valf1elemf2f2f2f2 := &svcsdktypes.DataSetNumericFilterValue{}
-									if f9valf1iter.FilterOperation.NumericFilterCondition.RangeFilterCondition.RangeMaximum.StaticValue != nil {
-										f9valf1elemf2f2f2f2.StaticValue = f9valf1iter.FilterOperation.NumericFilterCondition.RangeFilterCondition.RangeMaximum.StaticValue
-									}
-									f9valf1elemf2f2f2.RangeMaximum = f9valf1elemf2f2f2f2
-								}
-								if f9valf1iter.FilterOperation.NumericFilterCondition.RangeFilterCondition.RangeMinimum != nil {
-									f9valf1elemf2f2f2f3 := &svcsdktypes.DataSetNumericFilterValue{}
-									if f9valf1iter.FilterOperation.NumericFilterCondition.RangeFilterCondition.RangeMinimum.StaticValue != nil {
-										f9valf1elemf2f2f2f3.StaticValue = f9valf1iter.FilterOperation.NumericFilterCondition.RangeFilterCondition.RangeMinimum.StaticValue
-									}
-									f9valf1elemf2f2f2.RangeMinimum = f9valf1elemf2f2f2f3
-								}
-								f9valf1elemf2f2.RangeFilterCondition = f9valf1elemf2f2f2
-							}
-							f9valf1elemf2.NumericFilterCondition = f9valf1elemf2f2
-						}
-						if f9valf1iter.FilterOperation.StringFilterCondition != nil {
-							f9valf1elemf2f3 := &svcsdktypes.DataSetStringFilterCondition{}
-							if f9valf1iter.FilterOperation.StringFilterCondition.ColumnName != nil {
-								f9valf1elemf2f3.ColumnName = f9valf1iter.FilterOperation.StringFilterCondition.ColumnName
-							}
-							if f9valf1iter.FilterOperation.StringFilterCondition.ComparisonFilterCondition != nil {
-								f9valf1elemf2f3f1 := &svcsdktypes.DataSetStringComparisonFilterCondition{}
-								if f9valf1iter.FilterOperation.StringFilterCondition.ComparisonFilterCondition.Operator != nil {
-									f9valf1elemf2f3f1.Operator = svcsdktypes.DataSetStringComparisonFilterOperator(*f9valf1iter.FilterOperation.StringFilterCondition.ComparisonFilterCondition.Operator)
-								}
-								if f9valf1iter.FilterOperation.StringFilterCondition.ComparisonFilterCondition.Value != nil {
-									f9valf1elemf2f3f1f1 := &svcsdktypes.DataSetStringFilterValue{}
-									if f9valf1iter.FilterOperation.StringFilterCondition.ComparisonFilterCondition.Value.StaticValue != nil {
-										f9valf1elemf2f3f1f1.StaticValue = f9valf1iter.FilterOperation.StringFilterCondition.ComparisonFilterCondition.Value.StaticValue
-									}
-									f9valf1elemf2f3f1.Value = f9valf1elemf2f3f1f1
-								}
-								f9valf1elemf2f3.ComparisonFilterCondition = f9valf1elemf2f3f1
-							}
-							if f9valf1iter.FilterOperation.StringFilterCondition.ListFilterCondition != nil {
-								f9valf1elemf2f3f2 := &svcsdktypes.DataSetStringListFilterCondition{}
-								if f9valf1iter.FilterOperation.StringFilterCondition.ListFilterCondition.Operator != nil {
-									f9valf1elemf2f3f2.Operator = svcsdktypes.DataSetStringListFilterOperator(*f9valf1iter.FilterOperation.StringFilterCondition.ListFilterCondition.Operator)
-								}
-								if f9valf1iter.FilterOperation.StringFilterCondition.ListFilterCondition.Values != nil {
-									f9valf1elemf2f3f2f1 := &svcsdktypes.DataSetStringListFilterValue{}
-									if f9valf1iter.FilterOperation.StringFilterCondition.ListFilterCondition.Values.StaticValues != nil {
-										f9valf1elemf2f3f2f1.StaticValues = aws.ToStringSlice(f9valf1iter.FilterOperation.StringFilterCondition.ListFilterCondition.Values.StaticValues)
-									}
-									f9valf1elemf2f3f2.Values = f9valf1elemf2f3f2f1
-								}
-								f9valf1elemf2f3.ListFilterCondition = f9valf1elemf2f3f2
-							}
-							f9valf1elemf2.StringFilterCondition = f9valf1elemf2f3
-						}
-						f9valf1elemf2Parent.Value = *f9valf1elemf2
-						f9valf1elem = f9valf1elemf2Parent
-						isInterfaceSet = true
-					}
-					if f9valf1iter.OverrideDatasetParameterOperation != nil {
-						if isInterfaceSet {
-							return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for OverrideDatasetParameterOperation"))
-						}
-						f9valf1elemf3Parent := &svcsdktypes.TransformOperationMemberOverrideDatasetParameterOperation{}
-						f9valf1elemf3 := &svcsdktypes.OverrideDatasetParameterOperation{}
-						if f9valf1iter.OverrideDatasetParameterOperation.NewDefaultValues != nil {
-							f9valf1elemf3f0 := &svcsdktypes.NewDefaultValues{}
-							if f9valf1iter.OverrideDatasetParameterOperation.NewDefaultValues.DateTimeStaticValues != nil {
-								f9valf1elemf3f0f0 := []time.Time{}
-								for _, f9valf1elemf3f0f0iter := range f9valf1iter.OverrideDatasetParameterOperation.NewDefaultValues.DateTimeStaticValues {
-									var f9valf1elemf3f0f0elem time.Time
-									f9valf1elemf3f0f0elem = f9valf1elemf3f0f0iter.Time
-									f9valf1elemf3f0f0 = append(f9valf1elemf3f0f0, f9valf1elemf3f0f0elem)
-								}
-								f9valf1elemf3f0.DateTimeStaticValues = f9valf1elemf3f0f0
-							}
-							if f9valf1iter.OverrideDatasetParameterOperation.NewDefaultValues.DecimalStaticValues != nil {
-								f9valf1elemf3f0f1 := []float64{}
-								for _, f9valf1elemf3f0f1iter := range f9valf1iter.OverrideDatasetParameterOperation.NewDefaultValues.DecimalStaticValues {
-									var f9valf1elemf3f0f1elem float64
-									f9valf1elemf3f0f1elem = *f9valf1elemf3f0f1iter
-									f9valf1elemf3f0f1 = append(f9valf1elemf3f0f1, f9valf1elemf3f0f1elem)
-								}
-								f9valf1elemf3f0.DecimalStaticValues = f9valf1elemf3f0f1
-							}
-							if f9valf1iter.OverrideDatasetParameterOperation.NewDefaultValues.IntegerStaticValues != nil {
-								f9valf1elemf3f0.IntegerStaticValues = aws.ToInt64Slice(f9valf1iter.OverrideDatasetParameterOperation.NewDefaultValues.IntegerStaticValues)
-							}
-							if f9valf1iter.OverrideDatasetParameterOperation.NewDefaultValues.StringStaticValues != nil {
-								f9valf1elemf3f0.StringStaticValues = aws.ToStringSlice(f9valf1iter.OverrideDatasetParameterOperation.NewDefaultValues.StringStaticValues)
-							}
-							f9valf1elemf3.NewDefaultValues = f9valf1elemf3f0
-						}
-						if f9valf1iter.OverrideDatasetParameterOperation.NewParameterName != nil {
-							f9valf1elemf3.NewParameterName = f9valf1iter.OverrideDatasetParameterOperation.NewParameterName
-						}
-						if f9valf1iter.OverrideDatasetParameterOperation.ParameterName != nil {
-							f9valf1elemf3.ParameterName = f9valf1iter.OverrideDatasetParameterOperation.ParameterName
-						}
-						f9valf1elemf3Parent.Value = *f9valf1elemf3
-						f9valf1elem = f9valf1elemf3Parent
-						isInterfaceSet = true
-					}
-					if f9valf1iter.ProjectOperation != nil {
-						if isInterfaceSet {
-							return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for ProjectOperation"))
-						}
-						f9valf1elemf4Parent := &svcsdktypes.TransformOperationMemberProjectOperation{}
-						f9valf1elemf4 := &svcsdktypes.ProjectOperation{}
-						if f9valf1iter.ProjectOperation.Alias != nil {
-							f9valf1elemf4.Alias = f9valf1iter.ProjectOperation.Alias
-						}
-						if f9valf1iter.ProjectOperation.ProjectedColumns != nil {
-							f9valf1elemf4.ProjectedColumns = aws.ToStringSlice(f9valf1iter.ProjectOperation.ProjectedColumns)
-						}
-						if f9valf1iter.ProjectOperation.Source != nil {
-							f9valf1elemf4f2 := &svcsdktypes.TransformOperationSource{}
-							if f9valf1iter.ProjectOperation.Source.ColumnIDMappings != nil {
-								f9valf1elemf4f2f0 := []svcsdktypes.DataSetColumnIdMapping{}
-								for _, f9valf1elemf4f2f0iter := range f9valf1iter.ProjectOperation.Source.ColumnIDMappings {
-									f9valf1elemf4f2f0elem := &svcsdktypes.DataSetColumnIdMapping{}
-									if f9valf1elemf4f2f0iter.SourceColumnID != nil {
-										f9valf1elemf4f2f0elem.SourceColumnId = f9valf1elemf4f2f0iter.SourceColumnID
-									}
-									if f9valf1elemf4f2f0iter.TargetColumnID != nil {
-										f9valf1elemf4f2f0elem.TargetColumnId = f9valf1elemf4f2f0iter.TargetColumnID
-									}
-									f9valf1elemf4f2f0 = append(f9valf1elemf4f2f0, *f9valf1elemf4f2f0elem)
-								}
-								f9valf1elemf4f2.ColumnIdMappings = f9valf1elemf4f2f0
-							}
-							if f9valf1iter.ProjectOperation.Source.TransformOperationID != nil {
-								f9valf1elemf4f2.TransformOperationId = f9valf1iter.ProjectOperation.Source.TransformOperationID
-							}
-							f9valf1elemf4.Source = f9valf1elemf4f2
-						}
-						f9valf1elemf4Parent.Value = *f9valf1elemf4
-						f9valf1elem = f9valf1elemf4Parent
-						isInterfaceSet = true
-					}
-					if f9valf1iter.RenameColumnOperation != nil {
-						if isInterfaceSet {
-							return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for RenameColumnOperation"))
-						}
-						f9valf1elemf5Parent := &svcsdktypes.TransformOperationMemberRenameColumnOperation{}
-						f9valf1elemf5 := &svcsdktypes.RenameColumnOperation{}
-						if f9valf1iter.RenameColumnOperation.ColumnName != nil {
-							f9valf1elemf5.ColumnName = f9valf1iter.RenameColumnOperation.ColumnName
-						}
-						if f9valf1iter.RenameColumnOperation.NewColumnName != nil {
-							f9valf1elemf5.NewColumnName = f9valf1iter.RenameColumnOperation.NewColumnName
-						}
-						f9valf1elemf5Parent.Value = *f9valf1elemf5
-						f9valf1elem = f9valf1elemf5Parent
-						isInterfaceSet = true
-					}
-					if f9valf1iter.TagColumnOperation != nil {
-						if isInterfaceSet {
-							return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for TagColumnOperation"))
-						}
-						f9valf1elemf6Parent := &svcsdktypes.TransformOperationMemberTagColumnOperation{}
-						f9valf1elemf6 := &svcsdktypes.TagColumnOperation{}
-						if f9valf1iter.TagColumnOperation.ColumnName != nil {
-							f9valf1elemf6.ColumnName = f9valf1iter.TagColumnOperation.ColumnName
-						}
-						if f9valf1iter.TagColumnOperation.Tags != nil {
-							f9valf1elemf6f1 := []svcsdktypes.ColumnTag{}
-							for _, f9valf1elemf6f1iter := range f9valf1iter.TagColumnOperation.Tags {
-								f9valf1elemf6f1elem := &svcsdktypes.ColumnTag{}
-								if f9valf1elemf6f1iter.ColumnDescription != nil {
-									f9valf1elemf6f1elemf0 := &svcsdktypes.ColumnDescription{}
-									if f9valf1elemf6f1iter.ColumnDescription.Text != nil {
-										f9valf1elemf6f1elemf0.Text = f9valf1elemf6f1iter.ColumnDescription.Text
-									}
-									f9valf1elemf6f1elem.ColumnDescription = f9valf1elemf6f1elemf0
-								}
-								if f9valf1elemf6f1iter.ColumnGeographicRole != nil {
-									f9valf1elemf6f1elem.ColumnGeographicRole = svcsdktypes.GeoSpatialDataRole(*f9valf1elemf6f1iter.ColumnGeographicRole)
-								}
-								f9valf1elemf6f1 = append(f9valf1elemf6f1, *f9valf1elemf6f1elem)
-							}
-							f9valf1elemf6.Tags = f9valf1elemf6f1
-						}
-						f9valf1elemf6Parent.Value = *f9valf1elemf6
-						f9valf1elem = f9valf1elemf6Parent
-						isInterfaceSet = true
-					}
-					if f9valf1iter.UntagColumnOperation != nil {
-						if isInterfaceSet {
-							return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for UntagColumnOperation"))
-						}
-						f9valf1elemf7Parent := &svcsdktypes.TransformOperationMemberUntagColumnOperation{}
-						f9valf1elemf7 := &svcsdktypes.UntagColumnOperation{}
-						if f9valf1iter.UntagColumnOperation.ColumnName != nil {
-							f9valf1elemf7.ColumnName = f9valf1iter.UntagColumnOperation.ColumnName
-						}
-						if f9valf1iter.UntagColumnOperation.TagNames != nil {
-							f9valf1elemf7f1 := []svcsdktypes.ColumnTagName{}
-							for _, f9valf1elemf7f1iter := range f9valf1iter.UntagColumnOperation.TagNames {
-								var f9valf1elemf7f1elem string
-								f9valf1elemf7f1elem = string(*f9valf1elemf7f1iter)
-								f9valf1elemf7f1 = append(f9valf1elemf7f1, svcsdktypes.ColumnTagName(f9valf1elemf7f1elem))
-							}
-							f9valf1elemf7.TagNames = f9valf1elemf7f1
-						}
-						f9valf1elemf7Parent.Value = *f9valf1elemf7
-						f9valf1elem = f9valf1elemf7Parent
-						isInterfaceSet = true
-					}
-					f9valf1 = append(f9valf1, f9valf1elem)
-				}
-				f9val.DataTransforms = f9valf1
-			}
-			if f9valiter.Source != nil {
-				f9valf2 := &svcsdktypes.LogicalTableSource{}
-				if f9valiter.Source.DataSetARN != nil {
-					f9valf2.DataSetArn = f9valiter.Source.DataSetARN
-				}
-				if f9valiter.Source.JoinInstruction != nil {
-					f9valf2f1 := &svcsdktypes.JoinInstruction{}
-					if f9valiter.Source.JoinInstruction.LeftJoinKeyProperties != nil {
-						f9valf2f1f0 := &svcsdktypes.JoinKeyProperties{}
-						if f9valiter.Source.JoinInstruction.LeftJoinKeyProperties.UniqueKey != nil {
-							f9valf2f1f0.UniqueKey = f9valiter.Source.JoinInstruction.LeftJoinKeyProperties.UniqueKey
-						}
-						f9valf2f1.LeftJoinKeyProperties = f9valf2f1f0
-					}
-					if f9valiter.Source.JoinInstruction.LeftOperand != nil {
-						f9valf2f1.LeftOperand = f9valiter.Source.JoinInstruction.LeftOperand
-					}
-					if f9valiter.Source.JoinInstruction.OnClause != nil {
-						f9valf2f1.OnClause = f9valiter.Source.JoinInstruction.OnClause
-					}
-					if f9valiter.Source.JoinInstruction.RightJoinKeyProperties != nil {
-						f9valf2f1f3 := &svcsdktypes.JoinKeyProperties{}
-						if f9valiter.Source.JoinInstruction.RightJoinKeyProperties.UniqueKey != nil {
-							f9valf2f1f3.UniqueKey = f9valiter.Source.JoinInstruction.RightJoinKeyProperties.UniqueKey
-						}
-						f9valf2f1.RightJoinKeyProperties = f9valf2f1f3
-					}
-					if f9valiter.Source.JoinInstruction.RightOperand != nil {
-						f9valf2f1.RightOperand = f9valiter.Source.JoinInstruction.RightOperand
-					}
-					if f9valiter.Source.JoinInstruction.Type != nil {
-						f9valf2f1.Type = svcsdktypes.JoinType(*f9valiter.Source.JoinInstruction.Type)
-					}
-					f9valf2.JoinInstruction = f9valf2f1
-				}
-				if f9valiter.Source.PhysicalTableID != nil {
-					f9valf2.PhysicalTableId = f9valiter.Source.PhysicalTableID
-				}
-				f9val.Source = f9valf2
-			}
-			f9[f9key] = *f9val
-		}
-		res.LogicalTableMap = f9
-	}
 	if r.ko.Spec.Name != nil {
 		res.Name = r.ko.Spec.Name
 	}
 	if r.ko.Spec.PerformanceConfiguration != nil {
-		f11 := &svcsdktypes.PerformanceConfiguration{}
+		f10 := &svcsdktypes.PerformanceConfiguration{}
 		if r.ko.Spec.PerformanceConfiguration.UniqueKeys != nil {
-			f11f0 := []svcsdktypes.UniqueKey{}
-			for _, f11f0iter := range r.ko.Spec.PerformanceConfiguration.UniqueKeys {
-				f11f0elem := &svcsdktypes.UniqueKey{}
-				if f11f0iter.ColumnNames != nil {
-					f11f0elem.ColumnNames = aws.ToStringSlice(f11f0iter.ColumnNames)
+			f10f0 := []svcsdktypes.UniqueKey{}
+			for _, f10f0iter := range r.ko.Spec.PerformanceConfiguration.UniqueKeys {
+				f10f0elem := &svcsdktypes.UniqueKey{}
+				if f10f0iter.ColumnNames != nil {
+					f10f0elem.ColumnNames = aws.ToStringSlice(f10f0iter.ColumnNames)
 				}
-				f11f0 = append(f11f0, *f11f0elem)
+				f10f0 = append(f10f0, *f10f0elem)
 			}
-			f11.UniqueKeys = f11f0
+			f10.UniqueKeys = f10f0
 		}
-		res.PerformanceConfiguration = f11
+		res.PerformanceConfiguration = f10
 	}
 	if r.ko.Spec.PhysicalTableMap != nil {
-		f12 := map[string]svcsdktypes.PhysicalTable{}
-		for f12key, f12valiter := range r.ko.Spec.PhysicalTableMap {
-			var f12val svcsdktypes.PhysicalTable
+		f11 := map[string]svcsdktypes.PhysicalTable{}
+		for f11key, f11valiter := range r.ko.Spec.PhysicalTableMap {
+			var f11val svcsdktypes.PhysicalTable
 			isInterfaceSet := false
-			if f12valiter.CustomSQL != nil {
+			if f11valiter.CustomSQL != nil {
 				if isInterfaceSet {
 					return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for CustomSql"))
 				}
-				f12valf0Parent := &svcsdktypes.PhysicalTableMemberCustomSql{}
-				f12valf0 := &svcsdktypes.CustomSql{}
-				if f12valiter.CustomSQL.Columns != nil {
-					f12valf0f0 := []svcsdktypes.InputColumn{}
-					for _, f12valf0f0iter := range f12valiter.CustomSQL.Columns {
-						f12valf0f0elem := &svcsdktypes.InputColumn{}
-						if f12valf0f0iter.ID != nil {
-							f12valf0f0elem.Id = f12valf0f0iter.ID
+				f11valf0Parent := &svcsdktypes.PhysicalTableMemberCustomSql{}
+				f11valf0 := &svcsdktypes.CustomSql{}
+				if f11valiter.CustomSQL.Columns != nil {
+					f11valf0f0 := []svcsdktypes.InputColumn{}
+					for _, f11valf0f0iter := range f11valiter.CustomSQL.Columns {
+						f11valf0f0elem := &svcsdktypes.InputColumn{}
+						if f11valf0f0iter.ID != nil {
+							f11valf0f0elem.Id = f11valf0f0iter.ID
 						}
-						if f12valf0f0iter.Name != nil {
-							f12valf0f0elem.Name = f12valf0f0iter.Name
+						if f11valf0f0iter.Name != nil {
+							f11valf0f0elem.Name = f11valf0f0iter.Name
 						}
-						if f12valf0f0iter.SubType != nil {
-							f12valf0f0elem.SubType = svcsdktypes.ColumnDataSubType(*f12valf0f0iter.SubType)
+						if f11valf0f0iter.SubType != nil {
+							f11valf0f0elem.SubType = svcsdktypes.ColumnDataSubType(*f11valf0f0iter.SubType)
 						}
-						if f12valf0f0iter.Type != nil {
-							f12valf0f0elem.Type = svcsdktypes.InputColumnDataType(*f12valf0f0iter.Type)
+						if f11valf0f0iter.Type != nil {
+							f11valf0f0elem.Type = svcsdktypes.InputColumnDataType(*f11valf0f0iter.Type)
 						}
-						f12valf0f0 = append(f12valf0f0, *f12valf0f0elem)
+						f11valf0f0 = append(f11valf0f0, *f11valf0f0elem)
 					}
-					f12valf0.Columns = f12valf0f0
+					f11valf0.Columns = f11valf0f0
 				}
-				if f12valiter.CustomSQL.DataSourceARN != nil {
-					f12valf0.DataSourceArn = f12valiter.CustomSQL.DataSourceARN
+				if f11valiter.CustomSQL.DataSourceARN != nil {
+					f11valf0.DataSourceArn = f11valiter.CustomSQL.DataSourceARN
 				}
-				if f12valiter.CustomSQL.Name != nil {
-					f12valf0.Name = f12valiter.CustomSQL.Name
+				if f11valiter.CustomSQL.Name != nil {
+					f11valf0.Name = f11valiter.CustomSQL.Name
 				}
-				if f12valiter.CustomSQL.SQLQuery != nil {
-					f12valf0.SqlQuery = f12valiter.CustomSQL.SQLQuery
+				if f11valiter.CustomSQL.SQLQuery != nil {
+					f11valf0.SqlQuery = f11valiter.CustomSQL.SQLQuery
 				}
-				f12valf0Parent.Value = *f12valf0
-				f12val = f12valf0Parent
+				f11valf0Parent.Value = *f11valf0
+				f11val = f11valf0Parent
 				isInterfaceSet = true
 			}
-			if f12valiter.RelationalTable != nil {
+			if f11valiter.RelationalTable != nil {
 				if isInterfaceSet {
 					return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for RelationalTable"))
 				}
-				f12valf1Parent := &svcsdktypes.PhysicalTableMemberRelationalTable{}
-				f12valf1 := &svcsdktypes.RelationalTable{}
-				if f12valiter.RelationalTable.Catalog != nil {
-					f12valf1.Catalog = f12valiter.RelationalTable.Catalog
+				f11valf1Parent := &svcsdktypes.PhysicalTableMemberRelationalTable{}
+				f11valf1 := &svcsdktypes.RelationalTable{}
+				if f11valiter.RelationalTable.Catalog != nil {
+					f11valf1.Catalog = f11valiter.RelationalTable.Catalog
 				}
-				if f12valiter.RelationalTable.DataSourceARN != nil {
-					f12valf1.DataSourceArn = f12valiter.RelationalTable.DataSourceARN
+				if f11valiter.RelationalTable.DataSourceARN != nil {
+					f11valf1.DataSourceArn = f11valiter.RelationalTable.DataSourceARN
 				}
-				if f12valiter.RelationalTable.InputColumns != nil {
-					f12valf1f2 := []svcsdktypes.InputColumn{}
-					for _, f12valf1f2iter := range f12valiter.RelationalTable.InputColumns {
-						f12valf1f2elem := &svcsdktypes.InputColumn{}
-						if f12valf1f2iter.ID != nil {
-							f12valf1f2elem.Id = f12valf1f2iter.ID
+				if f11valiter.RelationalTable.InputColumns != nil {
+					f11valf1f2 := []svcsdktypes.InputColumn{}
+					for _, f11valf1f2iter := range f11valiter.RelationalTable.InputColumns {
+						f11valf1f2elem := &svcsdktypes.InputColumn{}
+						if f11valf1f2iter.ID != nil {
+							f11valf1f2elem.Id = f11valf1f2iter.ID
 						}
-						if f12valf1f2iter.Name != nil {
-							f12valf1f2elem.Name = f12valf1f2iter.Name
+						if f11valf1f2iter.Name != nil {
+							f11valf1f2elem.Name = f11valf1f2iter.Name
 						}
-						if f12valf1f2iter.SubType != nil {
-							f12valf1f2elem.SubType = svcsdktypes.ColumnDataSubType(*f12valf1f2iter.SubType)
+						if f11valf1f2iter.SubType != nil {
+							f11valf1f2elem.SubType = svcsdktypes.ColumnDataSubType(*f11valf1f2iter.SubType)
 						}
-						if f12valf1f2iter.Type != nil {
-							f12valf1f2elem.Type = svcsdktypes.InputColumnDataType(*f12valf1f2iter.Type)
+						if f11valf1f2iter.Type != nil {
+							f11valf1f2elem.Type = svcsdktypes.InputColumnDataType(*f11valf1f2iter.Type)
 						}
-						f12valf1f2 = append(f12valf1f2, *f12valf1f2elem)
+						f11valf1f2 = append(f11valf1f2, *f11valf1f2elem)
 					}
-					f12valf1.InputColumns = f12valf1f2
+					f11valf1.InputColumns = f11valf1f2
 				}
-				if f12valiter.RelationalTable.Name != nil {
-					f12valf1.Name = f12valiter.RelationalTable.Name
+				if f11valiter.RelationalTable.Name != nil {
+					f11valf1.Name = f11valiter.RelationalTable.Name
 				}
-				if f12valiter.RelationalTable.Schema != nil {
-					f12valf1.Schema = f12valiter.RelationalTable.Schema
+				if f11valiter.RelationalTable.Schema != nil {
+					f11valf1.Schema = f11valiter.RelationalTable.Schema
 				}
-				f12valf1Parent.Value = *f12valf1
-				f12val = f12valf1Parent
+				f11valf1Parent.Value = *f11valf1
+				f11val = f11valf1Parent
 				isInterfaceSet = true
 			}
-			if f12valiter.S3Source != nil {
+			if f11valiter.S3Source != nil {
 				if isInterfaceSet {
 					return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for S3Source"))
 				}
-				f12valf2Parent := &svcsdktypes.PhysicalTableMemberS3Source{}
-				f12valf2 := &svcsdktypes.S3Source{}
-				if f12valiter.S3Source.DataSourceARN != nil {
-					f12valf2.DataSourceArn = f12valiter.S3Source.DataSourceARN
+				f11valf2Parent := &svcsdktypes.PhysicalTableMemberS3Source{}
+				f11valf2 := &svcsdktypes.S3Source{}
+				if f11valiter.S3Source.DataSourceARN != nil {
+					f11valf2.DataSourceArn = f11valiter.S3Source.DataSourceARN
 				}
-				if f12valiter.S3Source.InputColumns != nil {
-					f12valf2f1 := []svcsdktypes.InputColumn{}
-					for _, f12valf2f1iter := range f12valiter.S3Source.InputColumns {
-						f12valf2f1elem := &svcsdktypes.InputColumn{}
-						if f12valf2f1iter.ID != nil {
-							f12valf2f1elem.Id = f12valf2f1iter.ID
+				if f11valiter.S3Source.InputColumns != nil {
+					f11valf2f1 := []svcsdktypes.InputColumn{}
+					for _, f11valf2f1iter := range f11valiter.S3Source.InputColumns {
+						f11valf2f1elem := &svcsdktypes.InputColumn{}
+						if f11valf2f1iter.ID != nil {
+							f11valf2f1elem.Id = f11valf2f1iter.ID
 						}
-						if f12valf2f1iter.Name != nil {
-							f12valf2f1elem.Name = f12valf2f1iter.Name
+						if f11valf2f1iter.Name != nil {
+							f11valf2f1elem.Name = f11valf2f1iter.Name
 						}
-						if f12valf2f1iter.SubType != nil {
-							f12valf2f1elem.SubType = svcsdktypes.ColumnDataSubType(*f12valf2f1iter.SubType)
+						if f11valf2f1iter.SubType != nil {
+							f11valf2f1elem.SubType = svcsdktypes.ColumnDataSubType(*f11valf2f1iter.SubType)
 						}
-						if f12valf2f1iter.Type != nil {
-							f12valf2f1elem.Type = svcsdktypes.InputColumnDataType(*f12valf2f1iter.Type)
+						if f11valf2f1iter.Type != nil {
+							f11valf2f1elem.Type = svcsdktypes.InputColumnDataType(*f11valf2f1iter.Type)
 						}
-						f12valf2f1 = append(f12valf2f1, *f12valf2f1elem)
+						f11valf2f1 = append(f11valf2f1, *f11valf2f1elem)
 					}
-					f12valf2.InputColumns = f12valf2f1
+					f11valf2.InputColumns = f11valf2f1
 				}
-				if f12valiter.S3Source.UploadSettings != nil {
-					f12valf2f2 := &svcsdktypes.UploadSettings{}
-					if f12valiter.S3Source.UploadSettings.ContainsHeader != nil {
-						f12valf2f2.ContainsHeader = f12valiter.S3Source.UploadSettings.ContainsHeader
+				if f11valiter.S3Source.UploadSettings != nil {
+					f11valf2f2 := &svcsdktypes.UploadSettings{}
+					if f11valiter.S3Source.UploadSettings.ContainsHeader != nil {
+						f11valf2f2.ContainsHeader = f11valiter.S3Source.UploadSettings.ContainsHeader
 					}
-					if f12valiter.S3Source.UploadSettings.CustomCellAddressRange != nil {
-						f12valf2f2.CustomCellAddressRange = f12valiter.S3Source.UploadSettings.CustomCellAddressRange
+					if f11valiter.S3Source.UploadSettings.CustomCellAddressRange != nil {
+						f11valf2f2.CustomCellAddressRange = f11valiter.S3Source.UploadSettings.CustomCellAddressRange
 					}
-					if f12valiter.S3Source.UploadSettings.Delimiter != nil {
-						f12valf2f2.Delimiter = f12valiter.S3Source.UploadSettings.Delimiter
+					if f11valiter.S3Source.UploadSettings.Delimiter != nil {
+						f11valf2f2.Delimiter = f11valiter.S3Source.UploadSettings.Delimiter
 					}
-					if f12valiter.S3Source.UploadSettings.Format != nil {
-						f12valf2f2.Format = svcsdktypes.FileFormat(*f12valiter.S3Source.UploadSettings.Format)
+					if f11valiter.S3Source.UploadSettings.Format != nil {
+						f11valf2f2.Format = svcsdktypes.FileFormat(*f11valiter.S3Source.UploadSettings.Format)
 					}
-					if f12valiter.S3Source.UploadSettings.StartFromRow != nil {
-						startFromRowCopy0 := *f12valiter.S3Source.UploadSettings.StartFromRow
+					if f11valiter.S3Source.UploadSettings.StartFromRow != nil {
+						startFromRowCopy0 := *f11valiter.S3Source.UploadSettings.StartFromRow
 						if startFromRowCopy0 > math.MaxInt32 || startFromRowCopy0 < math.MinInt32 {
 							return nil, fmt.Errorf("error: field StartFromRow is of type int32")
 						}
 						startFromRowCopy := int32(startFromRowCopy0)
-						f12valf2f2.StartFromRow = &startFromRowCopy
+						f11valf2f2.StartFromRow = &startFromRowCopy
 					}
-					if f12valiter.S3Source.UploadSettings.TextQualifier != nil {
-						f12valf2f2.TextQualifier = svcsdktypes.TextQualifier(*f12valiter.S3Source.UploadSettings.TextQualifier)
+					if f11valiter.S3Source.UploadSettings.TextQualifier != nil {
+						f11valf2f2.TextQualifier = svcsdktypes.TextQualifier(*f11valiter.S3Source.UploadSettings.TextQualifier)
 					}
-					f12valf2.UploadSettings = f12valf2f2
+					f11valf2.UploadSettings = f11valf2f2
 				}
-				f12valf2Parent.Value = *f12valf2
-				f12val = f12valf2Parent
+				f11valf2Parent.Value = *f11valf2
+				f11val = f11valf2Parent
 				isInterfaceSet = true
 			}
-			if f12valiter.SaaSTable != nil {
+			if f11valiter.SaaSTable != nil {
 				if isInterfaceSet {
 					return nil, ackerr.NewTerminalError(fmt.Errorf("can only set one of the members for SaaSTable"))
 				}
-				f12valf3Parent := &svcsdktypes.PhysicalTableMemberSaaSTable{}
-				f12valf3 := &svcsdktypes.SaaSTable{}
-				if f12valiter.SaaSTable.DataSourceARN != nil {
-					f12valf3.DataSourceArn = f12valiter.SaaSTable.DataSourceARN
+				f11valf3Parent := &svcsdktypes.PhysicalTableMemberSaaSTable{}
+				f11valf3 := &svcsdktypes.SaaSTable{}
+				if f11valiter.SaaSTable.DataSourceARN != nil {
+					f11valf3.DataSourceArn = f11valiter.SaaSTable.DataSourceARN
 				}
-				if f12valiter.SaaSTable.InputColumns != nil {
-					f12valf3f1 := []svcsdktypes.InputColumn{}
-					for _, f12valf3f1iter := range f12valiter.SaaSTable.InputColumns {
-						f12valf3f1elem := &svcsdktypes.InputColumn{}
-						if f12valf3f1iter.ID != nil {
-							f12valf3f1elem.Id = f12valf3f1iter.ID
+				if f11valiter.SaaSTable.InputColumns != nil {
+					f11valf3f1 := []svcsdktypes.InputColumn{}
+					for _, f11valf3f1iter := range f11valiter.SaaSTable.InputColumns {
+						f11valf3f1elem := &svcsdktypes.InputColumn{}
+						if f11valf3f1iter.ID != nil {
+							f11valf3f1elem.Id = f11valf3f1iter.ID
 						}
-						if f12valf3f1iter.Name != nil {
-							f12valf3f1elem.Name = f12valf3f1iter.Name
+						if f11valf3f1iter.Name != nil {
+							f11valf3f1elem.Name = f11valf3f1iter.Name
 						}
-						if f12valf3f1iter.SubType != nil {
-							f12valf3f1elem.SubType = svcsdktypes.ColumnDataSubType(*f12valf3f1iter.SubType)
+						if f11valf3f1iter.SubType != nil {
+							f11valf3f1elem.SubType = svcsdktypes.ColumnDataSubType(*f11valf3f1iter.SubType)
 						}
-						if f12valf3f1iter.Type != nil {
-							f12valf3f1elem.Type = svcsdktypes.InputColumnDataType(*f12valf3f1iter.Type)
+						if f11valf3f1iter.Type != nil {
+							f11valf3f1elem.Type = svcsdktypes.InputColumnDataType(*f11valf3f1iter.Type)
 						}
-						f12valf3f1 = append(f12valf3f1, *f12valf3f1elem)
+						f11valf3f1 = append(f11valf3f1, *f11valf3f1elem)
 					}
-					f12valf3.InputColumns = f12valf3f1
+					f11valf3.InputColumns = f11valf3f1
 				}
-				if f12valiter.SaaSTable.TablePath != nil {
-					f12valf3f2 := []svcsdktypes.TablePathElement{}
-					for _, f12valf3f2iter := range f12valiter.SaaSTable.TablePath {
-						f12valf3f2elem := &svcsdktypes.TablePathElement{}
-						if f12valf3f2iter.ID != nil {
-							f12valf3f2elem.Id = f12valf3f2iter.ID
+				if f11valiter.SaaSTable.TablePath != nil {
+					f11valf3f2 := []svcsdktypes.TablePathElement{}
+					for _, f11valf3f2iter := range f11valiter.SaaSTable.TablePath {
+						f11valf3f2elem := &svcsdktypes.TablePathElement{}
+						if f11valf3f2iter.ID != nil {
+							f11valf3f2elem.Id = f11valf3f2iter.ID
 						}
-						if f12valf3f2iter.Name != nil {
-							f12valf3f2elem.Name = f12valf3f2iter.Name
+						if f11valf3f2iter.Name != nil {
+							f11valf3f2elem.Name = f11valf3f2iter.Name
 						}
-						f12valf3f2 = append(f12valf3f2, *f12valf3f2elem)
+						f11valf3f2 = append(f11valf3f2, *f11valf3f2elem)
 					}
-					f12valf3.TablePath = f12valf3f2
+					f11valf3.TablePath = f11valf3f2
 				}
-				f12valf3Parent.Value = *f12valf3
-				f12val = f12valf3Parent
+				f11valf3Parent.Value = *f11valf3
+				f11val = f11valf3Parent
 				isInterfaceSet = true
 			}
-			f12[f12key] = f12val
+			f11[f11key] = f11val
 		}
-		res.PhysicalTableMap = f12
-	}
-	if r.ko.Spec.RowLevelPermissionDataSet != nil {
-		f13 := &svcsdktypes.RowLevelPermissionDataSet{}
-		if r.ko.Spec.RowLevelPermissionDataSet.ARN != nil {
-			f13.Arn = r.ko.Spec.RowLevelPermissionDataSet.ARN
-		}
-		if r.ko.Spec.RowLevelPermissionDataSet.FormatVersion != nil {
-			f13.FormatVersion = svcsdktypes.RowLevelPermissionFormatVersion(*r.ko.Spec.RowLevelPermissionDataSet.FormatVersion)
-		}
-		if r.ko.Spec.RowLevelPermissionDataSet.Namespace != nil {
-			f13.Namespace = r.ko.Spec.RowLevelPermissionDataSet.Namespace
-		}
-		if r.ko.Spec.RowLevelPermissionDataSet.PermissionPolicy != nil {
-			f13.PermissionPolicy = svcsdktypes.RowLevelPermissionPolicy(*r.ko.Spec.RowLevelPermissionDataSet.PermissionPolicy)
-		}
-		if r.ko.Spec.RowLevelPermissionDataSet.Status != nil {
-			f13.Status = svcsdktypes.Status(*r.ko.Spec.RowLevelPermissionDataSet.Status)
-		}
-		res.RowLevelPermissionDataSet = f13
-	}
-	if r.ko.Spec.RowLevelPermissionTagConfiguration != nil {
-		f14 := &svcsdktypes.RowLevelPermissionTagConfiguration{}
-		if r.ko.Spec.RowLevelPermissionTagConfiguration.Status != nil {
-			f14.Status = svcsdktypes.Status(*r.ko.Spec.RowLevelPermissionTagConfiguration.Status)
-		}
-		if r.ko.Spec.RowLevelPermissionTagConfiguration.TagRuleConfigurations != nil {
-			f14f1 := [][]string{}
-			for _, f14f1iter := range r.ko.Spec.RowLevelPermissionTagConfiguration.TagRuleConfigurations {
-				f14f1elem := aws.ToStringSlice(f14f1iter)
-				f14f1 = append(f14f1, f14f1elem)
-			}
-			f14.TagRuleConfigurations = f14f1
-		}
-		if r.ko.Spec.RowLevelPermissionTagConfiguration.TagRules != nil {
-			f14f2 := []svcsdktypes.RowLevelPermissionTagRule{}
-			for _, f14f2iter := range r.ko.Spec.RowLevelPermissionTagConfiguration.TagRules {
-				f14f2elem := &svcsdktypes.RowLevelPermissionTagRule{}
-				if f14f2iter.ColumnName != nil {
-					f14f2elem.ColumnName = f14f2iter.ColumnName
-				}
-				if f14f2iter.MatchAllValue != nil {
-					f14f2elem.MatchAllValue = f14f2iter.MatchAllValue
-				}
-				if f14f2iter.TagKey != nil {
-					f14f2elem.TagKey = f14f2iter.TagKey
-				}
-				if f14f2iter.TagMultiValueDelimiter != nil {
-					f14f2elem.TagMultiValueDelimiter = f14f2iter.TagMultiValueDelimiter
-				}
-				f14f2 = append(f14f2, *f14f2elem)
-			}
-			f14.TagRules = f14f2
-		}
-		res.RowLevelPermissionTagConfiguration = f14
+		res.PhysicalTableMap = f11
 	}
 	if r.ko.Spec.SemanticModelConfiguration != nil {
-		f15 := &svcsdktypes.SemanticModelConfiguration{}
+		f12 := &svcsdktypes.SemanticModelConfiguration{}
 		if r.ko.Spec.SemanticModelConfiguration.TableMap != nil {
-			f15f0 := map[string]svcsdktypes.SemanticTable{}
-			for f15f0key, f15f0valiter := range r.ko.Spec.SemanticModelConfiguration.TableMap {
-				f15f0val := &svcsdktypes.SemanticTable{}
-				if f15f0valiter.Alias != nil {
-					f15f0val.Alias = f15f0valiter.Alias
+			f12f0 := map[string]svcsdktypes.SemanticTable{}
+			for f12f0key, f12f0valiter := range r.ko.Spec.SemanticModelConfiguration.TableMap {
+				f12f0val := &svcsdktypes.SemanticTable{}
+				if f12f0valiter.Alias != nil {
+					f12f0val.Alias = f12f0valiter.Alias
 				}
-				if f15f0valiter.DestinationTableID != nil {
-					f15f0val.DestinationTableId = f15f0valiter.DestinationTableID
+				if f12f0valiter.DestinationTableID != nil {
+					f12f0val.DestinationTableId = f12f0valiter.DestinationTableID
 				}
-				if f15f0valiter.RowLevelPermissionConfiguration != nil {
-					f15f0valf2 := &svcsdktypes.RowLevelPermissionConfiguration{}
-					if f15f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet != nil {
-						f15f0valf2f0 := &svcsdktypes.RowLevelPermissionDataSet{}
-						if f15f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.ARN != nil {
-							f15f0valf2f0.Arn = f15f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.ARN
+				if f12f0valiter.RowLevelPermissionConfiguration != nil {
+					f12f0valf2 := &svcsdktypes.RowLevelPermissionConfiguration{}
+					if f12f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet != nil {
+						f12f0valf2f0 := &svcsdktypes.RowLevelPermissionDataSet{}
+						if f12f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.ARN != nil {
+							f12f0valf2f0.Arn = f12f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.ARN
 						}
-						if f15f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.FormatVersion != nil {
-							f15f0valf2f0.FormatVersion = svcsdktypes.RowLevelPermissionFormatVersion(*f15f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.FormatVersion)
+						if f12f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.FormatVersion != nil {
+							f12f0valf2f0.FormatVersion = svcsdktypes.RowLevelPermissionFormatVersion(*f12f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.FormatVersion)
 						}
-						if f15f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.Namespace != nil {
-							f15f0valf2f0.Namespace = f15f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.Namespace
+						if f12f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.Namespace != nil {
+							f12f0valf2f0.Namespace = f12f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.Namespace
 						}
-						if f15f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.PermissionPolicy != nil {
-							f15f0valf2f0.PermissionPolicy = svcsdktypes.RowLevelPermissionPolicy(*f15f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.PermissionPolicy)
+						if f12f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.PermissionPolicy != nil {
+							f12f0valf2f0.PermissionPolicy = svcsdktypes.RowLevelPermissionPolicy(*f12f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.PermissionPolicy)
 						}
-						if f15f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.Status != nil {
-							f15f0valf2f0.Status = svcsdktypes.Status(*f15f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.Status)
+						if f12f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.Status != nil {
+							f12f0valf2f0.Status = svcsdktypes.Status(*f12f0valiter.RowLevelPermissionConfiguration.RowLevelPermissionDataSet.Status)
 						}
-						f15f0valf2.RowLevelPermissionDataSet = f15f0valf2f0
+						f12f0valf2.RowLevelPermissionDataSet = f12f0valf2f0
 					}
-					if f15f0valiter.RowLevelPermissionConfiguration.TagConfiguration != nil {
-						f15f0valf2f1 := &svcsdktypes.RowLevelPermissionTagConfiguration{}
-						if f15f0valiter.RowLevelPermissionConfiguration.TagConfiguration.Status != nil {
-							f15f0valf2f1.Status = svcsdktypes.Status(*f15f0valiter.RowLevelPermissionConfiguration.TagConfiguration.Status)
+					if f12f0valiter.RowLevelPermissionConfiguration.TagConfiguration != nil {
+						f12f0valf2f1 := &svcsdktypes.RowLevelPermissionTagConfiguration{}
+						if f12f0valiter.RowLevelPermissionConfiguration.TagConfiguration.Status != nil {
+							f12f0valf2f1.Status = svcsdktypes.Status(*f12f0valiter.RowLevelPermissionConfiguration.TagConfiguration.Status)
 						}
-						if f15f0valiter.RowLevelPermissionConfiguration.TagConfiguration.TagRuleConfigurations != nil {
-							f15f0valf2f1f1 := [][]string{}
-							for _, f15f0valf2f1f1iter := range f15f0valiter.RowLevelPermissionConfiguration.TagConfiguration.TagRuleConfigurations {
-								f15f0valf2f1f1elem := aws.ToStringSlice(f15f0valf2f1f1iter)
-								f15f0valf2f1f1 = append(f15f0valf2f1f1, f15f0valf2f1f1elem)
+						if f12f0valiter.RowLevelPermissionConfiguration.TagConfiguration.TagRuleConfigurations != nil {
+							f12f0valf2f1f1 := [][]string{}
+							for _, f12f0valf2f1f1iter := range f12f0valiter.RowLevelPermissionConfiguration.TagConfiguration.TagRuleConfigurations {
+								f12f0valf2f1f1elem := aws.ToStringSlice(f12f0valf2f1f1iter)
+								f12f0valf2f1f1 = append(f12f0valf2f1f1, f12f0valf2f1f1elem)
 							}
-							f15f0valf2f1.TagRuleConfigurations = f15f0valf2f1f1
+							f12f0valf2f1.TagRuleConfigurations = f12f0valf2f1f1
 						}
-						if f15f0valiter.RowLevelPermissionConfiguration.TagConfiguration.TagRules != nil {
-							f15f0valf2f1f2 := []svcsdktypes.RowLevelPermissionTagRule{}
-							for _, f15f0valf2f1f2iter := range f15f0valiter.RowLevelPermissionConfiguration.TagConfiguration.TagRules {
-								f15f0valf2f1f2elem := &svcsdktypes.RowLevelPermissionTagRule{}
-								if f15f0valf2f1f2iter.ColumnName != nil {
-									f15f0valf2f1f2elem.ColumnName = f15f0valf2f1f2iter.ColumnName
+						if f12f0valiter.RowLevelPermissionConfiguration.TagConfiguration.TagRules != nil {
+							f12f0valf2f1f2 := []svcsdktypes.RowLevelPermissionTagRule{}
+							for _, f12f0valf2f1f2iter := range f12f0valiter.RowLevelPermissionConfiguration.TagConfiguration.TagRules {
+								f12f0valf2f1f2elem := &svcsdktypes.RowLevelPermissionTagRule{}
+								if f12f0valf2f1f2iter.ColumnName != nil {
+									f12f0valf2f1f2elem.ColumnName = f12f0valf2f1f2iter.ColumnName
 								}
-								if f15f0valf2f1f2iter.MatchAllValue != nil {
-									f15f0valf2f1f2elem.MatchAllValue = f15f0valf2f1f2iter.MatchAllValue
+								if f12f0valf2f1f2iter.MatchAllValue != nil {
+									f12f0valf2f1f2elem.MatchAllValue = f12f0valf2f1f2iter.MatchAllValue
 								}
-								if f15f0valf2f1f2iter.TagKey != nil {
-									f15f0valf2f1f2elem.TagKey = f15f0valf2f1f2iter.TagKey
+								if f12f0valf2f1f2iter.TagKey != nil {
+									f12f0valf2f1f2elem.TagKey = f12f0valf2f1f2iter.TagKey
 								}
-								if f15f0valf2f1f2iter.TagMultiValueDelimiter != nil {
-									f15f0valf2f1f2elem.TagMultiValueDelimiter = f15f0valf2f1f2iter.TagMultiValueDelimiter
+								if f12f0valf2f1f2iter.TagMultiValueDelimiter != nil {
+									f12f0valf2f1f2elem.TagMultiValueDelimiter = f12f0valf2f1f2iter.TagMultiValueDelimiter
 								}
-								f15f0valf2f1f2 = append(f15f0valf2f1f2, *f15f0valf2f1f2elem)
+								f12f0valf2f1f2 = append(f12f0valf2f1f2, *f12f0valf2f1f2elem)
 							}
-							f15f0valf2f1.TagRules = f15f0valf2f1f2
+							f12f0valf2f1.TagRules = f12f0valf2f1f2
 						}
-						f15f0valf2.TagConfiguration = f15f0valf2f1
+						f12f0valf2.TagConfiguration = f12f0valf2f1
 					}
-					f15f0val.RowLevelPermissionConfiguration = f15f0valf2
+					f12f0val.RowLevelPermissionConfiguration = f12f0valf2
 				}
-				f15f0[f15f0key] = *f15f0val
+				f12f0[f12f0key] = *f12f0val
 			}
-			f15.TableMap = f15f0
+			f12.TableMap = f12f0
 		}
-		res.SemanticModelConfiguration = f15
+		res.SemanticModelConfiguration = f12
 	}
 
 	return res, nil

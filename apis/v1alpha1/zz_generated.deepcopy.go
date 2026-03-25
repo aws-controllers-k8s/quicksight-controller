@@ -3237,22 +3237,6 @@ func (in *DataSetSpec) DeepCopyInto(out *DataSetSpec) {
 		*out = new(string)
 		**out = **in
 	}
-	if in.LogicalTableMap != nil {
-		in, out := &in.LogicalTableMap, &out.LogicalTableMap
-		*out = make(map[string]*LogicalTable, len(*in))
-		for key, val := range *in {
-			var outVal *LogicalTable
-			if val == nil {
-				(*out)[key] = nil
-			} else {
-				inVal := (*in)[key]
-				in, out := &inVal, &outVal
-				*out = new(LogicalTable)
-				(*in).DeepCopyInto(*out)
-			}
-			(*out)[key] = outVal
-		}
-	}
 	if in.Name != nil {
 		in, out := &in.Name, &out.Name
 		*out = new(string)
@@ -3300,16 +3284,6 @@ func (in *DataSetSpec) DeepCopyInto(out *DataSetSpec) {
 			}
 			(*out)[key] = outVal
 		}
-	}
-	if in.RowLevelPermissionDataSet != nil {
-		in, out := &in.RowLevelPermissionDataSet, &out.RowLevelPermissionDataSet
-		*out = new(RowLevelPermissionDataSet)
-		(*in).DeepCopyInto(*out)
-	}
-	if in.RowLevelPermissionTagConfiguration != nil {
-		in, out := &in.RowLevelPermissionTagConfiguration, &out.RowLevelPermissionTagConfiguration
-		*out = new(RowLevelPermissionTagConfiguration)
-		(*in).DeepCopyInto(*out)
 	}
 	if in.SemanticModelConfiguration != nil {
 		in, out := &in.SemanticModelConfiguration, &out.SemanticModelConfiguration

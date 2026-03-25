@@ -1471,7 +1471,7 @@ type JoinInstruction struct {
 	RightJoinKeyProperties *JoinKeyProperties `json:"rightJoinKeyProperties,omitempty"`
 	// An identifier for the logical table that is defined in the dataset
 	RightOperand *string `json:"rightOperand,omitempty"`
-	Type         *string `json:"type,omitempty"`
+	Type         *string `json:"type_,omitempty"`
 }
 
 // Properties associated with the columns participating in a join.

@@ -40,6 +40,18 @@ ignore:
       - UpdateDataSetOutput.Status
       - DeleteDataSetOutput.Status
       - DescribeDataSetOutput.Status
+      # RowLevelPermissionDataSet - deprecated
+      - CreateDataSetInput.RowLevelPermissionDataSet
+      - UpdateDataSetInput.RowLevelPermissionDataSet
+      - DescribeDataSetOutput.RowLevelPermissionDataSet
+      # LogicalTableMap - deprecated, only used in legacy data preparation experience
+      - CreateDataSetInput.LogicalTableMap
+      - UpdateDataSetInput.LogicalTableMap
+      - DescribeDataSetOutput.LogicalTableMap
+      # RowLevelPermissionTagConfiguration - deprecated, only used in legacy data preparation experience
+      - CreateDataSetInput.RowLevelPermissionTagConfiguration
+      - UpdateDataSetInput.RowLevelPermissionTagConfiguration
+      - DescribeDataSetOutput.RowLevelPermissionTagConfiguration
 
 operations:
   DescribeDataSource:
@@ -108,12 +120,10 @@ resources:
         go_tag: json:"type,omitempty"
       PhysicalTableMap.RelationalTable.InputColumns.Type:
         go_tag: json:"type,omitempty"
-      LogicalTableMap.Source.JoinInstruction.Type:
-        go_tag: json:"type,omitempty"
       DataPrepConfiguration.TransformStepMap.JoinStep.Type:
         go_tag: json:"type,omitempty"
       # Cross-resource references for DataSource ARN in physical tables
-      # NOTE: These are nested inside map types (PhysicalTableMap, LogicalTableMap).
+      # NOTE: These are nested inside map types (PhysicalTableMap).
       # PhysicalTableMap.CustomSQL.DataSourceARN:
       #   references:
       #     resource: DataSource
@@ -129,17 +139,6 @@ resources:
       # PhysicalTableMap.SaaSTable.DataSourceARN:
       #   references:
       #     resource: DataSource
-      #     path: Status.ACKResourceMetadata.ARN
-      # LogicalTableMap.Source.DataSetARN:
-      #   references:
-      #     resource: DataSet
-      #     path: Status.ACKResourceMetadata.ARN
-      # NOTE: RowLevelPermissionDataSet.ARN cannot be a reference because
-      # the field name is just an identifier suffix (ARN). The code generator
-      # cannot derive a meaningful reference field name from it.
-      # RowLevelPermissionDataSet.ARN:
-      #   references:
-      #     resource: DataSet
       #     path: Status.ACKResourceMetadata.ARN
     hooks:
       sdk_update_pre_build_request:

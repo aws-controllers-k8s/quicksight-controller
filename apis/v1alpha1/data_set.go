@@ -53,9 +53,6 @@ type DataSetSpec struct {
 	// Indicates whether you want to import the data into SPICE.
 	// +kubebuilder:validation:Required
 	ImportMode *string `json:"importMode"`
-	// Configures the combination and transformation of the data from the physical
-	// tables. This parameter is used with the legacy data preparation experience.
-	LogicalTableMap map[string]*LogicalTable `json:"logicalTableMap,omitempty"`
 	// The display name for the dataset.
 	// +kubebuilder:validation:Required
 	Name *string `json:"name"`
@@ -69,13 +66,6 @@ type DataSetSpec struct {
 	// Declares the physical tables that are available in the underlying data sources.
 	// +kubebuilder:validation:Required
 	PhysicalTableMap map[string]*PhysicalTable `json:"physicalTableMap"`
-	// The row-level security configuration for the data that you want to create.
-	// This parameter is used with the legacy data preparation experience.
-	RowLevelPermissionDataSet *RowLevelPermissionDataSet `json:"rowLevelPermissionDataSet,omitempty"`
-	// The configuration of tags on a dataset to set row-level security. Row-level
-	// security tags are currently supported for anonymous embedding only. This
-	// parameter is used with the legacy data preparation experience.
-	RowLevelPermissionTagConfiguration *RowLevelPermissionTagConfiguration `json:"rowLevelPermissionTagConfiguration,omitempty"`
 	// The semantic model configuration for the dataset. This configuration defines
 	// how the prepared data is structured for an analysis, including table mappings
 	// and row-level security configurations. Required when using the new data preparation
