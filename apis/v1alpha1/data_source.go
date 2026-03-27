@@ -39,6 +39,7 @@ type DataSourceSpec struct {
 	FolderARNs []*string `json:"folderARNs,omitempty"`
 	// An ID for the data source. This ID is unique per Amazon Web Services Region
 	// for each Amazon Web Services account.
+	// +kubebuilder:validation:XValidation:rule="self == oldSelf",message="Value is immutable once set"
 	// +kubebuilder:validation:Required
 	ID *string `json:"id"`
 	// A display name for the data source.
