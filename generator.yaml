@@ -138,6 +138,11 @@ resources:
         from:
           operation: DescribeAnalysis
           path: Analysis.DataSetArns
+    hooks:
+      sdk_update_pre_build_request:
+        template_path: hooks/analysis/sdk_update_pre_build_request.go.tpl
+      sdk_read_one_post_set_output:
+        template_path: hooks/analysis/sdk_read_one_post_set_output.go.tpl
     exceptions:
       errors:
         404:
