@@ -1,0 +1,15 @@
+apiVersion: quicksight.services.k8s.aws/v1alpha1
+kind: Analysis
+metadata:
+  name: $ANALYSIS_NAME
+spec:
+  awsAccountID: "$AWS_ACCOUNT_ID"
+  id: $ANALYSIS_ID
+  name: $ANALYSIS_NAME
+  definition:
+    dataSetIdentifierDeclarations:
+      - dataSetARN: $DATA_SET_ARN
+        identifier: testDataSet
+  tags:
+    - key: environment
+      value: test

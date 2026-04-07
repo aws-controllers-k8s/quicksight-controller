@@ -199,13 +199,6 @@ func newResourceDelta(
 				delta.Add("Spec.Definition.DataSetIdentifierDeclarations", a.ko.Spec.Definition.DataSetIdentifierDeclarations, b.ko.Spec.Definition.DataSetIdentifierDeclarations)
 			}
 		}
-		if len(a.ko.Spec.Definition.FilterGroups) != len(b.ko.Spec.Definition.FilterGroups) {
-			delta.Add("Spec.Definition.FilterGroups", a.ko.Spec.Definition.FilterGroups, b.ko.Spec.Definition.FilterGroups)
-		} else if len(a.ko.Spec.Definition.FilterGroups) > 0 {
-			if !equality.Semantic.Equalities.DeepEqual(a.ko.Spec.Definition.FilterGroups, b.ko.Spec.Definition.FilterGroups) {
-				delta.Add("Spec.Definition.FilterGroups", a.ko.Spec.Definition.FilterGroups, b.ko.Spec.Definition.FilterGroups)
-			}
-		}
 		if ackcompare.HasNilDifference(a.ko.Spec.Definition.Options, b.ko.Spec.Definition.Options) {
 			delta.Add("Spec.Definition.Options", a.ko.Spec.Definition.Options, b.ko.Spec.Definition.Options)
 		} else if a.ko.Spec.Definition.Options != nil && b.ko.Spec.Definition.Options != nil {
@@ -269,13 +262,6 @@ func newResourceDelta(
 				if *a.ko.Spec.Definition.QueryExecutionOptions.QueryExecutionMode != *b.ko.Spec.Definition.QueryExecutionOptions.QueryExecutionMode {
 					delta.Add("Spec.Definition.QueryExecutionOptions.QueryExecutionMode", a.ko.Spec.Definition.QueryExecutionOptions.QueryExecutionMode, b.ko.Spec.Definition.QueryExecutionOptions.QueryExecutionMode)
 				}
-			}
-		}
-		if len(a.ko.Spec.Definition.Sheets) != len(b.ko.Spec.Definition.Sheets) {
-			delta.Add("Spec.Definition.Sheets", a.ko.Spec.Definition.Sheets, b.ko.Spec.Definition.Sheets)
-		} else if len(a.ko.Spec.Definition.Sheets) > 0 {
-			if !equality.Semantic.Equalities.DeepEqual(a.ko.Spec.Definition.Sheets, b.ko.Spec.Definition.Sheets) {
-				delta.Add("Spec.Definition.Sheets", a.ko.Spec.Definition.Sheets, b.ko.Spec.Definition.Sheets)
 			}
 		}
 		if len(a.ko.Spec.Definition.StaticFiles) != len(b.ko.Spec.Definition.StaticFiles) {

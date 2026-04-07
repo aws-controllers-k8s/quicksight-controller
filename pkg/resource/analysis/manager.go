@@ -268,11 +268,11 @@ func (rm *resourceManager) IsSynced(ctx context.Context, res acktypes.AWSResourc
 		panic("resource manager's IsSynced() method received resource with nil CR object")
 	}
 
-	if r.ko.Status.CreationStatus == nil {
+	if r.ko.Status.Status == nil {
 		return false, nil
 	}
-	creationStatusCandidates := []string{"CREATION_SUCCESSFUL", "UPDATE_SUCCESSFUL"}
-	if !ackutil.InStrings(*r.ko.Status.CreationStatus, creationStatusCandidates) {
+	statusCandidates := []string{"CREATION_SUCCESSFUL", "UPDATE_SUCCESSFUL"}
+	if !ackutil.InStrings(*r.ko.Status.Status, statusCandidates) {
 		return false, nil
 	}
 

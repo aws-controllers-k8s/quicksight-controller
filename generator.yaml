@@ -58,6 +58,12 @@ ignore:
       - CreateDataSetInput.RowLevelPermissionTagConfiguration
       - UpdateDataSetInput.RowLevelPermissionTagConfiguration
       - DescribeDataSetOutput.RowLevelPermissionTagConfiguration
+      # Analysis Definition CRD size reduction - the Analysis CRD exceeds the
+      # Kubernetes API server limit (8.1MB) due to deeply fields. Ignoring sheets and FilterGroups reduces size below limits
+      - CreateAnalysisInput.Definition.Sheets
+      - CreateAnalysisInput.Definition.FilterGroups
+      - UpdateAnalysisInput.Definition.Sheets
+      - UpdateAnalysisInput.Definition.FilterGroups
 
 operations:
   DescribeDataSource:
@@ -76,7 +82,7 @@ resources:
     ignore_idempotency_token: true
     synced:
       when:
-        - path: Status.CreationStatus
+        - path: Status.Status
           in:
             - CREATION_SUCCESSFUL
             - UPDATE_SUCCESSFUL
@@ -86,18 +92,20 @@ resources:
           input_fields:
             AnalysisId: ID
           output_fields:
-            CreationStatus: CreationStatus
+            CreationStatus: Status
         UpdateAnalysis:
           input_fields:
             AnalysisId: ID
           output_fields:
-            UpdateStatus: CreationStatus
+            UpdateStatus: Status
         DeleteAnalysis:
           input_fields:
             AnalysisId: ID
         DescribeAnalysis:
           input_fields:
             AnalysisId: ID
+          output_fields:
+            Status: Status
     fields:
       # Primary identifiers
       ID:
@@ -106,7 +114,7 @@ resources:
       AwsAccountId:
         is_immutable: true
       # Status fields from DescribeAnalysis
-      CreationStatus:
+      Status:
         is_read_only: true
         from:
           operation: DescribeAnalysis

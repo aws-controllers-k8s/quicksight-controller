@@ -98,9 +98,6 @@ type AnalysisStatus struct {
 	// The time that the analysis was created.
 	// +kubebuilder:validation:Optional
 	CreatedTime *metav1.Time `json:"createdTime,omitempty"`
-	// Status associated with the analysis.
-	// +kubebuilder:validation:Optional
-	CreationStatus *string `json:"creationStatus,omitempty"`
 	// The ARNs of the datasets of the analysis.
 	// +kubebuilder:validation:Optional
 	DataSetARNs []*string `json:"dataSetARNs,omitempty"`
@@ -114,6 +111,9 @@ type AnalysisStatus struct {
 	// sheet.
 	// +kubebuilder:validation:Optional
 	Sheets []*Sheet `json:"sheets,omitempty"`
+	// Status associated with the analysis.
+	// +kubebuilder:validation:Optional
+	Status *string `json:"status,omitempty"`
 }
 
 // Analysis is the Schema for the Analyses API

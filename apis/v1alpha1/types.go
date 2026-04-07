@@ -131,19 +131,6 @@ type Aggregation struct {
 	NewColumnName       *string                      `json:"newColumnName,omitempty"`
 }
 
-// An aggregation function aggregates values from a dimension or measure.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type AggregationFunction struct {
-	// Aggregation for attributes.
-	AttributeAggregationFunction   *AttributeAggregationFunction `json:"attributeAggregationFunction,omitempty"`
-	CategoricalAggregationFunction *string                       `json:"categoricalAggregationFunction,omitempty"`
-	DateAggregationFunction        *string                       `json:"dateAggregationFunction,omitempty"`
-	// Aggregation for numerical values.
-	NumericalAggregationFunction *NumericalAggregationFunction `json:"numericalAggregationFunction,omitempty"`
-}
-
 // The definition of an AggregationPartitionBy.
 type AggregationPartitionBy struct {
 	TimeGranularity *string `json:"timeGranularity,omitempty"`
@@ -151,14 +138,8 @@ type AggregationPartitionBy struct {
 
 // The configuration options to sort aggregated values.
 type AggregationSortConfiguration struct {
-	// An aggregation function aggregates values from a dimension or measure.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	AggregationFunction *AggregationFunction `json:"aggregationFunction,omitempty"`
 	// A column of a data set.
-	Column        *ColumnIdentifier `json:"column,omitempty"`
-	SortDirection *string           `json:"sortDirection,omitempty"`
+	Column *ColumnIdentifier `json:"column,omitempty"`
 }
 
 // The parameters for OpenSearch.
@@ -184,13 +165,11 @@ type AnalysisDefinition struct {
 	CalculatedFields              []*CalculatedField              `json:"calculatedFields,omitempty"`
 	ColumnConfigurations          []*ColumnConfiguration          `json:"columnConfigurations,omitempty"`
 	DataSetIdentifierDeclarations []*DataSetIdentifierDeclaration `json:"dataSetIdentifierDeclarations,omitempty"`
-	FilterGroups                  []*FilterGroup                  `json:"filterGroups,omitempty"`
 	// An array of analysis level configurations.
 	Options               *AssetOptions           `json:"options,omitempty"`
 	ParameterDeclarations []*ParameterDeclaration `json:"parameterDeclarations,omitempty"`
 	// A structure that describes the query execution options.
 	QueryExecutionOptions *QueryExecutionOptions `json:"queryExecutionOptions,omitempty"`
-	Sheets                []*SheetDefinition     `json:"sheets,omitempty"`
 	StaticFiles           []*StaticFile          `json:"staticFiles,omitempty"`
 }
 
@@ -244,13 +223,11 @@ type Analysis_SDK struct {
 
 // The definition of the Anchor.
 type Anchor struct {
-	Offset          *int64  `json:"offset,omitempty"`
 	TimeGranularity *string `json:"timeGranularity,omitempty"`
 }
 
 // The date configuration of the filter.
 type AnchorDateConfiguration struct {
-	AnchorOption  *string `json:"anchorOption,omitempty"`
 	ParameterName *string `json:"parameterName,omitempty"`
 }
 
@@ -277,30 +254,6 @@ type AppendOperation struct {
 type AppendedColumn struct {
 	ColumnName  *string `json:"columnName,omitempty"`
 	NewColumnID *string `json:"newColumnID,omitempty"`
-}
-
-// The arc axis configuration of a GaugeChartVisual.
-type ArcAxisConfiguration struct {
-	// The arc axis range of a GaugeChartVisual.
-	Range        *ArcAxisDisplayRange `json:"range_,omitempty"`
-	ReserveRange *int64               `json:"reserveRange,omitempty"`
-}
-
-// The arc axis range of a GaugeChartVisual.
-type ArcAxisDisplayRange struct {
-	Max *float64 `json:"max,omitempty"`
-	Min *float64 `json:"min,omitempty"`
-}
-
-// The arc configuration of a GaugeChartVisual.
-type ArcConfiguration struct {
-	ArcAngle     *float64 `json:"arcAngle,omitempty"`
-	ArcThickness *string  `json:"arcThickness,omitempty"`
-}
-
-// The options that determine the arc thickness of a GaugeChartVisual.
-type ArcOptions struct {
-	ArcThickness *string `json:"arcThickness,omitempty"`
 }
 
 // Controls how a specific Analysis resource is parameterized in the returned
@@ -562,8 +515,7 @@ type AthenaParameters struct {
 
 // Aggregation for attributes.
 type AttributeAggregationFunction struct {
-	SimpleAttributeAggregation *string `json:"simpleAttributeAggregation,omitempty"`
-	ValueForMultipleValues     *string `json:"valueForMultipleValues,omitempty"`
+	ValueForMultipleValues *string `json:"valueForMultipleValues,omitempty"`
 }
 
 // Parameters for Amazon Aurora.
@@ -580,59 +532,18 @@ type AuroraPostgreSQLParameters struct {
 	Port     *int64  `json:"port,omitempty"`
 }
 
-// The data options for an axis.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type AxisDataOptions struct {
-	// The options that determine how a date axis is displayed.
-	DateAxisOptions *DateAxisOptions `json:"dateAxisOptions,omitempty"`
-	// The options for an axis with a numeric field.
-	NumericAxisOptions *NumericAxisOptions `json:"numericAxisOptions,omitempty"`
-}
-
-// The minimum and maximum setup for an axis display range.
-type AxisDisplayMinMaxRange struct {
-	Maximum *float64 `json:"maximum,omitempty"`
-	Minimum *float64 `json:"minimum,omitempty"`
-}
-
 // The display options for the axis label.
 type AxisDisplayOptions struct {
 	AxisLineVisibility *string `json:"axisLineVisibility,omitempty"`
 	// String based length that is composed of value and unit in px
-	AxisOffset *string `json:"axisOffset,omitempty"`
-	// The data options for an axis.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	DataOptions        *AxisDataOptions `json:"dataOptions,omitempty"`
-	GridLineVisibility *string          `json:"gridLineVisibility,omitempty"`
-	// The visual display options for a data zoom scroll bar.
-	ScrollbarOptions *ScrollBarOptions `json:"scrollbarOptions,omitempty"`
-	// The tick label options of an axis.
-	TickLabelOptions *AxisTickLabelOptions `json:"tickLabelOptions,omitempty"`
-}
-
-// The range setup of a numeric axis display range.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type AxisDisplayRange struct {
-	// The options that are saved for future extension.
-	DataDriven map[string]*string `json:"dataDriven,omitempty"`
-	// The minimum and maximum setup for an axis display range.
-	MinMax *AxisDisplayMinMaxRange `json:"minMax,omitempty"`
+	AxisOffset         *string `json:"axisOffset,omitempty"`
+	GridLineVisibility *string `json:"gridLineVisibility,omitempty"`
 }
 
 // The label options for a chart axis. You must specify the field that the label
 // is targeted to.
 type AxisLabelOptions struct {
-	// The reference that specifies where the axis label is applied to.
-	ApplyTo     *AxisLabelReferenceOptions `json:"applyTo,omitempty"`
-	CustomLabel *string                    `json:"customLabel,omitempty"`
-	// Configures the display properties of the given text.
-	FontConfiguration *FontConfiguration `json:"fontConfiguration,omitempty"`
+	CustomLabel *string `json:"customLabel,omitempty"`
 }
 
 // The reference that specifies where the axis label is applied to.
@@ -642,132 +553,19 @@ type AxisLabelReferenceOptions struct {
 	FieldID *string           `json:"fieldID,omitempty"`
 }
 
-// The liner axis scale setup.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type AxisLinearScale struct {
-	StepCount *int64   `json:"stepCount,omitempty"`
-	StepSize  *float64 `json:"stepSize,omitempty"`
-}
-
-// The logarithmic axis scale setup.
-type AxisLogarithmicScale struct {
-	Base *float64 `json:"base,omitempty"`
-}
-
-// The scale setup options for a numeric axis display.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type AxisScale struct {
-	// The liner axis scale setup.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	Linear *AxisLinearScale `json:"linear,omitempty"`
-	// The logarithmic axis scale setup.
-	Logarithmic *AxisLogarithmicScale `json:"logarithmic,omitempty"`
-}
-
-// The tick label options of an axis.
-type AxisTickLabelOptions struct {
-	// The share label options for the labels.
-	LabelOptions  *LabelOptions `json:"labelOptions,omitempty"`
-	RotationAngle *float64      `json:"rotationAngle,omitempty"`
-}
-
-// The aggregated field wells of a bar chart.
-type BarChartAggregatedFieldWells struct {
-	Category       []*DimensionField `json:"category,omitempty"`
-	Colors         []*DimensionField `json:"colors,omitempty"`
-	SmallMultiples []*DimensionField `json:"smallMultiples,omitempty"`
-	Values         []*MeasureField   `json:"values,omitempty"`
-}
-
-// The configuration of a BarChartVisual.
-type BarChartConfiguration struct {
-	BarsArrangement *string `json:"barsArrangement,omitempty"`
-	// The display options for the axis label.
-	CategoryAxis *AxisDisplayOptions `json:"categoryAxis,omitempty"`
-	// The label options for an axis on a chart.
-	CategoryLabelOptions *ChartAxisLabelOptions `json:"categoryLabelOptions,omitempty"`
-	// The label options for an axis on a chart.
-	ColorLabelOptions            *ChartAxisLabelOptions         `json:"colorLabelOptions,omitempty"`
-	ContributionAnalysisDefaults []*ContributionAnalysisDefault `json:"contributionAnalysisDefaults,omitempty"`
-	// The options that determine the presentation of the data labels.
-	DataLabels *DataLabelOptions `json:"dataLabels,omitempty"`
-	// The options that determine the default presentation of all bar series in
-	// BarChartVisual.
-	DefaultSeriesSettings *BarChartDefaultSeriesSettings `json:"defaultSeriesSettings,omitempty"`
-	// The field wells of a BarChartVisual.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	FieldWells *BarChartFieldWells `json:"fieldWells,omitempty"`
-	// The general visual interactions setup for visual publish options
-	Interactions *VisualInteractionOptions `json:"interactions,omitempty"`
-	// The options for the legend setup of a visual.
-	Legend         *LegendOptions   `json:"legend,omitempty"`
-	Orientation    *string          `json:"orientation,omitempty"`
-	ReferenceLines []*ReferenceLine `json:"referenceLines,omitempty"`
-	Series         []*BarSeriesItem `json:"series,omitempty"`
-	// Options that determine the layout and display options of a chart's small
-	// multiples.
-	SmallMultiplesOptions *SmallMultiplesOptions `json:"smallMultiplesOptions,omitempty"`
-	// sort-configuration-description
-	SortConfiguration *BarChartSortConfiguration `json:"sortConfiguration,omitempty"`
-	// The display options for the visual tooltip.
-	Tooltip *TooltipOptions `json:"tooltip,omitempty"`
-	// The display options for the axis label.
-	ValueAxis *AxisDisplayOptions `json:"valueAxis,omitempty"`
-	// The label options for an axis on a chart.
-	ValueLabelOptions *ChartAxisLabelOptions `json:"valueLabelOptions,omitempty"`
-	// The visual display options for the visual palette.
-	VisualPalette *VisualPalette `json:"visualPalette,omitempty"`
-}
-
 // The options that determine the default presentation of all bar series in
 // BarChartVisual.
 type BarChartDefaultSeriesSettings struct {
-	// Border settings configuration for visual elements, including visibility,
-	// width, and color properties.
-	BorderSettings *BorderSettings `json:"borderSettings,omitempty"`
 	// Decal settings for accessibility features that define visual patterns and
 	// styling for data elements.
 	DecalSettings *DecalSettings `json:"decalSettings,omitempty"`
-}
-
-// The field wells of a BarChartVisual.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type BarChartFieldWells struct {
-	// The aggregated field wells of a bar chart.
-	BarChartAggregatedFieldWells *BarChartAggregatedFieldWells `json:"barChartAggregatedFieldWells,omitempty"`
 }
 
 // Options that determine the presentation of a bar series in the visual.
 type BarChartSeriesSettings struct {
-	// Border settings configuration for visual elements, including visibility,
-	// width, and color properties.
-	BorderSettings *BorderSettings `json:"borderSettings,omitempty"`
 	// Decal settings for accessibility features that define visual patterns and
 	// styling for data elements.
 	DecalSettings *DecalSettings `json:"decalSettings,omitempty"`
-}
-
-// sort-configuration-description
-type BarChartSortConfiguration struct {
-	// The limit configuration of the visual display for an axis.
-	CategoryItemsLimit *ItemsLimitConfiguration `json:"categoryItemsLimit,omitempty"`
-	CategorySort       []*FieldSortOptions      `json:"categorySort,omitempty"`
-	// The limit configuration of the visual display for an axis.
-	ColorItemsLimit *ItemsLimitConfiguration `json:"colorItemsLimit,omitempty"`
-	ColorSort       []*FieldSortOptions      `json:"colorSort,omitempty"`
-	// The limit configuration of the visual display for an axis.
-	SmallMultiplesLimitConfiguration *ItemsLimitConfiguration `json:"smallMultiplesLimitConfiguration,omitempty"`
-	SmallMultiplesSort               []*FieldSortOptions      `json:"smallMultiplesSort,omitempty"`
 }
 
 // A bar chart.
@@ -790,27 +588,8 @@ type BarChartSortConfiguration struct {
 // For more information, see Using bar charts (https://docs.aws.amazon.com/quicksight/latest/user/bar-charts.html)
 // in the Amazon Quick Suite User Guide.
 type BarChartVisual struct {
-	Actions []*VisualCustomAction `json:"actions,omitempty"`
-	// The configuration of a BarChartVisual.
-	ChartConfiguration *BarChartConfiguration `json:"chartConfiguration,omitempty"`
-	ColumnHierarchies  []*ColumnHierarchy     `json:"columnHierarchies,omitempty"`
-	// The subtitle label options for a visual.
-	Subtitle *VisualSubtitleLabelOptions `json:"subtitle,omitempty"`
-	// The title label options for a visual.
-	Title                *VisualTitleLabelOptions `json:"title,omitempty"`
-	VisualContentAltText *string                  `json:"visualContentAltText,omitempty"`
-	VisualID             *string                  `json:"visualID,omitempty"`
-}
-
-// The series item configuration of a BarChartVisual.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type BarSeriesItem struct {
-	// The data field series item configuration of a BarChartVisual.
-	DataFieldBarSeriesItem *DataFieldBarSeriesItem `json:"dataFieldBarSeriesItem,omitempty"`
-	// The field series item configuration of a BarChartVisual.
-	FieldBarSeriesItem *FieldBarSeriesItem `json:"fieldBarSeriesItem,omitempty"`
+	VisualContentAltText *string `json:"visualContentAltText,omitempty"`
+	VisualID             *string `json:"visualID,omitempty"`
 }
 
 // The parameters that are required to connect to a Google BigQuery data source.
@@ -819,78 +598,23 @@ type BigQueryParameters struct {
 	ProjectID     *string `json:"projectID,omitempty"`
 }
 
-// The options that determine the bin count of a histogram.
-type BinCountOptions struct {
-	Value *int64 `json:"value,omitempty"`
-}
-
-// The options that determine the bin width of a histogram.
-type BinWidthOptions struct {
-	BinCountLimit *int64   `json:"binCountLimit,omitempty"`
-	Value         *float64 `json:"value,omitempty"`
-}
-
 // The configuration of a body section.
 type BodySectionConfiguration struct {
-	// The configuration of content in a body section.
-	Content *BodySectionContent `json:"content,omitempty"`
-	// The configuration of a page break for a section.
-	PageBreakConfiguration *SectionPageBreakConfiguration `json:"pageBreakConfiguration,omitempty"`
-	// Describes the configurations that are required to declare a section as repeating.
-	RepeatConfiguration *BodySectionRepeatConfiguration `json:"repeatConfiguration,omitempty"`
-	SectionID           *string                         `json:"sectionID,omitempty"`
-	// The options that style a section.
-	Style *SectionStyle `json:"style,omitempty"`
-}
-
-// The configuration of content in a body section.
-type BodySectionContent struct {
-	// The layout configuration of a section.
-	Layout *SectionLayoutConfiguration `json:"layout,omitempty"`
+	SectionID *string `json:"sectionID,omitempty"`
 }
 
 // Describes the Category dataset column and constraints for the dynamic values
 // used to repeat the contents of a section.
 type BodySectionDynamicCategoryDimensionConfiguration struct {
 	// A column of a data set.
-	Column        *ColumnIdentifier `json:"column,omitempty"`
-	Limit         *int64            `json:"limit,omitempty"`
-	SortByMetrics []*ColumnSort     `json:"sortByMetrics,omitempty"`
+	Column *ColumnIdentifier `json:"column,omitempty"`
 }
 
 // Describes the Numeric dataset column and constraints for the dynamic values
 // used to repeat the contents of a section.
 type BodySectionDynamicNumericDimensionConfiguration struct {
 	// A column of a data set.
-	Column        *ColumnIdentifier `json:"column,omitempty"`
-	Limit         *int64            `json:"limit,omitempty"`
-	SortByMetrics []*ColumnSort     `json:"sortByMetrics,omitempty"`
-}
-
-// Describes the configurations that are required to declare a section as repeating.
-type BodySectionRepeatConfiguration struct {
-	DimensionConfigurations []*BodySectionRepeatDimensionConfiguration `json:"dimensionConfigurations,omitempty"`
-	NonRepeatingVisuals     []*string                                  `json:"nonRepeatingVisuals,omitempty"`
-	// The page break configuration to apply for each repeating instance.
-	PageBreakConfiguration *BodySectionRepeatPageBreakConfiguration `json:"pageBreakConfiguration,omitempty"`
-}
-
-// Describes the dataset column and constraints for the dynamic values used
-// to repeat the contents of a section. The dataset column is either Category
-// or Numeric column configuration
-type BodySectionRepeatDimensionConfiguration struct {
-	// Describes the Category dataset column and constraints for the dynamic values
-	// used to repeat the contents of a section.
-	DynamicCategoryDimensionConfiguration *BodySectionDynamicCategoryDimensionConfiguration `json:"dynamicCategoryDimensionConfiguration,omitempty"`
-	// Describes the Numeric dataset column and constraints for the dynamic values
-	// used to repeat the contents of a section.
-	DynamicNumericDimensionConfiguration *BodySectionDynamicNumericDimensionConfiguration `json:"dynamicNumericDimensionConfiguration,omitempty"`
-}
-
-// The page break configuration to apply for each repeating instance.
-type BodySectionRepeatPageBreakConfiguration struct {
-	// The configuration of a page break after a section.
-	After *SectionAfterPageBreak `json:"after,omitempty"`
+	Column *ColumnIdentifier `json:"column,omitempty"`
 }
 
 // The bookmarks configuration of an embedded dashboard.
@@ -910,74 +634,12 @@ type BorderSettings struct {
 // The display options for tile borders for visuals.
 type BorderStyle struct {
 	Show *bool `json:"show,omitempty"`
-	// String to encapsulate the most generic way Width can be formatted with whatever
-	// units (px, em etc)
-	Width *string `json:"width,omitempty"`
-}
-
-// The aggregated field well for a box plot.
-type BoxPlotAggregatedFieldWells struct {
-	GroupBy []*DimensionField `json:"groupBy,omitempty"`
-	Values  []*MeasureField   `json:"values,omitempty"`
-}
-
-// The configuration of a BoxPlotVisual.
-type BoxPlotChartConfiguration struct {
-	// The options of a box plot visual.
-	BoxPlotOptions *BoxPlotOptions `json:"boxPlotOptions,omitempty"`
-	// The display options for the axis label.
-	CategoryAxis *AxisDisplayOptions `json:"categoryAxis,omitempty"`
-	// The label options for an axis on a chart.
-	CategoryLabelOptions *ChartAxisLabelOptions `json:"categoryLabelOptions,omitempty"`
-	// The field wells of a BoxPlotVisual.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	FieldWells *BoxPlotFieldWells `json:"fieldWells,omitempty"`
-	// The general visual interactions setup for visual publish options
-	Interactions *VisualInteractionOptions `json:"interactions,omitempty"`
-	// The options for the legend setup of a visual.
-	Legend *LegendOptions `json:"legend,omitempty"`
-	// The display options for the axis label.
-	PrimaryYAxisDisplayOptions *AxisDisplayOptions `json:"primaryYAxisDisplayOptions,omitempty"`
-	// The label options for an axis on a chart.
-	PrimaryYAxisLabelOptions *ChartAxisLabelOptions `json:"primaryYAxisLabelOptions,omitempty"`
-	ReferenceLines           []*ReferenceLine       `json:"referenceLines,omitempty"`
-	// The sort configuration of a BoxPlotVisual.
-	SortConfiguration *BoxPlotSortConfiguration `json:"sortConfiguration,omitempty"`
-	// The display options for the visual tooltip.
-	Tooltip *TooltipOptions `json:"tooltip,omitempty"`
-	// The visual display options for the visual palette.
-	VisualPalette *VisualPalette `json:"visualPalette,omitempty"`
-}
-
-// The field wells of a BoxPlotVisual.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type BoxPlotFieldWells struct {
-	// The aggregated field well for a box plot.
-	BoxPlotAggregatedFieldWells *BoxPlotAggregatedFieldWells `json:"boxPlotAggregatedFieldWells,omitempty"`
 }
 
 // The options of a box plot visual.
 type BoxPlotOptions struct {
 	AllDataPointsVisibility *string `json:"allDataPointsVisibility,omitempty"`
 	OutlierVisibility       *string `json:"outlierVisibility,omitempty"`
-	// The style options of the box plot.
-	StyleOptions *BoxPlotStyleOptions `json:"styleOptions,omitempty"`
-}
-
-// The sort configuration of a BoxPlotVisual.
-type BoxPlotSortConfiguration struct {
-	CategorySort []*FieldSortOptions `json:"categorySort,omitempty"`
-	// The pagination configuration for a table visual or boxplot.
-	PaginationConfiguration *PaginationConfiguration `json:"paginationConfiguration,omitempty"`
-}
-
-// The style options of the box plot.
-type BoxPlotStyleOptions struct {
-	FillStyle *string `json:"fillStyle,omitempty"`
 }
 
 // A box plot.
@@ -985,16 +647,8 @@ type BoxPlotStyleOptions struct {
 // For more information, see Using box plots (https://docs.aws.amazon.com/quicksight/latest/user/box-plots.html)
 // in the Amazon Quick Suite User Guide.
 type BoxPlotVisual struct {
-	Actions []*VisualCustomAction `json:"actions,omitempty"`
-	// The configuration of a BoxPlotVisual.
-	ChartConfiguration *BoxPlotChartConfiguration `json:"chartConfiguration,omitempty"`
-	ColumnHierarchies  []*ColumnHierarchy         `json:"columnHierarchies,omitempty"`
-	// The subtitle label options for a visual.
-	Subtitle *VisualSubtitleLabelOptions `json:"subtitle,omitempty"`
-	// The title label options for a visual.
-	Title                *VisualTitleLabelOptions `json:"title,omitempty"`
-	VisualContentAltText *string                  `json:"visualContentAltText,omitempty"`
-	VisualID             *string                  `json:"visualID,omitempty"`
+	VisualContentAltText *string `json:"visualContentAltText,omitempty"`
+	VisualID             *string `json:"visualID,omitempty"`
 }
 
 // The details of the brand.
@@ -1034,12 +688,6 @@ type CalculatedMeasureField struct {
 	FieldID    *string `json:"fieldID,omitempty"`
 }
 
-// The values that are displayed in a control can be configured to only show
-// values that are valid based on what's selected in other controls.
-type CascadingControlConfiguration struct {
-	SourceControls []*CascadingControlSource `json:"sourceControls,omitempty"`
-}
-
 // The source controls that are used in a CascadingControlConfiguration.
 type CascadingControlSource struct {
 	// A column of a data set.
@@ -1072,12 +720,10 @@ type CategoricalDimensionField struct {
 	FieldID *string           `json:"fieldID,omitempty"`
 	// Formatting configuration for string fields.
 	FormatConfiguration *StringFormatConfiguration `json:"formatConfiguration,omitempty"`
-	HierarchyID         *string                    `json:"hierarchyID,omitempty"`
 }
 
 // The measure type field with categorical type columns.
 type CategoricalMeasureField struct {
-	AggregationFunction *string `json:"aggregationFunction,omitempty"`
 	// A column of a data set.
 	Column  *ColumnIdentifier `json:"column,omitempty"`
 	FieldID *string           `json:"fieldID,omitempty"`
@@ -1087,7 +733,6 @@ type CategoricalMeasureField struct {
 
 // The category drill down filter.
 type CategoryDrillDownFilter struct {
-	CategoryValues []*string `json:"categoryValues,omitempty"`
 	// A column of a data set.
 	Column *ColumnIdentifier `json:"column,omitempty"`
 }
@@ -1098,69 +743,20 @@ type CategoryDrillDownFilter struct {
 // in the Amazon Quick Suite User Guide.
 type CategoryFilter struct {
 	// A column of a data set.
-	Column *ColumnIdentifier `json:"column,omitempty"`
-	// The configuration for a CategoryFilter.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	Configuration *CategoryFilterConfiguration `json:"configuration,omitempty"`
-	// The default configuration for all dependent controls of the filter.
-	DefaultFilterControlConfiguration *DefaultFilterControlConfiguration `json:"defaultFilterControlConfiguration,omitempty"`
-	FilterID                          *string                            `json:"filterID,omitempty"`
-}
-
-// The configuration for a CategoryFilter.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type CategoryFilterConfiguration struct {
-	// A custom filter that filters based on a single value. This filter can be
-	// partially matched.
-	CustomFilterConfiguration *CustomFilterConfiguration `json:"customFilterConfiguration,omitempty"`
-	// A list of custom filter values.
-	CustomFilterListConfiguration *CustomFilterListConfiguration `json:"customFilterListConfiguration,omitempty"`
-	// A list of filter configurations.
-	FilterListConfiguration *FilterListConfiguration `json:"filterListConfiguration,omitempty"`
+	Column   *ColumnIdentifier `json:"column,omitempty"`
+	FilterID *string           `json:"filterID,omitempty"`
 }
 
 // A CategoryInnerFilter filters text values for the NestedFilter.
 type CategoryInnerFilter struct {
 	// A column of a data set.
 	Column *ColumnIdentifier `json:"column,omitempty"`
-	// The configuration for a CategoryFilter.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	Configuration *CategoryFilterConfiguration `json:"configuration,omitempty"`
-	// The default configuration for all dependent controls of the filter.
-	DefaultFilterControlConfiguration *DefaultFilterControlConfiguration `json:"defaultFilterControlConfiguration,omitempty"`
 }
 
 // The label options for an axis on a chart.
 type ChartAxisLabelOptions struct {
-	AxisLabelOptions   []*AxisLabelOptions `json:"axisLabelOptions,omitempty"`
-	SortIconVisibility *string             `json:"sortIconVisibility,omitempty"`
-	Visibility         *string             `json:"visibility,omitempty"`
-}
-
-// The cluster marker that is a part of the cluster marker configuration.
-type ClusterMarker struct {
-	// The simple cluster marker of the cluster marker.
-	SimpleClusterMarker *SimpleClusterMarker `json:"simpleClusterMarker,omitempty"`
-}
-
-// The cluster marker configuration of the geospatial map selected point style.
-type ClusterMarkerConfiguration struct {
-	// The cluster marker that is a part of the cluster marker configuration.
-	ClusterMarker *ClusterMarker `json:"clusterMarker,omitempty"`
-}
-
-// Determines the color scale that is applied to the visual.
-type ColorScale struct {
-	ColorFillType *string      `json:"colorFillType,omitempty"`
-	Colors        []*DataColor `json:"colors,omitempty"`
-	// Determines the color that is applied to a particular data value.
-	NullValueColor *DataColor `json:"nullValueColor,omitempty"`
+	SortIconVisibility *string `json:"sortIconVisibility,omitempty"`
+	Visibility         *string `json:"visibility,omitempty"`
 }
 
 // The color configurations for a column.
@@ -1204,19 +800,6 @@ type ColumnGroupSchema struct {
 	Name *string `json:"name,omitempty"`
 }
 
-// The option that determines the hierarchy of the fields for a visual element.
-type ColumnHierarchy struct {
-	// The option that determines the hierarchy of any DateTime fields.
-	DateTimeHierarchy *DateTimeHierarchy `json:"dateTimeHierarchy,omitempty"`
-	// The option that determines the hierarchy of the fields that are built within
-	// a visual's field wells. These fields can't be duplicated to other visuals.
-	ExplicitHierarchy *ExplicitHierarchy `json:"explicitHierarchy,omitempty"`
-	// The option that determines the hierarchy of the fields that are defined during
-	// data preparation. These fields are available to use in any analysis that
-	// uses the data source.
-	PredefinedHierarchy *PredefinedHierarchy `json:"predefinedHierarchy,omitempty"`
-}
-
 // A column of a data set.
 type ColumnIdentifier struct {
 	ColumnName        *string `json:"columnName,omitempty"`
@@ -1242,12 +825,6 @@ type ColumnSchema struct {
 
 // The sort configuration for a column that is not used in a field well.
 type ColumnSort struct {
-	// An aggregation function aggregates values from a dimension or measure.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	AggregationFunction *AggregationFunction `json:"aggregationFunction,omitempty"`
-	Direction           *string              `json:"direction,omitempty"`
 	// A column of a data set.
 	SortBy *ColumnIdentifier `json:"sortBy,omitempty"`
 }
@@ -1270,115 +847,24 @@ type ColumnToUnpivot struct {
 
 // The tooltip item for the columns that are not part of a field well.
 type ColumnTooltipItem struct {
-	// An aggregation function aggregates values from a dimension or measure.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	Aggregation *AggregationFunction `json:"aggregation,omitempty"`
 	// A column of a data set.
-	Column        *ColumnIdentifier `json:"column,omitempty"`
-	Label         *string           `json:"label,omitempty"`
-	TooltipTarget *string           `json:"tooltipTarget,omitempty"`
-	Visibility    *string           `json:"visibility,omitempty"`
-}
-
-// The aggregated field wells of a combo chart.
-type ComboChartAggregatedFieldWells struct {
-	BarValues  []*MeasureField   `json:"barValues,omitempty"`
-	Category   []*DimensionField `json:"category,omitempty"`
-	Colors     []*DimensionField `json:"colors,omitempty"`
-	LineValues []*MeasureField   `json:"lineValues,omitempty"`
-}
-
-// The configuration of a ComboChartVisual.
-type ComboChartConfiguration struct {
-	// The options that determine the presentation of the data labels.
-	BarDataLabels   *DataLabelOptions `json:"barDataLabels,omitempty"`
-	BarsArrangement *string           `json:"barsArrangement,omitempty"`
-	// The display options for the axis label.
-	CategoryAxis *AxisDisplayOptions `json:"categoryAxis,omitempty"`
-	// The label options for an axis on a chart.
-	CategoryLabelOptions *ChartAxisLabelOptions `json:"categoryLabelOptions,omitempty"`
-	// The label options for an axis on a chart.
-	ColorLabelOptions *ChartAxisLabelOptions `json:"colorLabelOptions,omitempty"`
-	// The options that determine the default presentation of all series in ComboChartVisual.
-	DefaultSeriesSettings *ComboChartDefaultSeriesSettings `json:"defaultSeriesSettings,omitempty"`
-	// The field wells of the visual.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	FieldWells *ComboChartFieldWells `json:"fieldWells,omitempty"`
-	// The general visual interactions setup for visual publish options
-	Interactions *VisualInteractionOptions `json:"interactions,omitempty"`
-	// The options for the legend setup of a visual.
-	Legend *LegendOptions `json:"legend,omitempty"`
-	// The options that determine the presentation of the data labels.
-	LineDataLabels *DataLabelOptions `json:"lineDataLabels,omitempty"`
-	// The display options for the axis label.
-	PrimaryYAxisDisplayOptions *AxisDisplayOptions `json:"primaryYAxisDisplayOptions,omitempty"`
-	// The label options for an axis on a chart.
-	PrimaryYAxisLabelOptions *ChartAxisLabelOptions `json:"primaryYAxisLabelOptions,omitempty"`
-	ReferenceLines           []*ReferenceLine       `json:"referenceLines,omitempty"`
-	// The display options for the axis label.
-	SecondaryYAxisDisplayOptions *AxisDisplayOptions `json:"secondaryYAxisDisplayOptions,omitempty"`
-	// The label options for an axis on a chart.
-	SecondaryYAxisLabelOptions *ChartAxisLabelOptions `json:"secondaryYAxisLabelOptions,omitempty"`
-	Series                     []*ComboSeriesItem     `json:"series,omitempty"`
-	// The settings of a chart's single axis configuration.
-	SingleAxisOptions *SingleAxisOptions `json:"singleAxisOptions,omitempty"`
-	// The sort configuration of a ComboChartVisual.
-	SortConfiguration *ComboChartSortConfiguration `json:"sortConfiguration,omitempty"`
-	// The display options for the visual tooltip.
-	Tooltip *TooltipOptions `json:"tooltip,omitempty"`
-	// The visual display options for the visual palette.
-	VisualPalette *VisualPalette `json:"visualPalette,omitempty"`
+	Column     *ColumnIdentifier `json:"column,omitempty"`
+	Label      *string           `json:"label,omitempty"`
+	Visibility *string           `json:"visibility,omitempty"`
 }
 
 // The options that determine the default presentation of all series in ComboChartVisual.
 type ComboChartDefaultSeriesSettings struct {
-	// Border settings configuration for visual elements, including visibility,
-	// width, and color properties.
-	BorderSettings *BorderSettings `json:"borderSettings,omitempty"`
 	// Decal settings for accessibility features that define visual patterns and
 	// styling for data elements.
 	DecalSettings *DecalSettings `json:"decalSettings,omitempty"`
-	// Line styles options for a line series in LineChartVisual.
-	LineStyleSettings *LineChartLineStyleSettings `json:"lineStyleSettings,omitempty"`
-	// Marker styles options for a line series in LineChartVisual.
-	MarkerStyleSettings *LineChartMarkerStyleSettings `json:"markerStyleSettings,omitempty"`
-}
-
-// The field wells of the visual.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type ComboChartFieldWells struct {
-	// The aggregated field wells of a combo chart.
-	ComboChartAggregatedFieldWells *ComboChartAggregatedFieldWells `json:"comboChartAggregatedFieldWells,omitempty"`
 }
 
 // Options that determine the presentation of a series in the visual.
 type ComboChartSeriesSettings struct {
-	// Border settings configuration for visual elements, including visibility,
-	// width, and color properties.
-	BorderSettings *BorderSettings `json:"borderSettings,omitempty"`
 	// Decal settings for accessibility features that define visual patterns and
 	// styling for data elements.
 	DecalSettings *DecalSettings `json:"decalSettings,omitempty"`
-	// Line styles options for a line series in LineChartVisual.
-	LineStyleSettings *LineChartLineStyleSettings `json:"lineStyleSettings,omitempty"`
-	// Marker styles options for a line series in LineChartVisual.
-	MarkerStyleSettings *LineChartMarkerStyleSettings `json:"markerStyleSettings,omitempty"`
-}
-
-// The sort configuration of a ComboChartVisual.
-type ComboChartSortConfiguration struct {
-	// The limit configuration of the visual display for an axis.
-	CategoryItemsLimit *ItemsLimitConfiguration `json:"categoryItemsLimit,omitempty"`
-	CategorySort       []*FieldSortOptions      `json:"categorySort,omitempty"`
-	// The limit configuration of the visual display for an axis.
-	ColorItemsLimit *ItemsLimitConfiguration `json:"colorItemsLimit,omitempty"`
-	ColorSort       []*FieldSortOptions      `json:"colorSort,omitempty"`
 }
 
 // A combo chart.
@@ -1389,37 +875,8 @@ type ComboChartSortConfiguration struct {
 // For more information, see Using combo charts (https://docs.aws.amazon.com/quicksight/latest/user/combo-charts.html)
 // in the Amazon Quick Suite User Guide.
 type ComboChartVisual struct {
-	Actions []*VisualCustomAction `json:"actions,omitempty"`
-	// The configuration of a ComboChartVisual.
-	ChartConfiguration *ComboChartConfiguration `json:"chartConfiguration,omitempty"`
-	ColumnHierarchies  []*ColumnHierarchy       `json:"columnHierarchies,omitempty"`
-	// The subtitle label options for a visual.
-	Subtitle *VisualSubtitleLabelOptions `json:"subtitle,omitempty"`
-	// The title label options for a visual.
-	Title                *VisualTitleLabelOptions `json:"title,omitempty"`
-	VisualContentAltText *string                  `json:"visualContentAltText,omitempty"`
-	VisualID             *string                  `json:"visualID,omitempty"`
-}
-
-// The series item configuration of a ComboChartVisual.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type ComboSeriesItem struct {
-	// The data field series item configuration of a ComboChartVisual.
-	DataFieldComboSeriesItem *DataFieldComboSeriesItem `json:"dataFieldComboSeriesItem,omitempty"`
-	// The field series item configuration of a ComboChartVisual.
-	FieldComboSeriesItem *FieldComboSeriesItem `json:"fieldComboSeriesItem,omitempty"`
-}
-
-// The comparison display configuration of a KPI or gauge chart.
-type ComparisonConfiguration struct {
-	// The format of the comparison.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	ComparisonFormat *ComparisonFormatConfiguration `json:"comparisonFormat,omitempty"`
-	ComparisonMethod *string                        `json:"comparisonMethod,omitempty"`
+	VisualContentAltText *string `json:"visualContentAltText,omitempty"`
+	VisualID             *string `json:"visualID,omitempty"`
 }
 
 // The format of the comparison.
@@ -1433,81 +890,20 @@ type ComparisonFormatConfiguration struct {
 	PercentageDisplayFormatConfiguration *PercentageDisplayFormatConfiguration `json:"percentageDisplayFormatConfiguration,omitempty"`
 }
 
-// The computation union that is used in an insight visual.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type Computation struct {
-	// The forecast computation configuration.
-	Forecast *ForecastComputation `json:"forecast,omitempty"`
-	// The growth rate computation configuration.
-	GrowthRate *GrowthRateComputation `json:"growthRate,omitempty"`
-	// The maximum and minimum computation configuration.
-	MaximumMinimum *MaximumMinimumComputation `json:"maximumMinimum,omitempty"`
-	// The metric comparison computation configuration.
-	MetricComparison *MetricComparisonComputation `json:"metricComparison,omitempty"`
-	// The period over period computation configuration.
-	PeriodOverPeriod *PeriodOverPeriodComputation `json:"periodOverPeriod,omitempty"`
-	// The period to date computation configuration.
-	PeriodToDate *PeriodToDateComputation `json:"periodToDate,omitempty"`
-	// The top movers and bottom movers computation setup.
-	TopBottomMovers *TopBottomMoversComputation `json:"topBottomMovers,omitempty"`
-	// The top ranked and bottom ranked computation configuration.
-	TopBottomRanked *TopBottomRankedComputation `json:"topBottomRanked,omitempty"`
-	// The total aggregation computation configuration.
-	TotalAggregation *TotalAggregationComputation `json:"totalAggregation,omitempty"`
-	// The unique values computation configuration.
-	UniqueValues *UniqueValuesComputation `json:"uniqueValues,omitempty"`
-}
-
-// The formatting configuration for the color.
-type ConditionalFormattingColor struct {
-	// Formatting configuration for gradient color.
-	Gradient *ConditionalFormattingGradientColor `json:"gradient,omitempty"`
-	// Formatting configuration for solid color.
-	Solid *ConditionalFormattingSolidColor `json:"solid,omitempty"`
-}
-
 // Determines the custom condition for an icon set.
 type ConditionalFormattingCustomIconCondition struct {
-	Color *string `json:"color,omitempty"`
-	// Determines the icon display configuration.
-	DisplayConfiguration *ConditionalFormattingIconDisplayConfiguration `json:"displayConfiguration,omitempty"`
-	Expression           *string                                        `json:"expression,omitempty"`
-	// Custom icon options for an icon set.
-	IconOptions *ConditionalFormattingCustomIconOptions `json:"iconOptions,omitempty"`
-}
-
-// Custom icon options for an icon set.
-type ConditionalFormattingCustomIconOptions struct {
-	Icon        *string `json:"icon,omitempty"`
-	UnicodeIcon *string `json:"unicodeIcon,omitempty"`
+	Color      *string `json:"color,omitempty"`
+	Expression *string `json:"expression,omitempty"`
 }
 
 // Formatting configuration for gradient color.
 type ConditionalFormattingGradientColor struct {
-	// Determines the gradient color settings.
-	Color      *GradientColor `json:"color,omitempty"`
-	Expression *string        `json:"expression,omitempty"`
-}
-
-// The formatting configuration for the icon.
-type ConditionalFormattingIcon struct {
-	// Determines the custom condition for an icon set.
-	CustomCondition *ConditionalFormattingCustomIconCondition `json:"customCondition,omitempty"`
-	// Formatting configuration for icon set.
-	IconSet *ConditionalFormattingIconSet `json:"iconSet,omitempty"`
-}
-
-// Determines the icon display configuration.
-type ConditionalFormattingIconDisplayConfiguration struct {
-	IconDisplayOption *string `json:"iconDisplayOption,omitempty"`
+	Expression *string `json:"expression,omitempty"`
 }
 
 // Formatting configuration for icon set.
 type ConditionalFormattingIconSet struct {
-	Expression  *string `json:"expression,omitempty"`
-	IconSetType *string `json:"iconSetType,omitempty"`
+	Expression *string `json:"expression,omitempty"`
 }
 
 // Formatting configuration for solid color.
@@ -1528,14 +924,7 @@ type ContextMenuOption struct {
 
 // The contribution analysis visual display for a line, pie, or bar chart.
 type ContributionAnalysisDefault struct {
-	ContributorDimensions []*ColumnIdentifier `json:"contributorDimensions,omitempty"`
-	MeasureFieldID        *string             `json:"measureFieldID,omitempty"`
-}
-
-// The preference coordinate for the geocode preference.
-type Coordinate struct {
-	Latitude  *float64 `json:"latitude,omitempty"`
-	Longitude *float64 `json:"longitude,omitempty"`
+	MeasureFieldID *string `json:"measureFieldID,omitempty"`
 }
 
 // A transform operation that creates calculated columns. Columns created in
@@ -1576,21 +965,6 @@ type CurrencyDisplayFormatConfiguration struct {
 	Symbol                 *string                        `json:"symbol,omitempty"`
 }
 
-// The filter operation that filters data included in a visual or in an entire
-// sheet.
-type CustomActionFilterOperation struct {
-	// The configuration of selected fields in theCustomActionFilterOperation.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	SelectedFieldsConfiguration *FilterOperationSelectedFieldsConfiguration `json:"selectedFieldsConfiguration,omitempty"`
-	// The configuration of target visuals that you want to be filtered.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	TargetVisualsConfiguration *FilterOperationTargetVisualsConfiguration `json:"targetVisualsConfiguration,omitempty"`
-}
-
 // The navigation operation that navigates between different sheets in the same
 // analysis.
 //
@@ -1626,11 +1000,7 @@ type CustomConnectionParameters struct {
 
 // The configuration of a CustomContentVisual.
 type CustomContentConfiguration struct {
-	ContentType  *string `json:"contentType,omitempty"`
-	ContentURL   *string `json:"contentURL,omitempty"`
-	ImageScaling *string `json:"imageScaling,omitempty"`
-	// The general visual interactions setup for visual publish options
-	Interactions *VisualInteractionOptions `json:"interactions,omitempty"`
+	ContentURL *string `json:"contentURL,omitempty"`
 }
 
 // A visual that contains custom content.
@@ -1638,39 +1008,15 @@ type CustomContentConfiguration struct {
 // For more information, see Using custom visual content (https://docs.aws.amazon.com/quicksight/latest/user/custom-visual-content.html)
 // in the Amazon Quick Suite User Guide.
 type CustomContentVisual struct {
-	Actions []*VisualCustomAction `json:"actions,omitempty"`
-	// The configuration of a CustomContentVisual.
-	ChartConfiguration *CustomContentConfiguration `json:"chartConfiguration,omitempty"`
-	DataSetIdentifier  *string                     `json:"dataSetIdentifier,omitempty"`
-	// The subtitle label options for a visual.
-	Subtitle *VisualSubtitleLabelOptions `json:"subtitle,omitempty"`
-	// The title label options for a visual.
-	Title                *VisualTitleLabelOptions `json:"title,omitempty"`
-	VisualContentAltText *string                  `json:"visualContentAltText,omitempty"`
-	VisualID             *string                  `json:"visualID,omitempty"`
+	DataSetIdentifier    *string `json:"dataSetIdentifier,omitempty"`
+	VisualContentAltText *string `json:"visualContentAltText,omitempty"`
+	VisualID             *string `json:"visualID,omitempty"`
 }
 
 // A custom filter that filters based on a single value. This filter can be
 // partially matched.
 type CustomFilterConfiguration struct {
-	CategoryValue    *string `json:"categoryValue,omitempty"`
-	MatchOperator    *string `json:"matchOperator,omitempty"`
-	NullOption       *string `json:"nullOption,omitempty"`
-	ParameterName    *string `json:"parameterName,omitempty"`
-	SelectAllOptions *string `json:"selectAllOptions,omitempty"`
-}
-
-// A list of custom filter values.
-type CustomFilterListConfiguration struct {
-	CategoryValues   []*string `json:"categoryValues,omitempty"`
-	MatchOperator    *string   `json:"matchOperator,omitempty"`
-	NullOption       *string   `json:"nullOption,omitempty"`
-	SelectAllOptions *string   `json:"selectAllOptions,omitempty"`
-}
-
-// The custom narrative options.
-type CustomNarrativeOptions struct {
-	Narrative *string `json:"narrative,omitempty"`
+	ParameterName *string `json:"parameterName,omitempty"`
 }
 
 // The customized parameter values.
@@ -1716,24 +1062,10 @@ type Dashboard struct {
 	LastUpdatedTime   *metav1.Time `json:"lastUpdatedTime,omitempty"`
 }
 
-// The options that define customizations available to dashboard readers for
-// a specific visual
-type DashboardCustomizationVisualOptions struct {
-	// The configuration that controls field customization options available to
-	// dashboard readers for a visual.
-	FieldsConfiguration *VisualCustomizationFieldsConfiguration `json:"fieldsConfiguration,omitempty"`
-}
-
 // Dashboard error.
 type DashboardError struct {
 	Message          *string   `json:"message,omitempty"`
 	ViolatedEntities []*Entity `json:"violatedEntities,omitempty"`
-}
-
-// Dashboard publish options.
-type DashboardPublishOptions struct {
-	// The menu options for a visual.
-	VisualMenuOption *VisualMenuOption `json:"visualMenuOption,omitempty"`
 }
 
 // A filter that you apply when searching for dashboards.
@@ -1774,11 +1106,9 @@ type DashboardVersionDefinition struct {
 	CalculatedFields              []*CalculatedField              `json:"calculatedFields,omitempty"`
 	ColumnConfigurations          []*ColumnConfiguration          `json:"columnConfigurations,omitempty"`
 	DataSetIdentifierDeclarations []*DataSetIdentifierDeclaration `json:"dataSetIdentifierDeclarations,omitempty"`
-	FilterGroups                  []*FilterGroup                  `json:"filterGroups,omitempty"`
 	// An array of analysis level configurations.
 	Options               *AssetOptions           `json:"options,omitempty"`
 	ParameterDeclarations []*ParameterDeclaration `json:"parameterDeclarations,omitempty"`
-	Sheets                []*SheetDefinition      `json:"sheets,omitempty"`
 	StaticFiles           []*StaticFile           `json:"staticFiles,omitempty"`
 }
 
@@ -1826,8 +1156,7 @@ type DataBarsOptions struct {
 
 // Determines the color that is applied to a particular data value.
 type DataColor struct {
-	Color     *string  `json:"color,omitempty"`
-	DataValue *float64 `json:"dataValue,omitempty"`
+	Color *string `json:"color,omitempty"`
 }
 
 // The theme colors that are used for data colors in charts. The colors description
@@ -1841,65 +1170,33 @@ type DataColorPalette struct {
 type DataFieldBarSeriesItem struct {
 	FieldID    *string `json:"fieldID,omitempty"`
 	FieldValue *string `json:"fieldValue,omitempty"`
-	// Options that determine the presentation of a bar series in the visual.
-	Settings *BarChartSeriesSettings `json:"settings,omitempty"`
 }
 
 // The data field series item configuration of a ComboChartVisual.
 type DataFieldComboSeriesItem struct {
 	FieldID    *string `json:"fieldID,omitempty"`
 	FieldValue *string `json:"fieldValue,omitempty"`
-	// Options that determine the presentation of a series in the visual.
-	Settings *ComboChartSeriesSettings `json:"settings,omitempty"`
 }
 
 // The data field series item configuration of a line chart.
 type DataFieldSeriesItem struct {
-	AxisBinding *string `json:"axisBinding,omitempty"`
-	FieldID     *string `json:"fieldID,omitempty"`
-	FieldValue  *string `json:"fieldValue,omitempty"`
-	// The options that determine the presentation of a line series in the visual
-	Settings *LineChartSeriesSettings `json:"settings,omitempty"`
+	FieldID    *string `json:"fieldID,omitempty"`
+	FieldValue *string `json:"fieldValue,omitempty"`
 }
 
 // The options that determine the presentation of the data labels.
 type DataLabelOptions struct {
-	CategoryLabelVisibility *string          `json:"categoryLabelVisibility,omitempty"`
-	DataLabelTypes          []*DataLabelType `json:"dataLabelTypes,omitempty"`
-	LabelColor              *string          `json:"labelColor,omitempty"`
-	LabelContent            *string          `json:"labelContent,omitempty"`
-	// Configures the display properties of the given text.
-	LabelFontConfiguration *FontConfiguration `json:"labelFontConfiguration,omitempty"`
-	MeasureLabelVisibility *string            `json:"measureLabelVisibility,omitempty"`
-	Overlap                *string            `json:"overlap,omitempty"`
-	Position               *string            `json:"position,omitempty"`
-	TotalsVisibility       *string            `json:"totalsVisibility,omitempty"`
-	Visibility             *string            `json:"visibility,omitempty"`
-}
-
-// The option that determines the data label type.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type DataLabelType struct {
-	// The option that specifies individual data values for labels.
-	DataPathLabelType *DataPathLabelType `json:"dataPathLabelType,omitempty"`
-	// The field label type.
-	FieldLabelType *FieldLabelType `json:"fieldLabelType,omitempty"`
-	// The maximum label of a data path label.
-	MaximumLabelType *MaximumLabelType `json:"maximumLabelType,omitempty"`
-	// The minimum label of a data path label.
-	MinimumLabelType *MinimumLabelType `json:"minimumLabelType,omitempty"`
-	// The range ends label type of a data path label.
-	RangeEndsLabelType *RangeEndsLabelType `json:"rangeEndsLabelType,omitempty"`
+	CategoryLabelVisibility *string `json:"categoryLabelVisibility,omitempty"`
+	LabelColor              *string `json:"labelColor,omitempty"`
+	MeasureLabelVisibility  *string `json:"measureLabelVisibility,omitempty"`
+	TotalsVisibility        *string `json:"totalsVisibility,omitempty"`
+	Visibility              *string `json:"visibility,omitempty"`
 }
 
 // The color map that determines the color options for a particular element.
 type DataPathColor struct {
-	Color *string `json:"color,omitempty"`
-	// The data path that needs to be sorted.
-	Element         *DataPathValue `json:"element,omitempty"`
-	TimeGranularity *string        `json:"timeGranularity,omitempty"`
+	Color           *string `json:"color,omitempty"`
+	TimeGranularity *string `json:"timeGranularity,omitempty"`
 }
 
 // The option that specifies individual data values for labels.
@@ -1909,23 +1206,10 @@ type DataPathLabelType struct {
 	Visibility *string `json:"visibility,omitempty"`
 }
 
-// Allows data paths to be sorted by a specific data value.
-type DataPathSort struct {
-	Direction *string          `json:"direction,omitempty"`
-	SortPaths []*DataPathValue `json:"sortPaths,omitempty"`
-}
-
-// The type of the data path value.
-type DataPathType struct {
-	PivotTableDataPathType *string `json:"pivotTableDataPathType,omitempty"`
-}
-
 // The data path that needs to be sorted.
 type DataPathValue struct {
-	// The type of the data path value.
-	DataPathType *DataPathType `json:"dataPathType,omitempty"`
-	FieldID      *string       `json:"fieldID,omitempty"`
-	FieldValue   *string       `json:"fieldValue,omitempty"`
+	FieldID    *string `json:"fieldID,omitempty"`
+	FieldValue *string `json:"fieldValue,omitempty"`
 }
 
 // The drill down options for data points in a dashbaord.
@@ -2377,12 +1661,10 @@ type DateDimensionField struct {
 	FieldID         *string           `json:"fieldID,omitempty"`
 	// Formatting configuration for DateTime fields.
 	FormatConfiguration *DateTimeFormatConfiguration `json:"formatConfiguration,omitempty"`
-	HierarchyID         *string                      `json:"hierarchyID,omitempty"`
 }
 
 // The measure type field with date type columns.
 type DateMeasureField struct {
-	AggregationFunction *string `json:"aggregationFunction,omitempty"`
 	// A column of a data set.
 	Column  *ColumnIdentifier `json:"column,omitempty"`
 	FieldID *string           `json:"fieldID,omitempty"`
@@ -2428,12 +1710,6 @@ type DateTimeFormatConfiguration struct {
 	NumericFormatConfiguration *NumericFormatConfiguration `json:"numericFormatConfiguration,omitempty"`
 }
 
-// The option that determines the hierarchy of any DateTime fields.
-type DateTimeHierarchy struct {
-	DrillDownFilters []*DrillDownFilter `json:"drillDownFilters,omitempty"`
-	HierarchyID      *string            `json:"hierarchyID,omitempty"`
-}
-
 // A date-time parameter.
 type DateTimeParameter struct {
 	Name   *string       `json:"name,omitempty"`
@@ -2458,10 +1734,6 @@ type DateTimePickerControlDisplayOptions struct {
 	DateIconVisibility   *string `json:"dateIconVisibility,omitempty"`
 	DateTimeFormat       *string `json:"dateTimeFormat,omitempty"`
 	HelperTextVisibility *string `json:"helperTextVisibility,omitempty"`
-	// A control to display info icons for filters and parameters.
-	InfoIconLabelOptions *SheetControlInfoIconLabelOptions `json:"infoIconLabelOptions,omitempty"`
-	// The share label options for the labels.
-	TitleOptions *LabelOptions `json:"titleOptions,omitempty"`
 }
 
 // The configuration that defines the default value of a DateTime parameter
@@ -2540,59 +1812,6 @@ type DecimalValueWhenUnsetConfiguration struct {
 	ValueWhenUnsetOption *string  `json:"valueWhenUnsetOption,omitempty"`
 }
 
-// The default options that correspond to the filter control type of a DateTimePicker.
-type DefaultDateTimePickerControlOptions struct {
-	CommitMode *string `json:"commitMode,omitempty"`
-	// The display options of a control.
-	DisplayOptions *DateTimePickerControlDisplayOptions `json:"displayOptions,omitempty"`
-	Type           *string                              `json:"type_,omitempty"`
-}
-
-// The default configuration for all dependent controls of the filter.
-type DefaultFilterControlConfiguration struct {
-	// The option that corresponds to the control type of the filter.
-	ControlOptions *DefaultFilterControlOptions `json:"controlOptions,omitempty"`
-	Title          *string                      `json:"title,omitempty"`
-}
-
-// The option that corresponds to the control type of the filter.
-type DefaultFilterControlOptions struct {
-	// The default options that correspond to the filter control type of a DateTimePicker.
-	DefaultDateTimePickerOptions *DefaultDateTimePickerControlOptions `json:"defaultDateTimePickerOptions,omitempty"`
-	// The default options that correspond to the Dropdown filter control type.
-	DefaultDropdownOptions *DefaultFilterDropDownControlOptions `json:"defaultDropdownOptions,omitempty"`
-	// The default options that correspond to the List filter control type.
-	DefaultListOptions *DefaultFilterListControlOptions `json:"defaultListOptions,omitempty"`
-	// The default options that correspond to the RelativeDateTime filter control
-	// type.
-	DefaultRelativeDateTimeOptions *DefaultRelativeDateTimeControlOptions `json:"defaultRelativeDateTimeOptions,omitempty"`
-	// The default options that correspond to the Slider filter control type.
-	DefaultSliderOptions *DefaultSliderControlOptions `json:"defaultSliderOptions,omitempty"`
-	// The default options that correspond to the TextArea filter control type.
-	DefaultTextAreaOptions *DefaultTextAreaControlOptions `json:"defaultTextAreaOptions,omitempty"`
-	// The default options that correspond to the TextField filter control type.
-	DefaultTextFieldOptions *DefaultTextFieldControlOptions `json:"defaultTextFieldOptions,omitempty"`
-}
-
-// The default options that correspond to the Dropdown filter control type.
-type DefaultFilterDropDownControlOptions struct {
-	CommitMode *string `json:"commitMode,omitempty"`
-	// The display options of a control.
-	DisplayOptions *DropDownControlDisplayOptions `json:"displayOptions,omitempty"`
-	// A list of selectable values that are used in a control.
-	SelectableValues *FilterSelectableValues `json:"selectableValues,omitempty"`
-	Type             *string                 `json:"type_,omitempty"`
-}
-
-// The default options that correspond to the List filter control type.
-type DefaultFilterListControlOptions struct {
-	// The display options of a control.
-	DisplayOptions *ListControlDisplayOptions `json:"displayOptions,omitempty"`
-	// A list of selectable values that are used in a control.
-	SelectableValues *FilterSelectableValues `json:"selectableValues,omitempty"`
-	Type             *string                 `json:"type_,omitempty"`
-}
-
 // The options that determine the default settings of a free-form layout configuration.
 type DefaultFreeFormLayoutConfiguration struct {
 	// Configuration options for the canvas of a free-form layout.
@@ -2629,42 +1848,11 @@ type DefaultPaginatedLayoutConfiguration struct {
 	SectionBased *DefaultSectionBasedLayoutConfiguration `json:"sectionBased,omitempty"`
 }
 
-// The default options that correspond to the RelativeDateTime filter control
-// type.
-type DefaultRelativeDateTimeControlOptions struct {
-	CommitMode *string `json:"commitMode,omitempty"`
-	// The display options of a control.
-	DisplayOptions *RelativeDateTimeControlDisplayOptions `json:"displayOptions,omitempty"`
-}
-
 // The options that determine the default settings for a section-based layout
 // configuration.
 type DefaultSectionBasedLayoutConfiguration struct {
 	// The options for the canvas of a section-based layout.
 	CanvasSizeOptions *SectionBasedLayoutCanvasSizeOptions `json:"canvasSizeOptions,omitempty"`
-}
-
-// The default options that correspond to the Slider filter control type.
-type DefaultSliderControlOptions struct {
-	// The display options of a control.
-	DisplayOptions *SliderControlDisplayOptions `json:"displayOptions,omitempty"`
-	MaximumValue   *float64                     `json:"maximumValue,omitempty"`
-	MinimumValue   *float64                     `json:"minimumValue,omitempty"`
-	StepSize       *float64                     `json:"stepSize,omitempty"`
-	Type           *string                      `json:"type_,omitempty"`
-}
-
-// The default options that correspond to the TextArea filter control type.
-type DefaultTextAreaControlOptions struct {
-	Delimiter *string `json:"delimiter,omitempty"`
-	// The display options of a control.
-	DisplayOptions *TextAreaControlDisplayOptions `json:"displayOptions,omitempty"`
-}
-
-// The default options that correspond to the TextField filter control type.
-type DefaultTextFieldControlOptions struct {
-	// The display options of a control.
-	DisplayOptions *TextFieldControlDisplayOptions `json:"displayOptions,omitempty"`
 }
 
 // The configuration of destination parameter values.
@@ -2696,19 +1884,8 @@ type DestinationTableSource struct {
 	TransformOperationID *string `json:"transformOperationID,omitempty"`
 }
 
-// The dimension type field.
-type DimensionField struct {
-	// The dimension type field with categorical type columns..
-	CategoricalDimensionField *CategoricalDimensionField `json:"categoricalDimensionField,omitempty"`
-	// The dimension type field with date type columns.
-	DateDimensionField *DateDimensionField `json:"dateDimensionField,omitempty"`
-	// The dimension type field with numerical type columns.
-	NumericalDimensionField *NumericalDimensionField `json:"numericalDimensionField,omitempty"`
-}
-
 // A structure that represents additional options for display formatting.
 type DisplayFormatOptions struct {
-	FractionDigits     *int64  `json:"fractionDigits,omitempty"`
 	UnitScaler         *string `json:"unitScaler,omitempty"`
 	UseBlankCellFormat *bool   `json:"useBlankCellFormat,omitempty"`
 	UseGrouping        *bool   `json:"useGrouping,omitempty"`
@@ -2718,38 +1895,6 @@ type DisplayFormatOptions struct {
 // chart. This option isn't available for pie charts.
 type DonutCenterOptions struct {
 	LabelVisibility *string `json:"labelVisibility,omitempty"`
-}
-
-// The options for configuring a donut chart or pie chart.
-type DonutOptions struct {
-	// The options that determine the arc thickness of a GaugeChartVisual.
-	ArcOptions *ArcOptions `json:"arcOptions,omitempty"`
-	// The label options of the label that is displayed in the center of a donut
-	// chart. This option isn't available for pie charts.
-	DonutCenterOptions *DonutCenterOptions `json:"donutCenterOptions,omitempty"`
-}
-
-// The drill down filter for the column hierarchies.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type DrillDownFilter struct {
-	// The category drill down filter.
-	CategoryFilter *CategoryDrillDownFilter `json:"categoryFilter,omitempty"`
-	// The numeric equality type drill down filter.
-	NumericEqualityFilter *NumericEqualityDrillDownFilter `json:"numericEqualityFilter,omitempty"`
-	// The time range drill down filter.
-	TimeRangeFilter *TimeRangeDrillDownFilter `json:"timeRangeFilter,omitempty"`
-}
-
-// The display options of a control.
-type DropDownControlDisplayOptions struct {
-	// A control to display info icons for filters and parameters.
-	InfoIconLabelOptions *SheetControlInfoIconLabelOptions `json:"infoIconLabelOptions,omitempty"`
-	// The configuration of the Select all options in a list control.
-	SelectAllOptions *ListControlSelectAllOptions `json:"selectAllOptions,omitempty"`
-	// The share label options for the labels.
-	TitleOptions *LabelOptions `json:"titleOptions,omitempty"`
 }
 
 // Defines different defaults to the users or groups based on mapping.
@@ -2768,9 +1913,8 @@ type DynamicDefaultValue struct {
 // data. A new visual created in the Quick Sight console is considered an EmptyVisual
 // until a visual type is selected.
 type EmptyVisual struct {
-	Actions           []*VisualCustomAction `json:"actions,omitempty"`
-	DataSetIdentifier *string               `json:"dataSetIdentifier,omitempty"`
-	VisualID          *string               `json:"visualID,omitempty"`
+	DataSetIdentifier *string `json:"dataSetIdentifier,omitempty"`
+	VisualID          *string `json:"visualID,omitempty"`
 }
 
 // An object, structure, or sub-structure of an analysis, template, or dashboard.
@@ -2791,7 +1935,6 @@ type ExasolParameters struct {
 
 // The exclude period of TimeRangeFilter or RelativeDatesFilter.
 type ExcludePeriodConfiguration struct {
-	Amount      *int64  `json:"amount,omitempty"`
 	Granularity *string `json:"granularity,omitempty"`
 	Status      *string `json:"status,omitempty"`
 }
@@ -2804,14 +1947,6 @@ type ExecutiveSummaryConfigurations struct {
 // Data stories sharing option.
 type ExecutiveSummaryOption struct {
 	AvailabilityStatus *string `json:"availabilityStatus,omitempty"`
-}
-
-// The option that determines the hierarchy of the fields that are built within
-// a visual's field wells. These fields can't be duplicated to other visuals.
-type ExplicitHierarchy struct {
-	Columns          []*ColumnIdentifier `json:"columns,omitempty"`
-	DrillDownFilters []*DrillDownFilter  `json:"drillDownFilters,omitempty"`
-	HierarchyID      *string             `json:"hierarchyID,omitempty"`
 }
 
 // Determines if hidden fields are included in an exported dashboard.
@@ -2840,22 +1975,16 @@ type FailedKeyRegistrationEntry struct {
 // The field series item configuration of a BarChartVisual.
 type FieldBarSeriesItem struct {
 	FieldID *string `json:"fieldID,omitempty"`
-	// Options that determine the presentation of a bar series in the visual.
-	Settings *BarChartSeriesSettings `json:"settings,omitempty"`
 }
 
 // The setup for the detailed tooltip.
 type FieldBasedTooltip struct {
-	AggregationVisibility *string        `json:"aggregationVisibility,omitempty"`
-	TooltipFields         []*TooltipItem `json:"tooltipFields,omitempty"`
-	TooltipTitleType      *string        `json:"tooltipTitleType,omitempty"`
+	AggregationVisibility *string `json:"aggregationVisibility,omitempty"`
 }
 
 // The field series item configuration of a ComboChartVisual.
 type FieldComboSeriesItem struct {
 	FieldID *string `json:"fieldID,omitempty"`
-	// Options that determine the presentation of a series in the visual.
-	Settings *ComboChartSeriesSettings `json:"settings,omitempty"`
 }
 
 // A FieldFolder element is a folder that contains fields and nested subfolders.
@@ -2872,91 +2001,24 @@ type FieldLabelType struct {
 
 // The field series item configuration of a line chart.
 type FieldSeriesItem struct {
-	AxisBinding *string `json:"axisBinding,omitempty"`
-	FieldID     *string `json:"fieldID,omitempty"`
-	// The options that determine the presentation of a line series in the visual
-	Settings *LineChartSeriesSettings `json:"settings,omitempty"`
+	FieldID *string `json:"fieldID,omitempty"`
 }
 
 // The sort configuration for a field in a field well.
 type FieldSort struct {
-	Direction *string `json:"direction,omitempty"`
-	FieldID   *string `json:"fieldID,omitempty"`
-}
-
-// The field sort options in a chart configuration.
-type FieldSortOptions struct {
-	// The sort configuration for a column that is not used in a field well.
-	ColumnSort *ColumnSort `json:"columnSort,omitempty"`
-	// The sort configuration for a field in a field well.
-	FieldSort *FieldSort `json:"fieldSort,omitempty"`
+	FieldID *string `json:"fieldID,omitempty"`
 }
 
 // The tooltip item for the fields.
 type FieldTooltipItem struct {
-	FieldID       *string `json:"fieldID,omitempty"`
-	Label         *string `json:"label,omitempty"`
-	TooltipTarget *string `json:"tooltipTarget,omitempty"`
-	Visibility    *string `json:"visibility,omitempty"`
-}
-
-// The aggregated field well of the filled map.
-type FilledMapAggregatedFieldWells struct {
-	Geospatial []*DimensionField `json:"geospatial,omitempty"`
-	Values     []*MeasureField   `json:"values,omitempty"`
-}
-
-// The conditional formatting of a FilledMapVisual.
-type FilledMapConditionalFormatting struct {
-	ConditionalFormattingOptions []*FilledMapConditionalFormattingOption `json:"conditionalFormattingOptions,omitempty"`
-}
-
-// Conditional formatting options of a FilledMapVisual.
-type FilledMapConditionalFormattingOption struct {
-	// The conditional formatting that determines the shape of the filled map.
-	Shape *FilledMapShapeConditionalFormatting `json:"shape,omitempty"`
-}
-
-// The configuration for a FilledMapVisual.
-type FilledMapConfiguration struct {
-	// The field wells of a FilledMapVisual.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	FieldWells *FilledMapFieldWells `json:"fieldWells,omitempty"`
-	// The general visual interactions setup for visual publish options
-	Interactions *VisualInteractionOptions `json:"interactions,omitempty"`
-	// The options for the legend setup of a visual.
-	Legend *LegendOptions `json:"legend,omitempty"`
-	// The map style options of the geospatial map.
-	MapStyleOptions *GeospatialMapStyleOptions `json:"mapStyleOptions,omitempty"`
-	// The sort configuration of a FilledMapVisual.
-	SortConfiguration *FilledMapSortConfiguration `json:"sortConfiguration,omitempty"`
-	// The display options for the visual tooltip.
-	Tooltip *TooltipOptions `json:"tooltip,omitempty"`
-	// The window options of the geospatial map visual.
-	WindowOptions *GeospatialWindowOptions `json:"windowOptions,omitempty"`
-}
-
-// The field wells of a FilledMapVisual.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type FilledMapFieldWells struct {
-	// The aggregated field well of the filled map.
-	FilledMapAggregatedFieldWells *FilledMapAggregatedFieldWells `json:"filledMapAggregatedFieldWells,omitempty"`
+	FieldID    *string `json:"fieldID,omitempty"`
+	Label      *string `json:"label,omitempty"`
+	Visibility *string `json:"visibility,omitempty"`
 }
 
 // The conditional formatting that determines the shape of the filled map.
 type FilledMapShapeConditionalFormatting struct {
 	FieldID *string `json:"fieldID,omitempty"`
-	// The shape conditional formatting of a filled map visual.
-	Format *ShapeConditionalFormat `json:"format,omitempty"`
-}
-
-// The sort configuration of a FilledMapVisual.
-type FilledMapSortConfiguration struct {
-	CategorySort []*FieldSortOptions `json:"categorySort,omitempty"`
 }
 
 // A filled map.
@@ -2964,112 +2026,28 @@ type FilledMapSortConfiguration struct {
 // For more information, see Creating filled maps (https://docs.aws.amazon.com/quicksight/latest/user/filled-maps.html)
 // in the Amazon Quick Suite User Guide.
 type FilledMapVisual struct {
-	Actions []*VisualCustomAction `json:"actions,omitempty"`
-	// The configuration for a FilledMapVisual.
-	ChartConfiguration *FilledMapConfiguration `json:"chartConfiguration,omitempty"`
-	ColumnHierarchies  []*ColumnHierarchy      `json:"columnHierarchies,omitempty"`
-	// The conditional formatting of a FilledMapVisual.
-	ConditionalFormatting *FilledMapConditionalFormatting `json:"conditionalFormatting,omitempty"`
-	GeocodingPreferences  []*GeocodePreference            `json:"geocodingPreferences,omitempty"`
-	// The subtitle label options for a visual.
-	Subtitle *VisualSubtitleLabelOptions `json:"subtitle,omitempty"`
-	// The title label options for a visual.
-	Title                *VisualTitleLabelOptions `json:"title,omitempty"`
-	VisualContentAltText *string                  `json:"visualContentAltText,omitempty"`
-	VisualID             *string                  `json:"visualID,omitempty"`
-}
-
-// With a Filter, you can remove portions of data from a particular visual or
-// view.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type Filter struct {
-	// A CategoryFilter filters text values.
-	//
-	// For more information, see Adding text filters (https://docs.aws.amazon.com/quicksight/latest/user/add-a-text-filter-data-prep.html)
-	// in the Amazon Quick Suite User Guide.
-	CategoryFilter *CategoryFilter `json:"categoryFilter,omitempty"`
-	// A NestedFilter filters data with a subset of data that is defined by the
-	// nested inner filter.
-	NestedFilter *NestedFilter `json:"nestedFilter,omitempty"`
-	// A NumericEqualityFilter filters values that are equal to the specified value.
-	NumericEqualityFilter *NumericEqualityFilter `json:"numericEqualityFilter,omitempty"`
-	// A NumericRangeFilter filters values that are within the value range.
-	NumericRangeFilter *NumericRangeFilter `json:"numericRangeFilter,omitempty"`
-	// A RelativeDatesFilter filters relative dates values.
-	RelativeDatesFilter *RelativeDatesFilter `json:"relativeDatesFilter,omitempty"`
-	// A TimeEqualityFilter filters values that are equal to a given value.
-	TimeEqualityFilter *TimeEqualityFilter `json:"timeEqualityFilter,omitempty"`
-	// A TimeRangeFilter filters values that are between two specified values.
-	TimeRangeFilter *TimeRangeFilter `json:"timeRangeFilter,omitempty"`
-	// A TopBottomFilter filters values that are at the top or the bottom.
-	TopBottomFilter *TopBottomFilter `json:"topBottomFilter,omitempty"`
-}
-
-// The control of a filter that is used to interact with a dashboard or an analysis.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type FilterControl struct {
-	// A control from a filter that is scoped across more than one sheet. This represents
-	// your filter control on a sheet
-	CrossSheet *FilterCrossSheetControl `json:"crossSheet,omitempty"`
-	// A control from a date filter that is used to specify date and time.
-	DateTimePicker *FilterDateTimePickerControl `json:"dateTimePicker,omitempty"`
-	// A control to display a dropdown list with buttons that are used to select
-	// a single value.
-	Dropdown *FilterDropDownControl `json:"dropdown,omitempty"`
-	// A control to display a list of buttons or boxes. This is used to select either
-	// a single value or multiple values.
-	List *FilterListControl `json:"list,omitempty"`
-	// A control from a date filter that is used to specify the relative date.
-	RelativeDateTime *FilterRelativeDateTimeControl `json:"relativeDateTime,omitempty"`
-	// A control to display a horizontal toggle bar. This is used to change a value
-	// by sliding the toggle.
-	Slider *FilterSliderControl `json:"slider,omitempty"`
-	// A control to display a text box that is used to enter multiple entries.
-	TextArea *FilterTextAreaControl `json:"textArea,omitempty"`
-	// A control to display a text box that is used to enter a single entry.
-	TextField *FilterTextFieldControl `json:"textField,omitempty"`
+	VisualContentAltText *string `json:"visualContentAltText,omitempty"`
+	VisualID             *string `json:"visualID,omitempty"`
 }
 
 // A control from a filter that is scoped across more than one sheet. This represents
 // your filter control on a sheet
 type FilterCrossSheetControl struct {
-	// The values that are displayed in a control can be configured to only show
-	// values that are valid based on what's selected in other controls.
-	CascadingControlConfiguration *CascadingControlConfiguration `json:"cascadingControlConfiguration,omitempty"`
-	FilterControlID               *string                        `json:"filterControlID,omitempty"`
-	SourceFilterID                *string                        `json:"sourceFilterID,omitempty"`
+	FilterControlID *string `json:"filterControlID,omitempty"`
+	SourceFilterID  *string `json:"sourceFilterID,omitempty"`
 }
 
 // A control from a date filter that is used to specify date and time.
 type FilterDateTimePickerControl struct {
-	CommitMode *string `json:"commitMode,omitempty"`
-	// The display options of a control.
-	DisplayOptions  *DateTimePickerControlDisplayOptions `json:"displayOptions,omitempty"`
-	FilterControlID *string                              `json:"filterControlID,omitempty"`
-	SourceFilterID  *string                              `json:"sourceFilterID,omitempty"`
-	Title           *string                              `json:"title,omitempty"`
-	Type            *string                              `json:"type_,omitempty"`
+	FilterControlID *string `json:"filterControlID,omitempty"`
+	SourceFilterID  *string `json:"sourceFilterID,omitempty"`
 }
 
 // A control to display a dropdown list with buttons that are used to select
 // a single value.
 type FilterDropDownControl struct {
-	// The values that are displayed in a control can be configured to only show
-	// values that are valid based on what's selected in other controls.
-	CascadingControlConfiguration *CascadingControlConfiguration `json:"cascadingControlConfiguration,omitempty"`
-	CommitMode                    *string                        `json:"commitMode,omitempty"`
-	// The display options of a control.
-	DisplayOptions  *DropDownControlDisplayOptions `json:"displayOptions,omitempty"`
-	FilterControlID *string                        `json:"filterControlID,omitempty"`
-	// A list of selectable values that are used in a control.
-	SelectableValues *FilterSelectableValues `json:"selectableValues,omitempty"`
-	SourceFilterID   *string                 `json:"sourceFilterID,omitempty"`
-	Title            *string                 `json:"title,omitempty"`
-	Type             *string                 `json:"type_,omitempty"`
+	FilterControlID *string `json:"filterControlID,omitempty"`
+	SourceFilterID  *string `json:"sourceFilterID,omitempty"`
 }
 
 // A grouping of individual filters. Filter groups are applied to the same group
@@ -3079,39 +2057,15 @@ type FilterDropDownControl struct {
 // and OR operators (https://docs.aws.amazon.com/quicksight/latest/user/add-a-compound-filter.html)
 // in the Amazon Quick Suite User Guide.
 type FilterGroup struct {
-	CrossDataset  *string   `json:"crossDataset,omitempty"`
-	FilterGroupID *string   `json:"filterGroupID,omitempty"`
-	Filters       []*Filter `json:"filters,omitempty"`
-	// The scope configuration for a FilterGroup.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	ScopeConfiguration *FilterScopeConfiguration `json:"scopeConfiguration,omitempty"`
-	Status             *string                   `json:"status,omitempty"`
-}
-
-// A list of filter configurations.
-type FilterListConfiguration struct {
-	CategoryValues   []*string `json:"categoryValues,omitempty"`
-	MatchOperator    *string   `json:"matchOperator,omitempty"`
-	NullOption       *string   `json:"nullOption,omitempty"`
-	SelectAllOptions *string   `json:"selectAllOptions,omitempty"`
+	FilterGroupID *string `json:"filterGroupID,omitempty"`
+	Status        *string `json:"status,omitempty"`
 }
 
 // A control to display a list of buttons or boxes. This is used to select either
 // a single value or multiple values.
 type FilterListControl struct {
-	// The values that are displayed in a control can be configured to only show
-	// values that are valid based on what's selected in other controls.
-	CascadingControlConfiguration *CascadingControlConfiguration `json:"cascadingControlConfiguration,omitempty"`
-	// The display options of a control.
-	DisplayOptions  *ListControlDisplayOptions `json:"displayOptions,omitempty"`
-	FilterControlID *string                    `json:"filterControlID,omitempty"`
-	// A list of selectable values that are used in a control.
-	SelectableValues *FilterSelectableValues `json:"selectableValues,omitempty"`
-	SourceFilterID   *string                 `json:"sourceFilterID,omitempty"`
-	Title            *string                 `json:"title,omitempty"`
-	Type             *string                 `json:"type_,omitempty"`
+	FilterControlID *string `json:"filterControlID,omitempty"`
+	SourceFilterID  *string `json:"sourceFilterID,omitempty"`
 }
 
 // A transform operation that filters rows based on a condition.
@@ -3128,95 +2082,29 @@ type FilterOperation struct {
 	StringFilterCondition *DataSetStringFilterCondition `json:"stringFilterCondition,omitempty"`
 }
 
-// The configuration of selected fields in theCustomActionFilterOperation.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type FilterOperationSelectedFieldsConfiguration struct {
-	SelectedColumns      []*ColumnIdentifier `json:"selectedColumns,omitempty"`
-	SelectedFieldOptions *string             `json:"selectedFieldOptions,omitempty"`
-	SelectedFields       []*string           `json:"selectedFields,omitempty"`
-}
-
-// The configuration of target visuals that you want to be filtered.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type FilterOperationTargetVisualsConfiguration struct {
-	// The configuration of the same-sheet target visuals that you want to be filtered.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	SameSheetTargetVisualConfiguration *SameSheetTargetVisualConfiguration `json:"sameSheetTargetVisualConfiguration,omitempty"`
-}
-
 // A control from a date filter that is used to specify the relative date.
 type FilterRelativeDateTimeControl struct {
-	CommitMode *string `json:"commitMode,omitempty"`
-	// The display options of a control.
-	DisplayOptions  *RelativeDateTimeControlDisplayOptions `json:"displayOptions,omitempty"`
-	FilterControlID *string                                `json:"filterControlID,omitempty"`
-	SourceFilterID  *string                                `json:"sourceFilterID,omitempty"`
-	Title           *string                                `json:"title,omitempty"`
-}
-
-// The scope configuration for a FilterGroup.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type FilterScopeConfiguration struct {
-	// An empty object that represents that the AllSheets option is the chosen value
-	// for the FilterScopeConfiguration parameter. This structure applies the filter
-	// to all visuals on all sheets of an Analysis, Dashboard, or Template.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	AllSheets map[string]*string `json:"allSheets,omitempty"`
-	// The configuration for applying a filter to specific sheets or visuals. You
-	// can apply this filter to multiple visuals that are on one sheet or to all
-	// visuals on a sheet.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	SelectedSheets *SelectedSheetsFilterScopeConfiguration `json:"selectedSheets,omitempty"`
-}
-
-// A list of selectable values that are used in a control.
-type FilterSelectableValues struct {
-	Values []*string `json:"values,omitempty"`
+	FilterControlID *string `json:"filterControlID,omitempty"`
+	SourceFilterID  *string `json:"sourceFilterID,omitempty"`
 }
 
 // A control to display a horizontal toggle bar. This is used to change a value
 // by sliding the toggle.
 type FilterSliderControl struct {
-	// The display options of a control.
-	DisplayOptions  *SliderControlDisplayOptions `json:"displayOptions,omitempty"`
-	FilterControlID *string                      `json:"filterControlID,omitempty"`
-	MaximumValue    *float64                     `json:"maximumValue,omitempty"`
-	MinimumValue    *float64                     `json:"minimumValue,omitempty"`
-	SourceFilterID  *string                      `json:"sourceFilterID,omitempty"`
-	StepSize        *float64                     `json:"stepSize,omitempty"`
-	Title           *string                      `json:"title,omitempty"`
-	Type            *string                      `json:"type_,omitempty"`
+	FilterControlID *string `json:"filterControlID,omitempty"`
+	SourceFilterID  *string `json:"sourceFilterID,omitempty"`
 }
 
 // A control to display a text box that is used to enter multiple entries.
 type FilterTextAreaControl struct {
-	Delimiter *string `json:"delimiter,omitempty"`
-	// The display options of a control.
-	DisplayOptions  *TextAreaControlDisplayOptions `json:"displayOptions,omitempty"`
-	FilterControlID *string                        `json:"filterControlID,omitempty"`
-	SourceFilterID  *string                        `json:"sourceFilterID,omitempty"`
-	Title           *string                        `json:"title,omitempty"`
+	FilterControlID *string `json:"filterControlID,omitempty"`
+	SourceFilterID  *string `json:"sourceFilterID,omitempty"`
 }
 
 // A control to display a text box that is used to enter a single entry.
 type FilterTextFieldControl struct {
-	// The display options of a control.
-	DisplayOptions  *TextFieldControlDisplayOptions `json:"displayOptions,omitempty"`
-	FilterControlID *string                         `json:"filterControlID,omitempty"`
-	SourceFilterID  *string                         `json:"sourceFilterID,omitempty"`
-	Title           *string                         `json:"title,omitempty"`
+	FilterControlID *string `json:"filterControlID,omitempty"`
+	SourceFilterID  *string `json:"sourceFilterID,omitempty"`
 }
 
 // A transform operation that applies one or more filter conditions.
@@ -3238,8 +2126,6 @@ type FlowSummary struct {
 	LastPublishedBy *string      `json:"lastPublishedBy,omitempty"`
 	LastUpdatedBy   *string      `json:"lastUpdatedBy,omitempty"`
 	LastUpdatedTime *metav1.Time `json:"lastUpdatedTime,omitempty"`
-	RunCount        *int64       `json:"runCount,omitempty"`
-	UserCount       *int64       `json:"userCount,omitempty"`
 }
 
 // A folder in Quick Sight.
@@ -3268,59 +2154,20 @@ type Font struct {
 
 // Configures the display properties of the given text.
 type FontConfiguration struct {
-	FontColor      *string `json:"fontColor,omitempty"`
-	FontDecoration *string `json:"fontDecoration,omitempty"`
-	FontFamily     *string `json:"fontFamily,omitempty"`
-	// The option that determines the text display size.
-	FontSize  *FontSize `json:"fontSize,omitempty"`
-	FontStyle *string   `json:"fontStyle,omitempty"`
-	// The option that determines the text display weight, or boldness.
-	FontWeight *FontWeight `json:"fontWeight,omitempty"`
+	FontColor  *string `json:"fontColor,omitempty"`
+	FontFamily *string `json:"fontFamily,omitempty"`
 }
 
 // The option that determines the text display size.
 type FontSize struct {
 	// String based length that is composed of value and unit in px
 	Absolute *string `json:"absolute,omitempty"`
-	Relative *string `json:"relative,omitempty"`
-}
-
-// The option that determines the text display weight, or boldness.
-type FontWeight struct {
-	Name *string `json:"name,omitempty"`
 }
 
 // The forecast computation configuration.
 type ForecastComputation struct {
-	ComputationID          *string  `json:"computationID,omitempty"`
-	CustomSeasonalityValue *int64   `json:"customSeasonalityValue,omitempty"`
-	LowerBoundary          *float64 `json:"lowerBoundary,omitempty"`
-	Name                   *string  `json:"name,omitempty"`
-	PeriodsBackward        *int64   `json:"periodsBackward,omitempty"`
-	PeriodsForward         *int64   `json:"periodsForward,omitempty"`
-	PredictionInterval     *int64   `json:"predictionInterval,omitempty"`
-	Seasonality            *string  `json:"seasonality,omitempty"`
-	// The dimension type field.
-	Time          *DimensionField `json:"time,omitempty"`
-	UpperBoundary *float64        `json:"upperBoundary,omitempty"`
-	// The measure (metric) type field.
-	Value *MeasureField `json:"value,omitempty"`
-}
-
-// The forecast configuration that is used in a line chart's display properties.
-type ForecastConfiguration struct {
-	// The forecast properties setup of a forecast in the line chart.
-	ForecastProperties *TimeBasedForecastProperties `json:"forecastProperties,omitempty"`
-	// The forecast scenario of a forecast in the line chart.
-	Scenario *ForecastScenario `json:"scenario,omitempty"`
-}
-
-// The forecast scenario of a forecast in the line chart.
-type ForecastScenario struct {
-	// Provides the forecast to meet the target for a particular date.
-	WhatIfPointScenario *WhatIfPointScenario `json:"whatIfPointScenario,omitempty"`
-	// Provides the forecast to meet the target for a particular date range.
-	WhatIfRangeScenario *WhatIfRangeScenario `json:"whatIfRangeScenario,omitempty"`
+	ComputationID *string `json:"computationID,omitempty"`
+	Name          *string `json:"name,omitempty"`
 }
 
 // The formatting configuration for all types of field.
@@ -3343,34 +2190,18 @@ type FreeFormLayoutCanvasSizeOptions struct {
 type FreeFormLayoutConfiguration struct {
 	// Configuration options for the canvas of a free-form layout.
 	CanvasSizeOptions *FreeFormLayoutCanvasSizeOptions `json:"canvasSizeOptions,omitempty"`
-	Elements          []*FreeFormLayoutElement         `json:"elements,omitempty"`
 }
 
 // An element within a free-form layout.
 type FreeFormLayoutElement struct {
-	// The background style configuration of a free-form layout element.
-	BackgroundStyle *FreeFormLayoutElementBackgroundStyle `json:"backgroundStyle,omitempty"`
-	BorderRadius    *string                               `json:"borderRadius,omitempty"`
-	// The background style configuration of a free-form layout element.
-	BorderStyle *FreeFormLayoutElementBorderStyle `json:"borderStyle,omitempty"`
-	ElementID   *string                           `json:"elementID,omitempty"`
-	ElementType *string                           `json:"elementType,omitempty"`
+	ElementID *string `json:"elementID,omitempty"`
 	// String based length that is composed of value and unit in px
-	Height *string `json:"height,omitempty"`
-	// The configuration of loading animation in free-form layout.
-	LoadingAnimation *LoadingAnimation            `json:"loadingAnimation,omitempty"`
-	Padding          *string                      `json:"padding,omitempty"`
-	RenderingRules   []*SheetElementRenderingRule `json:"renderingRules,omitempty"`
-	// The background style configuration of a free-form layout element.
-	SelectedBorderStyle *FreeFormLayoutElementBorderStyle `json:"selectedBorderStyle,omitempty"`
-	Visibility          *string                           `json:"visibility,omitempty"`
+	Height     *string `json:"height,omitempty"`
+	Visibility *string `json:"visibility,omitempty"`
 	// String based length that is composed of value and unit in px
 	Width *string `json:"width,omitempty"`
 	// String based length that is composed of value and unit in px
 	XAxisLocation *string `json:"xAxisLocation,omitempty"`
-	// String based length that is composed of value and unit in px with Integer.MAX_VALUE
-	// as maximum value
-	YAxisLocation *string `json:"yAxisLocation,omitempty"`
 }
 
 // The background style configuration of a free-form layout element.
@@ -3383,9 +2214,6 @@ type FreeFormLayoutElementBackgroundStyle struct {
 type FreeFormLayoutElementBorderStyle struct {
 	Color      *string `json:"color,omitempty"`
 	Visibility *string `json:"visibility,omitempty"`
-	// String to encapsulate the most generic way Width can be formatted with whatever
-	// units (px, em etc)
-	Width *string `json:"width,omitempty"`
 }
 
 // The options that determine the sizing of the canvas used in a free-form layout.
@@ -3394,66 +2222,12 @@ type FreeFormLayoutScreenCanvasSizeOptions struct {
 	OptimizedViewPortWidth *string `json:"optimizedViewPortWidth,omitempty"`
 }
 
-// The free-form layout configuration of a section.
-type FreeFormSectionLayoutConfiguration struct {
-	Elements []*FreeFormLayoutElement `json:"elements,omitempty"`
-}
-
-// The field well configuration of a FunnelChartVisual.
-type FunnelChartAggregatedFieldWells struct {
-	Category []*DimensionField `json:"category,omitempty"`
-	Values   []*MeasureField   `json:"values,omitempty"`
-}
-
-// The configuration of a FunnelChartVisual.
-type FunnelChartConfiguration struct {
-	// The label options for an axis on a chart.
-	CategoryLabelOptions *ChartAxisLabelOptions `json:"categoryLabelOptions,omitempty"`
-	// The options that determine the presentation of the data labels.
-	DataLabelOptions *FunnelChartDataLabelOptions `json:"dataLabelOptions,omitempty"`
-	// The field well configuration of a FunnelChartVisual.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	FieldWells *FunnelChartFieldWells `json:"fieldWells,omitempty"`
-	// The general visual interactions setup for visual publish options
-	Interactions *VisualInteractionOptions `json:"interactions,omitempty"`
-	// The sort configuration of a FunnelChartVisual.
-	SortConfiguration *FunnelChartSortConfiguration `json:"sortConfiguration,omitempty"`
-	// The display options for the visual tooltip.
-	Tooltip *TooltipOptions `json:"tooltip,omitempty"`
-	// The label options for an axis on a chart.
-	ValueLabelOptions *ChartAxisLabelOptions `json:"valueLabelOptions,omitempty"`
-	// The visual display options for the visual palette.
-	VisualPalette *VisualPalette `json:"visualPalette,omitempty"`
-}
-
 // The options that determine the presentation of the data labels.
 type FunnelChartDataLabelOptions struct {
 	CategoryLabelVisibility *string `json:"categoryLabelVisibility,omitempty"`
 	LabelColor              *string `json:"labelColor,omitempty"`
-	// Configures the display properties of the given text.
-	LabelFontConfiguration *FontConfiguration `json:"labelFontConfiguration,omitempty"`
-	MeasureDataLabelStyle  *string            `json:"measureDataLabelStyle,omitempty"`
-	MeasureLabelVisibility *string            `json:"measureLabelVisibility,omitempty"`
-	Position               *string            `json:"position,omitempty"`
-	Visibility             *string            `json:"visibility,omitempty"`
-}
-
-// The field well configuration of a FunnelChartVisual.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type FunnelChartFieldWells struct {
-	// The field well configuration of a FunnelChartVisual.
-	FunnelChartAggregatedFieldWells *FunnelChartAggregatedFieldWells `json:"funnelChartAggregatedFieldWells,omitempty"`
-}
-
-// The sort configuration of a FunnelChartVisual.
-type FunnelChartSortConfiguration struct {
-	// The limit configuration of the visual display for an axis.
-	CategoryItemsLimit *ItemsLimitConfiguration `json:"categoryItemsLimit,omitempty"`
-	CategorySort       []*FieldSortOptions      `json:"categorySort,omitempty"`
+	MeasureLabelVisibility  *string `json:"measureLabelVisibility,omitempty"`
+	Visibility              *string `json:"visibility,omitempty"`
 }
 
 // A funnel chart.
@@ -3461,22 +2235,8 @@ type FunnelChartSortConfiguration struct {
 // For more information, see Using funnel charts (https://docs.aws.amazon.com/quicksight/latest/user/funnel-visual-content.html)
 // in the Amazon Quick Suite User Guide.
 type FunnelChartVisual struct {
-	Actions []*VisualCustomAction `json:"actions,omitempty"`
-	// The configuration of a FunnelChartVisual.
-	ChartConfiguration *FunnelChartConfiguration `json:"chartConfiguration,omitempty"`
-	ColumnHierarchies  []*ColumnHierarchy        `json:"columnHierarchies,omitempty"`
-	// The subtitle label options for a visual.
-	Subtitle *VisualSubtitleLabelOptions `json:"subtitle,omitempty"`
-	// The title label options for a visual.
-	Title                *VisualTitleLabelOptions `json:"title,omitempty"`
-	VisualContentAltText *string                  `json:"visualContentAltText,omitempty"`
-	VisualID             *string                  `json:"visualID,omitempty"`
-}
-
-// The options that determine the presentation of the arc of a GaugeChartVisual.
-type GaugeChartArcConditionalFormatting struct {
-	// The formatting configuration for the color.
-	ForegroundColor *ConditionalFormattingColor `json:"foregroundColor,omitempty"`
+	VisualContentAltText *string `json:"visualContentAltText,omitempty"`
+	VisualID             *string `json:"visualID,omitempty"`
 }
 
 // The color configuration of a GaugeChartVisual.
@@ -3485,80 +2245,13 @@ type GaugeChartColorConfiguration struct {
 	ForegroundColor *string `json:"foregroundColor,omitempty"`
 }
 
-// The conditional formatting of a GaugeChartVisual.
-type GaugeChartConditionalFormatting struct {
-	ConditionalFormattingOptions []*GaugeChartConditionalFormattingOption `json:"conditionalFormattingOptions,omitempty"`
-}
-
-// Conditional formatting options of a GaugeChartVisual.
-type GaugeChartConditionalFormattingOption struct {
-	// The options that determine the presentation of the arc of a GaugeChartVisual.
-	Arc *GaugeChartArcConditionalFormatting `json:"arc,omitempty"`
-	// The conditional formatting for the primary value of a GaugeChartVisual.
-	PrimaryValue *GaugeChartPrimaryValueConditionalFormatting `json:"primaryValue,omitempty"`
-}
-
-// The configuration of a GaugeChartVisual.
-type GaugeChartConfiguration struct {
-	// The color configuration of a GaugeChartVisual.
-	ColorConfiguration *GaugeChartColorConfiguration `json:"colorConfiguration,omitempty"`
-	// The options that determine the presentation of the data labels.
-	DataLabels *DataLabelOptions `json:"dataLabels,omitempty"`
-	// The field well configuration of a GaugeChartVisual.
-	FieldWells *GaugeChartFieldWells `json:"fieldWells,omitempty"`
-	// The options that determine the presentation of the GaugeChartVisual.
-	GaugeChartOptions *GaugeChartOptions `json:"gaugeChartOptions,omitempty"`
-	// The general visual interactions setup for visual publish options
-	Interactions *VisualInteractionOptions `json:"interactions,omitempty"`
-	// The display options for the visual tooltip.
-	TooltipOptions *TooltipOptions `json:"tooltipOptions,omitempty"`
-	// The visual display options for the visual palette.
-	VisualPalette *VisualPalette `json:"visualPalette,omitempty"`
-}
-
-// The field well configuration of a GaugeChartVisual.
-type GaugeChartFieldWells struct {
-	TargetValues []*MeasureField `json:"targetValues,omitempty"`
-	Values       []*MeasureField `json:"values,omitempty"`
-}
-
-// The options that determine the presentation of the GaugeChartVisual.
-type GaugeChartOptions struct {
-	// The arc configuration of a GaugeChartVisual.
-	Arc *ArcConfiguration `json:"arc,omitempty"`
-	// The arc axis configuration of a GaugeChartVisual.
-	ArcAxis *ArcAxisConfiguration `json:"arcAxis,omitempty"`
-	// The comparison display configuration of a KPI or gauge chart.
-	Comparison              *ComparisonConfiguration `json:"comparison,omitempty"`
-	PrimaryValueDisplayType *string                  `json:"primaryValueDisplayType,omitempty"`
-	// Configures the display properties of the given text.
-	PrimaryValueFontConfiguration *FontConfiguration `json:"primaryValueFontConfiguration,omitempty"`
-}
-
-// The conditional formatting for the primary value of a GaugeChartVisual.
-type GaugeChartPrimaryValueConditionalFormatting struct {
-	// The formatting configuration for the icon.
-	Icon *ConditionalFormattingIcon `json:"icon,omitempty"`
-	// The formatting configuration for the color.
-	TextColor *ConditionalFormattingColor `json:"textColor,omitempty"`
-}
-
 // A gauge chart.
 //
 // For more information, see Using gauge charts (https://docs.aws.amazon.com/quicksight/latest/user/gauge-chart.html)
 // in the Amazon Quick Suite User Guide.
 type GaugeChartVisual struct {
-	Actions []*VisualCustomAction `json:"actions,omitempty"`
-	// The configuration of a GaugeChartVisual.
-	ChartConfiguration *GaugeChartConfiguration `json:"chartConfiguration,omitempty"`
-	// The conditional formatting of a GaugeChartVisual.
-	ConditionalFormatting *GaugeChartConditionalFormatting `json:"conditionalFormatting,omitempty"`
-	// The subtitle label options for a visual.
-	Subtitle *VisualSubtitleLabelOptions `json:"subtitle,omitempty"`
-	// The title label options for a visual.
-	Title                *VisualTitleLabelOptions `json:"title,omitempty"`
-	VisualContentAltText *string                  `json:"visualContentAltText,omitempty"`
-	VisualID             *string                  `json:"visualID,omitempty"`
+	VisualContentAltText *string `json:"visualContentAltText,omitempty"`
+	VisualID             *string `json:"visualID,omitempty"`
 }
 
 // The QA result that is made from generated answer.
@@ -3578,38 +2271,9 @@ type GeoSpatialColumnGroup struct {
 	Name        *string   `json:"name,omitempty"`
 }
 
-// The geocode preference.
-type GeocodePreference struct {
-	// The preference value for the geocode preference.
-	Preference *GeocodePreferenceValue `json:"preference,omitempty"`
-	// The preference hierarchy for the geocode preference.
-	RequestKey *GeocoderHierarchy `json:"requestKey,omitempty"`
-}
-
-// The preference value for the geocode preference.
-type GeocodePreferenceValue struct {
-	// The preference coordinate for the geocode preference.
-	Coordinate *Coordinate `json:"coordinate,omitempty"`
-	// The preference hierarchy for the geocode preference.
-	GeocoderHierarchy *GeocoderHierarchy `json:"geocoderHierarchy,omitempty"`
-}
-
-// The preference hierarchy for the geocode preference.
-type GeocoderHierarchy struct {
-	City     *string `json:"city,omitempty"`
-	Country  *string `json:"country,omitempty"`
-	County   *string `json:"county,omitempty"`
-	PostCode *string `json:"postCode,omitempty"`
-	State    *string `json:"state,omitempty"`
-}
-
 // The definition for a categorical color.
 type GeospatialCategoricalColor struct {
-	CategoryDataColors []*GeospatialCategoricalDataColor `json:"categoryDataColors,omitempty"`
-	DefaultOpacity     *float64                          `json:"defaultOpacity,omitempty"`
-	// The properties for the visualization of null data.
-	NullDataSettings   *GeospatialNullDataSettings `json:"nullDataSettings,omitempty"`
-	NullDataVisibility *string                     `json:"nullDataVisibility,omitempty"`
+	NullDataVisibility *string `json:"nullDataVisibility,omitempty"`
 }
 
 // The categorical data color for a single category.
@@ -3618,71 +2282,14 @@ type GeospatialCategoricalDataColor struct {
 	DataValue *string `json:"dataValue,omitempty"`
 }
 
-// The geospatial radius for a circle.
-type GeospatialCircleRadius struct {
-	Radius *float64 `json:"radius,omitempty"`
-}
-
-// The properties for a circle symbol style.
-type GeospatialCircleSymbolStyle struct {
-	// The geospatial radius for a circle.
-	CircleRadius *GeospatialCircleRadius `json:"circleRadius,omitempty"`
-	// The visualization properties for solid, gradient, and categorical colors.
-	FillColor *GeospatialColor `json:"fillColor,omitempty"`
-	// The visualization properties for solid, gradient, and categorical colors.
-	StrokeColor *GeospatialColor `json:"strokeColor,omitempty"`
-	// The width properties for a line.
-	StrokeWidth *GeospatialLineWidth `json:"strokeWidth,omitempty"`
-}
-
-// The visualization properties for solid, gradient, and categorical colors.
-type GeospatialColor struct {
-	// The definition for a categorical color.
-	Categorical *GeospatialCategoricalColor `json:"categorical,omitempty"`
-	// The definition for a gradient color.
-	Gradient *GeospatialGradientColor `json:"gradient,omitempty"`
-	// The definition for a solid color.
-	Solid *GeospatialSolidColor `json:"solid,omitempty"`
-}
-
-// The bound options (north, south, west, east) of the geospatial window options.
-type GeospatialCoordinateBounds struct {
-	East  *float64 `json:"east,omitempty"`
-	North *float64 `json:"north,omitempty"`
-	South *float64 `json:"south,omitempty"`
-	West  *float64 `json:"west,omitempty"`
-}
-
-// The data source properties for the geospatial data.
-type GeospatialDataSourceItem struct {
-	// The source properties for a geospatial static file.
-	StaticFileDataSource *GeospatialStaticFileSource `json:"staticFileDataSource,omitempty"`
-}
-
 // The definition for a gradient color.
 type GeospatialGradientColor struct {
-	DefaultOpacity *float64 `json:"defaultOpacity,omitempty"`
-	// The properties for the visualization of null data.
-	NullDataSettings   *GeospatialNullDataSettings    `json:"nullDataSettings,omitempty"`
-	NullDataVisibility *string                        `json:"nullDataVisibility,omitempty"`
-	StepColors         []*GeospatialGradientStepColor `json:"stepColors,omitempty"`
+	NullDataVisibility *string `json:"nullDataVisibility,omitempty"`
 }
 
 // The gradient step color for a single step.
 type GeospatialGradientStepColor struct {
-	Color     *string  `json:"color,omitempty"`
-	DataValue *float64 `json:"dataValue,omitempty"`
-}
-
-// The color scale specification for the heatmap point style.
-type GeospatialHeatmapColorScale struct {
-	Colors []*GeospatialHeatmapDataColor `json:"colors,omitempty"`
-}
-
-// The heatmap configuration of the geospatial point style.
-type GeospatialHeatmapConfiguration struct {
-	// The color scale specification for the heatmap point style.
-	HeatmapColor *GeospatialHeatmapColorScale `json:"heatmapColor,omitempty"`
+	Color *string `json:"color,omitempty"`
 }
 
 // The color to be used in the heatmap point style.
@@ -3690,142 +2297,22 @@ type GeospatialHeatmapDataColor struct {
 	Color *string `json:"color,omitempty"`
 }
 
-// The color field that defines a gradient or categorical style.
-type GeospatialLayerColorField struct {
-	ColorDimensionsFields []*DimensionField `json:"colorDimensionsFields,omitempty"`
-	ColorValuesFields     []*MeasureField   `json:"colorValuesFields,omitempty"`
-}
-
-// The definition properties for a geospatial layer.
-type GeospatialLayerDefinition struct {
-	// The geospatial Line layer.
-	LineLayer *GeospatialLineLayer `json:"lineLayer,omitempty"`
-	// The geospatial Point layer.
-	PointLayer *GeospatialPointLayer `json:"pointLayer,omitempty"`
-	// The geospatial polygon layer.
-	PolygonLayer *GeospatialPolygonLayer `json:"polygonLayer,omitempty"`
-}
-
 // The properties for a single geospatial layer.
 type GeospatialLayerItem struct {
-	Actions []*LayerCustomAction `json:"actions,omitempty"`
-	// The data source properties for the geospatial data.
-	DataSource *GeospatialDataSourceItem `json:"dataSource,omitempty"`
-	// The custom actions for a layer.
-	JoinDefinition *GeospatialLayerJoinDefinition `json:"joinDefinition,omitempty"`
-	Label          *string                        `json:"label,omitempty"`
-	// The definition properties for a geospatial layer.
-	LayerDefinition *GeospatialLayerDefinition `json:"layerDefinition,omitempty"`
-	LayerID         *string                    `json:"layerID,omitempty"`
-	LayerType       *string                    `json:"layerType,omitempty"`
-	// The display options for the visual tooltip.
-	Tooltip    *TooltipOptions `json:"tooltip,omitempty"`
-	Visibility *string         `json:"visibility,omitempty"`
+	Label      *string `json:"label,omitempty"`
+	LayerID    *string `json:"layerID,omitempty"`
+	Visibility *string `json:"visibility,omitempty"`
 }
 
 // The custom actions for a layer.
 type GeospatialLayerJoinDefinition struct {
-	// The color field that defines a gradient or categorical style.
-	ColorField *GeospatialLayerColorField `json:"colorField,omitempty"`
-	// The unaggregated field for a table.
-	DatasetKeyField *UnaggregatedField `json:"datasetKeyField,omitempty"`
-	ShapeKeyField   *string            `json:"shapeKeyField,omitempty"`
-}
-
-// The map definition that defines map state, map style, and geospatial layers.
-type GeospatialLayerMapConfiguration struct {
-	// The general visual interactions setup for visual publish options
-	Interactions *VisualInteractionOptions `json:"interactions,omitempty"`
-	// The options for the legend setup of a visual.
-	Legend    *LegendOptions         `json:"legend,omitempty"`
-	MapLayers []*GeospatialLayerItem `json:"mapLayers,omitempty"`
-	// The map state properties for a map.
-	MapState *GeospatialMapState `json:"mapState,omitempty"`
-	// The map style properties for a map.
-	MapStyle *GeospatialMapStyle `json:"mapStyle,omitempty"`
-}
-
-// The geospatial Line layer.
-type GeospatialLineLayer struct {
-	// The visualization style for a line layer.
-	Style *GeospatialLineStyle `json:"style,omitempty"`
-}
-
-// The visualization style for a line layer.
-type GeospatialLineStyle struct {
-	// The symbol style for a line layer.
-	LineSymbolStyle *GeospatialLineSymbolStyle `json:"lineSymbolStyle,omitempty"`
-}
-
-// The symbol style for a line layer.
-type GeospatialLineSymbolStyle struct {
-	// The visualization properties for solid, gradient, and categorical colors.
-	FillColor *GeospatialColor `json:"fillColor,omitempty"`
-	// The width properties for a line.
-	LineWidth *GeospatialLineWidth `json:"lineWidth,omitempty"`
-}
-
-// The width properties for a line.
-type GeospatialLineWidth struct {
-	LineWidth *float64 `json:"lineWidth,omitempty"`
-}
-
-// The aggregated field wells for a geospatial map.
-type GeospatialMapAggregatedFieldWells struct {
-	Colors     []*DimensionField `json:"colors,omitempty"`
-	Geospatial []*DimensionField `json:"geospatial,omitempty"`
-	Values     []*MeasureField   `json:"values,omitempty"`
-}
-
-// The configuration of a GeospatialMapVisual.
-type GeospatialMapConfiguration struct {
-	// The field wells of a GeospatialMapVisual.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	FieldWells *GeospatialMapFieldWells `json:"fieldWells,omitempty"`
-	// The general visual interactions setup for visual publish options
-	Interactions *VisualInteractionOptions `json:"interactions,omitempty"`
-	// The options for the legend setup of a visual.
-	Legend *LegendOptions `json:"legend,omitempty"`
-	// The map style options of the geospatial map.
-	MapStyleOptions *GeospatialMapStyleOptions `json:"mapStyleOptions,omitempty"`
-	// The point style of the geospatial map.
-	PointStyleOptions *GeospatialPointStyleOptions `json:"pointStyleOptions,omitempty"`
-	// The display options for the visual tooltip.
-	Tooltip *TooltipOptions `json:"tooltip,omitempty"`
-	// The visual display options for the visual palette.
-	VisualPalette *VisualPalette `json:"visualPalette,omitempty"`
-	// The window options of the geospatial map visual.
-	WindowOptions *GeospatialWindowOptions `json:"windowOptions,omitempty"`
-}
-
-// The field wells of a GeospatialMapVisual.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type GeospatialMapFieldWells struct {
-	// The aggregated field wells for a geospatial map.
-	GeospatialMapAggregatedFieldWells *GeospatialMapAggregatedFieldWells `json:"geospatialMapAggregatedFieldWells,omitempty"`
-}
-
-// The map state properties for a map.
-type GeospatialMapState struct {
-	// The bound options (north, south, west, east) of the geospatial window options.
-	Bounds        *GeospatialCoordinateBounds `json:"bounds,omitempty"`
-	MapNavigation *string                     `json:"mapNavigation,omitempty"`
+	ShapeKeyField *string `json:"shapeKeyField,omitempty"`
 }
 
 // The map style properties for a map.
 type GeospatialMapStyle struct {
 	BackgroundColor   *string `json:"backgroundColor,omitempty"`
-	BaseMapStyle      *string `json:"baseMapStyle,omitempty"`
 	BaseMapVisibility *string `json:"baseMapVisibility,omitempty"`
-}
-
-// The map style options of the geospatial map.
-type GeospatialMapStyleOptions struct {
-	BaseMapStyle *string `json:"baseMapStyle,omitempty"`
 }
 
 // A geospatial map or a points on map visual.
@@ -3833,79 +2320,19 @@ type GeospatialMapStyleOptions struct {
 // For more information, see Creating point maps (https://docs.aws.amazon.com/quicksight/latest/user/point-maps.html)
 // in the Amazon Quick Suite User Guide.
 type GeospatialMapVisual struct {
-	Actions []*VisualCustomAction `json:"actions,omitempty"`
-	// The configuration of a GeospatialMapVisual.
-	ChartConfiguration   *GeospatialMapConfiguration `json:"chartConfiguration,omitempty"`
-	ColumnHierarchies    []*ColumnHierarchy          `json:"columnHierarchies,omitempty"`
-	GeocodingPreferences []*GeocodePreference        `json:"geocodingPreferences,omitempty"`
-	// The subtitle label options for a visual.
-	Subtitle *VisualSubtitleLabelOptions `json:"subtitle,omitempty"`
-	// The title label options for a visual.
-	Title                *VisualTitleLabelOptions `json:"title,omitempty"`
-	VisualContentAltText *string                  `json:"visualContentAltText,omitempty"`
-	VisualID             *string                  `json:"visualID,omitempty"`
-}
-
-// The properties for the visualization of null data.
-type GeospatialNullDataSettings struct {
-	// The symbol style for null data.
-	SymbolStyle *GeospatialNullSymbolStyle `json:"symbolStyle,omitempty"`
+	VisualContentAltText *string `json:"visualContentAltText,omitempty"`
+	VisualID             *string `json:"visualID,omitempty"`
 }
 
 // The symbol style for null data.
 type GeospatialNullSymbolStyle struct {
-	FillColor   *string  `json:"fillColor,omitempty"`
-	StrokeColor *string  `json:"strokeColor,omitempty"`
-	StrokeWidth *float64 `json:"strokeWidth,omitempty"`
-}
-
-// The geospatial Point layer.
-type GeospatialPointLayer struct {
-	// The point style for a point layer.
-	Style *GeospatialPointStyle `json:"style,omitempty"`
-}
-
-// The point style for a point layer.
-type GeospatialPointStyle struct {
-	// The properties for a circle symbol style.
-	CircleSymbolStyle *GeospatialCircleSymbolStyle `json:"circleSymbolStyle,omitempty"`
-}
-
-// The point style of the geospatial map.
-type GeospatialPointStyleOptions struct {
-	// The cluster marker configuration of the geospatial map selected point style.
-	ClusterMarkerConfiguration *ClusterMarkerConfiguration `json:"clusterMarkerConfiguration,omitempty"`
-	// The heatmap configuration of the geospatial point style.
-	HeatmapConfiguration *GeospatialHeatmapConfiguration `json:"heatmapConfiguration,omitempty"`
-	SelectedPointStyle   *string                         `json:"selectedPointStyle,omitempty"`
-}
-
-// The geospatial polygon layer.
-type GeospatialPolygonLayer struct {
-	// The polygon style for a polygon layer.
-	Style *GeospatialPolygonStyle `json:"style,omitempty"`
-}
-
-// The polygon style for a polygon layer.
-type GeospatialPolygonStyle struct {
-	// The polygon symbol style for a polygon layer.
-	PolygonSymbolStyle *GeospatialPolygonSymbolStyle `json:"polygonSymbolStyle,omitempty"`
-}
-
-// The polygon symbol style for a polygon layer.
-type GeospatialPolygonSymbolStyle struct {
-	// The visualization properties for solid, gradient, and categorical colors.
-	FillColor *GeospatialColor `json:"fillColor,omitempty"`
-	// The visualization properties for solid, gradient, and categorical colors.
-	StrokeColor *GeospatialColor `json:"strokeColor,omitempty"`
-	// The width properties for a line.
-	StrokeWidth *GeospatialLineWidth `json:"strokeWidth,omitempty"`
+	FillColor   *string `json:"fillColor,omitempty"`
+	StrokeColor *string `json:"strokeColor,omitempty"`
 }
 
 // The definition for a solid color.
 type GeospatialSolidColor struct {
 	Color *string `json:"color,omitempty"`
-	State *string `json:"state,omitempty"`
 }
 
 // The source properties for a geospatial static file.
@@ -3913,31 +2340,9 @@ type GeospatialStaticFileSource struct {
 	StaticFileID *string `json:"staticFileID,omitempty"`
 }
 
-// The window options of the geospatial map visual.
-type GeospatialWindowOptions struct {
-	// The bound options (north, south, west, east) of the geospatial window options.
-	Bounds      *GeospatialCoordinateBounds `json:"bounds,omitempty"`
-	MapZoomMode *string                     `json:"mapZoomMode,omitempty"`
-}
-
-// Determines the border options for a table visual.
-type GlobalTableBorderOptions struct {
-	// The side border options for a table.
-	SideSpecificBorder *TableSideBorderOptions `json:"sideSpecificBorder,omitempty"`
-	// The border options for a table border.
-	UniformBorder *TableBorderOptions `json:"uniformBorder,omitempty"`
-}
-
-// Determines the gradient color settings.
-type GradientColor struct {
-	Stops []*GradientStop `json:"stops,omitempty"`
-}
-
 // Determines the gradient stop configuration.
 type GradientStop struct {
-	Color          *string  `json:"color,omitempty"`
-	DataValue      *float64 `json:"dataValue,omitempty"`
-	GradientOffset *float64 `json:"gradientOffset,omitempty"`
+	Color *string `json:"color,omitempty"`
 }
 
 // Configuration options for the canvas of a grid layout.
@@ -3953,27 +2358,11 @@ type GridLayoutCanvasSizeOptions struct {
 type GridLayoutConfiguration struct {
 	// Configuration options for the canvas of a grid layout.
 	CanvasSizeOptions *GridLayoutCanvasSizeOptions `json:"canvasSizeOptions,omitempty"`
-	Elements          []*GridLayoutElement         `json:"elements,omitempty"`
 }
 
 // An element within a grid layout.
 type GridLayoutElement struct {
-	// The background style configuration of a grid layout element.
-	BackgroundStyle *GridLayoutElementBackgroundStyle `json:"backgroundStyle,omitempty"`
-	BorderRadius    *string                           `json:"borderRadius,omitempty"`
-	// The border style configuration of a grid layout element.
-	BorderStyle *GridLayoutElementBorderStyle `json:"borderStyle,omitempty"`
-	ColumnIndex *int64                        `json:"columnIndex,omitempty"`
-	ColumnSpan  *int64                        `json:"columnSpan,omitempty"`
-	ElementID   *string                       `json:"elementID,omitempty"`
-	ElementType *string                       `json:"elementType,omitempty"`
-	// The configuration of loading animation in free-form layout.
-	LoadingAnimation *LoadingAnimation `json:"loadingAnimation,omitempty"`
-	Padding          *string           `json:"padding,omitempty"`
-	RowIndex         *int64            `json:"rowIndex,omitempty"`
-	RowSpan          *int64            `json:"rowSpan,omitempty"`
-	// The border style configuration of a grid layout element.
-	SelectedBorderStyle *GridLayoutElementBorderStyle `json:"selectedBorderStyle,omitempty"`
+	ElementID *string `json:"elementID,omitempty"`
 }
 
 // The background style configuration of a grid layout element.
@@ -3986,9 +2375,6 @@ type GridLayoutElementBackgroundStyle struct {
 type GridLayoutElementBorderStyle struct {
 	Color      *string `json:"color,omitempty"`
 	Visibility *string `json:"visibility,omitempty"`
-	// String to encapsulate the most generic way Width can be formatted with whatever
-	// units (px, em etc)
-	Width *string `json:"width,omitempty"`
 }
 
 // The options that determine the sizing of the canvas used in a grid layout.
@@ -4020,11 +2406,6 @@ type GroupSearchFilter struct {
 type GrowthRateComputation struct {
 	ComputationID *string `json:"computationID,omitempty"`
 	Name          *string `json:"name,omitempty"`
-	PeriodSize    *int64  `json:"periodSize,omitempty"`
-	// The dimension type field.
-	Time *DimensionField `json:"time,omitempty"`
-	// The measure (metric) type field.
-	Value *MeasureField `json:"value,omitempty"`
 }
 
 // The display options for gutter spacing between tiles on a sheet.
@@ -4034,66 +2415,7 @@ type GutterStyle struct {
 
 // The configuration of a header or footer section.
 type HeaderFooterSectionConfiguration struct {
-	// The layout configuration of a section.
-	Layout    *SectionLayoutConfiguration `json:"layout,omitempty"`
-	SectionID *string                     `json:"sectionID,omitempty"`
-	// The options that style a section.
-	Style *SectionStyle `json:"style,omitempty"`
-}
-
-// The aggregated field wells of a heat map.
-type HeatMapAggregatedFieldWells struct {
-	Columns []*DimensionField `json:"columns,omitempty"`
-	Rows    []*DimensionField `json:"rows,omitempty"`
-	Values  []*MeasureField   `json:"values,omitempty"`
-}
-
-// The configuration of a heat map.
-type HeatMapConfiguration struct {
-	// Determines the color scale that is applied to the visual.
-	ColorScale *ColorScale `json:"colorScale,omitempty"`
-	// The display options for the axis label.
-	ColumnAxisDisplayOptions *AxisDisplayOptions `json:"columnAxisDisplayOptions,omitempty"`
-	// The label options for an axis on a chart.
-	ColumnLabelOptions *ChartAxisLabelOptions `json:"columnLabelOptions,omitempty"`
-	// The options that determine the presentation of the data labels.
-	DataLabels *DataLabelOptions `json:"dataLabels,omitempty"`
-	// The field well configuration of a heat map.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	FieldWells *HeatMapFieldWells `json:"fieldWells,omitempty"`
-	// The general visual interactions setup for visual publish options
-	Interactions *VisualInteractionOptions `json:"interactions,omitempty"`
-	// The options for the legend setup of a visual.
-	Legend *LegendOptions `json:"legend,omitempty"`
-	// The display options for the axis label.
-	RowAxisDisplayOptions *AxisDisplayOptions `json:"rowAxisDisplayOptions,omitempty"`
-	// The label options for an axis on a chart.
-	RowLabelOptions *ChartAxisLabelOptions `json:"rowLabelOptions,omitempty"`
-	// The sort configuration of a heat map.
-	SortConfiguration *HeatMapSortConfiguration `json:"sortConfiguration,omitempty"`
-	// The display options for the visual tooltip.
-	Tooltip *TooltipOptions `json:"tooltip,omitempty"`
-}
-
-// The field well configuration of a heat map.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type HeatMapFieldWells struct {
-	// The aggregated field wells of a heat map.
-	HeatMapAggregatedFieldWells *HeatMapAggregatedFieldWells `json:"heatMapAggregatedFieldWells,omitempty"`
-}
-
-// The sort configuration of a heat map.
-type HeatMapSortConfiguration struct {
-	// The limit configuration of the visual display for an axis.
-	HeatMapColumnItemsLimitConfiguration *ItemsLimitConfiguration `json:"heatMapColumnItemsLimitConfiguration,omitempty"`
-	HeatMapColumnSort                    []*FieldSortOptions      `json:"heatMapColumnSort,omitempty"`
-	// The limit configuration of the visual display for an axis.
-	HeatMapRowItemsLimitConfiguration *ItemsLimitConfiguration `json:"heatMapRowItemsLimitConfiguration,omitempty"`
-	HeatMapRowSort                    []*FieldSortOptions      `json:"heatMapRowSort,omitempty"`
+	SectionID *string `json:"sectionID,omitempty"`
 }
 
 // A heat map.
@@ -4101,59 +2423,8 @@ type HeatMapSortConfiguration struct {
 // For more information, see Using heat maps (https://docs.aws.amazon.com/quicksight/latest/user/heat-map.html)
 // in the Amazon Quick Suite User Guide.
 type HeatMapVisual struct {
-	Actions []*VisualCustomAction `json:"actions,omitempty"`
-	// The configuration of a heat map.
-	ChartConfiguration *HeatMapConfiguration `json:"chartConfiguration,omitempty"`
-	ColumnHierarchies  []*ColumnHierarchy    `json:"columnHierarchies,omitempty"`
-	// The subtitle label options for a visual.
-	Subtitle *VisualSubtitleLabelOptions `json:"subtitle,omitempty"`
-	// The title label options for a visual.
-	Title                *VisualTitleLabelOptions `json:"title,omitempty"`
-	VisualContentAltText *string                  `json:"visualContentAltText,omitempty"`
-	VisualID             *string                  `json:"visualID,omitempty"`
-}
-
-// The field well configuration of a histogram.
-type HistogramAggregatedFieldWells struct {
-	Values []*MeasureField `json:"values,omitempty"`
-}
-
-// The options that determine the presentation of histogram bins.
-type HistogramBinOptions struct {
-	// The options that determine the bin count of a histogram.
-	BinCount *BinCountOptions `json:"binCount,omitempty"`
-	// The options that determine the bin width of a histogram.
-	BinWidth        *BinWidthOptions `json:"binWidth,omitempty"`
-	SelectedBinType *string          `json:"selectedBinType,omitempty"`
-	StartValue      *float64         `json:"startValue,omitempty"`
-}
-
-// The configuration for a HistogramVisual.
-type HistogramConfiguration struct {
-	// The options that determine the presentation of histogram bins.
-	BinOptions *HistogramBinOptions `json:"binOptions,omitempty"`
-	// The options that determine the presentation of the data labels.
-	DataLabels *DataLabelOptions `json:"dataLabels,omitempty"`
-	// The field well configuration of a histogram.
-	FieldWells *HistogramFieldWells `json:"fieldWells,omitempty"`
-	// The general visual interactions setup for visual publish options
-	Interactions *VisualInteractionOptions `json:"interactions,omitempty"`
-	// The display options for the visual tooltip.
-	Tooltip *TooltipOptions `json:"tooltip,omitempty"`
-	// The visual display options for the visual palette.
-	VisualPalette *VisualPalette `json:"visualPalette,omitempty"`
-	// The display options for the axis label.
-	XAxisDisplayOptions *AxisDisplayOptions `json:"xAxisDisplayOptions,omitempty"`
-	// The label options for an axis on a chart.
-	XAxisLabelOptions *ChartAxisLabelOptions `json:"xAxisLabelOptions,omitempty"`
-	// The display options for the axis label.
-	YAxisDisplayOptions *AxisDisplayOptions `json:"yAxisDisplayOptions,omitempty"`
-}
-
-// The field well configuration of a histogram.
-type HistogramFieldWells struct {
-	// The field well configuration of a histogram.
-	HistogramAggregatedFieldWells *HistogramAggregatedFieldWells `json:"histogramAggregatedFieldWells,omitempty"`
+	VisualContentAltText *string `json:"visualContentAltText,omitempty"`
+	VisualID             *string `json:"visualID,omitempty"`
 }
 
 // A histogram.
@@ -4161,15 +2432,8 @@ type HistogramFieldWells struct {
 // For more information, see Using histograms (https://docs.aws.amazon.com/quicksight/latest/user/histogram-charts.html)
 // in the Amazon Quick Suite User Guide.
 type HistogramVisual struct {
-	Actions []*VisualCustomAction `json:"actions,omitempty"`
-	// The configuration for a HistogramVisual.
-	ChartConfiguration *HistogramConfiguration `json:"chartConfiguration,omitempty"`
-	// The subtitle label options for a visual.
-	Subtitle *VisualSubtitleLabelOptions `json:"subtitle,omitempty"`
-	// The title label options for a visual.
-	Title                *VisualTitleLabelOptions `json:"title,omitempty"`
-	VisualContentAltText *string                  `json:"visualContentAltText,omitempty"`
-	VisualID             *string                  `json:"visualID,omitempty"`
+	VisualContentAltText *string `json:"visualContentAltText,omitempty"`
+	VisualID             *string `json:"visualID,omitempty"`
 }
 
 // Authentication metadata for IAM-based connections, used for first-party Amazon
@@ -4274,12 +2538,6 @@ type Ingestion struct {
 	IngestionTimeInSeconds *int64       `json:"ingestionTimeInSeconds,omitempty"`
 }
 
-// The InnerFilter defines the subset of data to be used with the NestedFilter.
-type InnerFilter struct {
-	// A CategoryInnerFilter filters text values for the NestedFilter.
-	CategoryInnerFilter *CategoryInnerFilter `json:"categoryInnerFilter,omitempty"`
-}
-
 // Metadata for a column that is used as the input of a transform operation.
 type InputColumn struct {
 	ID      *string `json:"id,omitempty"`
@@ -4288,30 +2546,14 @@ type InputColumn struct {
 	Type    *string `json:"type,omitempty"`
 }
 
-// The configuration of an insight visual.
-type InsightConfiguration struct {
-	Computations []*Computation `json:"computations,omitempty"`
-	// The custom narrative options.
-	CustomNarrative *CustomNarrativeOptions `json:"customNarrative,omitempty"`
-	// The general visual interactions setup for visual publish options
-	Interactions *VisualInteractionOptions `json:"interactions,omitempty"`
-}
-
 // An insight visual.
 //
 // For more information, see Working with insights (https://docs.aws.amazon.com/quicksight/latest/user/computational-insights.html)
 // in the Amazon Quick Suite User Guide.
 type InsightVisual struct {
-	Actions           []*VisualCustomAction `json:"actions,omitempty"`
-	DataSetIdentifier *string               `json:"dataSetIdentifier,omitempty"`
-	// The configuration of an insight visual.
-	InsightConfiguration *InsightConfiguration `json:"insightConfiguration,omitempty"`
-	// The subtitle label options for a visual.
-	Subtitle *VisualSubtitleLabelOptions `json:"subtitle,omitempty"`
-	// The title label options for a visual.
-	Title                *VisualTitleLabelOptions `json:"title,omitempty"`
-	VisualContentAltText *string                  `json:"visualContentAltText,omitempty"`
-	VisualID             *string                  `json:"visualID,omitempty"`
+	DataSetIdentifier    *string `json:"dataSetIdentifier,omitempty"`
+	VisualContentAltText *string `json:"visualContentAltText,omitempty"`
+	VisualID             *string `json:"visualID,omitempty"`
 }
 
 // An integer parameter for a dataset.
@@ -4369,8 +2611,7 @@ type IntegerValueWhenUnsetConfiguration struct {
 
 // The limit configuration of the visual display for an axis.
 type ItemsLimitConfiguration struct {
-	ItemsLimit      *int64  `json:"itemsLimit,omitempty"`
-	OtherCategories *string `json:"otherCategories,omitempty"`
+	ItemsLimit *int64 `json:"itemsLimit,omitempty"`
 }
 
 // The parameters for Jira.
@@ -4423,107 +2664,11 @@ type JoinOperation struct {
 	Type                   *string                `json:"type,omitempty"`
 }
 
-// The conditional formatting for the actual value of a KPI visual.
-type KPIActualValueConditionalFormatting struct {
-	// The formatting configuration for the icon.
-	Icon *ConditionalFormattingIcon `json:"icon,omitempty"`
-	// The formatting configuration for the color.
-	TextColor *ConditionalFormattingColor `json:"textColor,omitempty"`
-}
-
-// The conditional formatting for the comparison value of a KPI visual.
-type KPIComparisonValueConditionalFormatting struct {
-	// The formatting configuration for the icon.
-	Icon *ConditionalFormattingIcon `json:"icon,omitempty"`
-	// The formatting configuration for the color.
-	TextColor *ConditionalFormattingColor `json:"textColor,omitempty"`
-}
-
-// The conditional formatting of a KPI visual.
-type KPIConditionalFormatting struct {
-	ConditionalFormattingOptions []*KPIConditionalFormattingOption `json:"conditionalFormattingOptions,omitempty"`
-}
-
-// The conditional formatting options of a KPI visual.
-type KPIConditionalFormattingOption struct {
-	// The conditional formatting for the actual value of a KPI visual.
-	ActualValue *KPIActualValueConditionalFormatting `json:"actualValue,omitempty"`
-	// The conditional formatting for the comparison value of a KPI visual.
-	ComparisonValue *KPIComparisonValueConditionalFormatting `json:"comparisonValue,omitempty"`
-	// The conditional formatting for the primary value of a KPI visual.
-	PrimaryValue *KPIPrimaryValueConditionalFormatting `json:"primaryValue,omitempty"`
-	// The conditional formatting for the progress bar of a KPI visual.
-	ProgressBar *KPIProgressBarConditionalFormatting `json:"progressBar,omitempty"`
-}
-
-// The configuration of a KPI visual.
-type KPIConfiguration struct {
-	// The field well configuration of a KPI visual.
-	FieldWells *KPIFieldWells `json:"fieldWells,omitempty"`
-	// The general visual interactions setup for visual publish options
-	Interactions *VisualInteractionOptions `json:"interactions,omitempty"`
-	// The options that determine the presentation of a KPI visual.
-	KPIOptions *KPIOptions `json:"kPIOptions,omitempty"`
-	// The sort configuration of a KPI visual.
-	SortConfiguration *KPISortConfiguration `json:"sortConfiguration,omitempty"`
-}
-
-// The field well configuration of a KPI visual.
-type KPIFieldWells struct {
-	TargetValues []*MeasureField   `json:"targetValues,omitempty"`
-	TrendGroups  []*DimensionField `json:"trendGroups,omitempty"`
-	Values       []*MeasureField   `json:"values,omitempty"`
-}
-
-// The options that determine the presentation of a KPI visual.
-type KPIOptions struct {
-	// The comparison display configuration of a KPI or gauge chart.
-	Comparison              *ComparisonConfiguration `json:"comparison,omitempty"`
-	PrimaryValueDisplayType *string                  `json:"primaryValueDisplayType,omitempty"`
-	// Configures the display properties of the given text.
-	PrimaryValueFontConfiguration *FontConfiguration `json:"primaryValueFontConfiguration,omitempty"`
-	// The options that determine the presentation of the progress bar of a KPI
-	// visual.
-	ProgressBar *ProgressBarOptions `json:"progressBar,omitempty"`
-	// The options that determine the presentation of the secondary value of a KPI
-	// visual.
-	SecondaryValue *SecondaryValueOptions `json:"secondaryValue,omitempty"`
-	// Configures the display properties of the given text.
-	SecondaryValueFontConfiguration *FontConfiguration `json:"secondaryValueFontConfiguration,omitempty"`
-	// The options that determine the visibility, color, type, and tooltip visibility
-	// of the sparkline of a KPI visual.
-	Sparkline *KPISparklineOptions `json:"sparkline,omitempty"`
-	// The options that determine the presentation of trend arrows in a KPI visual.
-	TrendArrows *TrendArrowOptions `json:"trendArrows,omitempty"`
-	// The options that determine the layout a KPI visual.
-	VisualLayoutOptions *KPIVisualLayoutOptions `json:"visualLayoutOptions,omitempty"`
-}
-
-// The conditional formatting for the primary value of a KPI visual.
-type KPIPrimaryValueConditionalFormatting struct {
-	// The formatting configuration for the icon.
-	Icon *ConditionalFormattingIcon `json:"icon,omitempty"`
-	// The formatting configuration for the color.
-	TextColor *ConditionalFormattingColor `json:"textColor,omitempty"`
-}
-
-// The conditional formatting for the progress bar of a KPI visual.
-type KPIProgressBarConditionalFormatting struct {
-	// The formatting configuration for the color.
-	ForegroundColor *ConditionalFormattingColor `json:"foregroundColor,omitempty"`
-}
-
-// The sort configuration of a KPI visual.
-type KPISortConfiguration struct {
-	TrendGroupSort []*FieldSortOptions `json:"trendGroupSort,omitempty"`
-}
-
 // The options that determine the visibility, color, type, and tooltip visibility
 // of the sparkline of a KPI visual.
 type KPISparklineOptions struct {
 	Color             *string `json:"color,omitempty"`
 	TooltipVisibility *string `json:"tooltipVisibility,omitempty"`
-	Type              *string `json:"type_,omitempty"`
 	Visibility        *string `json:"visibility,omitempty"`
 }
 
@@ -4532,29 +2677,8 @@ type KPISparklineOptions struct {
 // For more information, see Using KPIs (https://docs.aws.amazon.com/quicksight/latest/user/kpi.html)
 // in the Amazon Quick Suite User Guide.
 type KPIVisual struct {
-	Actions []*VisualCustomAction `json:"actions,omitempty"`
-	// The configuration of a KPI visual.
-	ChartConfiguration *KPIConfiguration  `json:"chartConfiguration,omitempty"`
-	ColumnHierarchies  []*ColumnHierarchy `json:"columnHierarchies,omitempty"`
-	// The conditional formatting of a KPI visual.
-	ConditionalFormatting *KPIConditionalFormatting `json:"conditionalFormatting,omitempty"`
-	// The subtitle label options for a visual.
-	Subtitle *VisualSubtitleLabelOptions `json:"subtitle,omitempty"`
-	// The title label options for a visual.
-	Title                *VisualTitleLabelOptions `json:"title,omitempty"`
-	VisualContentAltText *string                  `json:"visualContentAltText,omitempty"`
-	VisualID             *string                  `json:"visualID,omitempty"`
-}
-
-// The options that determine the layout a KPI visual.
-type KPIVisualLayoutOptions struct {
-	// The standard layout of the KPI visual.
-	StandardLayout *KPIVisualStandardLayout `json:"standardLayout,omitempty"`
-}
-
-// The standard layout of the KPI visual.
-type KPIVisualStandardLayout struct {
-	Type *string `json:"type_,omitempty"`
+	VisualContentAltText *string `json:"visualContentAltText,omitempty"`
+	VisualID             *string `json:"visualID,omitempty"`
 }
 
 // The combination of username, private key and passphrase that are used as
@@ -4568,18 +2692,13 @@ type KeyPairCredentials struct {
 // The share label options for the labels.
 type LabelOptions struct {
 	CustomLabel *string `json:"customLabel,omitempty"`
-	// Configures the display properties of the given text.
-	FontConfiguration *FontConfiguration `json:"fontConfiguration,omitempty"`
-	Visibility        *string            `json:"visibility,omitempty"`
+	Visibility  *string `json:"visibility,omitempty"`
 }
 
 // A layer custom action.
 type LayerCustomAction struct {
-	ActionOperations []*LayerCustomActionOperation `json:"actionOperations,omitempty"`
-	CustomActionID   *string                       `json:"customActionID,omitempty"`
-	Name             *string                       `json:"name,omitempty"`
-	Status           *string                       `json:"status,omitempty"`
-	Trigger          *string                       `json:"trigger,omitempty"`
+	CustomActionID *string `json:"customActionID,omitempty"`
+	Status         *string `json:"status,omitempty"`
 }
 
 // The operation that is defined by the custom action.
@@ -4587,9 +2706,6 @@ type LayerCustomAction struct {
 // This is a union type structure. For this structure to be valid, only one
 // of the attributes can be defined.
 type LayerCustomActionOperation struct {
-	// The filter operation that filters data included in a visual or in an entire
-	// sheet.
-	FilterOperation *CustomActionFilterOperation `json:"filterOperation,omitempty"`
 	// The navigation operation that navigates between different sheets in the same
 	// analysis.
 	//
@@ -4604,139 +2720,31 @@ type LayerCustomActionOperation struct {
 
 // A layer map visual.
 type LayerMapVisual struct {
-	// The map definition that defines map state, map style, and geospatial layers.
-	ChartConfiguration *GeospatialLayerMapConfiguration `json:"chartConfiguration,omitempty"`
-	DataSetIdentifier  *string                          `json:"dataSetIdentifier,omitempty"`
-	// The subtitle label options for a visual.
-	Subtitle *VisualSubtitleLabelOptions `json:"subtitle,omitempty"`
-	// The title label options for a visual.
-	Title                *VisualTitleLabelOptions `json:"title,omitempty"`
-	VisualContentAltText *string                  `json:"visualContentAltText,omitempty"`
-	VisualID             *string                  `json:"visualID,omitempty"`
-}
-
-// A Layout defines the placement of elements within a sheet.
-//
-// For more information, see Types of layout (https://docs.aws.amazon.com/quicksight/latest/user/types-of-layout.html)
-// in the Amazon Quick Suite User Guide.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type Layout struct {
-	// The configuration that determines what the type of layout will be used on
-	// a sheet.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	Configuration *LayoutConfiguration `json:"configuration,omitempty"`
-}
-
-// The configuration that determines what the type of layout will be used on
-// a sheet.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type LayoutConfiguration struct {
-	// The configuration of a free-form layout.
-	FreeFormLayout *FreeFormLayoutConfiguration `json:"freeFormLayout,omitempty"`
-	// The configuration for a grid layout. Also called a tiled layout.
-	//
-	// Visuals snap to a grid with standard spacing and alignment. Dashboards are
-	// displayed as designed, with options to fit to screen or view at actual size.
-	GridLayout *GridLayoutConfiguration `json:"gridLayout,omitempty"`
-	// The configuration for a section-based layout.
-	SectionBasedLayout *SectionBasedLayoutConfiguration `json:"sectionBasedLayout,omitempty"`
+	DataSetIdentifier    *string `json:"dataSetIdentifier,omitempty"`
+	VisualContentAltText *string `json:"visualContentAltText,omitempty"`
+	VisualID             *string `json:"visualID,omitempty"`
 }
 
 // The options for the legend setup of a visual.
 type LegendOptions struct {
 	// String based length that is composed of value and unit in px
-	Height   *string `json:"height,omitempty"`
-	Position *string `json:"position,omitempty"`
-	// The share label options for the labels.
-	Title *LabelOptions `json:"title,omitempty"`
-	// Configures the display properties of the given text.
-	ValueFontConfiguration *FontConfiguration `json:"valueFontConfiguration,omitempty"`
-	Visibility             *string            `json:"visibility,omitempty"`
+	Height     *string `json:"height,omitempty"`
+	Visibility *string `json:"visibility,omitempty"`
 	// String based length that is composed of value and unit in px
 	Width *string `json:"width,omitempty"`
-}
-
-// The field well configuration of a line chart.
-type LineChartAggregatedFieldWells struct {
-	Category       []*DimensionField `json:"category,omitempty"`
-	Colors         []*DimensionField `json:"colors,omitempty"`
-	SmallMultiples []*DimensionField `json:"smallMultiples,omitempty"`
-	Values         []*MeasureField   `json:"values,omitempty"`
-}
-
-// The configuration of a line chart.
-type LineChartConfiguration struct {
-	ContributionAnalysisDefaults []*ContributionAnalysisDefault `json:"contributionAnalysisDefaults,omitempty"`
-	// The options that determine the presentation of the data labels.
-	DataLabels *DataLabelOptions `json:"dataLabels,omitempty"`
-	// The options that determine the default presentation of all line series in
-	// LineChartVisual.
-	DefaultSeriesSettings *LineChartDefaultSeriesSettings `json:"defaultSeriesSettings,omitempty"`
-	// The field well configuration of a line chart.
-	FieldWells             *LineChartFieldWells     `json:"fieldWells,omitempty"`
-	ForecastConfigurations []*ForecastConfiguration `json:"forecastConfigurations,omitempty"`
-	// The general visual interactions setup for visual publish options
-	Interactions *VisualInteractionOptions `json:"interactions,omitempty"`
-	// The options for the legend setup of a visual.
-	Legend *LegendOptions `json:"legend,omitempty"`
-	// The series axis configuration of a line chart.
-	PrimaryYAxisDisplayOptions *LineSeriesAxisDisplayOptions `json:"primaryYAxisDisplayOptions,omitempty"`
-	// The label options for an axis on a chart.
-	PrimaryYAxisLabelOptions *ChartAxisLabelOptions `json:"primaryYAxisLabelOptions,omitempty"`
-	ReferenceLines           []*ReferenceLine       `json:"referenceLines,omitempty"`
-	// The series axis configuration of a line chart.
-	SecondaryYAxisDisplayOptions *LineSeriesAxisDisplayOptions `json:"secondaryYAxisDisplayOptions,omitempty"`
-	// The label options for an axis on a chart.
-	SecondaryYAxisLabelOptions *ChartAxisLabelOptions `json:"secondaryYAxisLabelOptions,omitempty"`
-	Series                     []*SeriesItem          `json:"series,omitempty"`
-	// The settings of a chart's single axis configuration.
-	SingleAxisOptions *SingleAxisOptions `json:"singleAxisOptions,omitempty"`
-	// Options that determine the layout and display options of a chart's small
-	// multiples.
-	SmallMultiplesOptions *SmallMultiplesOptions `json:"smallMultiplesOptions,omitempty"`
-	// The sort configuration of a line chart.
-	SortConfiguration *LineChartSortConfiguration `json:"sortConfiguration,omitempty"`
-	// The display options for the visual tooltip.
-	Tooltip *TooltipOptions `json:"tooltip,omitempty"`
-	Type    *string         `json:"type_,omitempty"`
-	// The visual display options for the visual palette.
-	VisualPalette *VisualPalette `json:"visualPalette,omitempty"`
-	// The display options for the axis label.
-	XAxisDisplayOptions *AxisDisplayOptions `json:"xAxisDisplayOptions,omitempty"`
-	// The label options for an axis on a chart.
-	XAxisLabelOptions *ChartAxisLabelOptions `json:"xAxisLabelOptions,omitempty"`
 }
 
 // The options that determine the default presentation of all line series in
 // LineChartVisual.
 type LineChartDefaultSeriesSettings struct {
-	AxisBinding *string `json:"axisBinding,omitempty"`
 	// Decal settings for accessibility features that define visual patterns and
 	// styling for data elements.
 	DecalSettings *DecalSettings `json:"decalSettings,omitempty"`
-	// Line styles options for a line series in LineChartVisual.
-	LineStyleSettings *LineChartLineStyleSettings `json:"lineStyleSettings,omitempty"`
-	// Marker styles options for a line series in LineChartVisual.
-	MarkerStyleSettings *LineChartMarkerStyleSettings `json:"markerStyleSettings,omitempty"`
-}
-
-// The field well configuration of a line chart.
-type LineChartFieldWells struct {
-	// The field well configuration of a line chart.
-	LineChartAggregatedFieldWells *LineChartAggregatedFieldWells `json:"lineChartAggregatedFieldWells,omitempty"`
 }
 
 // Line styles options for a line series in LineChartVisual.
 type LineChartLineStyleSettings struct {
-	LineInterpolation *string `json:"lineInterpolation,omitempty"`
-	LineStyle         *string `json:"lineStyle,omitempty"`
-	LineVisibility    *string `json:"lineVisibility,omitempty"`
+	LineVisibility *string `json:"lineVisibility,omitempty"`
 	// String based length that is composed of value and unit in px
 	LineWidth *string `json:"lineWidth,omitempty"`
 }
@@ -4744,7 +2752,6 @@ type LineChartLineStyleSettings struct {
 // Marker styles options for a line series in LineChartVisual.
 type LineChartMarkerStyleSettings struct {
 	MarkerColor *string `json:"markerColor,omitempty"`
-	MarkerShape *string `json:"markerShape,omitempty"`
 	// String based length that is composed of value and unit in px
 	MarkerSize       *string `json:"markerSize,omitempty"`
 	MarkerVisibility *string `json:"markerVisibility,omitempty"`
@@ -4755,22 +2762,6 @@ type LineChartSeriesSettings struct {
 	// Decal settings for accessibility features that define visual patterns and
 	// styling for data elements.
 	DecalSettings *DecalSettings `json:"decalSettings,omitempty"`
-	// Line styles options for a line series in LineChartVisual.
-	LineStyleSettings *LineChartLineStyleSettings `json:"lineStyleSettings,omitempty"`
-	// Marker styles options for a line series in LineChartVisual.
-	MarkerStyleSettings *LineChartMarkerStyleSettings `json:"markerStyleSettings,omitempty"`
-}
-
-// The sort configuration of a line chart.
-type LineChartSortConfiguration struct {
-	// The limit configuration of the visual display for an axis.
-	CategoryItemsLimitConfiguration *ItemsLimitConfiguration `json:"categoryItemsLimitConfiguration,omitempty"`
-	CategorySort                    []*FieldSortOptions      `json:"categorySort,omitempty"`
-	// The limit configuration of the visual display for an axis.
-	ColorItemsLimitConfiguration *ItemsLimitConfiguration `json:"colorItemsLimitConfiguration,omitempty"`
-	// The limit configuration of the visual display for an axis.
-	SmallMultiplesLimitConfiguration *ItemsLimitConfiguration `json:"smallMultiplesLimitConfiguration,omitempty"`
-	SmallMultiplesSort               []*FieldSortOptions      `json:"smallMultiplesSort,omitempty"`
 }
 
 // A line chart.
@@ -4778,40 +2769,13 @@ type LineChartSortConfiguration struct {
 // For more information, see Using line charts (https://docs.aws.amazon.com/quicksight/latest/user/line-charts.html)
 // in the Amazon Quick Suite User Guide.
 type LineChartVisual struct {
-	Actions []*VisualCustomAction `json:"actions,omitempty"`
-	// The configuration of a line chart.
-	ChartConfiguration *LineChartConfiguration `json:"chartConfiguration,omitempty"`
-	ColumnHierarchies  []*ColumnHierarchy      `json:"columnHierarchies,omitempty"`
-	// The subtitle label options for a visual.
-	Subtitle *VisualSubtitleLabelOptions `json:"subtitle,omitempty"`
-	// The title label options for a visual.
-	Title                *VisualTitleLabelOptions `json:"title,omitempty"`
-	VisualContentAltText *string                  `json:"visualContentAltText,omitempty"`
-	VisualID             *string                  `json:"visualID,omitempty"`
-}
-
-// The series axis configuration of a line chart.
-type LineSeriesAxisDisplayOptions struct {
-	// The display options for the axis label.
-	AxisOptions               *AxisDisplayOptions         `json:"axisOptions,omitempty"`
-	MissingDataConfigurations []*MissingDataConfiguration `json:"missingDataConfigurations,omitempty"`
+	VisualContentAltText *string `json:"visualContentAltText,omitempty"`
+	VisualID             *string `json:"visualID,omitempty"`
 }
 
 // A structure that contains the configuration of a shareable link to the dashboard.
 type LinkSharingConfiguration struct {
 	Permissions []*ResourcePermission `json:"permissions,omitempty"`
-}
-
-// The display options of a control.
-type ListControlDisplayOptions struct {
-	// A control to display info icons for filters and parameters.
-	InfoIconLabelOptions *SheetControlInfoIconLabelOptions `json:"infoIconLabelOptions,omitempty"`
-	// The configuration of the search options in a list control.
-	SearchOptions *ListControlSearchOptions `json:"searchOptions,omitempty"`
-	// The configuration of the Select all options in a list control.
-	SelectAllOptions *ListControlSelectAllOptions `json:"selectAllOptions,omitempty"`
-	// The share label options for the labels.
-	TitleOptions *LabelOptions `json:"titleOptions,omitempty"`
 }
 
 // The configuration of the search options in a list control.
@@ -4866,7 +2830,6 @@ type LogoConfiguration struct {
 // of the attributes can be defined.
 type LongFormatText struct {
 	PlainText *string `json:"plainText,omitempty"`
-	RichText  *string `json:"richText,omitempty"`
 }
 
 // The lookback window setup of an incremental refresh configuration.
@@ -4909,23 +2872,6 @@ type MaximumLabelType struct {
 type MaximumMinimumComputation struct {
 	ComputationID *string `json:"computationID,omitempty"`
 	Name          *string `json:"name,omitempty"`
-	// The dimension type field.
-	Time *DimensionField `json:"time,omitempty"`
-	Type *string         `json:"type_,omitempty"`
-	// The measure (metric) type field.
-	Value *MeasureField `json:"value,omitempty"`
-}
-
-// The measure (metric) type field.
-type MeasureField struct {
-	// The table calculation measure field for pivot tables.
-	CalculatedMeasureField *CalculatedMeasureField `json:"calculatedMeasureField,omitempty"`
-	// The measure type field with categorical type columns.
-	CategoricalMeasureField *CategoricalMeasureField `json:"categoricalMeasureField,omitempty"`
-	// The measure type field with date type columns.
-	DateMeasureField *DateMeasureField `json:"dateMeasureField,omitempty"`
-	// The measure type field with numerical type columns.
-	NumericalMeasureField *NumericalMeasureField `json:"numericalMeasureField,omitempty"`
 }
 
 // An object that consists of a member Amazon Resource Name (ARN) and a member
@@ -4937,24 +2883,12 @@ type MemberIDARNPair struct {
 // The metric comparison computation configuration.
 type MetricComparisonComputation struct {
 	ComputationID *string `json:"computationID,omitempty"`
-	// The measure (metric) type field.
-	FromValue *MeasureField `json:"fromValue,omitempty"`
-	Name      *string       `json:"name,omitempty"`
-	// The measure (metric) type field.
-	TargetValue *MeasureField `json:"targetValue,omitempty"`
-	// The dimension type field.
-	Time *DimensionField `json:"time,omitempty"`
+	Name          *string `json:"name,omitempty"`
 }
 
 // The minimum label of a data path label.
 type MinimumLabelType struct {
 	Visibility *string `json:"visibility,omitempty"`
-}
-
-// The configuration options that determine how missing data is treated during
-// the rendering of a line chart.
-type MissingDataConfiguration struct {
-	TreatmentOption *string `json:"treatmentOption,omitempty"`
 }
 
 // The parameters for MySQL.
@@ -4990,8 +2924,6 @@ type NestedFilter struct {
 	Column          *ColumnIdentifier `json:"column,omitempty"`
 	FilterID        *string           `json:"filterID,omitempty"`
 	IncludeInnerSet *bool             `json:"includeInnerSet,omitempty"`
-	// The InnerFilter defines the subset of data to be used with the NestedFilter.
-	InnerFilter *InnerFilter `json:"innerFilter,omitempty"`
 }
 
 // The structure that contains information about a network interface.
@@ -5038,44 +2970,18 @@ type NumberFormatConfiguration struct {
 	FormatConfiguration *NumericFormatConfiguration `json:"formatConfiguration,omitempty"`
 }
 
-// The options for an axis with a numeric field.
-type NumericAxisOptions struct {
-	// The range setup of a numeric axis display range.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	Range *AxisDisplayRange `json:"range_,omitempty"`
-	// The scale setup options for a numeric axis display.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	Scale *AxisScale `json:"scale,omitempty"`
-}
-
 // The numeric equality type drill down filter.
 type NumericEqualityDrillDownFilter struct {
 	// A column of a data set.
 	Column *ColumnIdentifier `json:"column,omitempty"`
-	Value  *float64          `json:"value,omitempty"`
 }
 
 // A NumericEqualityFilter filters values that are equal to the specified value.
 type NumericEqualityFilter struct {
-	// An aggregation function aggregates values from a dimension or measure.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	AggregationFunction *AggregationFunction `json:"aggregationFunction,omitempty"`
 	// A column of a data set.
-	Column *ColumnIdentifier `json:"column,omitempty"`
-	// The default configuration for all dependent controls of the filter.
-	DefaultFilterControlConfiguration *DefaultFilterControlConfiguration `json:"defaultFilterControlConfiguration,omitempty"`
-	FilterID                          *string                            `json:"filterID,omitempty"`
-	MatchOperator                     *string                            `json:"matchOperator,omitempty"`
-	NullOption                        *string                            `json:"nullOption,omitempty"`
-	ParameterName                     *string                            `json:"parameterName,omitempty"`
-	SelectAllOptions                  *string                            `json:"selectAllOptions,omitempty"`
-	Value                             *float64                           `json:"value,omitempty"`
+	Column        *ColumnIdentifier `json:"column,omitempty"`
+	FilterID      *string           `json:"filterID,omitempty"`
+	ParameterName *string           `json:"parameterName,omitempty"`
 }
 
 // The options that determine the numeric format configuration.
@@ -5093,30 +2999,16 @@ type NumericFormatConfiguration struct {
 
 // A NumericRangeFilter filters values that are within the value range.
 type NumericRangeFilter struct {
-	// An aggregation function aggregates values from a dimension or measure.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	AggregationFunction *AggregationFunction `json:"aggregationFunction,omitempty"`
 	// A column of a data set.
-	Column *ColumnIdentifier `json:"column,omitempty"`
-	// The default configuration for all dependent controls of the filter.
-	DefaultFilterControlConfiguration *DefaultFilterControlConfiguration `json:"defaultFilterControlConfiguration,omitempty"`
-	FilterID                          *string                            `json:"filterID,omitempty"`
-	IncludeMaximum                    *bool                              `json:"includeMaximum,omitempty"`
-	IncludeMinimum                    *bool                              `json:"includeMinimum,omitempty"`
-	NullOption                        *string                            `json:"nullOption,omitempty"`
-	// The value input pf the numeric range filter.
-	RangeMaximum *NumericRangeFilterValue `json:"rangeMaximum,omitempty"`
-	// The value input pf the numeric range filter.
-	RangeMinimum     *NumericRangeFilterValue `json:"rangeMinimum,omitempty"`
-	SelectAllOptions *string                  `json:"selectAllOptions,omitempty"`
+	Column         *ColumnIdentifier `json:"column,omitempty"`
+	FilterID       *string           `json:"filterID,omitempty"`
+	IncludeMaximum *bool             `json:"includeMaximum,omitempty"`
+	IncludeMinimum *bool             `json:"includeMinimum,omitempty"`
 }
 
 // The value input pf the numeric range filter.
 type NumericRangeFilterValue struct {
-	Parameter   *string  `json:"parameter,omitempty"`
-	StaticValue *float64 `json:"staticValue,omitempty"`
+	Parameter *string `json:"parameter,omitempty"`
 }
 
 // The options that determine the numeric separator configuration.
@@ -5126,13 +3018,6 @@ type NumericSeparatorConfiguration struct {
 	ThousandsSeparator *ThousandSeparatorOptions `json:"thousandsSeparator,omitempty"`
 }
 
-// Aggregation for numerical values.
-type NumericalAggregationFunction struct {
-	// An aggregation based on the percentile of values in a dimension or measure.
-	PercentileAggregation      *PercentileAggregation `json:"percentileAggregation,omitempty"`
-	SimpleNumericalAggregation *string                `json:"simpleNumericalAggregation,omitempty"`
-}
-
 // The dimension type field with numerical type columns.
 type NumericalDimensionField struct {
 	// A column of a data set.
@@ -5140,13 +3025,10 @@ type NumericalDimensionField struct {
 	FieldID *string           `json:"fieldID,omitempty"`
 	// Formatting configuration for number fields.
 	FormatConfiguration *NumberFormatConfiguration `json:"formatConfiguration,omitempty"`
-	HierarchyID         *string                    `json:"hierarchyID,omitempty"`
 }
 
 // The measure type field with numerical type columns.
 type NumericalMeasureField struct {
-	// Aggregation for numerical values.
-	AggregationFunction *NumericalAggregationFunction `json:"aggregationFunction,omitempty"`
 	// A column of a data set.
 	Column  *ColumnIdentifier `json:"column,omitempty"`
 	FieldID *string           `json:"fieldID,omitempty"`
@@ -5201,8 +3083,7 @@ type OverrideDatasetParameterOperation struct {
 
 // The pagination configuration for a table visual or boxplot.
 type PaginationConfiguration struct {
-	PageNumber *int64 `json:"pageNumber,omitempty"`
-	PageSize   *int64 `json:"pageSize,omitempty"`
+	PageSize *int64 `json:"pageSize,omitempty"`
 }
 
 // The color palette.
@@ -5217,55 +3098,23 @@ type PanelConfiguration struct {
 	BackgroundColor      *string `json:"backgroundColor,omitempty"`
 	BackgroundVisibility *string `json:"backgroundVisibility,omitempty"`
 	BorderColor          *string `json:"borderColor,omitempty"`
-	BorderStyle          *string `json:"borderStyle,omitempty"`
 	// String based length that is composed of value and unit in px
 	BorderThickness  *string `json:"borderThickness,omitempty"`
 	BorderVisibility *string `json:"borderVisibility,omitempty"`
 	// String based length that is composed of value and unit in px
 	GutterSpacing    *string `json:"gutterSpacing,omitempty"`
 	GutterVisibility *string `json:"gutterVisibility,omitempty"`
-	// The options that determine the title styles for each small multiples panel.
-	Title *PanelTitleOptions `json:"title,omitempty"`
 }
 
 // The options that determine the title styles for each small multiples panel.
 type PanelTitleOptions struct {
-	// Configures the display properties of the given text.
-	FontConfiguration       *FontConfiguration `json:"fontConfiguration,omitempty"`
-	HorizontalTextAlignment *string            `json:"horizontalTextAlignment,omitempty"`
-	Visibility              *string            `json:"visibility,omitempty"`
-}
-
-// The control of a parameter that users can interact with in a dashboard or
-// an analysis.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type ParameterControl struct {
-	// A control from a date parameter that specifies date and time.
-	DateTimePicker *ParameterDateTimePickerControl `json:"dateTimePicker,omitempty"`
-	// A control to display a dropdown list with buttons that are used to select
-	// a single value.
-	Dropdown *ParameterDropDownControl `json:"dropdown,omitempty"`
-	// A control to display a list with buttons or boxes that are used to select
-	// either a single value or multiple values.
-	List *ParameterListControl `json:"list,omitempty"`
-	// A control to display a horizontal toggle bar. This is used to change a value
-	// by sliding the toggle.
-	Slider *ParameterSliderControl `json:"slider,omitempty"`
-	// A control to display a text box that is used to enter multiple entries.
-	TextArea *ParameterTextAreaControl `json:"textArea,omitempty"`
-	// A control to display a text box that is used to enter a single entry.
-	TextField *ParameterTextFieldControl `json:"textField,omitempty"`
+	Visibility *string `json:"visibility,omitempty"`
 }
 
 // A control from a date parameter that specifies date and time.
 type ParameterDateTimePickerControl struct {
-	// The display options of a control.
-	DisplayOptions      *DateTimePickerControlDisplayOptions `json:"displayOptions,omitempty"`
-	ParameterControlID  *string                              `json:"parameterControlID,omitempty"`
-	SourceParameterName *string                              `json:"sourceParameterName,omitempty"`
-	Title               *string                              `json:"title,omitempty"`
+	ParameterControlID  *string `json:"parameterControlID,omitempty"`
+	SourceParameterName *string `json:"sourceParameterName,omitempty"`
 }
 
 // The declaration definition of a parameter.
@@ -5289,73 +3138,40 @@ type ParameterDeclaration struct {
 // A control to display a dropdown list with buttons that are used to select
 // a single value.
 type ParameterDropDownControl struct {
-	// The values that are displayed in a control can be configured to only show
-	// values that are valid based on what's selected in other controls.
-	CascadingControlConfiguration *CascadingControlConfiguration `json:"cascadingControlConfiguration,omitempty"`
-	CommitMode                    *string                        `json:"commitMode,omitempty"`
-	// The display options of a control.
-	DisplayOptions     *DropDownControlDisplayOptions `json:"displayOptions,omitempty"`
-	ParameterControlID *string                        `json:"parameterControlID,omitempty"`
-	// A list of selectable values that are used in a control.
-	SelectableValues    *ParameterSelectableValues `json:"selectableValues,omitempty"`
-	SourceParameterName *string                    `json:"sourceParameterName,omitempty"`
-	Title               *string                    `json:"title,omitempty"`
-	Type                *string                    `json:"type_,omitempty"`
+	ParameterControlID  *string `json:"parameterControlID,omitempty"`
+	SourceParameterName *string `json:"sourceParameterName,omitempty"`
 }
 
 // A control to display a list with buttons or boxes that are used to select
 // either a single value or multiple values.
 type ParameterListControl struct {
-	// The values that are displayed in a control can be configured to only show
-	// values that are valid based on what's selected in other controls.
-	CascadingControlConfiguration *CascadingControlConfiguration `json:"cascadingControlConfiguration,omitempty"`
-	// The display options of a control.
-	DisplayOptions     *ListControlDisplayOptions `json:"displayOptions,omitempty"`
-	ParameterControlID *string                    `json:"parameterControlID,omitempty"`
-	// A list of selectable values that are used in a control.
-	SelectableValues    *ParameterSelectableValues `json:"selectableValues,omitempty"`
-	SourceParameterName *string                    `json:"sourceParameterName,omitempty"`
-	Title               *string                    `json:"title,omitempty"`
-	Type                *string                    `json:"type_,omitempty"`
+	ParameterControlID  *string `json:"parameterControlID,omitempty"`
+	SourceParameterName *string `json:"sourceParameterName,omitempty"`
 }
 
 // A list of selectable values that are used in a control.
 type ParameterSelectableValues struct {
 	// A column of a data set.
 	LinkToDataSetColumn *ColumnIdentifier `json:"linkToDataSetColumn,omitempty"`
-	Values              []*string         `json:"values,omitempty"`
 }
 
 // A control to display a horizontal toggle bar. This is used to change a value
 // by sliding the toggle.
 type ParameterSliderControl struct {
-	// The display options of a control.
-	DisplayOptions      *SliderControlDisplayOptions `json:"displayOptions,omitempty"`
-	MaximumValue        *float64                     `json:"maximumValue,omitempty"`
-	MinimumValue        *float64                     `json:"minimumValue,omitempty"`
-	ParameterControlID  *string                      `json:"parameterControlID,omitempty"`
-	SourceParameterName *string                      `json:"sourceParameterName,omitempty"`
-	StepSize            *float64                     `json:"stepSize,omitempty"`
-	Title               *string                      `json:"title,omitempty"`
+	ParameterControlID  *string `json:"parameterControlID,omitempty"`
+	SourceParameterName *string `json:"sourceParameterName,omitempty"`
 }
 
 // A control to display a text box that is used to enter multiple entries.
 type ParameterTextAreaControl struct {
-	Delimiter *string `json:"delimiter,omitempty"`
-	// The display options of a control.
-	DisplayOptions      *TextAreaControlDisplayOptions `json:"displayOptions,omitempty"`
-	ParameterControlID  *string                        `json:"parameterControlID,omitempty"`
-	SourceParameterName *string                        `json:"sourceParameterName,omitempty"`
-	Title               *string                        `json:"title,omitempty"`
+	ParameterControlID  *string `json:"parameterControlID,omitempty"`
+	SourceParameterName *string `json:"sourceParameterName,omitempty"`
 }
 
 // A control to display a text box that is used to enter a single entry.
 type ParameterTextFieldControl struct {
-	// The display options of a control.
-	DisplayOptions      *TextFieldControlDisplayOptions `json:"displayOptions,omitempty"`
-	ParameterControlID  *string                         `json:"parameterControlID,omitempty"`
-	SourceParameterName *string                         `json:"sourceParameterName,omitempty"`
-	Title               *string                         `json:"title,omitempty"`
+	ParameterControlID  *string `json:"parameterControlID,omitempty"`
+	SourceParameterName *string `json:"sourceParameterName,omitempty"`
 }
 
 // A list of Quick Sight parameters and the list's override values.
@@ -5373,12 +3189,6 @@ type ParentDataSet struct {
 	InputColumns []*InputColumn `json:"inputColumns,omitempty"`
 }
 
-// The percent range in the visible range.
-type PercentVisibleRange struct {
-	From *float64 `json:"from,omitempty"`
-	To   *float64 `json:"to,omitempty"`
-}
-
 // The options that determine the percentage display format configuration.
 type PercentageDisplayFormatConfiguration struct {
 	// The option that determines the decimal places configuration.
@@ -5393,11 +3203,6 @@ type PercentageDisplayFormatConfiguration struct {
 	Suffix                 *string                        `json:"suffix,omitempty"`
 }
 
-// An aggregation based on the percentile of values in a dimension or measure.
-type PercentileAggregation struct {
-	PercentileValue *float64 `json:"percentileValue,omitempty"`
-}
-
 // The configuration for the performance optimization of the dataset that contains
 // a UniqueKey configuration.
 type PerformanceConfiguration struct {
@@ -5408,10 +3213,6 @@ type PerformanceConfiguration struct {
 type PeriodOverPeriodComputation struct {
 	ComputationID *string `json:"computationID,omitempty"`
 	Name          *string `json:"name,omitempty"`
-	// The dimension type field.
-	Time *DimensionField `json:"time,omitempty"`
-	// The measure (metric) type field.
-	Value *MeasureField `json:"value,omitempty"`
 }
 
 // The period to date computation configuration.
@@ -5419,10 +3220,6 @@ type PeriodToDateComputation struct {
 	ComputationID         *string `json:"computationID,omitempty"`
 	Name                  *string `json:"name,omitempty"`
 	PeriodTimeGranularity *string `json:"periodTimeGranularity,omitempty"`
-	// The dimension type field.
-	Time *DimensionField `json:"time,omitempty"`
-	// The measure (metric) type field.
-	Value *MeasureField `json:"value,omitempty"`
 }
 
 // A view of a data source that contains information about the shape of the
@@ -5438,63 +3235,6 @@ type PhysicalTable struct {
 	// A table from a Software-as-a-Service (SaaS) data source, including connection
 	// details and column definitions.
 	SaaSTable *SaaSTable `json:"saaSTable,omitempty"`
-}
-
-// The field well configuration of a pie chart.
-type PieChartAggregatedFieldWells struct {
-	Category       []*DimensionField `json:"category,omitempty"`
-	SmallMultiples []*DimensionField `json:"smallMultiples,omitempty"`
-	Values         []*MeasureField   `json:"values,omitempty"`
-}
-
-// The configuration of a pie chart.
-type PieChartConfiguration struct {
-	// The label options for an axis on a chart.
-	CategoryLabelOptions         *ChartAxisLabelOptions         `json:"categoryLabelOptions,omitempty"`
-	ContributionAnalysisDefaults []*ContributionAnalysisDefault `json:"contributionAnalysisDefaults,omitempty"`
-	// The options that determine the presentation of the data labels.
-	DataLabels *DataLabelOptions `json:"dataLabels,omitempty"`
-	// The options for configuring a donut chart or pie chart.
-	DonutOptions *DonutOptions `json:"donutOptions,omitempty"`
-	// The field well configuration of a pie chart.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	FieldWells *PieChartFieldWells `json:"fieldWells,omitempty"`
-	// The general visual interactions setup for visual publish options
-	Interactions *VisualInteractionOptions `json:"interactions,omitempty"`
-	// The options for the legend setup of a visual.
-	Legend *LegendOptions `json:"legend,omitempty"`
-	// Options that determine the layout and display options of a chart's small
-	// multiples.
-	SmallMultiplesOptions *SmallMultiplesOptions `json:"smallMultiplesOptions,omitempty"`
-	// The sort configuration of a pie chart.
-	SortConfiguration *PieChartSortConfiguration `json:"sortConfiguration,omitempty"`
-	// The display options for the visual tooltip.
-	Tooltip *TooltipOptions `json:"tooltip,omitempty"`
-	// The label options for an axis on a chart.
-	ValueLabelOptions *ChartAxisLabelOptions `json:"valueLabelOptions,omitempty"`
-	// The visual display options for the visual palette.
-	VisualPalette *VisualPalette `json:"visualPalette,omitempty"`
-}
-
-// The field well configuration of a pie chart.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type PieChartFieldWells struct {
-	// The field well configuration of a pie chart.
-	PieChartAggregatedFieldWells *PieChartAggregatedFieldWells `json:"pieChartAggregatedFieldWells,omitempty"`
-}
-
-// The sort configuration of a pie chart.
-type PieChartSortConfiguration struct {
-	// The limit configuration of the visual display for an axis.
-	CategoryItemsLimit *ItemsLimitConfiguration `json:"categoryItemsLimit,omitempty"`
-	CategorySort       []*FieldSortOptions      `json:"categorySort,omitempty"`
-	// The limit configuration of the visual display for an axis.
-	SmallMultiplesLimitConfiguration *ItemsLimitConfiguration `json:"smallMultiplesLimitConfiguration,omitempty"`
-	SmallMultiplesSort               []*FieldSortOptions      `json:"smallMultiplesSort,omitempty"`
 }
 
 // A pie or donut chart.
@@ -5514,16 +3254,8 @@ type PieChartSortConfiguration struct {
 // For more information, see Using donut charts (https://docs.aws.amazon.com/quicksight/latest/user/donut-chart.html)
 // in the Amazon Quick Suite User Guide.
 type PieChartVisual struct {
-	Actions []*VisualCustomAction `json:"actions,omitempty"`
-	// The configuration of a pie chart.
-	ChartConfiguration *PieChartConfiguration `json:"chartConfiguration,omitempty"`
-	ColumnHierarchies  []*ColumnHierarchy     `json:"columnHierarchies,omitempty"`
-	// The subtitle label options for a visual.
-	Subtitle *VisualSubtitleLabelOptions `json:"subtitle,omitempty"`
-	// The title label options for a visual.
-	Title                *VisualTitleLabelOptions `json:"title,omitempty"`
-	VisualContentAltText *string                  `json:"visualContentAltText,omitempty"`
-	VisualID             *string                  `json:"visualID,omitempty"`
+	VisualContentAltText *string `json:"visualContentAltText,omitempty"`
+	VisualID             *string `json:"visualID,omitempty"`
 }
 
 // Configuration for a pivot operation, specifying which column contains labels
@@ -5536,8 +3268,6 @@ type PivotConfiguration struct {
 // The field sort options for a pivot table sort configuration.
 type PivotFieldSortOptions struct {
 	FieldID *string `json:"fieldID,omitempty"`
-	// The sort by field for the field sort options.
-	SortBy *PivotTableSortBy `json:"sortBy,omitempty"`
 }
 
 // A transform operation that pivots data by converting row values into columns.
@@ -5555,95 +3285,26 @@ type PivotOperation struct {
 	ValueColumnConfiguration *ValueColumnConfiguration `json:"valueColumnConfiguration,omitempty"`
 }
 
-// The aggregated field well for the pivot table.
-type PivotTableAggregatedFieldWells struct {
-	Columns []*DimensionField `json:"columns,omitempty"`
-	Rows    []*DimensionField `json:"rows,omitempty"`
-	Values  []*MeasureField   `json:"values,omitempty"`
-}
-
 // The cell conditional formatting option for a pivot table.
 type PivotTableCellConditionalFormatting struct {
 	FieldID *string `json:"fieldID,omitempty"`
-	// The scope of the cell for conditional formatting.
-	Scope  *PivotTableConditionalFormattingScope   `json:"scope,omitempty"`
-	Scopes []*PivotTableConditionalFormattingScope `json:"scopes,omitempty"`
-	// The conditional formatting for the text.
-	TextFormat *TextConditionalFormat `json:"textFormat,omitempty"`
-}
-
-// The conditional formatting for a PivotTableVisual.
-type PivotTableConditionalFormatting struct {
-	ConditionalFormattingOptions []*PivotTableConditionalFormattingOption `json:"conditionalFormattingOptions,omitempty"`
-}
-
-// Conditional formatting options for a PivotTableVisual.
-type PivotTableConditionalFormattingOption struct {
-	// The cell conditional formatting option for a pivot table.
-	Cell *PivotTableCellConditionalFormatting `json:"cell,omitempty"`
-}
-
-// The scope of the cell for conditional formatting.
-type PivotTableConditionalFormattingScope struct {
-	Role *string `json:"role,omitempty"`
-}
-
-// The configuration for a PivotTableVisual.
-type PivotTableConfiguration struct {
-	// The options that define customizations available to dashboard readers for
-	// a specific visual
-	DashboardCustomizationVisualOptions *DashboardCustomizationVisualOptions `json:"dashboardCustomizationVisualOptions,omitempty"`
-	// The field options for a pivot table visual.
-	FieldOptions *PivotTableFieldOptions `json:"fieldOptions,omitempty"`
-	// The field wells for a pivot table visual.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	FieldWells *PivotTableFieldWells `json:"fieldWells,omitempty"`
-	// The general visual interactions setup for visual publish options
-	Interactions *VisualInteractionOptions `json:"interactions,omitempty"`
-	// The paginated report options for a pivot table visual.
-	PaginatedReportOptions *PivotTablePaginatedReportOptions `json:"paginatedReportOptions,omitempty"`
-	// The sort configuration for a PivotTableVisual.
-	SortConfiguration *PivotTableSortConfiguration `json:"sortConfiguration,omitempty"`
-	// The table options for a pivot table visual.
-	TableOptions *PivotTableOptions `json:"tableOptions,omitempty"`
-	// The total options for a pivot table visual.
-	TotalOptions *PivotTableTotalOptions `json:"totalOptions,omitempty"`
 }
 
 // The data path options for the pivot table field options.
 type PivotTableDataPathOption struct {
-	DataPathList []*DataPathValue `json:"dataPathList,omitempty"`
 	// String based length that is composed of value and unit in px
 	Width *string `json:"width,omitempty"`
 }
 
-// The collapse state options for the pivot table field options.
-type PivotTableFieldCollapseStateOption struct {
-	State *string `json:"state,omitempty"`
-	// The target of a pivot table field collapse state.
-	Target *PivotTableFieldCollapseStateTarget `json:"target,omitempty"`
-}
-
 // The target of a pivot table field collapse state.
 type PivotTableFieldCollapseStateTarget struct {
-	FieldDataPathValues []*DataPathValue `json:"fieldDataPathValues,omitempty"`
-	FieldID             *string          `json:"fieldID,omitempty"`
+	FieldID *string `json:"fieldID,omitempty"`
 }
 
 // The selected field options for the pivot table field options.
 type PivotTableFieldOption struct {
-	CustomLabel *string `json:"customLabel,omitempty"`
-	FieldID     *string `json:"fieldID,omitempty"`
-	Visibility  *string `json:"visibility,omitempty"`
-}
-
-// The field options for a pivot table visual.
-type PivotTableFieldOptions struct {
-	CollapseStateOptions []*PivotTableFieldCollapseStateOption `json:"collapseStateOptions,omitempty"`
-	DataPathOptions      []*PivotTableDataPathOption           `json:"dataPathOptions,omitempty"`
-	SelectedFieldOptions []*PivotTableFieldOption              `json:"selectedFieldOptions,omitempty"`
+	FieldID    *string `json:"fieldID,omitempty"`
+	Visibility *string `json:"visibility,omitempty"`
 }
 
 // The optional configuration of subtotals cells.
@@ -5651,38 +3312,14 @@ type PivotTableFieldSubtotalOptions struct {
 	FieldID *string `json:"fieldID,omitempty"`
 }
 
-// The field wells for a pivot table visual.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type PivotTableFieldWells struct {
-	// The aggregated field well for the pivot table.
-	PivotTableAggregatedFieldWells *PivotTableAggregatedFieldWells `json:"pivotTableAggregatedFieldWells,omitempty"`
-}
-
 // The table options for a pivot table visual.
 type PivotTableOptions struct {
-	// The table cell style for a cell in pivot table or table visual.
-	CellStyle                        *TableCellStyle `json:"cellStyle,omitempty"`
-	CollapsedRowDimensionsVisibility *string         `json:"collapsedRowDimensionsVisibility,omitempty"`
-	// The table cell style for a cell in pivot table or table visual.
-	ColumnHeaderStyle     *TableCellStyle `json:"columnHeaderStyle,omitempty"`
-	ColumnNamesVisibility *string         `json:"columnNamesVisibility,omitempty"`
+	CollapsedRowDimensionsVisibility *string `json:"collapsedRowDimensionsVisibility,omitempty"`
+	ColumnNamesVisibility            *string `json:"columnNamesVisibility,omitempty"`
 	// String based length that is composed of value and unit in px
-	DefaultCellWidth *string `json:"defaultCellWidth,omitempty"`
-	MetricPlacement  *string `json:"metricPlacement,omitempty"`
-	// Determines the row alternate color options.
-	RowAlternateColorOptions *RowAlternateColorOptions `json:"rowAlternateColorOptions,omitempty"`
-	// The table cell style for a cell in pivot table or table visual.
-	RowFieldNamesStyle *TableCellStyle `json:"rowFieldNamesStyle,omitempty"`
-	// The table cell style for a cell in pivot table or table visual.
-	RowHeaderStyle *TableCellStyle `json:"rowHeaderStyle,omitempty"`
-	// The options for the label thta is located above the row headers. This option
-	// is only applicable when RowsLayout is set to HIERARCHY.
-	RowsLabelOptions        *PivotTableRowsLabelOptions `json:"rowsLabelOptions,omitempty"`
-	RowsLayout              *string                     `json:"rowsLayout,omitempty"`
-	SingleMetricVisibility  *string                     `json:"singleMetricVisibility,omitempty"`
-	ToggleButtonsVisibility *string                     `json:"toggleButtonsVisibility,omitempty"`
+	DefaultCellWidth        *string `json:"defaultCellWidth,omitempty"`
+	SingleMetricVisibility  *string `json:"singleMetricVisibility,omitempty"`
+	ToggleButtonsVisibility *string `json:"toggleButtonsVisibility,omitempty"`
 }
 
 // The paginated report options for a pivot table visual.
@@ -5694,35 +3331,7 @@ type PivotTablePaginatedReportOptions struct {
 // The options for the label thta is located above the row headers. This option
 // is only applicable when RowsLayout is set to HIERARCHY.
 type PivotTableRowsLabelOptions struct {
-	CustomLabel *string `json:"customLabel,omitempty"`
-	Visibility  *string `json:"visibility,omitempty"`
-}
-
-// The sort by field for the field sort options.
-type PivotTableSortBy struct {
-	// The sort configuration for a column that is not used in a field well.
-	Column *ColumnSort `json:"column,omitempty"`
-	// Allows data paths to be sorted by a specific data value.
-	DataPath *DataPathSort `json:"dataPath,omitempty"`
-	// The sort configuration for a field in a field well.
-	Field *FieldSort `json:"field,omitempty"`
-}
-
-// The sort configuration for a PivotTableVisual.
-type PivotTableSortConfiguration struct {
-	FieldSortOptions []*PivotFieldSortOptions `json:"fieldSortOptions,omitempty"`
-}
-
-// The total options for a pivot table visual.
-type PivotTableTotalOptions struct {
-	// The subtotal options.
-	ColumnSubtotalOptions *SubtotalOptions `json:"columnSubtotalOptions,omitempty"`
-	// The optional configuration of totals cells in a PivotTableVisual.
-	ColumnTotalOptions *PivotTotalOptions `json:"columnTotalOptions,omitempty"`
-	// The subtotal options.
-	RowSubtotalOptions *SubtotalOptions `json:"rowSubtotalOptions,omitempty"`
-	// The optional configuration of totals cells in a PivotTableVisual.
-	RowTotalOptions *PivotTotalOptions `json:"rowTotalOptions,omitempty"`
+	Visibility *string `json:"visibility,omitempty"`
 }
 
 // A pivot table.
@@ -5730,32 +3339,14 @@ type PivotTableTotalOptions struct {
 // For more information, see Using pivot tables (https://docs.aws.amazon.com/quicksight/latest/user/pivot-table.html)
 // in the Amazon Quick Suite User Guide.
 type PivotTableVisual struct {
-	Actions []*VisualCustomAction `json:"actions,omitempty"`
-	// The configuration for a PivotTableVisual.
-	ChartConfiguration *PivotTableConfiguration `json:"chartConfiguration,omitempty"`
-	// The conditional formatting for a PivotTableVisual.
-	ConditionalFormatting *PivotTableConditionalFormatting `json:"conditionalFormatting,omitempty"`
-	// The subtitle label options for a visual.
-	Subtitle *VisualSubtitleLabelOptions `json:"subtitle,omitempty"`
-	// The title label options for a visual.
-	Title                *VisualTitleLabelOptions `json:"title,omitempty"`
-	VisualContentAltText *string                  `json:"visualContentAltText,omitempty"`
-	VisualID             *string                  `json:"visualID,omitempty"`
+	VisualContentAltText *string `json:"visualContentAltText,omitempty"`
+	VisualID             *string `json:"visualID,omitempty"`
 }
 
 // The optional configuration of totals cells in a PivotTableVisual.
 type PivotTotalOptions struct {
-	CustomLabel *string `json:"customLabel,omitempty"`
-	// The table cell style for a cell in pivot table or table visual.
-	MetricHeaderCellStyle   *TableCellStyle           `json:"metricHeaderCellStyle,omitempty"`
-	Placement               *string                   `json:"placement,omitempty"`
-	ScrollStatus            *string                   `json:"scrollStatus,omitempty"`
-	TotalAggregationOptions []*TotalAggregationOption `json:"totalAggregationOptions,omitempty"`
-	// The table cell style for a cell in pivot table or table visual.
-	TotalCellStyle   *TableCellStyle `json:"totalCellStyle,omitempty"`
-	TotalsVisibility *string         `json:"totalsVisibility,omitempty"`
-	// The table cell style for a cell in pivot table or table visual.
-	ValueCellStyle *TableCellStyle `json:"valueCellStyle,omitempty"`
+	CustomLabel      *string `json:"customLabel,omitempty"`
+	TotalsVisibility *string `json:"totalsVisibility,omitempty"`
 }
 
 // Specifies a label value to be pivoted into a separate column, including the
@@ -5769,45 +3360,14 @@ type PivotedLabel struct {
 // A flexible visualization type that allows engineers to create new custom
 // charts in Quick Sight.
 type PluginVisual struct {
-	Actions []*VisualCustomAction `json:"actions,omitempty"`
-	// The plugin visual configuration. This includes the field wells, sorting options,
-	// and persisted options of the plugin visual.
-	ChartConfiguration *PluginVisualConfiguration `json:"chartConfiguration,omitempty"`
-	PluginARN          *string                    `json:"pluginARN,omitempty"`
-	// The subtitle label options for a visual.
-	Subtitle *VisualSubtitleLabelOptions `json:"subtitle,omitempty"`
-	// The title label options for a visual.
-	Title                *VisualTitleLabelOptions `json:"title,omitempty"`
-	VisualContentAltText *string                  `json:"visualContentAltText,omitempty"`
-	VisualID             *string                  `json:"visualID,omitempty"`
-}
-
-// The plugin visual configuration. This includes the field wells, sorting options,
-// and persisted options of the plugin visual.
-type PluginVisualConfiguration struct {
-	FieldWells []*PluginVisualFieldWell `json:"fieldWells,omitempty"`
-	// Determines how the plugin visual sorts the data during query.
-	SortConfiguration *PluginVisualSortConfiguration `json:"sortConfiguration,omitempty"`
-	// The options and persisted properties for the plugin visual.
-	VisualOptions *PluginVisualOptions `json:"visualOptions,omitempty"`
-}
-
-// A collection of field wells for a plugin visual.
-type PluginVisualFieldWell struct {
-	AxisName     *string              `json:"axisName,omitempty"`
-	Dimensions   []*DimensionField    `json:"dimensions,omitempty"`
-	Measures     []*MeasureField      `json:"measures,omitempty"`
-	Unaggregated []*UnaggregatedField `json:"unaggregated,omitempty"`
+	PluginARN            *string `json:"pluginARN,omitempty"`
+	VisualContentAltText *string `json:"visualContentAltText,omitempty"`
+	VisualID             *string `json:"visualID,omitempty"`
 }
 
 // A query limits configuration.
 type PluginVisualItemsLimitConfiguration struct {
 	ItemsLimit *int64 `json:"itemsLimit,omitempty"`
-}
-
-// The options and persisted properties for the plugin visual.
-type PluginVisualOptions struct {
-	VisualProperties []*PluginVisualProperty `json:"visualProperties,omitempty"`
 }
 
 // The key value pair of the persisted property.
@@ -5816,33 +3376,11 @@ type PluginVisualProperty struct {
 	Value *string `json:"value,omitempty"`
 }
 
-// Determines how the plugin visual sorts the data during query.
-type PluginVisualSortConfiguration struct {
-	// The table query sorting options for the plugin visual.
-	PluginVisualTableQuerySort *PluginVisualTableQuerySort `json:"pluginVisualTableQuerySort,omitempty"`
-}
-
-// The table query sorting options for the plugin visual.
-type PluginVisualTableQuerySort struct {
-	// A query limits configuration.
-	ItemsLimitConfiguration *PluginVisualItemsLimitConfiguration `json:"itemsLimitConfiguration,omitempty"`
-	RowSort                 []*FieldSortOptions                  `json:"rowSort,omitempty"`
-}
-
 // The parameters for PostgreSQL.
 type PostgreSQLParameters struct {
 	Database *string `json:"database,omitempty"`
 	Host     *string `json:"host,omitempty"`
 	Port     *int64  `json:"port,omitempty"`
-}
-
-// The option that determines the hierarchy of the fields that are defined during
-// data preparation. These fields are available to use in any analysis that
-// uses the data source.
-type PredefinedHierarchy struct {
-	Columns          []*ColumnIdentifier `json:"columns,omitempty"`
-	DrillDownFilters []*DrillDownFilter  `json:"drillDownFilters,omitempty"`
-	HierarchyID      *string             `json:"hierarchyID,omitempty"`
 }
 
 // The parameters for Presto.
@@ -5895,13 +3433,6 @@ type QuickSuiteActionsOption struct {
 	AvailabilityStatus *string `json:"availabilityStatus,omitempty"`
 }
 
-// The aggregated field well configuration of a RadarChartVisual.
-type RadarChartAggregatedFieldWells struct {
-	Category []*DimensionField `json:"category,omitempty"`
-	Color    []*DimensionField `json:"color,omitempty"`
-	Values   []*MeasureField   `json:"values,omitempty"`
-}
-
 // The configured style settings of a radar chart.
 type RadarChartAreaStyleSettings struct {
 	Visibility *string `json:"visibility,omitempty"`
@@ -5912,65 +3443,12 @@ type RadarChartConfiguration struct {
 	AlternateBandColorsVisibility *string `json:"alternateBandColorsVisibility,omitempty"`
 	AlternateBandEvenColor        *string `json:"alternateBandEvenColor,omitempty"`
 	AlternateBandOddColor         *string `json:"alternateBandOddColor,omitempty"`
-	AxesRangeScale                *string `json:"axesRangeScale,omitempty"`
-	// The series settings of a radar chart.
-	BaseSeriesSettings *RadarChartSeriesSettings `json:"baseSeriesSettings,omitempty"`
-	// The display options for the axis label.
-	CategoryAxis *AxisDisplayOptions `json:"categoryAxis,omitempty"`
-	// The label options for an axis on a chart.
-	CategoryLabelOptions *ChartAxisLabelOptions `json:"categoryLabelOptions,omitempty"`
-	// The display options for the axis label.
-	ColorAxis *AxisDisplayOptions `json:"colorAxis,omitempty"`
-	// The label options for an axis on a chart.
-	ColorLabelOptions *ChartAxisLabelOptions `json:"colorLabelOptions,omitempty"`
-	// The field wells of a radar chart visual.
-	FieldWells *RadarChartFieldWells `json:"fieldWells,omitempty"`
-	// The general visual interactions setup for visual publish options
-	Interactions *VisualInteractionOptions `json:"interactions,omitempty"`
-	// The options for the legend setup of a visual.
-	Legend *LegendOptions `json:"legend,omitempty"`
-	Shape  *string        `json:"shape,omitempty"`
-	// The sort configuration of a RadarChartVisual.
-	SortConfiguration *RadarChartSortConfiguration `json:"sortConfiguration,omitempty"`
-	StartAngle        *float64                     `json:"startAngle,omitempty"`
-	// The visual display options for the visual palette.
-	VisualPalette *VisualPalette `json:"visualPalette,omitempty"`
-}
-
-// The field wells of a radar chart visual.
-type RadarChartFieldWells struct {
-	// The aggregated field well configuration of a RadarChartVisual.
-	RadarChartAggregatedFieldWells *RadarChartAggregatedFieldWells `json:"radarChartAggregatedFieldWells,omitempty"`
-}
-
-// The series settings of a radar chart.
-type RadarChartSeriesSettings struct {
-	// The configured style settings of a radar chart.
-	AreaStyleSettings *RadarChartAreaStyleSettings `json:"areaStyleSettings,omitempty"`
-}
-
-// The sort configuration of a RadarChartVisual.
-type RadarChartSortConfiguration struct {
-	// The limit configuration of the visual display for an axis.
-	CategoryItemsLimit *ItemsLimitConfiguration `json:"categoryItemsLimit,omitempty"`
-	CategorySort       []*FieldSortOptions      `json:"categorySort,omitempty"`
-	// The limit configuration of the visual display for an axis.
-	ColorItemsLimit *ItemsLimitConfiguration `json:"colorItemsLimit,omitempty"`
-	ColorSort       []*FieldSortOptions      `json:"colorSort,omitempty"`
 }
 
 // A radar chart visual.
 type RadarChartVisual struct {
-	Actions []*VisualCustomAction `json:"actions,omitempty"`
-	// The configuration of a RadarChartVisual.
-	ChartConfiguration *RadarChartConfiguration `json:"chartConfiguration,omitempty"`
-	ColumnHierarchies  []*ColumnHierarchy       `json:"columnHierarchies,omitempty"`
-	// The subtitle label options for a visual.
-	Subtitle *VisualSubtitleLabelOptions `json:"subtitle,omitempty"`
-	// The title label options for a visual.
-	Title                *VisualTitleLabelOptions `json:"title,omitempty"`
-	VisualContentAltText *string                  `json:"visualContentAltText,omitempty"`
-	VisualID             *string                  `json:"visualID,omitempty"`
+	VisualContentAltText *string `json:"visualContentAltText,omitempty"`
+	VisualID             *string `json:"visualID,omitempty"`
 }
 
 // The range ends label type of a data path label.
@@ -6027,13 +3505,7 @@ type RedshiftParameters struct {
 
 // The reference line visual display options.
 type ReferenceLine struct {
-	// The data configuration of the reference line.
-	DataConfiguration *ReferenceLineDataConfiguration `json:"dataConfiguration,omitempty"`
-	// The label configuration of a reference line.
-	LabelConfiguration *ReferenceLineLabelConfiguration `json:"labelConfiguration,omitempty"`
-	Status             *string                          `json:"status,omitempty"`
-	// The style configuration of the reference line.
-	StyleConfiguration *ReferenceLineStyleConfiguration `json:"styleConfiguration,omitempty"`
+	Status *string `json:"status,omitempty"`
 }
 
 // The configuration for a custom label on a ReferenceLine.
@@ -6041,40 +3513,15 @@ type ReferenceLineCustomLabelConfiguration struct {
 	CustomLabel *string `json:"customLabel,omitempty"`
 }
 
-// The data configuration of the reference line.
-type ReferenceLineDataConfiguration struct {
-	AxisBinding *string `json:"axisBinding,omitempty"`
-	// The dynamic configuration of the reference line data configuration.
-	DynamicConfiguration *ReferenceLineDynamicDataConfiguration `json:"dynamicConfiguration,omitempty"`
-	SeriesType           *string                                `json:"seriesType,omitempty"`
-	// The static data configuration of the reference line data configuration.
-	StaticConfiguration *ReferenceLineStaticDataConfiguration `json:"staticConfiguration,omitempty"`
-}
-
 // The dynamic configuration of the reference line data configuration.
 type ReferenceLineDynamicDataConfiguration struct {
-	// Aggregation for numerical values.
-	Calculation *NumericalAggregationFunction `json:"calculation,omitempty"`
 	// A column of a data set.
 	Column *ColumnIdentifier `json:"column,omitempty"`
-	// An aggregation function aggregates values from a dimension or measure.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	MeasureAggregationFunction *AggregationFunction `json:"measureAggregationFunction,omitempty"`
 }
 
 // The label configuration of a reference line.
 type ReferenceLineLabelConfiguration struct {
-	// The configuration for a custom label on a ReferenceLine.
-	CustomLabelConfiguration *ReferenceLineCustomLabelConfiguration `json:"customLabelConfiguration,omitempty"`
-	FontColor                *string                                `json:"fontColor,omitempty"`
-	// Configures the display properties of the given text.
-	FontConfiguration  *FontConfiguration `json:"fontConfiguration,omitempty"`
-	HorizontalPosition *string            `json:"horizontalPosition,omitempty"`
-	// The value label configuration of the label in a reference line.
-	ValueLabelConfiguration *ReferenceLineValueLabelConfiguration `json:"valueLabelConfiguration,omitempty"`
-	VerticalPosition        *string                               `json:"verticalPosition,omitempty"`
+	FontColor *string `json:"fontColor,omitempty"`
 }
 
 // The static data configuration of the reference line data configuration.
@@ -6084,8 +3531,7 @@ type ReferenceLineStaticDataConfiguration struct {
 
 // The style configuration of the reference line.
 type ReferenceLineStyleConfiguration struct {
-	Color   *string `json:"color,omitempty"`
-	Pattern *string `json:"pattern,omitempty"`
+	Color *string `json:"color,omitempty"`
 }
 
 // The value label configuration of the label in a reference line.
@@ -6095,7 +3541,6 @@ type ReferenceLineValueLabelConfiguration struct {
 	// This is a union type structure. For this structure to be valid, only one
 	// of the attributes can be defined.
 	FormatConfiguration *NumericFormatConfiguration `json:"formatConfiguration,omitempty"`
-	RelativePosition    *string                     `json:"relativePosition,omitempty"`
 }
 
 // Specifies the interval between each scheduled refresh of a dataset.
@@ -6140,29 +3585,16 @@ type RelationalTable struct {
 // The display options of a control.
 type RelativeDateTimeControlDisplayOptions struct {
 	DateTimeFormat *string `json:"dateTimeFormat,omitempty"`
-	// A control to display info icons for filters and parameters.
-	InfoIconLabelOptions *SheetControlInfoIconLabelOptions `json:"infoIconLabelOptions,omitempty"`
-	// The share label options for the labels.
-	TitleOptions *LabelOptions `json:"titleOptions,omitempty"`
 }
 
 // A RelativeDatesFilter filters relative dates values.
 type RelativeDatesFilter struct {
-	// The date configuration of the filter.
-	AnchorDateConfiguration *AnchorDateConfiguration `json:"anchorDateConfiguration,omitempty"`
 	// A column of a data set.
-	Column *ColumnIdentifier `json:"column,omitempty"`
-	// The default configuration for all dependent controls of the filter.
-	DefaultFilterControlConfiguration *DefaultFilterControlConfiguration `json:"defaultFilterControlConfiguration,omitempty"`
-	// The exclude period of TimeRangeFilter or RelativeDatesFilter.
-	ExcludePeriodConfiguration *ExcludePeriodConfiguration `json:"excludePeriodConfiguration,omitempty"`
-	FilterID                   *string                     `json:"filterID,omitempty"`
-	MinimumGranularity         *string                     `json:"minimumGranularity,omitempty"`
-	NullOption                 *string                     `json:"nullOption,omitempty"`
-	ParameterName              *string                     `json:"parameterName,omitempty"`
-	RelativeDateType           *string                     `json:"relativeDateType,omitempty"`
-	RelativeDateValue          *int64                      `json:"relativeDateValue,omitempty"`
-	TimeGranularity            *string                     `json:"timeGranularity,omitempty"`
+	Column             *ColumnIdentifier `json:"column,omitempty"`
+	FilterID           *string           `json:"filterID,omitempty"`
+	MinimumGranularity *string           `json:"minimumGranularity,omitempty"`
+	ParameterName      *string           `json:"parameterName,omitempty"`
+	TimeGranularity    *string           `json:"timeGranularity,omitempty"`
 }
 
 // A transform operation that renames a column.
@@ -6194,9 +3626,8 @@ type RollingDateConfiguration struct {
 
 // Determines the row alternate color options.
 type RowAlternateColorOptions struct {
-	RowAlternateColors        []*string `json:"rowAlternateColors,omitempty"`
-	Status                    *string   `json:"status,omitempty"`
-	UsePrimaryBackgroundColor *string   `json:"usePrimaryBackgroundColor,omitempty"`
+	Status                    *string `json:"status,omitempty"`
+	UsePrimaryBackgroundColor *string `json:"usePrimaryBackgroundColor,omitempty"`
 }
 
 // Information about rows for a data set SPICE ingestion.
@@ -6306,127 +3737,13 @@ type SaaSTable struct {
 	TablePath     []*TablePathElement `json:"tablePath,omitempty"`
 }
 
-// The configuration of the same-sheet target visuals that you want to be filtered.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type SameSheetTargetVisualConfiguration struct {
-	TargetVisualOptions *string   `json:"targetVisualOptions,omitempty"`
-	TargetVisuals       []*string `json:"targetVisuals,omitempty"`
-}
-
-// The field well configuration of a sankey diagram.
-type SankeyDiagramAggregatedFieldWells struct {
-	Destination []*DimensionField `json:"destination,omitempty"`
-	Source      []*DimensionField `json:"source,omitempty"`
-	Weight      []*MeasureField   `json:"weight,omitempty"`
-}
-
-// The configuration of a sankey diagram.
-type SankeyDiagramChartConfiguration struct {
-	// The options that determine the presentation of the data labels.
-	DataLabels *DataLabelOptions `json:"dataLabels,omitempty"`
-	// The field well configuration of a sankey diagram.
-	FieldWells *SankeyDiagramFieldWells `json:"fieldWells,omitempty"`
-	// The general visual interactions setup for visual publish options
-	Interactions *VisualInteractionOptions `json:"interactions,omitempty"`
-	// The sort configuration of a sankey diagram.
-	SortConfiguration *SankeyDiagramSortConfiguration `json:"sortConfiguration,omitempty"`
-}
-
-// The field well configuration of a sankey diagram.
-type SankeyDiagramFieldWells struct {
-	// The field well configuration of a sankey diagram.
-	SankeyDiagramAggregatedFieldWells *SankeyDiagramAggregatedFieldWells `json:"sankeyDiagramAggregatedFieldWells,omitempty"`
-}
-
-// The sort configuration of a sankey diagram.
-type SankeyDiagramSortConfiguration struct {
-	// The limit configuration of the visual display for an axis.
-	DestinationItemsLimit *ItemsLimitConfiguration `json:"destinationItemsLimit,omitempty"`
-	// The limit configuration of the visual display for an axis.
-	SourceItemsLimit *ItemsLimitConfiguration `json:"sourceItemsLimit,omitempty"`
-	WeightSort       []*FieldSortOptions      `json:"weightSort,omitempty"`
-}
-
 // A sankey diagram.
 //
 // For more information, see Using Sankey diagrams (https://docs.aws.amazon.com/quicksight/latest/user/sankey-diagram.html)
 // in the Amazon Quick Suite User Guide.
 type SankeyDiagramVisual struct {
-	Actions []*VisualCustomAction `json:"actions,omitempty"`
-	// The configuration of a sankey diagram.
-	ChartConfiguration *SankeyDiagramChartConfiguration `json:"chartConfiguration,omitempty"`
-	// The subtitle label options for a visual.
-	Subtitle *VisualSubtitleLabelOptions `json:"subtitle,omitempty"`
-	// The title label options for a visual.
-	Title                *VisualTitleLabelOptions `json:"title,omitempty"`
-	VisualContentAltText *string                  `json:"visualContentAltText,omitempty"`
-	VisualID             *string                  `json:"visualID,omitempty"`
-}
-
-// The aggregated field well of a scatter plot.
-type ScatterPlotCategoricallyAggregatedFieldWells struct {
-	Category []*DimensionField `json:"category,omitempty"`
-	Label    []*DimensionField `json:"label,omitempty"`
-	Size     []*MeasureField   `json:"size,omitempty"`
-	XAxis    []*MeasureField   `json:"xAxis,omitempty"`
-	YAxis    []*MeasureField   `json:"yAxis,omitempty"`
-}
-
-// The configuration of a scatter plot.
-type ScatterPlotConfiguration struct {
-	// The options that determine the presentation of the data labels.
-	DataLabels *DataLabelOptions `json:"dataLabels,omitempty"`
-	// The field well configuration of a scatter plot.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	FieldWells *ScatterPlotFieldWells `json:"fieldWells,omitempty"`
-	// The general visual interactions setup for visual publish options
-	Interactions *VisualInteractionOptions `json:"interactions,omitempty"`
-	// The options for the legend setup of a visual.
-	Legend *LegendOptions `json:"legend,omitempty"`
-	// The sort configuration of a scatter plot.
-	SortConfiguration *ScatterPlotSortConfiguration `json:"sortConfiguration,omitempty"`
-	// The display options for the visual tooltip.
-	Tooltip *TooltipOptions `json:"tooltip,omitempty"`
-	// The visual display options for the visual palette.
-	VisualPalette *VisualPalette `json:"visualPalette,omitempty"`
-	// The display options for the axis label.
-	XAxisDisplayOptions *AxisDisplayOptions `json:"xAxisDisplayOptions,omitempty"`
-	// The label options for an axis on a chart.
-	XAxisLabelOptions *ChartAxisLabelOptions `json:"xAxisLabelOptions,omitempty"`
-	// The display options for the axis label.
-	YAxisDisplayOptions *AxisDisplayOptions `json:"yAxisDisplayOptions,omitempty"`
-	// The label options for an axis on a chart.
-	YAxisLabelOptions *ChartAxisLabelOptions `json:"yAxisLabelOptions,omitempty"`
-}
-
-// The field well configuration of a scatter plot.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type ScatterPlotFieldWells struct {
-	// The aggregated field well of a scatter plot.
-	ScatterPlotCategoricallyAggregatedFieldWells *ScatterPlotCategoricallyAggregatedFieldWells `json:"scatterPlotCategoricallyAggregatedFieldWells,omitempty"`
-	// The unaggregated field wells of a scatter plot.
-	ScatterPlotUnaggregatedFieldWells *ScatterPlotUnaggregatedFieldWells `json:"scatterPlotUnaggregatedFieldWells,omitempty"`
-}
-
-// The sort configuration of a scatter plot.
-type ScatterPlotSortConfiguration struct {
-	// The limit configuration of the visual display for an axis.
-	ScatterPlotLimitConfiguration *ItemsLimitConfiguration `json:"scatterPlotLimitConfiguration,omitempty"`
-}
-
-// The unaggregated field wells of a scatter plot.
-type ScatterPlotUnaggregatedFieldWells struct {
-	Category []*DimensionField `json:"category,omitempty"`
-	Label    []*DimensionField `json:"label,omitempty"`
-	Size     []*MeasureField   `json:"size,omitempty"`
-	XAxis    []*DimensionField `json:"xAxis,omitempty"`
-	YAxis    []*DimensionField `json:"yAxis,omitempty"`
+	VisualContentAltText *string `json:"visualContentAltText,omitempty"`
+	VisualID             *string `json:"visualID,omitempty"`
 }
 
 // A scatter plot.
@@ -6434,16 +3751,8 @@ type ScatterPlotUnaggregatedFieldWells struct {
 // For more information, see Using scatter plots (https://docs.aws.amazon.com/quicksight/latest/user/scatter-plot.html)
 // in the Amazon Quick Suite User Guide.
 type ScatterPlotVisual struct {
-	Actions []*VisualCustomAction `json:"actions,omitempty"`
-	// The configuration of a scatter plot.
-	ChartConfiguration *ScatterPlotConfiguration `json:"chartConfiguration,omitempty"`
-	ColumnHierarchies  []*ColumnHierarchy        `json:"columnHierarchies,omitempty"`
-	// The subtitle label options for a visual.
-	Subtitle *VisualSubtitleLabelOptions `json:"subtitle,omitempty"`
-	// The title label options for a visual.
-	Title                *VisualTitleLabelOptions `json:"title,omitempty"`
-	VisualContentAltText *string                  `json:"visualContentAltText,omitempty"`
-	VisualID             *string                  `json:"visualID,omitempty"`
+	VisualContentAltText *string `json:"visualContentAltText,omitempty"`
+	VisualID             *string `json:"visualID,omitempty"`
 }
 
 // The schedules configuration for an embedded Quick Sight dashboard.
@@ -6454,8 +3763,6 @@ type SchedulesConfigurations struct {
 // The visual display options for a data zoom scroll bar.
 type ScrollBarOptions struct {
 	Visibility *string `json:"visibility,omitempty"`
-	// The range options for the data zoom scroll bar.
-	VisibleRange *VisibleRangeOptions `json:"visibleRange,omitempty"`
 }
 
 // A structure that contains the filter information when searching flows.
@@ -6469,11 +3776,6 @@ type SecondaryValueOptions struct {
 	Visibility *string `json:"visibility,omitempty"`
 }
 
-// The configuration of a page break after a section.
-type SectionAfterPageBreak struct {
-	Status *string `json:"status,omitempty"`
-}
-
 // The options for the canvas of a section-based layout.
 type SectionBasedLayoutCanvasSizeOptions struct {
 	// The options for a paper canvas of a section-based layout.
@@ -6482,11 +3784,8 @@ type SectionBasedLayoutCanvasSizeOptions struct {
 
 // The configuration for a section-based layout.
 type SectionBasedLayoutConfiguration struct {
-	BodySections []*BodySectionConfiguration `json:"bodySections,omitempty"`
 	// The options for the canvas of a section-based layout.
 	CanvasSizeOptions *SectionBasedLayoutCanvasSizeOptions `json:"canvasSizeOptions,omitempty"`
-	FooterSections    []*HeaderFooterSectionConfiguration  `json:"footerSections,omitempty"`
-	HeaderSections    []*HeaderFooterSectionConfiguration  `json:"headerSections,omitempty"`
 }
 
 // The options for a paper canvas of a section-based layout.
@@ -6497,34 +3796,12 @@ type SectionBasedLayoutPaperCanvasSizeOptions struct {
 	PaperSize        *string  `json:"paperSize,omitempty"`
 }
 
-// The layout configuration of a section.
-type SectionLayoutConfiguration struct {
-	// The free-form layout configuration of a section.
-	FreeFormLayout *FreeFormSectionLayoutConfiguration `json:"freeFormLayout,omitempty"`
-}
-
-// The configuration of a page break for a section.
-type SectionPageBreakConfiguration struct {
-	// The configuration of a page break after a section.
-	After *SectionAfterPageBreak `json:"after,omitempty"`
-}
-
 // The options that style a section.
 type SectionStyle struct {
 	// String based length that is composed of value and unit in px
 	Height *string `json:"height,omitempty"`
 	// The configuration of spacing (often a margin or padding).
 	Padding *Spacing `json:"padding,omitempty"`
-}
-
-// The configuration for applying a filter to specific sheets or visuals. You
-// can apply this filter to multiple visuals that are on one sheet or to all
-// visuals on a sheet.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type SelectedSheetsFilterScopeConfiguration struct {
-	SheetVisualScopingConfigurations []*SheetVisualScopingConfiguration `json:"sheetVisualScopingConfigurations,omitempty"`
 }
 
 // Details of a self-upgrade request.
@@ -6558,17 +3835,6 @@ type SemanticType struct {
 	TruthyCellValueSynonyms []*string `json:"truthyCellValueSynonyms,omitempty"`
 }
 
-// The series item configuration of a line chart.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type SeriesItem struct {
-	// The data field series item configuration of a line chart.
-	DataFieldSeriesItem *DataFieldSeriesItem `json:"dataFieldSeriesItem,omitempty"`
-	// The field series item configuration of a line chart.
-	FieldSeriesItem *FieldSeriesItem `json:"fieldSeriesItem,omitempty"`
-}
-
 // The parameters for ServiceNow.
 type ServiceNowParameters struct {
 	SiteBaseURL *string `json:"siteBaseURL,omitempty"`
@@ -6588,12 +3854,6 @@ type SetParameterValueConfiguration struct {
 	// This is a union type structure. For this structure to be valid, only one
 	// of the attributes can be defined.
 	Value *DestinationParameterValueConfiguration `json:"value,omitempty"`
-}
-
-// The shape conditional formatting of a filled map visual.
-type ShapeConditionalFormat struct {
-	// The formatting configuration for the color.
-	BackgroundColor *ConditionalFormattingColor `json:"backgroundColor,omitempty"`
 }
 
 // The shared view settings of an embedded dashboard.
@@ -6619,25 +3879,7 @@ type SheetBackgroundStyle struct {
 
 // A control to display info icons for filters and parameters.
 type SheetControlInfoIconLabelOptions struct {
-	InfoIconText *string `json:"infoIconText,omitempty"`
-	Visibility   *string `json:"visibility,omitempty"`
-}
-
-// A grid layout to define the placement of sheet control.
-type SheetControlLayout struct {
-	// The configuration that determines the elements and canvas size options of
-	// sheet control.
-	Configuration *SheetControlLayoutConfiguration `json:"configuration,omitempty"`
-}
-
-// The configuration that determines the elements and canvas size options of
-// sheet control.
-type SheetControlLayoutConfiguration struct {
-	// The configuration for a grid layout. Also called a tiled layout.
-	//
-	// Visuals snap to a grid with standard spacing and alignment. Dashboards are
-	// displayed as designed, with options to fit to screen or view at actual size.
-	GridLayout *GridLayoutConfiguration `json:"gridLayout,omitempty"`
+	Visibility *string `json:"visibility,omitempty"`
 }
 
 // A sheet is an object that contains a set of visuals that are viewed together
@@ -6647,17 +3889,9 @@ type SheetDefinition struct {
 	ContentType *string `json:"contentType,omitempty"`
 	// A list of custom actions applied to visuals in an analysis or sheet.
 	CustomActionDefaults *VisualCustomActionDefaults `json:"customActionDefaults,omitempty"`
-	Description          *string                     `json:"description,omitempty"`
-	FilterControls       []*FilterControl            `json:"filterControls,omitempty"`
 	Images               []*SheetImage               `json:"images,omitempty"`
-	Layouts              []*Layout                   `json:"layouts,omitempty"`
 	Name                 *string                     `json:"name,omitempty"`
-	ParameterControls    []*ParameterControl         `json:"parameterControls,omitempty"`
-	SheetControlLayouts  []*SheetControlLayout       `json:"sheetControlLayouts,omitempty"`
 	SheetID              *string                     `json:"sheetID,omitempty"`
-	TextBoxes            []*SheetTextBox             `json:"textBoxes,omitempty"`
-	Title                *string                     `json:"title,omitempty"`
-	Visuals              []*Visual                   `json:"visuals,omitempty"`
 }
 
 // The override configuration of the rendering rules of a sheet.
@@ -6667,9 +3901,7 @@ type SheetElementConfigurationOverrides struct {
 
 // The rendering rules of a sheet that uses a free-form layout.
 type SheetElementRenderingRule struct {
-	// The override configuration of the rendering rules of a sheet.
-	ConfigurationOverrides *SheetElementConfigurationOverrides `json:"configurationOverrides,omitempty"`
-	Expression             *string                             `json:"expression,omitempty"`
+	Expression *string `json:"expression,omitempty"`
 }
 
 // An image that is located on a sheet.
@@ -6722,26 +3954,12 @@ type SheetLayoutElementMaximizationOption struct {
 
 // A text box.
 type SheetTextBox struct {
-	Content *string `json:"content,omitempty"`
-	// The general textbox interactions setup for textbox publish options.
-	Interactions   *TextBoxInteractionOptions `json:"interactions,omitempty"`
-	SheetTextBoxID *string                    `json:"sheetTextBoxID,omitempty"`
+	SheetTextBoxID *string `json:"sheetTextBoxID,omitempty"`
 }
 
 // The filter that is applied to the options.
 type SheetVisualScopingConfiguration struct {
-	Scope     *string   `json:"scope,omitempty"`
-	SheetID   *string   `json:"sheetID,omitempty"`
-	VisualIDs []*string `json:"visualIDs,omitempty"`
-}
-
-// The text format for the title.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type ShortFormatText struct {
-	PlainText *string `json:"plainText,omitempty"`
-	RichText  *string `json:"richText,omitempty"`
+	SheetID *string `json:"sheetID,omitempty"`
 }
 
 // A SignupResponse object that contains a summary of a newly created account.
@@ -6755,43 +3973,6 @@ type SignupResponse struct {
 // The simple cluster marker of the cluster marker.
 type SimpleClusterMarker struct {
 	Color *string `json:"color,omitempty"`
-}
-
-// The settings of a chart's single axis configuration.
-type SingleAxisOptions struct {
-	// The options that are available for a single Y axis in a chart.
-	YAxisOptions *YAxisOptions `json:"yAxisOptions,omitempty"`
-}
-
-// The display options of a control.
-type SliderControlDisplayOptions struct {
-	// A control to display info icons for filters and parameters.
-	InfoIconLabelOptions *SheetControlInfoIconLabelOptions `json:"infoIconLabelOptions,omitempty"`
-	// The share label options for the labels.
-	TitleOptions *LabelOptions `json:"titleOptions,omitempty"`
-}
-
-// Configures the properties of a chart's axes that are used by small multiples
-// panels.
-type SmallMultiplesAxisProperties struct {
-	Placement *string `json:"placement,omitempty"`
-	Scale     *string `json:"scale,omitempty"`
-}
-
-// Options that determine the layout and display options of a chart's small
-// multiples.
-type SmallMultiplesOptions struct {
-	MaxVisibleColumns *int64 `json:"maxVisibleColumns,omitempty"`
-	MaxVisibleRows    *int64 `json:"maxVisibleRows,omitempty"`
-	// A collection of options that configure how each panel displays in a small
-	// multiples chart.
-	PanelConfiguration *PanelConfiguration `json:"panelConfiguration,omitempty"`
-	// Configures the properties of a chart's axes that are used by small multiples
-	// panels.
-	XAxis *SmallMultiplesAxisProperties `json:"xAxis,omitempty"`
-	// Configures the properties of a chart's axes that are used by small multiples
-	// panels.
-	YAxis *SmallMultiplesAxisProperties `json:"yAxis,omitempty"`
 }
 
 // Describes the configuration of the dashboard snapshot.
@@ -6979,17 +4160,8 @@ type StringValueWhenUnsetConfiguration struct {
 
 // The subtotal options.
 type SubtotalOptions struct {
-	CustomLabel       *string                           `json:"customLabel,omitempty"`
-	FieldLevel        *string                           `json:"fieldLevel,omitempty"`
-	FieldLevelOptions []*PivotTableFieldSubtotalOptions `json:"fieldLevelOptions,omitempty"`
-	// The table cell style for a cell in pivot table or table visual.
-	MetricHeaderCellStyle *TableCellStyle     `json:"metricHeaderCellStyle,omitempty"`
-	StyleTargets          []*TableStyleTarget `json:"styleTargets,omitempty"`
-	// The table cell style for a cell in pivot table or table visual.
-	TotalCellStyle   *TableCellStyle `json:"totalCellStyle,omitempty"`
-	TotalsVisibility *string         `json:"totalsVisibility,omitempty"`
-	// The table cell style for a cell in pivot table or table visual.
-	ValueCellStyle *TableCellStyle `json:"valueCellStyle,omitempty"`
+	CustomLabel      *string `json:"customLabel,omitempty"`
+	TotalsVisibility *string `json:"totalsVisibility,omitempty"`
 }
 
 // A success entry that occurs when a KeyRegistration job is successfully applied
@@ -6999,173 +4171,39 @@ type SuccessfulKeyRegistrationEntry struct {
 	StatusCode *int64  `json:"statusCode,omitempty"`
 }
 
-// The aggregated field well for the table.
-type TableAggregatedFieldWells struct {
-	GroupBy []*DimensionField `json:"groupBy,omitempty"`
-	Values  []*MeasureField   `json:"values,omitempty"`
-}
-
 // The border options for a table border.
 type TableBorderOptions struct {
-	Color     *string `json:"color,omitempty"`
-	Style     *string `json:"style,omitempty"`
-	Thickness *int64  `json:"thickness,omitempty"`
+	Color *string `json:"color,omitempty"`
 }
 
 // The cell conditional formatting option for a table.
 type TableCellConditionalFormatting struct {
 	FieldID *string `json:"fieldID,omitempty"`
-	// The conditional formatting for the text.
-	TextFormat *TextConditionalFormat `json:"textFormat,omitempty"`
-}
-
-// The sizing options for the table image configuration.
-type TableCellImageSizingConfiguration struct {
-	TableCellImageScalingConfiguration *string `json:"tableCellImageScalingConfiguration,omitempty"`
 }
 
 // The table cell style for a cell in pivot table or table visual.
 type TableCellStyle struct {
 	BackgroundColor *string `json:"backgroundColor,omitempty"`
-	// Determines the border options for a table visual.
-	Border *GlobalTableBorderOptions `json:"border,omitempty"`
-	// Configures the display properties of the given text.
-	FontConfiguration       *FontConfiguration `json:"fontConfiguration,omitempty"`
-	Height                  *int64             `json:"height,omitempty"`
-	HorizontalTextAlignment *string            `json:"horizontalTextAlignment,omitempty"`
-	TextWrap                *string            `json:"textWrap,omitempty"`
-	VerticalTextAlignment   *string            `json:"verticalTextAlignment,omitempty"`
-	Visibility              *string            `json:"visibility,omitempty"`
-}
-
-// The conditional formatting for a PivotTableVisual.
-type TableConditionalFormatting struct {
-	ConditionalFormattingOptions []*TableConditionalFormattingOption `json:"conditionalFormattingOptions,omitempty"`
-}
-
-// Conditional formatting options for a PivotTableVisual.
-type TableConditionalFormattingOption struct {
-	// The cell conditional formatting option for a table.
-	Cell *TableCellConditionalFormatting `json:"cell,omitempty"`
-	// The conditional formatting of a table row.
-	Row *TableRowConditionalFormatting `json:"row,omitempty"`
-}
-
-// The configuration for a TableVisual.
-type TableConfiguration struct {
-	// The options that define customizations available to dashboard readers for
-	// a specific visual
-	DashboardCustomizationVisualOptions *DashboardCustomizationVisualOptions `json:"dashboardCustomizationVisualOptions,omitempty"`
-	// The field options of a table visual.
-	FieldOptions *TableFieldOptions `json:"fieldOptions,omitempty"`
-	// The field wells for a table visual.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	FieldWells *TableFieldWells `json:"fieldWells,omitempty"`
-	// The general visual interactions setup for visual publish options
-	Interactions *VisualInteractionOptions `json:"interactions,omitempty"`
-	// The paginated report options for a table visual.
-	PaginatedReportOptions *TablePaginatedReportOptions `json:"paginatedReportOptions,omitempty"`
-	// The sort configuration for a TableVisual.
-	SortConfiguration         *TableSortConfiguration     `json:"sortConfiguration,omitempty"`
-	TableInlineVisualizations []*TableInlineVisualization `json:"tableInlineVisualizations,omitempty"`
-	// The table options for a table visual.
-	TableOptions *TableOptions `json:"tableOptions,omitempty"`
-	// The total options for a table visual.
-	TotalOptions *TotalOptions `json:"totalOptions,omitempty"`
-}
-
-// The custom icon content for the table link content configuration.
-type TableFieldCustomIconContent struct {
-	Icon *string `json:"icon,omitempty"`
+	Visibility      *string `json:"visibility,omitempty"`
 }
 
 // The custom text content (value, font configuration) for the table link content
 // configuration.
 type TableFieldCustomTextContent struct {
-	// Configures the display properties of the given text.
-	FontConfiguration *FontConfiguration `json:"fontConfiguration,omitempty"`
-	Value             *string            `json:"value,omitempty"`
-}
-
-// The image configuration of a table field URL.
-type TableFieldImageConfiguration struct {
-	// The sizing options for the table image configuration.
-	SizingOptions *TableCellImageSizingConfiguration `json:"sizingOptions,omitempty"`
+	Value *string `json:"value,omitempty"`
 }
 
 // The link configuration of a table field URL.
 type TableFieldLinkConfiguration struct {
-	// The URL content (text, icon) for the table link configuration.
-	Content *TableFieldLinkContentConfiguration `json:"content,omitempty"`
-	Target  *string                             `json:"target,omitempty"`
-}
-
-// The URL content (text, icon) for the table link configuration.
-type TableFieldLinkContentConfiguration struct {
-	// The custom icon content for the table link content configuration.
-	CustomIconContent *TableFieldCustomIconContent `json:"customIconContent,omitempty"`
-	// The custom text content (value, font configuration) for the table link content
-	// configuration.
-	CustomTextContent *TableFieldCustomTextContent `json:"customTextContent,omitempty"`
+	Target *string `json:"target,omitempty"`
 }
 
 // The options for a table field.
 type TableFieldOption struct {
-	CustomLabel *string `json:"customLabel,omitempty"`
-	FieldID     *string `json:"fieldID,omitempty"`
-	// The URL configuration for a table field.
-	URLStyling *TableFieldURLConfiguration `json:"urlStyling,omitempty"`
-	Visibility *string                     `json:"visibility,omitempty"`
+	FieldID    *string `json:"fieldID,omitempty"`
+	Visibility *string `json:"visibility,omitempty"`
 	// String based length that is composed of value and unit in px
 	Width *string `json:"width,omitempty"`
-}
-
-// The field options of a table visual.
-type TableFieldOptions struct {
-	Order []*string `json:"order,omitempty"`
-	// The settings for the pinned columns of a table visual.
-	PinnedFieldOptions   *TablePinnedFieldOptions `json:"pinnedFieldOptions,omitempty"`
-	SelectedFieldOptions []*TableFieldOption      `json:"selectedFieldOptions,omitempty"`
-	// A list of TransposedTableOption configurations.
-	TransposedTableOptions []*TransposedTableOption `json:"transposedTableOptions,omitempty"`
-}
-
-// The URL configuration for a table field.
-type TableFieldURLConfiguration struct {
-	// The image configuration of a table field URL.
-	ImageConfiguration *TableFieldImageConfiguration `json:"imageConfiguration,omitempty"`
-	// The link configuration of a table field URL.
-	LinkConfiguration *TableFieldLinkConfiguration `json:"linkConfiguration,omitempty"`
-}
-
-// The field wells for a table visual.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type TableFieldWells struct {
-	// The aggregated field well for the table.
-	TableAggregatedFieldWells *TableAggregatedFieldWells `json:"tableAggregatedFieldWells,omitempty"`
-	// The unaggregated field well for the table.
-	TableUnaggregatedFieldWells *TableUnaggregatedFieldWells `json:"tableUnaggregatedFieldWells,omitempty"`
-}
-
-// The inline visualization of a specific type to display within a chart.
-type TableInlineVisualization struct {
-	// The options for data bars.
-	DataBars *DataBarsOptions `json:"dataBars,omitempty"`
-}
-
-// The table options for a table visual.
-type TableOptions struct {
-	// The table cell style for a cell in pivot table or table visual.
-	CellStyle *TableCellStyle `json:"cellStyle,omitempty"`
-	// The table cell style for a cell in pivot table or table visual.
-	HeaderStyle *TableCellStyle `json:"headerStyle,omitempty"`
-	Orientation *string         `json:"orientation,omitempty"`
-	// Determines the row alternate color options.
-	RowAlternateColorOptions *RowAlternateColorOptions `json:"rowAlternateColorOptions,omitempty"`
 }
 
 // The paginated report options for a table visual.
@@ -7181,69 +4219,13 @@ type TablePathElement struct {
 	Name *string `json:"name,omitempty"`
 }
 
-// The settings for the pinned columns of a table visual.
-type TablePinnedFieldOptions struct {
-	// A list of table field IDs.
-	PinnedLeftFields []*string `json:"pinnedLeftFields,omitempty"`
-}
-
-// The conditional formatting of a table row.
-type TableRowConditionalFormatting struct {
-	// The formatting configuration for the color.
-	BackgroundColor *ConditionalFormattingColor `json:"backgroundColor,omitempty"`
-	// The formatting configuration for the color.
-	TextColor *ConditionalFormattingColor `json:"textColor,omitempty"`
-}
-
-// The side border options for a table.
-type TableSideBorderOptions struct {
-	// The border options for a table border.
-	Bottom *TableBorderOptions `json:"bottom,omitempty"`
-	// The border options for a table border.
-	InnerHorizontal *TableBorderOptions `json:"innerHorizontal,omitempty"`
-	// The border options for a table border.
-	InnerVertical *TableBorderOptions `json:"innerVertical,omitempty"`
-	// The border options for a table border.
-	Left *TableBorderOptions `json:"left,omitempty"`
-	// The border options for a table border.
-	Right *TableBorderOptions `json:"right,omitempty"`
-	// The border options for a table border.
-	Top *TableBorderOptions `json:"top,omitempty"`
-}
-
-// The sort configuration for a TableVisual.
-type TableSortConfiguration struct {
-	// The pagination configuration for a table visual or boxplot.
-	PaginationConfiguration *PaginationConfiguration `json:"paginationConfiguration,omitempty"`
-	RowSort                 []*FieldSortOptions      `json:"rowSort,omitempty"`
-}
-
-// The table style target.
-type TableStyleTarget struct {
-	CellType *string `json:"cellType,omitempty"`
-}
-
-// The unaggregated field well for the table.
-type TableUnaggregatedFieldWells struct {
-	Values []*UnaggregatedField `json:"values,omitempty"`
-}
-
 // A table visual.
 //
 // For more information, see Using tables as visuals (https://docs.aws.amazon.com/quicksight/latest/user/tabular.html)
 // in the Amazon Quick Suite User Guide.
 type TableVisual struct {
-	Actions []*VisualCustomAction `json:"actions,omitempty"`
-	// The configuration for a TableVisual.
-	ChartConfiguration *TableConfiguration `json:"chartConfiguration,omitempty"`
-	// The conditional formatting for a PivotTableVisual.
-	ConditionalFormatting *TableConditionalFormatting `json:"conditionalFormatting,omitempty"`
-	// The subtitle label options for a visual.
-	Subtitle *VisualSubtitleLabelOptions `json:"subtitle,omitempty"`
-	// The title label options for a visual.
-	Title                *VisualTitleLabelOptions `json:"title,omitempty"`
-	VisualContentAltText *string                  `json:"visualContentAltText,omitempty"`
-	VisualID             *string                  `json:"visualID,omitempty"`
+	VisualContentAltText *string `json:"visualContentAltText,omitempty"`
+	VisualID             *string `json:"visualID,omitempty"`
 }
 
 // The key or keys of the key-value pairs for the resource tag or tags assigned
@@ -7321,13 +4303,11 @@ type TemplateVersionDefinition struct {
 	AnalysisDefaults     *AnalysisDefaults      `json:"analysisDefaults,omitempty"`
 	CalculatedFields     []*CalculatedField     `json:"calculatedFields,omitempty"`
 	ColumnConfigurations []*ColumnConfiguration `json:"columnConfigurations,omitempty"`
-	FilterGroups         []*FilterGroup         `json:"filterGroups,omitempty"`
 	// An array of analysis level configurations.
 	Options               *AssetOptions           `json:"options,omitempty"`
 	ParameterDeclarations []*ParameterDeclaration `json:"parameterDeclarations,omitempty"`
 	// A structure that describes the query execution options.
 	QueryExecutionOptions *QueryExecutionOptions `json:"queryExecutionOptions,omitempty"`
-	Sheets                []*SheetDefinition     `json:"sheets,omitempty"`
 	StaticFiles           []*StaticFile          `json:"staticFiles,omitempty"`
 }
 
@@ -7345,50 +4325,14 @@ type TeradataParameters struct {
 	Port     *int64  `json:"port,omitempty"`
 }
 
-// The display options of a control.
-type TextAreaControlDisplayOptions struct {
-	// A control to display info icons for filters and parameters.
-	InfoIconLabelOptions *SheetControlInfoIconLabelOptions `json:"infoIconLabelOptions,omitempty"`
-	// The configuration of the placeholder options in a text control.
-	PlaceholderOptions *TextControlPlaceholderOptions `json:"placeholderOptions,omitempty"`
-	// The share label options for the labels.
-	TitleOptions *LabelOptions `json:"titleOptions,omitempty"`
-}
-
-// The general textbox interactions setup for textbox publish options.
-type TextBoxInteractionOptions struct {
-	// The menu options for the interactions of a textbox.
-	TextBoxMenuOption *TextBoxMenuOption `json:"textBoxMenuOption,omitempty"`
-}
-
 // The menu options for the interactions of a textbox.
 type TextBoxMenuOption struct {
 	AvailabilityStatus *string `json:"availabilityStatus,omitempty"`
 }
 
-// The conditional formatting for the text.
-type TextConditionalFormat struct {
-	// The formatting configuration for the color.
-	BackgroundColor *ConditionalFormattingColor `json:"backgroundColor,omitempty"`
-	// The formatting configuration for the icon.
-	Icon *ConditionalFormattingIcon `json:"icon,omitempty"`
-	// The formatting configuration for the color.
-	TextColor *ConditionalFormattingColor `json:"textColor,omitempty"`
-}
-
 // The configuration of the placeholder options in a text control.
 type TextControlPlaceholderOptions struct {
 	Visibility *string `json:"visibility,omitempty"`
-}
-
-// The display options of a control.
-type TextFieldControlDisplayOptions struct {
-	// A control to display info icons for filters and parameters.
-	InfoIconLabelOptions *SheetControlInfoIconLabelOptions `json:"infoIconLabelOptions,omitempty"`
-	// The configuration of the placeholder options in a text control.
-	PlaceholderOptions *TextControlPlaceholderOptions `json:"placeholderOptions,omitempty"`
-	// The share label options for the labels.
-	TitleOptions *LabelOptions `json:"titleOptions,omitempty"`
 }
 
 // Summary information about a theme.
@@ -7444,30 +4388,12 @@ type ThresholdAlertsConfigurations struct {
 	Enabled *bool `json:"enabled,omitempty"`
 }
 
-// Display options related to tiles on a sheet.
-type TileStyle struct {
-	BorderRadius *string `json:"borderRadius,omitempty"`
-	Padding      *string `json:"padding,omitempty"`
-}
-
-// The forecast properties setup of a forecast in the line chart.
-type TimeBasedForecastProperties struct {
-	LowerBoundary      *float64 `json:"lowerBoundary,omitempty"`
-	PeriodsBackward    *int64   `json:"periodsBackward,omitempty"`
-	PeriodsForward     *int64   `json:"periodsForward,omitempty"`
-	PredictionInterval *int64   `json:"predictionInterval,omitempty"`
-	Seasonality        *int64   `json:"seasonality,omitempty"`
-	UpperBoundary      *float64 `json:"upperBoundary,omitempty"`
-}
-
 // A TimeEqualityFilter filters values that are equal to a given value.
 type TimeEqualityFilter struct {
 	// A column of a data set.
-	Column *ColumnIdentifier `json:"column,omitempty"`
-	// The default configuration for all dependent controls of the filter.
-	DefaultFilterControlConfiguration *DefaultFilterControlConfiguration `json:"defaultFilterControlConfiguration,omitempty"`
-	FilterID                          *string                            `json:"filterID,omitempty"`
-	ParameterName                     *string                            `json:"parameterName,omitempty"`
+	Column        *ColumnIdentifier `json:"column,omitempty"`
+	FilterID      *string           `json:"filterID,omitempty"`
+	ParameterName *string           `json:"parameterName,omitempty"`
 	// The rolling date configuration of a date time filter.
 	RollingDate     *RollingDateConfiguration `json:"rollingDate,omitempty"`
 	TimeGranularity *string                   `json:"timeGranularity,omitempty"`
@@ -7486,26 +4412,11 @@ type TimeRangeDrillDownFilter struct {
 // A TimeRangeFilter filters values that are between two specified values.
 type TimeRangeFilter struct {
 	// A column of a data set.
-	Column *ColumnIdentifier `json:"column,omitempty"`
-	// The default configuration for all dependent controls of the filter.
-	DefaultFilterControlConfiguration *DefaultFilterControlConfiguration `json:"defaultFilterControlConfiguration,omitempty"`
-	// The exclude period of TimeRangeFilter or RelativeDatesFilter.
-	ExcludePeriodConfiguration *ExcludePeriodConfiguration `json:"excludePeriodConfiguration,omitempty"`
-	FilterID                   *string                     `json:"filterID,omitempty"`
-	IncludeMaximum             *bool                       `json:"includeMaximum,omitempty"`
-	IncludeMinimum             *bool                       `json:"includeMinimum,omitempty"`
-	NullOption                 *string                     `json:"nullOption,omitempty"`
-	// The value of a time range filter.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	RangeMaximumValue *TimeRangeFilterValue `json:"rangeMaximumValue,omitempty"`
-	// The value of a time range filter.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	RangeMinimumValue *TimeRangeFilterValue `json:"rangeMinimumValue,omitempty"`
-	TimeGranularity   *string               `json:"timeGranularity,omitempty"`
+	Column          *ColumnIdentifier `json:"column,omitempty"`
+	FilterID        *string           `json:"filterID,omitempty"`
+	IncludeMaximum  *bool             `json:"includeMaximum,omitempty"`
+	IncludeMinimum  *bool             `json:"includeMinimum,omitempty"`
+	TimeGranularity *string           `json:"timeGranularity,omitempty"`
 }
 
 // The value of a time range filter.
@@ -7519,63 +4430,30 @@ type TimeRangeFilterValue struct {
 	StaticValue *metav1.Time              `json:"staticValue,omitempty"`
 }
 
-// The tooltip.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type TooltipItem struct {
-	// The tooltip item for the columns that are not part of a field well.
-	ColumnTooltipItem *ColumnTooltipItem `json:"columnTooltipItem,omitempty"`
-	// The tooltip item for the fields.
-	FieldTooltipItem *FieldTooltipItem `json:"fieldTooltipItem,omitempty"`
-}
-
 // The display options for the visual tooltip.
 type TooltipOptions struct {
-	// The setup for the detailed tooltip.
-	FieldBasedTooltip   *FieldBasedTooltip `json:"fieldBasedTooltip,omitempty"`
-	SelectedTooltipType *string            `json:"selectedTooltipType,omitempty"`
-	TooltipVisibility   *string            `json:"tooltipVisibility,omitempty"`
+	TooltipVisibility *string `json:"tooltipVisibility,omitempty"`
 }
 
 // A TopBottomFilter filters values that are at the top or the bottom.
 type TopBottomFilter struct {
-	AggregationSortConfigurations []*AggregationSortConfiguration `json:"aggregationSortConfigurations,omitempty"`
 	// A column of a data set.
-	Column *ColumnIdentifier `json:"column,omitempty"`
-	// The default configuration for all dependent controls of the filter.
-	DefaultFilterControlConfiguration *DefaultFilterControlConfiguration `json:"defaultFilterControlConfiguration,omitempty"`
-	FilterID                          *string                            `json:"filterID,omitempty"`
-	Limit                             *int64                             `json:"limit,omitempty"`
-	ParameterName                     *string                            `json:"parameterName,omitempty"`
-	TimeGranularity                   *string                            `json:"timeGranularity,omitempty"`
+	Column          *ColumnIdentifier `json:"column,omitempty"`
+	FilterID        *string           `json:"filterID,omitempty"`
+	ParameterName   *string           `json:"parameterName,omitempty"`
+	TimeGranularity *string           `json:"timeGranularity,omitempty"`
 }
 
 // The top movers and bottom movers computation setup.
 type TopBottomMoversComputation struct {
-	// The dimension type field.
-	Category      *DimensionField `json:"category,omitempty"`
-	ComputationID *string         `json:"computationID,omitempty"`
-	MoverSize     *int64          `json:"moverSize,omitempty"`
-	Name          *string         `json:"name,omitempty"`
-	SortOrder     *string         `json:"sortOrder,omitempty"`
-	// The dimension type field.
-	Time *DimensionField `json:"time,omitempty"`
-	Type *string         `json:"type_,omitempty"`
-	// The measure (metric) type field.
-	Value *MeasureField `json:"value,omitempty"`
+	ComputationID *string `json:"computationID,omitempty"`
+	Name          *string `json:"name,omitempty"`
 }
 
 // The top ranked and bottom ranked computation configuration.
 type TopBottomRankedComputation struct {
-	// The dimension type field.
-	Category      *DimensionField `json:"category,omitempty"`
-	ComputationID *string         `json:"computationID,omitempty"`
-	Name          *string         `json:"name,omitempty"`
-	ResultSize    *int64          `json:"resultSize,omitempty"`
-	Type          *string         `json:"type_,omitempty"`
-	// The measure (metric) type field.
-	Value *MeasureField `json:"value,omitempty"`
+	ComputationID *string `json:"computationID,omitempty"`
+	Name          *string `json:"name,omitempty"`
 }
 
 // A structure that represents a calculated field.
@@ -7605,11 +4483,6 @@ type TopicDateRangeFilter struct {
 // and associated data sets.
 type TopicDetails struct {
 	Name *string `json:"name,omitempty"`
-}
-
-// The definition of a TopicIRComparisonMethod.
-type TopicIRComparisonMethod struct {
-	WindowSize *int64 `json:"windowSize,omitempty"`
 }
 
 // The definition for a TopicIRFilterOption.
@@ -7674,31 +4547,17 @@ type TopicSummary struct {
 type TotalAggregationComputation struct {
 	ComputationID *string `json:"computationID,omitempty"`
 	Name          *string `json:"name,omitempty"`
-	// The measure (metric) type field.
-	Value *MeasureField `json:"value,omitempty"`
-}
-
-// An aggregation function that aggregates the total values of a measure.
-type TotalAggregationFunction struct {
-	SimpleTotalAggregationFunction *string `json:"simpleTotalAggregationFunction,omitempty"`
 }
 
 // The total aggregation settings map of a field id.
 type TotalAggregationOption struct {
 	FieldID *string `json:"fieldID,omitempty"`
-	// An aggregation function that aggregates the total values of a measure.
-	TotalAggregationFunction *TotalAggregationFunction `json:"totalAggregationFunction,omitempty"`
 }
 
 // The total options for a table visual.
 type TotalOptions struct {
-	CustomLabel             *string                   `json:"customLabel,omitempty"`
-	Placement               *string                   `json:"placement,omitempty"`
-	ScrollStatus            *string                   `json:"scrollStatus,omitempty"`
-	TotalAggregationOptions []*TotalAggregationOption `json:"totalAggregationOptions,omitempty"`
-	// The table cell style for a cell in pivot table or table visual.
-	TotalCellStyle   *TableCellStyle `json:"totalCellStyle,omitempty"`
-	TotalsVisibility *string         `json:"totalsVisibility,omitempty"`
+	CustomLabel      *string `json:"customLabel,omitempty"`
+	TotalsVisibility *string `json:"totalsVisibility,omitempty"`
 }
 
 // A data transformation on a logical table. This is a variant type structure.
@@ -7767,61 +4626,8 @@ type TransformStep struct {
 
 // The column option of the transposed table.
 type TransposedTableOption struct {
-	// The integer value of a column index in the transposed table.
-	ColumnIndex *int64  `json:"columnIndex,omitempty"`
-	ColumnType  *string `json:"columnType,omitempty"`
 	// String based length that is composed of value and unit in px
 	ColumnWidth *string `json:"columnWidth,omitempty"`
-}
-
-// Aggregated field wells of a tree map.
-type TreeMapAggregatedFieldWells struct {
-	Colors []*MeasureField   `json:"colors,omitempty"`
-	Groups []*DimensionField `json:"groups,omitempty"`
-	Sizes  []*MeasureField   `json:"sizes,omitempty"`
-}
-
-// The configuration of a tree map.
-type TreeMapConfiguration struct {
-	// The label options for an axis on a chart.
-	ColorLabelOptions *ChartAxisLabelOptions `json:"colorLabelOptions,omitempty"`
-	// Determines the color scale that is applied to the visual.
-	ColorScale *ColorScale `json:"colorScale,omitempty"`
-	// The options that determine the presentation of the data labels.
-	DataLabels *DataLabelOptions `json:"dataLabels,omitempty"`
-	// The field wells of a tree map.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	FieldWells *TreeMapFieldWells `json:"fieldWells,omitempty"`
-	// The label options for an axis on a chart.
-	GroupLabelOptions *ChartAxisLabelOptions `json:"groupLabelOptions,omitempty"`
-	// The general visual interactions setup for visual publish options
-	Interactions *VisualInteractionOptions `json:"interactions,omitempty"`
-	// The options for the legend setup of a visual.
-	Legend *LegendOptions `json:"legend,omitempty"`
-	// The label options for an axis on a chart.
-	SizeLabelOptions *ChartAxisLabelOptions `json:"sizeLabelOptions,omitempty"`
-	// The sort configuration of a tree map.
-	SortConfiguration *TreeMapSortConfiguration `json:"sortConfiguration,omitempty"`
-	// The display options for the visual tooltip.
-	Tooltip *TooltipOptions `json:"tooltip,omitempty"`
-}
-
-// The field wells of a tree map.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type TreeMapFieldWells struct {
-	// Aggregated field wells of a tree map.
-	TreeMapAggregatedFieldWells *TreeMapAggregatedFieldWells `json:"treeMapAggregatedFieldWells,omitempty"`
-}
-
-// The sort configuration of a tree map.
-type TreeMapSortConfiguration struct {
-	// The limit configuration of the visual display for an axis.
-	TreeMapGroupItemsLimitConfiguration *ItemsLimitConfiguration `json:"treeMapGroupItemsLimitConfiguration,omitempty"`
-	TreeMapSort                         []*FieldSortOptions      `json:"treeMapSort,omitempty"`
 }
 
 // A tree map.
@@ -7829,16 +4635,8 @@ type TreeMapSortConfiguration struct {
 // For more information, see Using tree maps (https://docs.aws.amazon.com/quicksight/latest/user/tree-map.html)
 // in the Amazon Quick Suite User Guide.
 type TreeMapVisual struct {
-	Actions []*VisualCustomAction `json:"actions,omitempty"`
-	// The configuration of a tree map.
-	ChartConfiguration *TreeMapConfiguration `json:"chartConfiguration,omitempty"`
-	ColumnHierarchies  []*ColumnHierarchy    `json:"columnHierarchies,omitempty"`
-	// The subtitle label options for a visual.
-	Subtitle *VisualSubtitleLabelOptions `json:"subtitle,omitempty"`
-	// The title label options for a visual.
-	Title                *VisualTitleLabelOptions `json:"title,omitempty"`
-	VisualContentAltText *string                  `json:"visualContentAltText,omitempty"`
-	VisualID             *string                  `json:"visualID,omitempty"`
+	VisualContentAltText *string `json:"visualContentAltText,omitempty"`
+	VisualID             *string `json:"visualID,omitempty"`
 }
 
 // The options that determine the presentation of trend arrows in a KPI visual.
@@ -7857,20 +4655,6 @@ type TrinoParameters struct {
 type TwitterParameters struct {
 	MaxRows *int64  `json:"maxRows,omitempty"`
 	Query   *string `json:"query,omitempty"`
-}
-
-// Determines the typography options.
-type Typography struct {
-	// Configures the display properties of the given text.
-	AxisLabelFontConfiguration *FontConfiguration `json:"axisLabelFontConfiguration,omitempty"`
-	// Configures the display properties of the given text.
-	AxisTitleFontConfiguration *FontConfiguration `json:"axisTitleFontConfiguration,omitempty"`
-	// Configures the display properties of the given text.
-	DataLabelFontConfiguration *FontConfiguration `json:"dataLabelFontConfiguration,omitempty"`
-	// Configures the display properties of the given text.
-	LegendTitleFontConfiguration *FontConfiguration `json:"legendTitleFontConfiguration,omitempty"`
-	// Configures the display properties of the given text.
-	LegendValueFontConfiguration *FontConfiguration `json:"legendValueFontConfiguration,omitempty"`
 }
 
 // The theme colors that apply to UI and to charts, excluding data colors. The
@@ -7913,10 +4697,8 @@ type UniqueKey struct {
 
 // The unique values computation configuration.
 type UniqueValuesComputation struct {
-	// The dimension type field.
-	Category      *DimensionField `json:"category,omitempty"`
-	ComputationID *string         `json:"computationID,omitempty"`
-	Name          *string         `json:"name,omitempty"`
+	ComputationID *string `json:"computationID,omitempty"`
+	Name          *string `json:"name,omitempty"`
 }
 
 // A transform operation that converts columns into rows, normalizing the data
@@ -8007,167 +4789,6 @@ type ValueColumnConfiguration struct {
 	AggregationFunction *DataPrepAggregationFunction `json:"aggregationFunction,omitempty"`
 }
 
-// The range options for the data zoom scroll bar.
-type VisibleRangeOptions struct {
-	// The percent range in the visible range.
-	PercentRange *PercentVisibleRange `json:"percentRange,omitempty"`
-}
-
-// A visual displayed on a sheet in an analysis, dashboard, or template.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type Visual struct {
-	// A bar chart.
-	//
-	// The BarChartVisual structure describes a visual that is a member of the bar
-	// chart family. The following charts can be described using this structure:
-	//
-	//    * Horizontal bar chart
-	//
-	//    * Vertical bar chart
-	//
-	//    * Horizontal stacked bar chart
-	//
-	//    * Vertical stacked bar chart
-	//
-	//    * Horizontal stacked 100% bar chart
-	//
-	//    * Vertical stacked 100% bar chart
-	//
-	// For more information, see Using bar charts (https://docs.aws.amazon.com/quicksight/latest/user/bar-charts.html)
-	// in the Amazon Quick Suite User Guide.
-	BarChartVisual *BarChartVisual `json:"barChartVisual,omitempty"`
-	// A box plot.
-	//
-	// For more information, see Using box plots (https://docs.aws.amazon.com/quicksight/latest/user/box-plots.html)
-	// in the Amazon Quick Suite User Guide.
-	BoxPlotVisual *BoxPlotVisual `json:"boxPlotVisual,omitempty"`
-	// A combo chart.
-	//
-	// The ComboChartVisual includes stacked bar combo charts and clustered bar
-	// combo charts
-	//
-	// For more information, see Using combo charts (https://docs.aws.amazon.com/quicksight/latest/user/combo-charts.html)
-	// in the Amazon Quick Suite User Guide.
-	ComboChartVisual *ComboChartVisual `json:"comboChartVisual,omitempty"`
-	// A visual that contains custom content.
-	//
-	// For more information, see Using custom visual content (https://docs.aws.amazon.com/quicksight/latest/user/custom-visual-content.html)
-	// in the Amazon Quick Suite User Guide.
-	CustomContentVisual *CustomContentVisual `json:"customContentVisual,omitempty"`
-	// An empty visual.
-	//
-	// Empty visuals are used in layouts but have not been configured to show any
-	// data. A new visual created in the Quick Sight console is considered an EmptyVisual
-	// until a visual type is selected.
-	EmptyVisual *EmptyVisual `json:"emptyVisual,omitempty"`
-	// A filled map.
-	//
-	// For more information, see Creating filled maps (https://docs.aws.amazon.com/quicksight/latest/user/filled-maps.html)
-	// in the Amazon Quick Suite User Guide.
-	FilledMapVisual *FilledMapVisual `json:"filledMapVisual,omitempty"`
-	// A funnel chart.
-	//
-	// For more information, see Using funnel charts (https://docs.aws.amazon.com/quicksight/latest/user/funnel-visual-content.html)
-	// in the Amazon Quick Suite User Guide.
-	FunnelChartVisual *FunnelChartVisual `json:"funnelChartVisual,omitempty"`
-	// A gauge chart.
-	//
-	// For more information, see Using gauge charts (https://docs.aws.amazon.com/quicksight/latest/user/gauge-chart.html)
-	// in the Amazon Quick Suite User Guide.
-	GaugeChartVisual *GaugeChartVisual `json:"gaugeChartVisual,omitempty"`
-	// A geospatial map or a points on map visual.
-	//
-	// For more information, see Creating point maps (https://docs.aws.amazon.com/quicksight/latest/user/point-maps.html)
-	// in the Amazon Quick Suite User Guide.
-	GeospatialMapVisual *GeospatialMapVisual `json:"geospatialMapVisual,omitempty"`
-	// A heat map.
-	//
-	// For more information, see Using heat maps (https://docs.aws.amazon.com/quicksight/latest/user/heat-map.html)
-	// in the Amazon Quick Suite User Guide.
-	HeatMapVisual *HeatMapVisual `json:"heatMapVisual,omitempty"`
-	// A histogram.
-	//
-	// For more information, see Using histograms (https://docs.aws.amazon.com/quicksight/latest/user/histogram-charts.html)
-	// in the Amazon Quick Suite User Guide.
-	HistogramVisual *HistogramVisual `json:"histogramVisual,omitempty"`
-	// An insight visual.
-	//
-	// For more information, see Working with insights (https://docs.aws.amazon.com/quicksight/latest/user/computational-insights.html)
-	// in the Amazon Quick Suite User Guide.
-	InsightVisual *InsightVisual `json:"insightVisual,omitempty"`
-	// A key performance indicator (KPI).
-	//
-	// For more information, see Using KPIs (https://docs.aws.amazon.com/quicksight/latest/user/kpi.html)
-	// in the Amazon Quick Suite User Guide.
-	KPIVisual *KPIVisual `json:"kPIVisual,omitempty"`
-	// A layer map visual.
-	LayerMapVisual *LayerMapVisual `json:"layerMapVisual,omitempty"`
-	// A line chart.
-	//
-	// For more information, see Using line charts (https://docs.aws.amazon.com/quicksight/latest/user/line-charts.html)
-	// in the Amazon Quick Suite User Guide.
-	LineChartVisual *LineChartVisual `json:"lineChartVisual,omitempty"`
-	// A pie or donut chart.
-	//
-	// The PieChartVisual structure describes a visual that is a member of the pie
-	// chart family.
-	//
-	// The following charts can be described by using this structure:
-	//
-	//    * Pie charts
-	//
-	//    * Donut charts
-	//
-	// For more information, see Using pie charts (https://docs.aws.amazon.com/quicksight/latest/user/pie-chart.html)
-	// in the Amazon Quick Suite User Guide.
-	//
-	// For more information, see Using donut charts (https://docs.aws.amazon.com/quicksight/latest/user/donut-chart.html)
-	// in the Amazon Quick Suite User Guide.
-	PieChartVisual *PieChartVisual `json:"pieChartVisual,omitempty"`
-	// A pivot table.
-	//
-	// For more information, see Using pivot tables (https://docs.aws.amazon.com/quicksight/latest/user/pivot-table.html)
-	// in the Amazon Quick Suite User Guide.
-	PivotTableVisual *PivotTableVisual `json:"pivotTableVisual,omitempty"`
-	// A flexible visualization type that allows engineers to create new custom
-	// charts in Quick Sight.
-	PluginVisual *PluginVisual `json:"pluginVisual,omitempty"`
-	// A radar chart visual.
-	RadarChartVisual *RadarChartVisual `json:"radarChartVisual,omitempty"`
-	// A sankey diagram.
-	//
-	// For more information, see Using Sankey diagrams (https://docs.aws.amazon.com/quicksight/latest/user/sankey-diagram.html)
-	// in the Amazon Quick Suite User Guide.
-	SankeyDiagramVisual *SankeyDiagramVisual `json:"sankeyDiagramVisual,omitempty"`
-	// A scatter plot.
-	//
-	// For more information, see Using scatter plots (https://docs.aws.amazon.com/quicksight/latest/user/scatter-plot.html)
-	// in the Amazon Quick Suite User Guide.
-	ScatterPlotVisual *ScatterPlotVisual `json:"scatterPlotVisual,omitempty"`
-	// A table visual.
-	//
-	// For more information, see Using tables as visuals (https://docs.aws.amazon.com/quicksight/latest/user/tabular.html)
-	// in the Amazon Quick Suite User Guide.
-	TableVisual *TableVisual `json:"tableVisual,omitempty"`
-	// A tree map.
-	//
-	// For more information, see Using tree maps (https://docs.aws.amazon.com/quicksight/latest/user/tree-map.html)
-	// in the Amazon Quick Suite User Guide.
-	TreeMapVisual *TreeMapVisual `json:"treeMapVisual,omitempty"`
-	// A waterfall chart.
-	//
-	// For more information, see Using waterfall charts (https://docs.aws.amazon.com/quicksight/latest/user/waterfall-chart.html)
-	// in the Amazon Quick Suite User Guide.
-	WaterfallVisual *WaterfallVisual `json:"waterfallVisual,omitempty"`
-	// A word cloud.
-	//
-	// For more information, see Using word clouds (https://docs.aws.amazon.com/quicksight/latest/user/word-cloud.html)
-	// in the Amazon Quick Suite User Guide.
-	WordCloudVisual *WordCloudVisual `json:"wordCloudVisual,omitempty"`
-}
-
 // The axis sort options for a visual.
 type VisualAxisSortOption struct {
 	AvailabilityStatus *string `json:"availabilityStatus,omitempty"`
@@ -8175,11 +4796,8 @@ type VisualAxisSortOption struct {
 
 // A custom action defined on a visual.
 type VisualCustomAction struct {
-	ActionOperations []*VisualCustomActionOperation `json:"actionOperations,omitempty"`
-	CustomActionID   *string                        `json:"customActionID,omitempty"`
-	Name             *string                        `json:"name,omitempty"`
-	Status           *string                        `json:"status,omitempty"`
-	Trigger          *string                        `json:"trigger,omitempty"`
+	CustomActionID *string `json:"customActionID,omitempty"`
+	Status         *string `json:"status,omitempty"`
 }
 
 // A list of custom actions applied to visuals in an analysis or sheet.
@@ -8194,9 +4812,6 @@ type VisualCustomActionDefaults struct {
 // This is a union type structure. For this structure to be valid, only one
 // of the attributes can be defined.
 type VisualCustomActionOperation struct {
-	// The filter operation that filters data included in a visual or in an entire
-	// sheet.
-	FilterOperation *CustomActionFilterOperation `json:"filterOperation,omitempty"`
 	// The navigation operation that navigates between different sheets in the same
 	// analysis.
 	//
@@ -8209,25 +4824,10 @@ type VisualCustomActionOperation struct {
 	URLOperation *CustomActionURLOperation `json:"urlOperation,omitempty"`
 }
 
-// The configuration that controls field customization options available to
-// dashboard readers for a visual.
-type VisualCustomizationFieldsConfiguration struct {
-	AdditionalFields []*ColumnIdentifier `json:"additionalFields,omitempty"`
-	Status           *string             `json:"status,omitempty"`
-}
-
 // Defines what initiates a highlight operation on a visual, such as a click
 // or hover.
 type VisualHighlightOperation struct {
 	Trigger *string `json:"trigger,omitempty"`
-}
-
-// The general visual interactions setup for visual publish options
-type VisualInteractionOptions struct {
-	// The context menu options for a visual's interactions.
-	ContextMenuOption *ContextMenuOption `json:"contextMenuOption,omitempty"`
-	// The menu options for a visual.
-	VisualMenuOption *VisualMenuOption `json:"visualMenuOption,omitempty"`
 }
 
 // The menu options for a visual.
@@ -8237,89 +4837,17 @@ type VisualMenuOption struct {
 
 // The visual display options for the visual palette.
 type VisualPalette struct {
-	ChartColor *string          `json:"chartColor,omitempty"`
-	ColorMap   []*DataPathColor `json:"colorMap,omitempty"`
-}
-
-// Configures the display properties of the visual sub-title.
-type VisualSubtitleFontConfiguration struct {
-	// Configures the display properties of the given text.
-	FontConfiguration *FontConfiguration `json:"fontConfiguration,omitempty"`
-	TextAlignment     *string            `json:"textAlignment,omitempty"`
+	ChartColor *string `json:"chartColor,omitempty"`
 }
 
 // The subtitle label options for a visual.
 type VisualSubtitleLabelOptions struct {
-	// The text format for a subtitle.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	FormatText *LongFormatText `json:"formatText,omitempty"`
-	Visibility *string         `json:"visibility,omitempty"`
-}
-
-// Configures the display properties of the visual title.
-type VisualTitleFontConfiguration struct {
-	// Configures the display properties of the given text.
-	FontConfiguration *FontConfiguration `json:"fontConfiguration,omitempty"`
-	TextAlignment     *string            `json:"textAlignment,omitempty"`
+	Visibility *string `json:"visibility,omitempty"`
 }
 
 // The title label options for a visual.
 type VisualTitleLabelOptions struct {
-	// The text format for the title.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	FormatText *ShortFormatText `json:"formatText,omitempty"`
-	Visibility *string          `json:"visibility,omitempty"`
-}
-
-// The field well configuration of a waterfall visual.
-type WaterfallChartAggregatedFieldWells struct {
-	Breakdowns []*DimensionField `json:"breakdowns,omitempty"`
-	Categories []*DimensionField `json:"categories,omitempty"`
-	Values     []*MeasureField   `json:"values,omitempty"`
-}
-
-// The color configuration of a waterfall visual.
-type WaterfallChartColorConfiguration struct {
-	// The color configuration for individual groups within a waterfall visual.
-	GroupColorConfiguration *WaterfallChartGroupColorConfiguration `json:"groupColorConfiguration,omitempty"`
-}
-
-// The configuration for a waterfall visual.
-type WaterfallChartConfiguration struct {
-	// The display options for the axis label.
-	CategoryAxisDisplayOptions *AxisDisplayOptions `json:"categoryAxisDisplayOptions,omitempty"`
-	// The label options for an axis on a chart.
-	CategoryAxisLabelOptions *ChartAxisLabelOptions `json:"categoryAxisLabelOptions,omitempty"`
-	// The color configuration of a waterfall visual.
-	ColorConfiguration *WaterfallChartColorConfiguration `json:"colorConfiguration,omitempty"`
-	// The options that determine the presentation of the data labels.
-	DataLabels *DataLabelOptions `json:"dataLabels,omitempty"`
-	// The field well configuration of a waterfall visual.
-	FieldWells *WaterfallChartFieldWells `json:"fieldWells,omitempty"`
-	// The general visual interactions setup for visual publish options
-	Interactions *VisualInteractionOptions `json:"interactions,omitempty"`
-	// The options for the legend setup of a visual.
-	Legend *LegendOptions `json:"legend,omitempty"`
-	// The display options for the axis label.
-	PrimaryYAxisDisplayOptions *AxisDisplayOptions `json:"primaryYAxisDisplayOptions,omitempty"`
-	// The label options for an axis on a chart.
-	PrimaryYAxisLabelOptions *ChartAxisLabelOptions `json:"primaryYAxisLabelOptions,omitempty"`
-	// The sort configuration of a waterfall visual.
-	SortConfiguration *WaterfallChartSortConfiguration `json:"sortConfiguration,omitempty"`
-	// The visual display options for the visual palette.
-	VisualPalette *VisualPalette `json:"visualPalette,omitempty"`
-	// The options that determine the presentation of a waterfall visual.
-	WaterfallChartOptions *WaterfallChartOptions `json:"waterfallChartOptions,omitempty"`
-}
-
-// The field well configuration of a waterfall visual.
-type WaterfallChartFieldWells struct {
-	// The field well configuration of a waterfall visual.
-	WaterfallChartAggregatedFieldWells *WaterfallChartAggregatedFieldWells `json:"waterfallChartAggregatedFieldWells,omitempty"`
+	Visibility *string `json:"visibility,omitempty"`
 }
 
 // The color configuration for individual groups within a waterfall visual.
@@ -8334,28 +4862,13 @@ type WaterfallChartOptions struct {
 	TotalBarLabel *string `json:"totalBarLabel,omitempty"`
 }
 
-// The sort configuration of a waterfall visual.
-type WaterfallChartSortConfiguration struct {
-	// The limit configuration of the visual display for an axis.
-	BreakdownItemsLimit *ItemsLimitConfiguration `json:"breakdownItemsLimit,omitempty"`
-	CategorySort        []*FieldSortOptions      `json:"categorySort,omitempty"`
-}
-
 // A waterfall chart.
 //
 // For more information, see Using waterfall charts (https://docs.aws.amazon.com/quicksight/latest/user/waterfall-chart.html)
 // in the Amazon Quick Suite User Guide.
 type WaterfallVisual struct {
-	Actions []*VisualCustomAction `json:"actions,omitempty"`
-	// The configuration for a waterfall visual.
-	ChartConfiguration *WaterfallChartConfiguration `json:"chartConfiguration,omitempty"`
-	ColumnHierarchies  []*ColumnHierarchy           `json:"columnHierarchies,omitempty"`
-	// The subtitle label options for a visual.
-	Subtitle *VisualSubtitleLabelOptions `json:"subtitle,omitempty"`
-	// The title label options for a visual.
-	Title                *VisualTitleLabelOptions `json:"title,omitempty"`
-	VisualContentAltText *string                  `json:"visualContentAltText,omitempty"`
-	VisualID             *string                  `json:"visualID,omitempty"`
+	VisualContentAltText *string `json:"visualContentAltText,omitempty"`
+	VisualID             *string `json:"visualID,omitempty"`
 }
 
 // The parameters for a web crawler data source.
@@ -8378,64 +4891,13 @@ type WebProxyCredentials struct {
 
 // Provides the forecast to meet the target for a particular date.
 type WhatIfPointScenario struct {
-	Date  *metav1.Time `json:"date,omitempty"`
-	Value *float64     `json:"value,omitempty"`
+	Date *metav1.Time `json:"date,omitempty"`
 }
 
 // Provides the forecast to meet the target for a particular date range.
 type WhatIfRangeScenario struct {
 	EndDate   *metav1.Time `json:"endDate,omitempty"`
 	StartDate *metav1.Time `json:"startDate,omitempty"`
-	Value     *float64     `json:"value,omitempty"`
-}
-
-// The aggregated field wells of a word cloud.
-type WordCloudAggregatedFieldWells struct {
-	GroupBy []*DimensionField `json:"groupBy,omitempty"`
-	Size    []*MeasureField   `json:"size,omitempty"`
-}
-
-// The configuration of a word cloud visual.
-type WordCloudChartConfiguration struct {
-	// The label options for an axis on a chart.
-	CategoryLabelOptions *ChartAxisLabelOptions `json:"categoryLabelOptions,omitempty"`
-	// The field wells of a word cloud visual.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	FieldWells *WordCloudFieldWells `json:"fieldWells,omitempty"`
-	// The general visual interactions setup for visual publish options
-	Interactions *VisualInteractionOptions `json:"interactions,omitempty"`
-	// The sort configuration of a word cloud visual.
-	SortConfiguration *WordCloudSortConfiguration `json:"sortConfiguration,omitempty"`
-	// The word cloud options for a word cloud visual.
-	WordCloudOptions *WordCloudOptions `json:"wordCloudOptions,omitempty"`
-}
-
-// The field wells of a word cloud visual.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type WordCloudFieldWells struct {
-	// The aggregated field wells of a word cloud.
-	WordCloudAggregatedFieldWells *WordCloudAggregatedFieldWells `json:"wordCloudAggregatedFieldWells,omitempty"`
-}
-
-// The word cloud options for a word cloud visual.
-type WordCloudOptions struct {
-	CloudLayout         *string `json:"cloudLayout,omitempty"`
-	MaximumStringLength *int64  `json:"maximumStringLength,omitempty"`
-	WordCasing          *string `json:"wordCasing,omitempty"`
-	WordOrientation     *string `json:"wordOrientation,omitempty"`
-	WordPadding         *string `json:"wordPadding,omitempty"`
-	WordScaling         *string `json:"wordScaling,omitempty"`
-}
-
-// The sort configuration of a word cloud visual.
-type WordCloudSortConfiguration struct {
-	// The limit configuration of the visual display for an axis.
-	CategoryItemsLimit *ItemsLimitConfiguration `json:"categoryItemsLimit,omitempty"`
-	CategorySort       []*FieldSortOptions      `json:"categorySort,omitempty"`
 }
 
 // A word cloud.
@@ -8443,19 +4905,6 @@ type WordCloudSortConfiguration struct {
 // For more information, see Using word clouds (https://docs.aws.amazon.com/quicksight/latest/user/word-cloud.html)
 // in the Amazon Quick Suite User Guide.
 type WordCloudVisual struct {
-	Actions []*VisualCustomAction `json:"actions,omitempty"`
-	// The configuration of a word cloud visual.
-	ChartConfiguration *WordCloudChartConfiguration `json:"chartConfiguration,omitempty"`
-	ColumnHierarchies  []*ColumnHierarchy           `json:"columnHierarchies,omitempty"`
-	// The subtitle label options for a visual.
-	Subtitle *VisualSubtitleLabelOptions `json:"subtitle,omitempty"`
-	// The title label options for a visual.
-	Title                *VisualTitleLabelOptions `json:"title,omitempty"`
-	VisualContentAltText *string                  `json:"visualContentAltText,omitempty"`
-	VisualID             *string                  `json:"visualID,omitempty"`
-}
-
-// The options that are available for a single Y axis in a chart.
-type YAxisOptions struct {
-	YAxis *string `json:"yAxis,omitempty"`
+	VisualContentAltText *string `json:"visualContentAltText,omitempty"`
+	VisualID             *string `json:"visualID,omitempty"`
 }
