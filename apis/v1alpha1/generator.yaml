@@ -104,8 +104,6 @@ resources:
         DescribeAnalysis:
           input_fields:
             AnalysisId: ID
-          output_fields:
-            Status: Status
     fields:
       # Primary identifiers
       ID:
