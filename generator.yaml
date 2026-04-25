@@ -143,6 +143,10 @@ resources:
         from:
           operation: DescribeAnalysis
           path: Analysis.DataSetArns
+      SourceEntity.SourceTemplate.DataSetReferences.DataSetARN:
+        references:
+          resource: DataSet
+          path: Status.ACKResourceMetadata.ARN
     hooks:
       sdk_update_pre_build_request:
         template_path: hooks/analysis/sdk_update_pre_build_request.go.tpl

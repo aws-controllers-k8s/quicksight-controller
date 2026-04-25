@@ -17,9 +17,14 @@ package analysis
 
 import (
 	"context"
+	"fmt"
 
+	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
+	ackv1alpha1 "github.com/aws-controllers-k8s/runtime/apis/core/v1alpha1"
+	ackerr "github.com/aws-controllers-k8s/runtime/pkg/errors"
 	acktypes "github.com/aws-controllers-k8s/runtime/pkg/types"
 
 	svcapitypes "github.com/aws-controllers-k8s/quicksight-controller/apis/v1alpha1"
@@ -31,6 +36,16 @@ import (
 // values.
 func (rm *resourceManager) ClearResolvedReferences(res acktypes.AWSResource) acktypes.AWSResource {
 	ko := rm.concreteResource(res).ko.DeepCopy()
+
+	if ko.Spec.SourceEntity != nil {
+		if ko.Spec.SourceEntity.SourceTemplate != nil {
+			for f0idx, f0iter := range ko.Spec.SourceEntity.SourceTemplate.DataSetReferences {
+				if f0iter.DataSetRef != nil {
+					ko.Spec.SourceEntity.SourceTemplate.DataSetReferences[f0idx].DataSetARN = nil
+				}
+			}
+		}
+	}
 
 	return &resource{ko}
 }
@@ -47,11 +62,120 @@ func (rm *resourceManager) ResolveReferences(
 	apiReader client.Reader,
 	res acktypes.AWSResource,
 ) (acktypes.AWSResource, bool, error) {
-	return res, false, nil
+	ko := rm.concreteResource(res).ko
+
+	resourceHasReferences := false
+	err := validateReferenceFields(ko)
+	if fieldHasReferences, err := rm.resolveReferenceForSourceEntity_SourceTemplate_DataSetReferences_DataSetARN(ctx, apiReader, ko); err != nil {
+		return &resource{ko}, (resourceHasReferences || fieldHasReferences), err
+	} else {
+		resourceHasReferences = resourceHasReferences || fieldHasReferences
+	}
+
+	return &resource{ko}, resourceHasReferences, err
 }
 
 // validateReferenceFields validates the reference field and corresponding
 // identifier field.
 func validateReferenceFields(ko *svcapitypes.Analysis) error {
+
+	if ko.Spec.SourceEntity != nil {
+		if ko.Spec.SourceEntity.SourceTemplate != nil {
+			for _, f0iter := range ko.Spec.SourceEntity.SourceTemplate.DataSetReferences {
+				if f0iter.DataSetRef != nil && f0iter.DataSetARN != nil {
+					return ackerr.ResourceReferenceAndIDNotSupportedFor("SourceEntity.SourceTemplate.DataSetReferences.DataSetARN", "SourceEntity.SourceTemplate.DataSetReferences.DataSetRef")
+				}
+			}
+		}
+	}
+	return nil
+}
+
+// resolveReferenceForSourceEntity_SourceTemplate_DataSetReferences_DataSetARN reads the resource referenced
+// from SourceEntity.SourceTemplate.DataSetReferences.DataSetRef field and sets the SourceEntity.SourceTemplate.DataSetReferences.DataSetARN
+// from referenced resource. Returns a boolean indicating whether a reference
+// contains references, or an error
+func (rm *resourceManager) resolveReferenceForSourceEntity_SourceTemplate_DataSetReferences_DataSetARN(
+	ctx context.Context,
+	apiReader client.Reader,
+	ko *svcapitypes.Analysis,
+) (hasReferences bool, err error) {
+	if ko.Spec.SourceEntity != nil {
+		if ko.Spec.SourceEntity.SourceTemplate != nil {
+			for f0idx, f0iter := range ko.Spec.SourceEntity.SourceTemplate.DataSetReferences {
+				if f0iter.DataSetRef != nil && f0iter.DataSetRef.From != nil {
+					hasReferences = true
+					arr := f0iter.DataSetRef.From
+					if arr.Name == nil || *arr.Name == "" {
+						return hasReferences, fmt.Errorf("provided resource reference is nil or empty: SourceEntity.SourceTemplate.DataSetReferences.DataSetRef")
+					}
+					namespace := ko.ObjectMeta.GetNamespace()
+					if arr.Namespace != nil && *arr.Namespace != "" {
+						namespace = *arr.Namespace
+					}
+					obj := &svcapitypes.DataSet{}
+					if err := getReferencedResourceState_DataSet(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
+						return hasReferences, err
+					}
+					ko.Spec.SourceEntity.SourceTemplate.DataSetReferences[f0idx].DataSetARN = (*string)(obj.Status.ACKResourceMetadata.ARN)
+				}
+			}
+		}
+	}
+
+	return hasReferences, nil
+}
+
+// getReferencedResourceState_DataSet looks up whether a referenced resource
+// exists and is in a ACK.ResourceSynced=True state. If the referenced resource does exist and is
+// in a Synced state, returns nil, otherwise returns `ackerr.ResourceReferenceTerminalFor` or
+// `ResourceReferenceNotSyncedFor` depending on if the resource is in a Terminal state.
+func getReferencedResourceState_DataSet(
+	ctx context.Context,
+	apiReader client.Reader,
+	obj *svcapitypes.DataSet,
+	name string, // the Kubernetes name of the referenced resource
+	namespace string, // the Kubernetes namespace of the referenced resource
+) error {
+	namespacedName := types.NamespacedName{
+		Namespace: namespace,
+		Name:      name,
+	}
+	err := apiReader.Get(ctx, namespacedName, obj)
+	if err != nil {
+		return err
+	}
+	var refResourceTerminal bool
+	for _, cond := range obj.Status.Conditions {
+		if cond.Type == ackv1alpha1.ConditionTypeTerminal &&
+			cond.Status == corev1.ConditionTrue {
+			return ackerr.ResourceReferenceTerminalFor(
+				"DataSet",
+				namespace, name)
+		}
+	}
+	if refResourceTerminal {
+		return ackerr.ResourceReferenceTerminalFor(
+			"DataSet",
+			namespace, name)
+	}
+	var refResourceSynced bool
+	for _, cond := range obj.Status.Conditions {
+		if cond.Type == ackv1alpha1.ConditionTypeResourceSynced &&
+			cond.Status == corev1.ConditionTrue {
+			refResourceSynced = true
+		}
+	}
+	if !refResourceSynced {
+		return ackerr.ResourceReferenceNotSyncedFor(
+			"DataSet",
+			namespace, name)
+	}
+	if obj.Status.ACKResourceMetadata == nil || obj.Status.ACKResourceMetadata.ARN == nil {
+		return ackerr.ResourceReferenceMissingTargetFieldFor(
+			"DataSet",
+			namespace, name,
+			"Status.ACKResourceMetadata.ARN")
+	}
 	return nil
 }

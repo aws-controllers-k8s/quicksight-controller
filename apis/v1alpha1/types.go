@@ -1221,6 +1221,8 @@ type DataSetNumericRangeFilterCondition struct {
 type DataSetReference struct {
 	DataSetARN         *string `json:"dataSetARN,omitempty"`
 	DataSetPlaceholder *string `json:"dataSetPlaceholder,omitempty"`
+	// Reference field for DataSetARN
+	DataSetRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"dataSetRef,omitempty"`
 }
 
 // A filter that you apply when searching for datasets.
