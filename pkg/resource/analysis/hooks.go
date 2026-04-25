@@ -15,7 +15,44 @@ package analysis
 
 import (
 	"github.com/aws-controllers-k8s/quicksight-controller/pkg/sync"
+	svcsdktypes "github.com/aws/aws-sdk-go-v2/service/quicksight/types"
 )
 
 var syncTags = sync.Tags
 var getTags = sync.GetTags
+
+func analysisIsCreationSuccessful(desired *resource) bool {
+	if desired.ko.Status.Status != nil && *desired.ko.Status.Status == string(svcsdktypes.ResourceStatusCreationSuccessful) {
+		return true
+	}
+
+	return false
+}
+
+func analysisIsUpdateSuccessful(desired *resource) bool {
+	if desired.ko.Status.Status != nil && *desired.ko.Status.Status == string(svcsdktypes.ResourceStatusUpdateSuccessful) {
+		return true
+	}
+
+	return false
+}
+
+func analysisIsCreationFailed(desired *resource) bool {
+	if desired.ko.Status.Status != nil && *desired.ko.Status.Status == string(svcsdktypes.ResourceStatusCreationFailed) {
+		return true
+	}
+
+	return false
+}
+
+func analysisIsUpdateFailed(desired *resource) bool {
+	if desired.ko.Status.Status != nil && *desired.ko.Status.Status == string(svcsdktypes.ResourceStatusUpdateFailed) {
+		return true
+	}
+
+	return false
+}
+
+func isAnalysisUpdateReady(desired *resource) bool {
+	return !(analysisIsCreationSuccessful(desired) || analysisIsUpdateSuccessful(desired) || analysisIsUpdateFailed(desired) || analysisIsCreationFailed(desired))
+}
