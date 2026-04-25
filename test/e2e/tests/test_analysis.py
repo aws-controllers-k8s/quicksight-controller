@@ -31,6 +31,7 @@ DATA_SOURCE_RESOURCE_PLURAL = "datasources"
 DATA_SET_RESOURCE_PLURAL = "datasets"
 
 MODIFY_WAIT_AFTER_SECONDS = 10
+TEMPLATE_WAIT_SECONDS = 15
 
 
 def _create_data_source(resource_name: str):
@@ -107,12 +108,74 @@ def _create_data_set(resource_name: str, data_source_arn: str, aws_account_id: s
     return (ref, cr, data_set_arn)
 
 
-def _create_analysis(resource_name: str, data_set_arn: str, aws_account_id: str):
-    """Helper to create an Analysis CR and return (ref, cr)."""
+def _create_template(quicksight_client, template_id: str, template_name: str,
+                     data_set_arn: str, aws_account_id: str):
+    """Helper to create a QuickSight Template via boto3 (not a K8s CR).
+    The template is created from the given DataSet using a minimal definition.
+    Returns the template ARN.
+    """
+    quicksight_client.create_template(
+        AwsAccountId=aws_account_id,
+        TemplateId=template_id,
+        Name=template_name,
+        Definition={
+            "DataSetConfigurations": [
+                {
+                    "Placeholder": "testDataSet",
+                    "DataSetSchema": {
+                        "ColumnSchemaList": [
+                            {"Name": "id", "DataType": "STRING"},
+                            {"Name": "name", "DataType": "STRING"},
+                            {"Name": "value", "DataType": "STRING"},
+                            {"Name": "category", "DataType": "STRING"},
+                        ],
+                    },
+                },
+            ],
+        },
+    )
+
+    # Wait for template creation to complete
+    for _ in range(10):
+        time.sleep(TEMPLATE_WAIT_SECONDS)
+        try:
+            resp = quicksight_client.describe_template(
+                AwsAccountId=aws_account_id,
+                TemplateId=template_id,
+            )
+            status = resp["Template"]["Version"]["Status"]
+            if status == "CREATION_SUCCESSFUL":
+                return resp["Template"]["Arn"]
+            if status in ("CREATION_FAILED", "UPDATE_FAILED"):
+                errors = resp["Template"]["Version"].get("Errors", [])
+                raise Exception(
+                    f"Template creation failed with status {status}: {errors}"
+                )
+        except quicksight_client.exceptions.ResourceNotFoundException:
+            continue
+
+    raise Exception(f"Template {template_id} did not reach CREATION_SUCCESSFUL in time")
+
+
+def _delete_template(quicksight_client, template_id: str, aws_account_id: str):
+    """Helper to delete a QuickSight Template via boto3."""
+    try:
+        quicksight_client.delete_template(
+            AwsAccountId=aws_account_id,
+            TemplateId=template_id,
+        )
+    except Exception:
+        logging.warning(f"Failed to delete template {template_id}", exc_info=True)
+
+
+def _create_analysis(resource_name: str, template_arn: str, data_set_arn: str,
+                     aws_account_id: str):
+    """Helper to create an Analysis CR using a template and return (ref, cr)."""
     replacements = REPLACEMENT_VALUES.copy()
     replacements["ANALYSIS_NAME"] = resource_name
     replacements["ANALYSIS_ID"] = resource_name
     replacements["AWS_ACCOUNT_ID"] = aws_account_id
+    replacements["TEMPLATE_ARN"] = template_arn
     replacements["DATA_SET_ARN"] = data_set_arn
 
     resource_data = load_resource(
@@ -168,12 +231,31 @@ def data_set_for_analysis(quicksight_client, data_source_for_analysis):
 
 
 @pytest.fixture(scope="module")
-def simple_analysis(quicksight_client, data_set_for_analysis):
-    """Creates a simple Analysis for testing."""
+def template_for_analysis(quicksight_client, data_set_for_analysis):
+    """Creates a QuickSight Template via boto3 to be used as a source for Analysis tests."""
     (_, aws_account_id, data_set_arn) = data_set_for_analysis
+    template_id = random_suffix_name("ack-test-tpl-for-an", 24)
+    template_name = template_id
+
+    template_arn = _create_template(
+        quicksight_client, template_id, template_name,
+        data_set_arn, aws_account_id,
+    )
+    logging.info(f"Created Template {template_id} with ARN {template_arn}")
+
+    yield (template_arn, aws_account_id, data_set_arn)
+
+    # Teardown
+    _delete_template(quicksight_client, template_id, aws_account_id)
+
+
+@pytest.fixture(scope="module")
+def simple_analysis(quicksight_client, template_for_analysis):
+    """Creates a simple Analysis for testing using a template source."""
+    (template_arn, aws_account_id, data_set_arn) = template_for_analysis
     resource_name = random_suffix_name("ack-test-analysis", 24)
 
-    (ref, cr) = _create_analysis(resource_name, data_set_arn, aws_account_id)
+    (ref, cr) = _create_analysis(resource_name, template_arn, data_set_arn, aws_account_id)
     logging.debug(cr)
 
     assert cr is not None
@@ -356,12 +438,12 @@ class TestAnalysis:
         tags.assert_ack_system_tags(tags=latest_tags)
         tags.assert_equal_without_ack_tags(expected=expected_tags, actual=latest_tags)
 
-    def test_delete(self, quicksight_client, data_set_for_analysis):
+    def test_delete(self, quicksight_client, template_for_analysis):
         """Test that deleting the K8s resource deletes the AWS Analysis."""
-        (_, aws_account_id, data_set_arn) = data_set_for_analysis
+        (template_arn, aws_account_id, data_set_arn) = template_for_analysis
         resource_name = random_suffix_name("ack-test-an-del", 24)
 
-        (ref, cr) = _create_analysis(resource_name, data_set_arn, aws_account_id)
+        (ref, cr) = _create_analysis(resource_name, template_arn, data_set_arn, aws_account_id)
 
         assert cr is not None
         assert k8s.wait_on_condition(ref, "ACK.ResourceSynced", "True", wait_periods=10)

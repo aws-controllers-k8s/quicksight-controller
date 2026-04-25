@@ -6,10 +6,12 @@ spec:
   awsAccountID: "$AWS_ACCOUNT_ID"
   id: $ANALYSIS_ID
   name: $ANALYSIS_NAME
-  definition:
-    dataSetIdentifierDeclarations:
-      - dataSetARN: $DATA_SET_ARN
-        identifier: testDataSet
+  sourceEntity:
+    sourceTemplate:
+      arn: $TEMPLATE_ARN
+      dataSetReferences:
+        - dataSetARN: $DATA_SET_ARN
+          dataSetPlaceholder: testDataSet
   tags:
     - key: environment
       value: test

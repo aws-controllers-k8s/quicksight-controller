@@ -31,14 +31,6 @@ type AnalysisSpec struct {
 	// +kubebuilder:validation:XValidation:rule="self == oldSelf",message="Value is immutable once set"
 	// +kubebuilder:validation:Required
 	AWSAccountID *string `json:"awsAccountID"`
-	// The definition of an analysis.
-	//
-	// A definition is the data model of all features in a Dashboard, Template,
-	// or Analysis.
-	//
-	// Either a SourceEntity or a Definition must be provided in order for the request
-	// to be valid.
-	Definition *AnalysisDefinition `json:"definition,omitempty"`
 	// When you create the analysis, Amazon Quick Sight adds the analysis to these
 	// folders.
 	FolderARNs []*string `json:"folderARNs,omitempty"`

@@ -60,10 +60,9 @@ ignore:
       - DescribeDataSetOutput.RowLevelPermissionTagConfiguration
       # Analysis Definition CRD size reduction - the Analysis CRD exceeds the
       # Kubernetes API server limit (8.1MB) due to deeply fields. Ignoring sheets and FilterGroups reduces size below limits
-      - CreateAnalysisInput.Definition.Sheets
-      - CreateAnalysisInput.Definition.FilterGroups
-      - UpdateAnalysisInput.Definition.Sheets
-      - UpdateAnalysisInput.Definition.FilterGroups
+      # Remove support for inline definition and only support template definition. 
+      - CreateAnalysisInput.Definition
+      - UpdateAnalysisInput.Definition
 
 operations:
   DescribeDataSource:

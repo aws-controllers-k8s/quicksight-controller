@@ -152,27 +152,6 @@ type AmazonOpenSearchParameters struct {
 	Domain *string `json:"domain,omitempty"`
 }
 
-// The configuration for default analysis settings.
-type AnalysisDefaults struct {
-	// The configuration for default new sheet settings.
-	DefaultNewSheetConfiguration *DefaultNewSheetConfiguration `json:"defaultNewSheetConfiguration,omitempty"`
-}
-
-// The definition of an analysis.
-type AnalysisDefinition struct {
-	// The configuration for default analysis settings.
-	AnalysisDefaults              *AnalysisDefaults               `json:"analysisDefaults,omitempty"`
-	CalculatedFields              []*CalculatedField              `json:"calculatedFields,omitempty"`
-	ColumnConfigurations          []*ColumnConfiguration          `json:"columnConfigurations,omitempty"`
-	DataSetIdentifierDeclarations []*DataSetIdentifierDeclaration `json:"dataSetIdentifierDeclarations,omitempty"`
-	// An array of analysis level configurations.
-	Options               *AssetOptions           `json:"options,omitempty"`
-	ParameterDeclarations []*ParameterDeclaration `json:"parameterDeclarations,omitempty"`
-	// A structure that describes the query execution options.
-	QueryExecutionOptions *QueryExecutionOptions `json:"queryExecutionOptions,omitempty"`
-	StaticFiles           []*StaticFile          `json:"staticFiles,omitempty"`
-}
-
 // Analysis error.
 type AnalysisError struct {
 	Message          *string   `json:"message,omitempty"`
@@ -495,12 +474,8 @@ type AssetBundleResourcePermissions struct {
 
 // An array of analysis level configurations.
 type AssetOptions struct {
-	// A list of custom actions applied to visuals in an analysis or sheet.
-	CustomActionDefaults    *VisualCustomActionDefaults `json:"customActionDefaults,omitempty"`
-	ExcludedDataSetARNs     []*string                   `json:"excludedDataSetARNs,omitempty"`
-	QBusinessInsightsStatus *string                     `json:"qBusinessInsightsStatus,omitempty"`
-	Timezone                *string                     `json:"timezone,omitempty"`
-	WeekStart               *string                     `json:"weekStart,omitempty"`
+	ExcludedDataSetARNs []*string `json:"excludedDataSetARNs,omitempty"`
+	Timezone            *string   `json:"timezone,omitempty"`
 }
 
 // Parameters for Amazon Athena.
@@ -535,8 +510,6 @@ type AuroraPostgreSQLParameters struct {
 // The display options for the axis label.
 type AxisDisplayOptions struct {
 	AxisLineVisibility *string `json:"axisLineVisibility,omitempty"`
-	// String based length that is composed of value and unit in px
-	AxisOffset         *string `json:"axisOffset,omitempty"`
 	GridLineVisibility *string `json:"gridLineVisibility,omitempty"`
 }
 
@@ -551,21 +524,6 @@ type AxisLabelReferenceOptions struct {
 	// A column of a data set.
 	Column  *ColumnIdentifier `json:"column,omitempty"`
 	FieldID *string           `json:"fieldID,omitempty"`
-}
-
-// The options that determine the default presentation of all bar series in
-// BarChartVisual.
-type BarChartDefaultSeriesSettings struct {
-	// Decal settings for accessibility features that define visual patterns and
-	// styling for data elements.
-	DecalSettings *DecalSettings `json:"decalSettings,omitempty"`
-}
-
-// Options that determine the presentation of a bar series in the visual.
-type BarChartSeriesSettings struct {
-	// Decal settings for accessibility features that define visual patterns and
-	// styling for data elements.
-	DecalSettings *DecalSettings `json:"decalSettings,omitempty"`
 }
 
 // A bar chart.
@@ -625,10 +583,7 @@ type BookmarksConfigurations struct {
 // Border settings configuration for visual elements, including visibility,
 // width, and color properties.
 type BorderSettings struct {
-	BorderColor      *string `json:"borderColor,omitempty"`
 	BorderVisibility *string `json:"borderVisibility,omitempty"`
-	// String based length that is composed of value and unit in px
-	BorderWidth *string `json:"borderWidth,omitempty"`
 }
 
 // The display options for tile borders for visuals.
@@ -678,7 +633,6 @@ type CalculatedColumn struct {
 // The calculated field of an analysis.
 type CalculatedField struct {
 	DataSetIdentifier *string `json:"dataSetIdentifier,omitempty"`
-	Expression        *string `json:"expression,omitempty"`
 	Name              *string `json:"name,omitempty"`
 }
 
@@ -718,8 +672,6 @@ type CategoricalDimensionField struct {
 	// A column of a data set.
 	Column  *ColumnIdentifier `json:"column,omitempty"`
 	FieldID *string           `json:"fieldID,omitempty"`
-	// Formatting configuration for string fields.
-	FormatConfiguration *StringFormatConfiguration `json:"formatConfiguration,omitempty"`
 }
 
 // The measure type field with categorical type columns.
@@ -727,8 +679,6 @@ type CategoricalMeasureField struct {
 	// A column of a data set.
 	Column  *ColumnIdentifier `json:"column,omitempty"`
 	FieldID *string           `json:"fieldID,omitempty"`
-	// Formatting configuration for string fields.
-	FormatConfiguration *StringFormatConfiguration `json:"formatConfiguration,omitempty"`
 }
 
 // The category drill down filter.
@@ -759,22 +709,10 @@ type ChartAxisLabelOptions struct {
 	Visibility         *string `json:"visibility,omitempty"`
 }
 
-// The color configurations for a column.
-type ColorsConfiguration struct {
-	CustomColors []*CustomColor `json:"customColors,omitempty"`
-}
-
 // The general configuration of a column.
 type ColumnConfiguration struct {
-	// The color configurations for a column.
-	ColorsConfiguration *ColorsConfiguration `json:"colorsConfiguration,omitempty"`
 	// A column of a data set.
 	Column *ColumnIdentifier `json:"column,omitempty"`
-	// Decal settings configuration for a column
-	DecalSettingsConfiguration *DecalSettingsConfiguration `json:"decalSettingsConfiguration,omitempty"`
-	// The formatting configuration for all types of field.
-	FormatConfiguration *FormatConfiguration `json:"formatConfiguration,omitempty"`
-	Role                *string              `json:"role,omitempty"`
 }
 
 // Metadata that contains a description for a column.
@@ -853,20 +791,6 @@ type ColumnTooltipItem struct {
 	Visibility *string           `json:"visibility,omitempty"`
 }
 
-// The options that determine the default presentation of all series in ComboChartVisual.
-type ComboChartDefaultSeriesSettings struct {
-	// Decal settings for accessibility features that define visual patterns and
-	// styling for data elements.
-	DecalSettings *DecalSettings `json:"decalSettings,omitempty"`
-}
-
-// Options that determine the presentation of a series in the visual.
-type ComboChartSeriesSettings struct {
-	// Decal settings for accessibility features that define visual patterns and
-	// styling for data elements.
-	DecalSettings *DecalSettings `json:"decalSettings,omitempty"`
-}
-
 // A combo chart.
 //
 // The ComboChartVisual includes stacked bar combo charts and clustered bar
@@ -879,20 +803,8 @@ type ComboChartVisual struct {
 	VisualID             *string `json:"visualID,omitempty"`
 }
 
-// The format of the comparison.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type ComparisonFormatConfiguration struct {
-	// The options that determine the number display format configuration.
-	NumberDisplayFormatConfiguration *NumberDisplayFormatConfiguration `json:"numberDisplayFormatConfiguration,omitempty"`
-	// The options that determine the percentage display format configuration.
-	PercentageDisplayFormatConfiguration *PercentageDisplayFormatConfiguration `json:"percentageDisplayFormatConfiguration,omitempty"`
-}
-
 // Determines the custom condition for an icon set.
 type ConditionalFormattingCustomIconCondition struct {
-	Color      *string `json:"color,omitempty"`
 	Expression *string `json:"expression,omitempty"`
 }
 
@@ -908,7 +820,6 @@ type ConditionalFormattingIconSet struct {
 
 // Formatting configuration for solid color.
 type ConditionalFormattingSolidColor struct {
-	Color      *string `json:"color,omitempty"`
 	Expression *string `json:"expression,omitempty"`
 }
 
@@ -949,22 +860,6 @@ type CredentialPair struct {
 	Username                      *string                         `json:"username,omitempty"`
 }
 
-// The options that determine the currency display format configuration.
-type CurrencyDisplayFormatConfiguration struct {
-	// The option that determines the decimal places configuration.
-	DecimalPlacesConfiguration *DecimalPlacesConfiguration `json:"decimalPlacesConfiguration,omitempty"`
-	// The options that determine the negative value configuration.
-	NegativeValueConfiguration *NegativeValueConfiguration `json:"negativeValueConfiguration,omitempty"`
-	// The options that determine the null value format configuration.
-	NullValueFormatConfiguration *NullValueFormatConfiguration `json:"nullValueFormatConfiguration,omitempty"`
-	NumberScale                  *string                       `json:"numberScale,omitempty"`
-	Prefix                       *string                       `json:"prefix,omitempty"`
-	// The options that determine the numeric separator configuration.
-	SeparatorConfiguration *NumericSeparatorConfiguration `json:"separatorConfiguration,omitempty"`
-	Suffix                 *string                        `json:"suffix,omitempty"`
-	Symbol                 *string                        `json:"symbol,omitempty"`
-}
-
 // The navigation operation that navigates between different sheets in the same
 // analysis.
 //
@@ -984,13 +879,6 @@ type CustomActionSetParametersOperation struct {
 type CustomActionURLOperation struct {
 	URLTarget   *string `json:"urlTarget,omitempty"`
 	URLTemplate *string `json:"urlTemplate,omitempty"`
-}
-
-// Determines the color that's applied to a particular data value in a column.
-type CustomColor struct {
-	Color        *string `json:"color,omitempty"`
-	FieldValue   *string `json:"fieldValue,omitempty"`
-	SpecialValue *string `json:"specialValue,omitempty"`
 }
 
 // The parameters that are required to connect to a custom connection data source.
@@ -1099,19 +987,6 @@ type DashboardVersion struct {
 	ThemeARN        *string      `json:"themeARN,omitempty"`
 }
 
-// The contents of a dashboard.
-type DashboardVersionDefinition struct {
-	// The configuration for default analysis settings.
-	AnalysisDefaults              *AnalysisDefaults               `json:"analysisDefaults,omitempty"`
-	CalculatedFields              []*CalculatedField              `json:"calculatedFields,omitempty"`
-	ColumnConfigurations          []*ColumnConfiguration          `json:"columnConfigurations,omitempty"`
-	DataSetIdentifierDeclarations []*DataSetIdentifierDeclaration `json:"dataSetIdentifierDeclarations,omitempty"`
-	// An array of analysis level configurations.
-	Options               *AssetOptions           `json:"options,omitempty"`
-	ParameterDeclarations []*ParameterDeclaration `json:"parameterDeclarations,omitempty"`
-	StaticFiles           []*StaticFile           `json:"staticFiles,omitempty"`
-}
-
 // Dashboard version summary.
 type DashboardVersionSummary struct {
 	ARN             *string      `json:"arn,omitempty"`
@@ -1149,21 +1024,7 @@ type DashboardVisualResult struct {
 
 // The options for data bars.
 type DataBarsOptions struct {
-	FieldID       *string `json:"fieldID,omitempty"`
-	NegativeColor *string `json:"negativeColor,omitempty"`
-	PositiveColor *string `json:"positiveColor,omitempty"`
-}
-
-// Determines the color that is applied to a particular data value.
-type DataColor struct {
-	Color *string `json:"color,omitempty"`
-}
-
-// The theme colors that are used for data colors in charts. The colors description
-// is a hexadecimal color code that consists of six alphanumerical characters,
-// prefixed with #, for example #37BFF5.
-type DataColorPalette struct {
-	EmptyFillColor *string `json:"emptyFillColor,omitempty"`
+	FieldID *string `json:"fieldID,omitempty"`
 }
 
 // The data field series item configuration of a BarChartVisual.
@@ -1187,7 +1048,6 @@ type DataFieldSeriesItem struct {
 // The options that determine the presentation of the data labels.
 type DataLabelOptions struct {
 	CategoryLabelVisibility *string `json:"categoryLabelVisibility,omitempty"`
-	LabelColor              *string `json:"labelColor,omitempty"`
 	MeasureLabelVisibility  *string `json:"measureLabelVisibility,omitempty"`
 	TotalsVisibility        *string `json:"totalsVisibility,omitempty"`
 	Visibility              *string `json:"visibility,omitempty"`
@@ -1195,21 +1055,18 @@ type DataLabelOptions struct {
 
 // The color map that determines the color options for a particular element.
 type DataPathColor struct {
-	Color           *string `json:"color,omitempty"`
 	TimeGranularity *string `json:"timeGranularity,omitempty"`
 }
 
 // The option that specifies individual data values for labels.
 type DataPathLabelType struct {
 	FieldID    *string `json:"fieldID,omitempty"`
-	FieldValue *string `json:"fieldValue,omitempty"`
 	Visibility *string `json:"visibility,omitempty"`
 }
 
 // The data path that needs to be sorted.
 type DataPathValue struct {
-	FieldID    *string `json:"fieldID,omitempty"`
-	FieldValue *string `json:"fieldValue,omitempty"`
+	FieldID *string `json:"fieldID,omitempty"`
 }
 
 // The drill down options for data points in a dashbaord.
@@ -1659,8 +1516,6 @@ type DateDimensionField struct {
 	Column          *ColumnIdentifier `json:"column,omitempty"`
 	DateGranularity *string           `json:"dateGranularity,omitempty"`
 	FieldID         *string           `json:"fieldID,omitempty"`
-	// Formatting configuration for DateTime fields.
-	FormatConfiguration *DateTimeFormatConfiguration `json:"formatConfiguration,omitempty"`
 }
 
 // The measure type field with date type columns.
@@ -1668,8 +1523,6 @@ type DateMeasureField struct {
 	// A column of a data set.
 	Column  *ColumnIdentifier `json:"column,omitempty"`
 	FieldID *string           `json:"fieldID,omitempty"`
-	// Formatting configuration for DateTime fields.
-	FormatConfiguration *DateTimeFormatConfiguration `json:"formatConfiguration,omitempty"`
 }
 
 // A date time parameter for a dataset.
@@ -1691,23 +1544,7 @@ type DateTimeDatasetParameterDefaultValues struct {
 
 // The default values of the DateTimeParameterDeclaration.
 type DateTimeDefaultValues struct {
-	// Defines different defaults to the users or groups based on mapping.
-	DynamicValue *DynamicDefaultValue `json:"dynamicValue,omitempty"`
-	// The rolling date configuration of a date time filter.
-	RollingDate  *RollingDateConfiguration `json:"rollingDate,omitempty"`
-	StaticValues []metav1.Time             `json:"staticValues,omitempty"`
-}
-
-// Formatting configuration for DateTime fields.
-type DateTimeFormatConfiguration struct {
-	DateTimeFormat *string `json:"dateTimeFormat,omitempty"`
-	// The options that determine the null value format configuration.
-	NullValueFormatConfiguration *NullValueFormatConfiguration `json:"nullValueFormatConfiguration,omitempty"`
-	// The options that determine the numeric format configuration.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	NumericFormatConfiguration *NumericFormatConfiguration `json:"numericFormatConfiguration,omitempty"`
+	StaticValues []metav1.Time `json:"staticValues,omitempty"`
 }
 
 // A date-time parameter.
@@ -1718,44 +1555,26 @@ type DateTimeParameter struct {
 
 // A parameter declaration for the DateTime data type.
 type DateTimeParameterDeclaration struct {
-	// The default values of the DateTimeParameterDeclaration.
-	DefaultValues *DateTimeDefaultValues `json:"defaultValues,omitempty"`
-	// A list of dataset parameters that are mapped to an analysis parameter.
-	MappedDataSetParameters []*MappedDataSetParameter `json:"mappedDataSetParameters,omitempty"`
-	Name                    *string                   `json:"name,omitempty"`
-	TimeGranularity         *string                   `json:"timeGranularity,omitempty"`
-	// The configuration that defines the default value of a DateTime parameter
-	// when a value has not been set.
-	ValueWhenUnset *DateTimeValueWhenUnsetConfiguration `json:"valueWhenUnset,omitempty"`
+	Name            *string `json:"name,omitempty"`
+	TimeGranularity *string `json:"timeGranularity,omitempty"`
 }
 
 // The display options of a control.
 type DateTimePickerControlDisplayOptions struct {
 	DateIconVisibility   *string `json:"dateIconVisibility,omitempty"`
-	DateTimeFormat       *string `json:"dateTimeFormat,omitempty"`
 	HelperTextVisibility *string `json:"helperTextVisibility,omitempty"`
 }
 
 // The configuration that defines the default value of a DateTime parameter
 // when a value has not been set.
 type DateTimeValueWhenUnsetConfiguration struct {
-	CustomValue          *metav1.Time `json:"customValue,omitempty"`
-	ValueWhenUnsetOption *string      `json:"valueWhenUnsetOption,omitempty"`
+	CustomValue *metav1.Time `json:"customValue,omitempty"`
 }
 
 // Decal settings for accessibility features that define visual patterns and
 // styling for data elements.
 type DecalSettings struct {
-	DecalColor       *string `json:"decalColor,omitempty"`
-	DecalPatternType *string `json:"decalPatternType,omitempty"`
-	DecalStyleType   *string `json:"decalStyleType,omitempty"`
-	DecalVisibility  *string `json:"decalVisibility,omitempty"`
-	ElementValue     *string `json:"elementValue,omitempty"`
-}
-
-// Decal settings configuration for a column
-type DecalSettingsConfiguration struct {
-	CustomDecalSettings []*DecalSettings `json:"customDecalSettings,omitempty"`
+	DecalVisibility *string `json:"decalVisibility,omitempty"`
 }
 
 // A decimal parameter for a dataset.
@@ -1776,9 +1595,7 @@ type DecimalDatasetParameterDefaultValues struct {
 
 // The default values of the DecimalParameterDeclaration.
 type DecimalDefaultValues struct {
-	// Defines different defaults to the users or groups based on mapping.
-	DynamicValue *DynamicDefaultValue `json:"dynamicValue,omitempty"`
-	StaticValues []*float64           `json:"staticValues,omitempty"`
+	StaticValues []*float64 `json:"staticValues,omitempty"`
 }
 
 // A decimal parameter.
@@ -1789,70 +1606,13 @@ type DecimalParameter struct {
 
 // A parameter declaration for the Decimal data type.
 type DecimalParameterDeclaration struct {
-	// The default values of the DecimalParameterDeclaration.
-	DefaultValues *DecimalDefaultValues `json:"defaultValues,omitempty"`
-	// A list of dataset parameters that are mapped to an analysis parameter.
-	MappedDataSetParameters []*MappedDataSetParameter `json:"mappedDataSetParameters,omitempty"`
-	Name                    *string                   `json:"name,omitempty"`
-	ParameterValueType      *string                   `json:"parameterValueType,omitempty"`
-	// The configuration that defines the default value of a Decimal parameter when
-	// a value has not been set.
-	ValueWhenUnset *DecimalValueWhenUnsetConfiguration `json:"valueWhenUnset,omitempty"`
-}
-
-// The option that determines the decimal places configuration.
-type DecimalPlacesConfiguration struct {
-	DecimalPlaces *int64 `json:"decimalPlaces,omitempty"`
+	Name *string `json:"name,omitempty"`
 }
 
 // The configuration that defines the default value of a Decimal parameter when
 // a value has not been set.
 type DecimalValueWhenUnsetConfiguration struct {
-	CustomValue          *float64 `json:"customValue,omitempty"`
-	ValueWhenUnsetOption *string  `json:"valueWhenUnsetOption,omitempty"`
-}
-
-// The options that determine the default settings of a free-form layout configuration.
-type DefaultFreeFormLayoutConfiguration struct {
-	// Configuration options for the canvas of a free-form layout.
-	CanvasSizeOptions *FreeFormLayoutCanvasSizeOptions `json:"canvasSizeOptions,omitempty"`
-}
-
-// The options that determine the default settings for a grid layout configuration.
-type DefaultGridLayoutConfiguration struct {
-	// Configuration options for the canvas of a grid layout.
-	CanvasSizeOptions *GridLayoutCanvasSizeOptions `json:"canvasSizeOptions,omitempty"`
-}
-
-// The options that determine the default settings for interactive layout configuration.
-type DefaultInteractiveLayoutConfiguration struct {
-	// The options that determine the default settings of a free-form layout configuration.
-	FreeForm *DefaultFreeFormLayoutConfiguration `json:"freeForm,omitempty"`
-	// The options that determine the default settings for a grid layout configuration.
-	Grid *DefaultGridLayoutConfiguration `json:"grid,omitempty"`
-}
-
-// The configuration for default new sheet settings.
-type DefaultNewSheetConfiguration struct {
-	// The options that determine the default settings for interactive layout configuration.
-	InteractiveLayoutConfiguration *DefaultInteractiveLayoutConfiguration `json:"interactiveLayoutConfiguration,omitempty"`
-	// The options that determine the default settings for a paginated layout configuration.
-	PaginatedLayoutConfiguration *DefaultPaginatedLayoutConfiguration `json:"paginatedLayoutConfiguration,omitempty"`
-	SheetContentType             *string                              `json:"sheetContentType,omitempty"`
-}
-
-// The options that determine the default settings for a paginated layout configuration.
-type DefaultPaginatedLayoutConfiguration struct {
-	// The options that determine the default settings for a section-based layout
-	// configuration.
-	SectionBased *DefaultSectionBasedLayoutConfiguration `json:"sectionBased,omitempty"`
-}
-
-// The options that determine the default settings for a section-based layout
-// configuration.
-type DefaultSectionBasedLayoutConfiguration struct {
-	// The options for the canvas of a section-based layout.
-	CanvasSizeOptions *SectionBasedLayoutCanvasSizeOptions `json:"canvasSizeOptions,omitempty"`
+	CustomValue *float64 `json:"customValue,omitempty"`
 }
 
 // The configuration of destination parameter values.
@@ -1886,9 +1646,8 @@ type DestinationTableSource struct {
 
 // A structure that represents additional options for display formatting.
 type DisplayFormatOptions struct {
-	UnitScaler         *string `json:"unitScaler,omitempty"`
-	UseBlankCellFormat *bool   `json:"useBlankCellFormat,omitempty"`
-	UseGrouping        *bool   `json:"useGrouping,omitempty"`
+	UseBlankCellFormat *bool `json:"useBlankCellFormat,omitempty"`
+	UseGrouping        *bool `json:"useGrouping,omitempty"`
 }
 
 // The label options of the label that is displayed in the center of a donut
@@ -2154,14 +1913,7 @@ type Font struct {
 
 // Configures the display properties of the given text.
 type FontConfiguration struct {
-	FontColor  *string `json:"fontColor,omitempty"`
 	FontFamily *string `json:"fontFamily,omitempty"`
-}
-
-// The option that determines the text display size.
-type FontSize struct {
-	// String based length that is composed of value and unit in px
-	Absolute *string `json:"absolute,omitempty"`
 }
 
 // The forecast computation configuration.
@@ -2170,62 +1922,25 @@ type ForecastComputation struct {
 	Name          *string `json:"name,omitempty"`
 }
 
-// The formatting configuration for all types of field.
-type FormatConfiguration struct {
-	// Formatting configuration for DateTime fields.
-	DateTimeFormatConfiguration *DateTimeFormatConfiguration `json:"dateTimeFormatConfiguration,omitempty"`
-	// Formatting configuration for number fields.
-	NumberFormatConfiguration *NumberFormatConfiguration `json:"numberFormatConfiguration,omitempty"`
-	// Formatting configuration for string fields.
-	StringFormatConfiguration *StringFormatConfiguration `json:"stringFormatConfiguration,omitempty"`
-}
-
-// Configuration options for the canvas of a free-form layout.
-type FreeFormLayoutCanvasSizeOptions struct {
-	// The options that determine the sizing of the canvas used in a free-form layout.
-	ScreenCanvasSizeOptions *FreeFormLayoutScreenCanvasSizeOptions `json:"screenCanvasSizeOptions,omitempty"`
-}
-
-// The configuration of a free-form layout.
-type FreeFormLayoutConfiguration struct {
-	// Configuration options for the canvas of a free-form layout.
-	CanvasSizeOptions *FreeFormLayoutCanvasSizeOptions `json:"canvasSizeOptions,omitempty"`
-}
-
 // An element within a free-form layout.
 type FreeFormLayoutElement struct {
-	ElementID *string `json:"elementID,omitempty"`
-	// String based length that is composed of value and unit in px
-	Height     *string `json:"height,omitempty"`
+	ElementID  *string `json:"elementID,omitempty"`
 	Visibility *string `json:"visibility,omitempty"`
-	// String based length that is composed of value and unit in px
-	Width *string `json:"width,omitempty"`
-	// String based length that is composed of value and unit in px
-	XAxisLocation *string `json:"xAxisLocation,omitempty"`
 }
 
 // The background style configuration of a free-form layout element.
 type FreeFormLayoutElementBackgroundStyle struct {
-	Color      *string `json:"color,omitempty"`
 	Visibility *string `json:"visibility,omitempty"`
 }
 
 // The background style configuration of a free-form layout element.
 type FreeFormLayoutElementBorderStyle struct {
-	Color      *string `json:"color,omitempty"`
 	Visibility *string `json:"visibility,omitempty"`
-}
-
-// The options that determine the sizing of the canvas used in a free-form layout.
-type FreeFormLayoutScreenCanvasSizeOptions struct {
-	// String based length that is composed of value and unit in px
-	OptimizedViewPortWidth *string `json:"optimizedViewPortWidth,omitempty"`
 }
 
 // The options that determine the presentation of the data labels.
 type FunnelChartDataLabelOptions struct {
 	CategoryLabelVisibility *string `json:"categoryLabelVisibility,omitempty"`
-	LabelColor              *string `json:"labelColor,omitempty"`
 	MeasureLabelVisibility  *string `json:"measureLabelVisibility,omitempty"`
 	Visibility              *string `json:"visibility,omitempty"`
 }
@@ -2237,12 +1952,6 @@ type FunnelChartDataLabelOptions struct {
 type FunnelChartVisual struct {
 	VisualContentAltText *string `json:"visualContentAltText,omitempty"`
 	VisualID             *string `json:"visualID,omitempty"`
-}
-
-// The color configuration of a GaugeChartVisual.
-type GaugeChartColorConfiguration struct {
-	BackgroundColor *string `json:"backgroundColor,omitempty"`
-	ForegroundColor *string `json:"foregroundColor,omitempty"`
 }
 
 // A gauge chart.
@@ -2278,23 +1987,12 @@ type GeospatialCategoricalColor struct {
 
 // The categorical data color for a single category.
 type GeospatialCategoricalDataColor struct {
-	Color     *string `json:"color,omitempty"`
 	DataValue *string `json:"dataValue,omitempty"`
 }
 
 // The definition for a gradient color.
 type GeospatialGradientColor struct {
 	NullDataVisibility *string `json:"nullDataVisibility,omitempty"`
-}
-
-// The gradient step color for a single step.
-type GeospatialGradientStepColor struct {
-	Color *string `json:"color,omitempty"`
-}
-
-// The color to be used in the heatmap point style.
-type GeospatialHeatmapDataColor struct {
-	Color *string `json:"color,omitempty"`
 }
 
 // The properties for a single geospatial layer.
@@ -2311,7 +2009,6 @@ type GeospatialLayerJoinDefinition struct {
 
 // The map style properties for a map.
 type GeospatialMapStyle struct {
-	BackgroundColor   *string `json:"backgroundColor,omitempty"`
 	BaseMapVisibility *string `json:"baseMapVisibility,omitempty"`
 }
 
@@ -2324,40 +2021,9 @@ type GeospatialMapVisual struct {
 	VisualID             *string `json:"visualID,omitempty"`
 }
 
-// The symbol style for null data.
-type GeospatialNullSymbolStyle struct {
-	FillColor   *string `json:"fillColor,omitempty"`
-	StrokeColor *string `json:"strokeColor,omitempty"`
-}
-
-// The definition for a solid color.
-type GeospatialSolidColor struct {
-	Color *string `json:"color,omitempty"`
-}
-
 // The source properties for a geospatial static file.
 type GeospatialStaticFileSource struct {
 	StaticFileID *string `json:"staticFileID,omitempty"`
-}
-
-// Determines the gradient stop configuration.
-type GradientStop struct {
-	Color *string `json:"color,omitempty"`
-}
-
-// Configuration options for the canvas of a grid layout.
-type GridLayoutCanvasSizeOptions struct {
-	// The options that determine the sizing of the canvas used in a grid layout.
-	ScreenCanvasSizeOptions *GridLayoutScreenCanvasSizeOptions `json:"screenCanvasSizeOptions,omitempty"`
-}
-
-// The configuration for a grid layout. Also called a tiled layout.
-//
-// Visuals snap to a grid with standard spacing and alignment. Dashboards are
-// displayed as designed, with options to fit to screen or view at actual size.
-type GridLayoutConfiguration struct {
-	// Configuration options for the canvas of a grid layout.
-	CanvasSizeOptions *GridLayoutCanvasSizeOptions `json:"canvasSizeOptions,omitempty"`
 }
 
 // An element within a grid layout.
@@ -2367,21 +2033,12 @@ type GridLayoutElement struct {
 
 // The background style configuration of a grid layout element.
 type GridLayoutElementBackgroundStyle struct {
-	Color      *string `json:"color,omitempty"`
 	Visibility *string `json:"visibility,omitempty"`
 }
 
 // The border style configuration of a grid layout element.
 type GridLayoutElementBorderStyle struct {
-	Color      *string `json:"color,omitempty"`
 	Visibility *string `json:"visibility,omitempty"`
-}
-
-// The options that determine the sizing of the canvas used in a grid layout.
-type GridLayoutScreenCanvasSizeOptions struct {
-	// String based length that is composed of value and unit in px
-	OptimizedViewPortWidth *string `json:"optimizedViewPortWidth,omitempty"`
-	ResizeOption           *string `json:"resizeOption,omitempty"`
 }
 
 // A group in Quick Sight consists of a set of users. You can use groups to
@@ -2504,9 +2161,7 @@ type ImageSource struct {
 
 // A static file that contains an image.
 type ImageStaticFile struct {
-	// The source of the static file.
-	Source       *StaticFileSource `json:"source,omitempty"`
-	StaticFileID *string           `json:"staticFileID,omitempty"`
+	StaticFileID *string `json:"staticFileID,omitempty"`
 }
 
 // The parameters that are required to connect to a Impala data source.
@@ -2574,9 +2229,7 @@ type IntegerDatasetParameterDefaultValues struct {
 
 // The default values of the IntegerParameterDeclaration.
 type IntegerDefaultValues struct {
-	// Defines different defaults to the users or groups based on mapping.
-	DynamicValue *DynamicDefaultValue `json:"dynamicValue,omitempty"`
-	StaticValues []*int64             `json:"staticValues,omitempty"`
+	StaticValues []*int64 `json:"staticValues,omitempty"`
 }
 
 // An integer parameter.
@@ -2587,17 +2240,7 @@ type IntegerParameter struct {
 
 // A parameter declaration for the Integer data type.
 type IntegerParameterDeclaration struct {
-	// The default values of the IntegerParameterDeclaration.
-	DefaultValues *IntegerDefaultValues `json:"defaultValues,omitempty"`
-	// A list of dataset parameters that are mapped to an analysis parameter.
-	MappedDataSetParameters []*MappedDataSetParameter `json:"mappedDataSetParameters,omitempty"`
-	Name                    *string                   `json:"name,omitempty"`
-	ParameterValueType      *string                   `json:"parameterValueType,omitempty"`
-	// A parameter declaration for the Integer data type.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	ValueWhenUnset *IntegerValueWhenUnsetConfiguration `json:"valueWhenUnset,omitempty"`
+	Name *string `json:"name,omitempty"`
 }
 
 // A parameter declaration for the Integer data type.
@@ -2605,8 +2248,7 @@ type IntegerParameterDeclaration struct {
 // This is a union type structure. For this structure to be valid, only one
 // of the attributes can be defined.
 type IntegerValueWhenUnsetConfiguration struct {
-	CustomValue          *int64  `json:"customValue,omitempty"`
-	ValueWhenUnsetOption *string `json:"valueWhenUnsetOption,omitempty"`
+	CustomValue *int64 `json:"customValue,omitempty"`
 }
 
 // The limit configuration of the visual display for an axis.
@@ -2667,7 +2309,6 @@ type JoinOperation struct {
 // The options that determine the visibility, color, type, and tooltip visibility
 // of the sparkline of a KPI visual.
 type KPISparklineOptions struct {
-	Color             *string `json:"color,omitempty"`
 	TooltipVisibility *string `json:"tooltipVisibility,omitempty"`
 	Visibility        *string `json:"visibility,omitempty"`
 }
@@ -2727,41 +2368,17 @@ type LayerMapVisual struct {
 
 // The options for the legend setup of a visual.
 type LegendOptions struct {
-	// String based length that is composed of value and unit in px
-	Height     *string `json:"height,omitempty"`
 	Visibility *string `json:"visibility,omitempty"`
-	// String based length that is composed of value and unit in px
-	Width *string `json:"width,omitempty"`
-}
-
-// The options that determine the default presentation of all line series in
-// LineChartVisual.
-type LineChartDefaultSeriesSettings struct {
-	// Decal settings for accessibility features that define visual patterns and
-	// styling for data elements.
-	DecalSettings *DecalSettings `json:"decalSettings,omitempty"`
 }
 
 // Line styles options for a line series in LineChartVisual.
 type LineChartLineStyleSettings struct {
 	LineVisibility *string `json:"lineVisibility,omitempty"`
-	// String based length that is composed of value and unit in px
-	LineWidth *string `json:"lineWidth,omitempty"`
 }
 
 // Marker styles options for a line series in LineChartVisual.
 type LineChartMarkerStyleSettings struct {
-	MarkerColor *string `json:"markerColor,omitempty"`
-	// String based length that is composed of value and unit in px
-	MarkerSize       *string `json:"markerSize,omitempty"`
 	MarkerVisibility *string `json:"markerVisibility,omitempty"`
-}
-
-// The options that determine the presentation of a line series in the visual
-type LineChartSeriesSettings struct {
-	// Decal settings for accessibility features that define visual patterns and
-	// styling for data elements.
-	DecalSettings *DecalSettings `json:"decalSettings,omitempty"`
 }
 
 // A line chart.
@@ -2912,11 +2529,6 @@ type NamespaceInfoV2 struct {
 	Name                            *string `json:"name,omitempty"`
 }
 
-// The options that determine the negative value configuration.
-type NegativeValueConfiguration struct {
-	DisplayMode *string `json:"displayMode,omitempty"`
-}
-
 // A NestedFilter filters data with a subset of data that is defined by the
 // nested inner filter.
 type NestedFilter struct {
@@ -2941,35 +2553,6 @@ type NewDefaultValues struct {
 	StringStaticValues   []*string     `json:"stringStaticValues,omitempty"`
 }
 
-// The options that determine the null value format configuration.
-type NullValueFormatConfiguration struct {
-	NullString *string `json:"nullString,omitempty"`
-}
-
-// The options that determine the number display format configuration.
-type NumberDisplayFormatConfiguration struct {
-	// The option that determines the decimal places configuration.
-	DecimalPlacesConfiguration *DecimalPlacesConfiguration `json:"decimalPlacesConfiguration,omitempty"`
-	// The options that determine the negative value configuration.
-	NegativeValueConfiguration *NegativeValueConfiguration `json:"negativeValueConfiguration,omitempty"`
-	// The options that determine the null value format configuration.
-	NullValueFormatConfiguration *NullValueFormatConfiguration `json:"nullValueFormatConfiguration,omitempty"`
-	NumberScale                  *string                       `json:"numberScale,omitempty"`
-	Prefix                       *string                       `json:"prefix,omitempty"`
-	// The options that determine the numeric separator configuration.
-	SeparatorConfiguration *NumericSeparatorConfiguration `json:"separatorConfiguration,omitempty"`
-	Suffix                 *string                        `json:"suffix,omitempty"`
-}
-
-// Formatting configuration for number fields.
-type NumberFormatConfiguration struct {
-	// The options that determine the numeric format configuration.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	FormatConfiguration *NumericFormatConfiguration `json:"formatConfiguration,omitempty"`
-}
-
 // The numeric equality type drill down filter.
 type NumericEqualityDrillDownFilter struct {
 	// A column of a data set.
@@ -2982,19 +2565,6 @@ type NumericEqualityFilter struct {
 	Column        *ColumnIdentifier `json:"column,omitempty"`
 	FilterID      *string           `json:"filterID,omitempty"`
 	ParameterName *string           `json:"parameterName,omitempty"`
-}
-
-// The options that determine the numeric format configuration.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type NumericFormatConfiguration struct {
-	// The options that determine the currency display format configuration.
-	CurrencyDisplayFormatConfiguration *CurrencyDisplayFormatConfiguration `json:"currencyDisplayFormatConfiguration,omitempty"`
-	// The options that determine the number display format configuration.
-	NumberDisplayFormatConfiguration *NumberDisplayFormatConfiguration `json:"numberDisplayFormatConfiguration,omitempty"`
-	// The options that determine the percentage display format configuration.
-	PercentageDisplayFormatConfiguration *PercentageDisplayFormatConfiguration `json:"percentageDisplayFormatConfiguration,omitempty"`
 }
 
 // A NumericRangeFilter filters values that are within the value range.
@@ -3011,20 +2581,11 @@ type NumericRangeFilterValue struct {
 	Parameter *string `json:"parameter,omitempty"`
 }
 
-// The options that determine the numeric separator configuration.
-type NumericSeparatorConfiguration struct {
-	DecimalSeparator *string `json:"decimalSeparator,omitempty"`
-	// The options that determine the thousands separator configuration.
-	ThousandsSeparator *ThousandSeparatorOptions `json:"thousandsSeparator,omitempty"`
-}
-
 // The dimension type field with numerical type columns.
 type NumericalDimensionField struct {
 	// A column of a data set.
 	Column  *ColumnIdentifier `json:"column,omitempty"`
 	FieldID *string           `json:"fieldID,omitempty"`
-	// Formatting configuration for number fields.
-	FormatConfiguration *NumberFormatConfiguration `json:"formatConfiguration,omitempty"`
 }
 
 // The measure type field with numerical type columns.
@@ -3032,8 +2593,6 @@ type NumericalMeasureField struct {
 	// A column of a data set.
 	Column  *ColumnIdentifier `json:"column,omitempty"`
 	FieldID *string           `json:"fieldID,omitempty"`
-	// Formatting configuration for number fields.
-	FormatConfiguration *NumberFormatConfiguration `json:"formatConfiguration,omitempty"`
 }
 
 // An object that contains information needed to create a data source connection
@@ -3086,24 +2645,12 @@ type PaginationConfiguration struct {
 	PageSize *int64 `json:"pageSize,omitempty"`
 }
 
-// The color palette.
-type Palette struct {
-	Background *string `json:"background,omitempty"`
-	Foreground *string `json:"foreground,omitempty"`
-}
-
 // A collection of options that configure how each panel displays in a small
 // multiples chart.
 type PanelConfiguration struct {
-	BackgroundColor      *string `json:"backgroundColor,omitempty"`
 	BackgroundVisibility *string `json:"backgroundVisibility,omitempty"`
-	BorderColor          *string `json:"borderColor,omitempty"`
-	// String based length that is composed of value and unit in px
-	BorderThickness  *string `json:"borderThickness,omitempty"`
-	BorderVisibility *string `json:"borderVisibility,omitempty"`
-	// String based length that is composed of value and unit in px
-	GutterSpacing    *string `json:"gutterSpacing,omitempty"`
-	GutterVisibility *string `json:"gutterVisibility,omitempty"`
+	BorderVisibility     *string `json:"borderVisibility,omitempty"`
+	GutterVisibility     *string `json:"gutterVisibility,omitempty"`
 }
 
 // The options that determine the title styles for each small multiples panel.
@@ -3115,24 +2662,6 @@ type PanelTitleOptions struct {
 type ParameterDateTimePickerControl struct {
 	ParameterControlID  *string `json:"parameterControlID,omitempty"`
 	SourceParameterName *string `json:"sourceParameterName,omitempty"`
-}
-
-// The declaration definition of a parameter.
-//
-// For more information, see Parameters in Amazon Quick Sight (https://docs.aws.amazon.com/quicksight/latest/user/parameters-in-quicksight.html)
-// in the Amazon Quick Suite User Guide.
-//
-// This is a union type structure. For this structure to be valid, only one
-// of the attributes can be defined.
-type ParameterDeclaration struct {
-	// A parameter declaration for the DateTime data type.
-	DateTimeParameterDeclaration *DateTimeParameterDeclaration `json:"dateTimeParameterDeclaration,omitempty"`
-	// A parameter declaration for the Decimal data type.
-	DecimalParameterDeclaration *DecimalParameterDeclaration `json:"decimalParameterDeclaration,omitempty"`
-	// A parameter declaration for the Integer data type.
-	IntegerParameterDeclaration *IntegerParameterDeclaration `json:"integerParameterDeclaration,omitempty"`
-	// A parameter declaration for the String data type.
-	StringParameterDeclaration *StringParameterDeclaration `json:"stringParameterDeclaration,omitempty"`
 }
 
 // A control to display a dropdown list with buttons that are used to select
@@ -3187,20 +2716,6 @@ type Parameters struct {
 type ParentDataSet struct {
 	DataSetARN   *string        `json:"dataSetARN,omitempty"`
 	InputColumns []*InputColumn `json:"inputColumns,omitempty"`
-}
-
-// The options that determine the percentage display format configuration.
-type PercentageDisplayFormatConfiguration struct {
-	// The option that determines the decimal places configuration.
-	DecimalPlacesConfiguration *DecimalPlacesConfiguration `json:"decimalPlacesConfiguration,omitempty"`
-	// The options that determine the negative value configuration.
-	NegativeValueConfiguration *NegativeValueConfiguration `json:"negativeValueConfiguration,omitempty"`
-	// The options that determine the null value format configuration.
-	NullValueFormatConfiguration *NullValueFormatConfiguration `json:"nullValueFormatConfiguration,omitempty"`
-	Prefix                       *string                       `json:"prefix,omitempty"`
-	// The options that determine the numeric separator configuration.
-	SeparatorConfiguration *NumericSeparatorConfiguration `json:"separatorConfiguration,omitempty"`
-	Suffix                 *string                        `json:"suffix,omitempty"`
 }
 
 // The configuration for the performance optimization of the dataset that contains
@@ -3290,12 +2805,6 @@ type PivotTableCellConditionalFormatting struct {
 	FieldID *string `json:"fieldID,omitempty"`
 }
 
-// The data path options for the pivot table field options.
-type PivotTableDataPathOption struct {
-	// String based length that is composed of value and unit in px
-	Width *string `json:"width,omitempty"`
-}
-
 // The target of a pivot table field collapse state.
 type PivotTableFieldCollapseStateTarget struct {
 	FieldID *string `json:"fieldID,omitempty"`
@@ -3316,10 +2825,8 @@ type PivotTableFieldSubtotalOptions struct {
 type PivotTableOptions struct {
 	CollapsedRowDimensionsVisibility *string `json:"collapsedRowDimensionsVisibility,omitempty"`
 	ColumnNamesVisibility            *string `json:"columnNamesVisibility,omitempty"`
-	// String based length that is composed of value and unit in px
-	DefaultCellWidth        *string `json:"defaultCellWidth,omitempty"`
-	SingleMetricVisibility  *string `json:"singleMetricVisibility,omitempty"`
-	ToggleButtonsVisibility *string `json:"toggleButtonsVisibility,omitempty"`
+	SingleMetricVisibility           *string `json:"singleMetricVisibility,omitempty"`
+	ToggleButtonsVisibility          *string `json:"toggleButtonsVisibility,omitempty"`
 }
 
 // The paginated report options for a pivot table visual.
@@ -3417,11 +2924,6 @@ type QDataKey struct {
 	QDataKeyARN *string `json:"qDataKeyARN,omitempty"`
 }
 
-// A structure that describes the query execution options.
-type QueryExecutionOptions struct {
-	QueryExecutionMode *string `json:"queryExecutionMode,omitempty"`
-}
-
 // Information about a queued dataset SPICE ingestion.
 type QueueInfo struct {
 	QueuedIngestion    *string `json:"queuedIngestion,omitempty"`
@@ -3441,8 +2943,6 @@ type RadarChartAreaStyleSettings struct {
 // The configuration of a RadarChartVisual.
 type RadarChartConfiguration struct {
 	AlternateBandColorsVisibility *string `json:"alternateBandColorsVisibility,omitempty"`
-	AlternateBandEvenColor        *string `json:"alternateBandEvenColor,omitempty"`
-	AlternateBandOddColor         *string `json:"alternateBandOddColor,omitempty"`
 }
 
 // A radar chart visual.
@@ -3519,28 +3019,9 @@ type ReferenceLineDynamicDataConfiguration struct {
 	Column *ColumnIdentifier `json:"column,omitempty"`
 }
 
-// The label configuration of a reference line.
-type ReferenceLineLabelConfiguration struct {
-	FontColor *string `json:"fontColor,omitempty"`
-}
-
 // The static data configuration of the reference line data configuration.
 type ReferenceLineStaticDataConfiguration struct {
 	Value *float64 `json:"value,omitempty"`
-}
-
-// The style configuration of the reference line.
-type ReferenceLineStyleConfiguration struct {
-	Color *string `json:"color,omitempty"`
-}
-
-// The value label configuration of the label in a reference line.
-type ReferenceLineValueLabelConfiguration struct {
-	// The options that determine the numeric format configuration.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	FormatConfiguration *NumericFormatConfiguration `json:"formatConfiguration,omitempty"`
 }
 
 // Specifies the interval between each scheduled refresh of a dataset.
@@ -3580,11 +3061,6 @@ type RelationalTable struct {
 	InputColumns  []*InputColumn `json:"inputColumns,omitempty"`
 	Name          *string        `json:"name,omitempty"`
 	Schema        *string        `json:"schema,omitempty"`
-}
-
-// The display options of a control.
-type RelativeDateTimeControlDisplayOptions struct {
-	DateTimeFormat *string `json:"dateTimeFormat,omitempty"`
 }
 
 // A RelativeDatesFilter filters relative dates values.
@@ -3776,34 +3252,6 @@ type SecondaryValueOptions struct {
 	Visibility *string `json:"visibility,omitempty"`
 }
 
-// The options for the canvas of a section-based layout.
-type SectionBasedLayoutCanvasSizeOptions struct {
-	// The options for a paper canvas of a section-based layout.
-	PaperCanvasSizeOptions *SectionBasedLayoutPaperCanvasSizeOptions `json:"paperCanvasSizeOptions,omitempty"`
-}
-
-// The configuration for a section-based layout.
-type SectionBasedLayoutConfiguration struct {
-	// The options for the canvas of a section-based layout.
-	CanvasSizeOptions *SectionBasedLayoutCanvasSizeOptions `json:"canvasSizeOptions,omitempty"`
-}
-
-// The options for a paper canvas of a section-based layout.
-type SectionBasedLayoutPaperCanvasSizeOptions struct {
-	// The configuration of spacing (often a margin or padding).
-	PaperMargin      *Spacing `json:"paperMargin,omitempty"`
-	PaperOrientation *string  `json:"paperOrientation,omitempty"`
-	PaperSize        *string  `json:"paperSize,omitempty"`
-}
-
-// The options that style a section.
-type SectionStyle struct {
-	// String based length that is composed of value and unit in px
-	Height *string `json:"height,omitempty"`
-	// The configuration of spacing (often a margin or padding).
-	Padding *Spacing `json:"padding,omitempty"`
-}
-
 // Details of a self-upgrade request.
 type SelfUpgradeRequestDetail struct {
 	CreationTime            *int64  `json:"creationTime,omitempty"`
@@ -3886,12 +3334,9 @@ type SheetControlInfoIconLabelOptions struct {
 // on one page in a paginated report. Every analysis and dashboard must contain
 // at least one sheet.
 type SheetDefinition struct {
-	ContentType *string `json:"contentType,omitempty"`
-	// A list of custom actions applied to visuals in an analysis or sheet.
-	CustomActionDefaults *VisualCustomActionDefaults `json:"customActionDefaults,omitempty"`
-	Images               []*SheetImage               `json:"images,omitempty"`
-	Name                 *string                     `json:"name,omitempty"`
-	SheetID              *string                     `json:"sheetID,omitempty"`
+	Images  []*SheetImage `json:"images,omitempty"`
+	Name    *string       `json:"name,omitempty"`
+	SheetID *string       `json:"sheetID,omitempty"`
 }
 
 // The override configuration of the rendering rules of a sheet.
@@ -3970,11 +3415,6 @@ type SignupResponse struct {
 	UserLoginName *string `json:"userLoginName,omitempty"`
 }
 
-// The simple cluster marker of the cluster marker.
-type SimpleClusterMarker struct {
-	Color *string `json:"color,omitempty"`
-}
-
 // Describes the configuration of the dashboard snapshot.
 type SnapshotConfiguration struct {
 	// A list of Quick Sight parameters and the list's override values.
@@ -4024,18 +3464,6 @@ type SourceTable struct {
 	PhysicalTableID *string        `json:"physicalTableID,omitempty"`
 }
 
-// The configuration of spacing (often a margin or padding).
-type Spacing struct {
-	// String based length that is composed of value and unit
-	Bottom *string `json:"bottom,omitempty"`
-	// String based length that is composed of value and unit
-	Left *string `json:"left,omitempty"`
-	// String based length that is composed of value and unit
-	Right *string `json:"right,omitempty"`
-	// String based length that is composed of value and unit
-	Top *string `json:"top,omitempty"`
-}
-
 // The parameters for Spark.
 type SparkParameters struct {
 	Host *string `json:"host,omitempty"`
@@ -4044,9 +3472,7 @@ type SparkParameters struct {
 
 // A static file that contains the geospatial data.
 type SpatialStaticFile struct {
-	// The source of the static file.
-	Source       *StaticFileSource `json:"source,omitempty"`
-	StaticFileID *string           `json:"staticFileID,omitempty"`
+	StaticFileID *string `json:"staticFileID,omitempty"`
 }
 
 // The parameters that are required to connect to a Starburst data source.
@@ -4068,29 +3494,12 @@ type StatePersistenceConfigurations struct {
 	Enabled *bool `json:"enabled,omitempty"`
 }
 
-// The static file.
-type StaticFile struct {
-	// A static file that contains an image.
-	ImageStaticFile *ImageStaticFile `json:"imageStaticFile,omitempty"`
-	// A static file that contains the geospatial data.
-	SpatialStaticFile *SpatialStaticFile `json:"spatialStaticFile,omitempty"`
-}
-
 // The structure that contains the Amazon S3 location to download the static
 // file from.
 type StaticFileS3SourceOptions struct {
 	BucketName *string `json:"bucketName,omitempty"`
 	ObjectKey  *string `json:"objectKey,omitempty"`
 	Region     *string `json:"region,omitempty"`
-}
-
-// The source of the static file.
-type StaticFileSource struct {
-	// The structure that contains the Amazon S3 location to download the static
-	// file from.
-	S3Options *StaticFileS3SourceOptions `json:"s3Options,omitempty"`
-	// The structure that contains the URL to download the static file from.
-	URLOptions *StaticFileURLSourceOptions `json:"urlOptions,omitempty"`
 }
 
 // The structure that contains the URL to download the static file from.
@@ -4116,20 +3525,7 @@ type StringDatasetParameterDefaultValues struct {
 
 // The default values of the StringParameterDeclaration.
 type StringDefaultValues struct {
-	// Defines different defaults to the users or groups based on mapping.
-	DynamicValue *DynamicDefaultValue `json:"dynamicValue,omitempty"`
-	StaticValues []*string            `json:"staticValues,omitempty"`
-}
-
-// Formatting configuration for string fields.
-type StringFormatConfiguration struct {
-	// The options that determine the null value format configuration.
-	NullValueFormatConfiguration *NullValueFormatConfiguration `json:"nullValueFormatConfiguration,omitempty"`
-	// The options that determine the numeric format configuration.
-	//
-	// This is a union type structure. For this structure to be valid, only one
-	// of the attributes can be defined.
-	NumericFormatConfiguration *NumericFormatConfiguration `json:"numericFormatConfiguration,omitempty"`
+	StaticValues []*string `json:"staticValues,omitempty"`
 }
 
 // A string parameter.
@@ -4140,22 +3536,13 @@ type StringParameter struct {
 
 // A parameter declaration for the String data type.
 type StringParameterDeclaration struct {
-	// The default values of the StringParameterDeclaration.
-	DefaultValues *StringDefaultValues `json:"defaultValues,omitempty"`
-	// A list of dataset parameters that are mapped to an analysis parameter.
-	MappedDataSetParameters []*MappedDataSetParameter `json:"mappedDataSetParameters,omitempty"`
-	Name                    *string                   `json:"name,omitempty"`
-	ParameterValueType      *string                   `json:"parameterValueType,omitempty"`
-	// The configuration that defines the default value of a String parameter when
-	// a value has not been set.
-	ValueWhenUnset *StringValueWhenUnsetConfiguration `json:"valueWhenUnset,omitempty"`
+	Name *string `json:"name,omitempty"`
 }
 
 // The configuration that defines the default value of a String parameter when
 // a value has not been set.
 type StringValueWhenUnsetConfiguration struct {
-	CustomValue          *string `json:"customValue,omitempty"`
-	ValueWhenUnsetOption *string `json:"valueWhenUnsetOption,omitempty"`
+	CustomValue *string `json:"customValue,omitempty"`
 }
 
 // The subtotal options.
@@ -4171,11 +3558,6 @@ type SuccessfulKeyRegistrationEntry struct {
 	StatusCode *int64  `json:"statusCode,omitempty"`
 }
 
-// The border options for a table border.
-type TableBorderOptions struct {
-	Color *string `json:"color,omitempty"`
-}
-
 // The cell conditional formatting option for a table.
 type TableCellConditionalFormatting struct {
 	FieldID *string `json:"fieldID,omitempty"`
@@ -4183,8 +3565,7 @@ type TableCellConditionalFormatting struct {
 
 // The table cell style for a cell in pivot table or table visual.
 type TableCellStyle struct {
-	BackgroundColor *string `json:"backgroundColor,omitempty"`
-	Visibility      *string `json:"visibility,omitempty"`
+	Visibility *string `json:"visibility,omitempty"`
 }
 
 // The custom text content (value, font configuration) for the table link content
@@ -4202,8 +3583,6 @@ type TableFieldLinkConfiguration struct {
 type TableFieldOption struct {
 	FieldID    *string `json:"fieldID,omitempty"`
 	Visibility *string `json:"visibility,omitempty"`
-	// String based length that is composed of value and unit in px
-	Width *string `json:"width,omitempty"`
 }
 
 // The paginated report options for a table visual.
@@ -4297,20 +3676,6 @@ type TemplateVersion struct {
 	ThemeARN        *string      `json:"themeARN,omitempty"`
 }
 
-// The detailed definition of a template.
-type TemplateVersionDefinition struct {
-	// The configuration for default analysis settings.
-	AnalysisDefaults     *AnalysisDefaults      `json:"analysisDefaults,omitempty"`
-	CalculatedFields     []*CalculatedField     `json:"calculatedFields,omitempty"`
-	ColumnConfigurations []*ColumnConfiguration `json:"columnConfigurations,omitempty"`
-	// An array of analysis level configurations.
-	Options               *AssetOptions           `json:"options,omitempty"`
-	ParameterDeclarations []*ParameterDeclaration `json:"parameterDeclarations,omitempty"`
-	// A structure that describes the query execution options.
-	QueryExecutionOptions *QueryExecutionOptions `json:"queryExecutionOptions,omitempty"`
-	StaticFiles           []*StaticFile          `json:"staticFiles,omitempty"`
-}
-
 // The template version.
 type TemplateVersionSummary struct {
 	ARN         *string      `json:"arn,omitempty"`
@@ -4378,9 +3743,7 @@ type ThemeVersionSummary struct {
 
 // The options that determine the thousands separator configuration.
 type ThousandSeparatorOptions struct {
-	GroupingStyle *string `json:"groupingStyle,omitempty"`
-	Symbol        *string `json:"symbol,omitempty"`
-	Visibility    *string `json:"visibility,omitempty"`
+	Visibility *string `json:"visibility,omitempty"`
 }
 
 // The threshold alerts configuration for an embedded Quick Sight dashboard.
@@ -4391,13 +3754,11 @@ type ThresholdAlertsConfigurations struct {
 // A TimeEqualityFilter filters values that are equal to a given value.
 type TimeEqualityFilter struct {
 	// A column of a data set.
-	Column        *ColumnIdentifier `json:"column,omitempty"`
-	FilterID      *string           `json:"filterID,omitempty"`
-	ParameterName *string           `json:"parameterName,omitempty"`
-	// The rolling date configuration of a date time filter.
-	RollingDate     *RollingDateConfiguration `json:"rollingDate,omitempty"`
-	TimeGranularity *string                   `json:"timeGranularity,omitempty"`
-	Value           *metav1.Time              `json:"value,omitempty"`
+	Column          *ColumnIdentifier `json:"column,omitempty"`
+	FilterID        *string           `json:"filterID,omitempty"`
+	ParameterName   *string           `json:"parameterName,omitempty"`
+	TimeGranularity *string           `json:"timeGranularity,omitempty"`
+	Value           *metav1.Time      `json:"value,omitempty"`
 }
 
 // The time range drill down filter.
@@ -4424,10 +3785,8 @@ type TimeRangeFilter struct {
 // This is a union type structure. For this structure to be valid, only one
 // of the attributes can be defined.
 type TimeRangeFilterValue struct {
-	Parameter *string `json:"parameter,omitempty"`
-	// The rolling date configuration of a date time filter.
-	RollingDate *RollingDateConfiguration `json:"rollingDate,omitempty"`
-	StaticValue *metav1.Time              `json:"staticValue,omitempty"`
+	Parameter   *string      `json:"parameter,omitempty"`
+	StaticValue *metav1.Time `json:"staticValue,omitempty"`
 }
 
 // The display options for the visual tooltip.
@@ -4624,12 +3983,6 @@ type TransformStep struct {
 	UnpivotStep *UnpivotOperation `json:"unpivotStep,omitempty"`
 }
 
-// The column option of the transposed table.
-type TransposedTableOption struct {
-	// String based length that is composed of value and unit in px
-	ColumnWidth *string `json:"columnWidth,omitempty"`
-}
-
 // A tree map.
 //
 // For more information, see Using tree maps (https://docs.aws.amazon.com/quicksight/latest/user/tree-map.html)
@@ -4657,37 +4010,11 @@ type TwitterParameters struct {
 	Query   *string `json:"query,omitempty"`
 }
 
-// The theme colors that apply to UI and to charts, excluding data colors. The
-// colors description is a hexadecimal color code that consists of six alphanumerical
-// characters, prefixed with #, for example #37BFF5. For more information, see
-// Using Themes in Quick Sight (https://docs.aws.amazon.com/quicksight/latest/user/themes-in-quicksight.html)
-// in the Quick Sight User Guide.
-type UIColorPalette struct {
-	Accent              *string `json:"accent,omitempty"`
-	AccentForeground    *string `json:"accentForeground,omitempty"`
-	Danger              *string `json:"danger,omitempty"`
-	DangerForeground    *string `json:"dangerForeground,omitempty"`
-	Dimension           *string `json:"dimension,omitempty"`
-	DimensionForeground *string `json:"dimensionForeground,omitempty"`
-	Measure             *string `json:"measure,omitempty"`
-	MeasureForeground   *string `json:"measureForeground,omitempty"`
-	PrimaryBackground   *string `json:"primaryBackground,omitempty"`
-	PrimaryForeground   *string `json:"primaryForeground,omitempty"`
-	SecondaryBackground *string `json:"secondaryBackground,omitempty"`
-	SecondaryForeground *string `json:"secondaryForeground,omitempty"`
-	Success             *string `json:"success,omitempty"`
-	SuccessForeground   *string `json:"successForeground,omitempty"`
-	Warning             *string `json:"warning,omitempty"`
-	WarningForeground   *string `json:"warningForeground,omitempty"`
-}
-
 // The unaggregated field for a table.
 type UnaggregatedField struct {
 	// A column of a data set.
 	Column  *ColumnIdentifier `json:"column,omitempty"`
 	FieldID *string           `json:"fieldID,omitempty"`
-	// The formatting configuration for all types of field.
-	FormatConfiguration *FormatConfiguration `json:"formatConfiguration,omitempty"`
 }
 
 // A UniqueKey configuration that references a dataset column.
@@ -4800,13 +4127,6 @@ type VisualCustomAction struct {
 	Status         *string `json:"status,omitempty"`
 }
 
-// A list of custom actions applied to visuals in an analysis or sheet.
-type VisualCustomActionDefaults struct {
-	// Defines what initiates a highlight operation on a visual, such as a click
-	// or hover.
-	HighlightOperation *VisualHighlightOperation `json:"highlightOperation,omitempty"`
-}
-
 // The operation that is defined by the custom action.
 //
 // This is a union type structure. For this structure to be valid, only one
@@ -4824,20 +4144,9 @@ type VisualCustomActionOperation struct {
 	URLOperation *CustomActionURLOperation `json:"urlOperation,omitempty"`
 }
 
-// Defines what initiates a highlight operation on a visual, such as a click
-// or hover.
-type VisualHighlightOperation struct {
-	Trigger *string `json:"trigger,omitempty"`
-}
-
 // The menu options for a visual.
 type VisualMenuOption struct {
 	AvailabilityStatus *string `json:"availabilityStatus,omitempty"`
-}
-
-// The visual display options for the visual palette.
-type VisualPalette struct {
-	ChartColor *string `json:"chartColor,omitempty"`
 }
 
 // The subtitle label options for a visual.
@@ -4848,13 +4157,6 @@ type VisualSubtitleLabelOptions struct {
 // The title label options for a visual.
 type VisualTitleLabelOptions struct {
 	Visibility *string `json:"visibility,omitempty"`
-}
-
-// The color configuration for individual groups within a waterfall visual.
-type WaterfallChartGroupColorConfiguration struct {
-	NegativeBarColor *string `json:"negativeBarColor,omitempty"`
-	PositiveBarColor *string `json:"positiveBarColor,omitempty"`
-	TotalBarColor    *string `json:"totalBarColor,omitempty"`
 }
 
 // The options that determine the presentation of a waterfall visual.
