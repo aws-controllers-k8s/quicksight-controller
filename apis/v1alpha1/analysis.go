@@ -90,19 +90,12 @@ type AnalysisStatus struct {
 	// The time that the analysis was created.
 	// +kubebuilder:validation:Optional
 	CreatedTime *metav1.Time `json:"createdTime,omitempty"`
-	// The ARNs of the datasets of the analysis.
-	// +kubebuilder:validation:Optional
-	DataSetARNs []*string `json:"dataSetARNs,omitempty"`
 	// Errors associated with the analysis.
 	// +kubebuilder:validation:Optional
 	Errors []*AnalysisError `json:"errors,omitempty"`
 	// The time that the analysis was last updated.
 	// +kubebuilder:validation:Optional
 	LastUpdatedTime *metav1.Time `json:"lastUpdatedTime,omitempty"`
-	// A list of the associated sheets with the unique identifier and name of each
-	// sheet.
-	// +kubebuilder:validation:Optional
-	Sheets []*Sheet `json:"sheets,omitempty"`
 	// Status associated with the analysis.
 	// +kubebuilder:validation:Optional
 	Status *string `json:"status,omitempty"`

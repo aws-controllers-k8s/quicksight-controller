@@ -133,16 +133,6 @@ resources:
           path: Analysis.Errors
       Errors.Type:
         go_tag: json:"type,omitempty"
-      Sheets:
-        is_read_only: true
-        from:
-          operation: DescribeAnalysis
-          path: Analysis.Sheets
-      DataSetARNs:
-        is_read_only: true
-        from:
-          operation: DescribeAnalysis
-          path: Analysis.DataSetArns
       SourceEntity.SourceTemplate.DataSetReferences.DataSetARN:
         references:
           resource: DataSet

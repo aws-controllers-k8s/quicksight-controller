@@ -740,17 +740,6 @@ func (in *AnalysisStatus) DeepCopyInto(out *AnalysisStatus) {
 		in, out := &in.CreatedTime, &out.CreatedTime
 		*out = (*in).DeepCopy()
 	}
-	if in.DataSetARNs != nil {
-		in, out := &in.DataSetARNs, &out.DataSetARNs
-		*out = make([]*string, len(*in))
-		for i := range *in {
-			if (*in)[i] != nil {
-				in, out := &(*in)[i], &(*out)[i]
-				*out = new(string)
-				**out = **in
-			}
-		}
-	}
 	if in.Errors != nil {
 		in, out := &in.Errors, &out.Errors
 		*out = make([]*AnalysisError, len(*in))
@@ -765,17 +754,6 @@ func (in *AnalysisStatus) DeepCopyInto(out *AnalysisStatus) {
 	if in.LastUpdatedTime != nil {
 		in, out := &in.LastUpdatedTime, &out.LastUpdatedTime
 		*out = (*in).DeepCopy()
-	}
-	if in.Sheets != nil {
-		in, out := &in.Sheets, &out.Sheets
-		*out = make([]*Sheet, len(*in))
-		for i := range *in {
-			if (*in)[i] != nil {
-				in, out := &(*in)[i], &(*out)[i]
-				*out = new(Sheet)
-				(*in).DeepCopyInto(*out)
-			}
-		}
 	}
 	if in.Status != nil {
 		in, out := &in.Status, &out.Status
