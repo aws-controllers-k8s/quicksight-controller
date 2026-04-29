@@ -322,26 +322,14 @@ class TestDashboard:
         k8s.patch_custom_resource(ref, updates)
         time.sleep(MODIFY_WAIT_AFTER_SECONDS)
 
-        # Wait for the update to sync. Dashboard updates go through two
-        # reconcile cycles: UpdateDashboard creates a draft version, then
-        # the next reconcile detects and publishes it. We wait for synced,
-        # then poll DescribeDashboard until the published version reflects
-        # the new name.
+        # Wait for the update to sync
         assert k8s.wait_on_condition(ref, "ACK.ResourceSynced", "True", wait_periods=DASHBOARD_SYNC_WAIT_PERIODS)
 
-        # Poll until the published dashboard reflects the updated name
-        max_attempts = 12
-        for _ in range(max_attempts):
-            response = quicksight_client.describe_dashboard(
-                AwsAccountId=aws_account_id,
-                DashboardId=dashboard_id,
-            )
-            if response["Dashboard"]["Name"] == new_name:
-                break
-            time.sleep(MODIFY_WAIT_AFTER_SECONDS)
-        else:
-            assert False, f"Dashboard name was not updated to '{new_name}' after {max_attempts * MODIFY_WAIT_AFTER_SECONDS}s"
-
+        # Once synced, the published dashboard should already reflect the new name
+        response = quicksight_client.describe_dashboard(
+            AwsAccountId=aws_account_id,
+            DashboardId=dashboard_id,
+        )
         assert response["Dashboard"]["Name"] == new_name
         assert response["Dashboard"]["Name"] != initial_name
 
