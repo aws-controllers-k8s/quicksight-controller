@@ -15,7 +15,8 @@
 
 Validates that when a dashboard with multiple published revisions is adopted
 by ACK, the controller preserves the current published version and does not
-publish a newer draft version.
+publish a newer draft version. Also validates that updating an adopted
+dashboard creates and publishes a new version.
 """
 
 import pytest
@@ -35,7 +36,6 @@ from e2e.tests.test_dashboard import (
     _delete_template,
     DASHBOARD_RESOURCE_PLURAL,
     MODIFY_WAIT_AFTER_SECONDS,
-    TEMPLATE_WAIT_SECONDS,
     DASHBOARD_SYNC_WAIT_PERIODS,
 )
 
@@ -153,7 +153,7 @@ def adoption_dependencies(quicksight_client):
 
     yield (ds_ref, dset_ref, template_arn, aws_account_id, data_set_arn)
 
-    # Teardown
+    # Teardown: delete in reverse dependency order
     _delete_template(quicksight_client, template_id, aws_account_id)
     try:
         _, deleted = k8s.delete_custom_resource(dset_ref, 3, 10)
@@ -168,97 +168,109 @@ def adoption_dependencies(quicksight_client):
         pass
 
 
+@pytest.fixture(scope="module")
+def boto_dashboard_with_draft(quicksight_client, adoption_dependencies):
+    """Creates a dashboard via boto3 with version 1 published and version 2
+    as an unpublished draft.
+
+    Yields (dashboard_id, aws_account_id, template_arn, data_set_arn).
+    """
+    (_, _, template_arn, aws_account_id, data_set_arn) = adoption_dependencies
+    dashboard_id = random_suffix_name("ack-adopt-dash", 24)
+    dashboard_name = dashboard_id
+
+    # Create dashboard (version 1, auto-published)
+    _create_dashboard_via_boto(
+        quicksight_client, dashboard_id, dashboard_name,
+        template_arn, data_set_arn, aws_account_id,
+    )
+    logging.info(f"Created dashboard {dashboard_id} via boto3")
+
+    # Wait for version 1 to be ready
+    _wait_dashboard_version_status(
+        quicksight_client, aws_account_id, dashboard_id,
+        version_number=1,
+        target_statuses=["CREATION_SUCCESSFUL"],
+    )
+    logging.info(f"Dashboard {dashboard_id} version 1 is CREATION_SUCCESSFUL")
+
+    # Update dashboard to create version 2 (draft, not published)
+    _update_dashboard_via_boto(
+        quicksight_client, dashboard_id, f"{dashboard_name}-v2",
+        template_arn, data_set_arn, aws_account_id,
+    )
+    logging.info(f"Updated dashboard {dashboard_id} to create version 2 (draft)")
+
+    # Wait for version 2 to be ready
+    _wait_dashboard_version_status(
+        quicksight_client, aws_account_id, dashboard_id,
+        version_number=2,
+        target_statuses=["CREATION_SUCCESSFUL"],
+    )
+    logging.info(f"Dashboard {dashboard_id} version 2 is CREATION_SUCCESSFUL (draft)")
+
+    yield (dashboard_id, aws_account_id, template_arn, data_set_arn)
+
+    # Teardown: delete the AWS dashboard
+    _delete_dashboard_via_boto(quicksight_client, dashboard_id, aws_account_id)
+
+
+@pytest.fixture()
+def adopted_dashboard(boto_dashboard_with_draft):
+    """Adopts the boto-created dashboard into ACK and yields (ref, cr, dashboard_id, aws_account_id).
+    Cleans up the K8s CR on teardown (deletion-policy: retain keeps the AWS resource).
+    """
+    (dashboard_id, aws_account_id, _, _) = boto_dashboard_with_draft
+
+    resource_name = random_suffix_name("ack-adopt-dash-cr", 24)
+    replacements = REPLACEMENT_VALUES.copy()
+    replacements["DASHBOARD_NAME"] = resource_name
+    replacements["DASHBOARD_ID"] = dashboard_id
+    replacements["AWS_ACCOUNT_ID"] = aws_account_id
+
+    resource_data = load_resource(
+        "dashboard_adoption",
+        additional_replacements=replacements,
+    )
+
+    ref = k8s.CustomResourceReference(
+        CRD_GROUP, CRD_VERSION, DASHBOARD_RESOURCE_PLURAL,
+        resource_name, namespace="default",
+    )
+    k8s.create_custom_resource(ref, resource_data)
+    cr = k8s.wait_resource_consumed_by_controller(ref)
+    assert cr is not None
+
+    assert k8s.wait_on_condition(
+        ref, "ACK.ResourceSynced", "True",
+        wait_periods=DASHBOARD_SYNC_WAIT_PERIODS,
+    )
+
+    cr = k8s.get_resource(ref)
+
+    yield (ref, cr, dashboard_id, aws_account_id)
+
+    # Teardown: delete the K8s CR (deletion-policy: retain keeps the AWS resource)
+    try:
+        _, deleted = k8s.delete_custom_resource(ref, 3, 10)
+        assert deleted
+    except:
+        pass
+
+
 @service_marker
 @pytest.mark.canary
 class TestDashboardAdoption:
     def test_adopt_preserves_published_version(
-        self, quicksight_client, adoption_dependencies,
+        self, quicksight_client, adopted_dashboard,
     ):
         """When a dashboard has multiple versions but is published on an older
         revision, adopting it into ACK should preserve the published version's
         versionNumber and versionStatus. The controller must not publish the
         newer draft version.
-
-        Steps:
-        1. Create dashboard via boto3 (version 1, auto-published)
-        2. Wait for version 1 to reach CREATION_SUCCESSFUL
-        3. Update dashboard via boto3 (creates version 2 as draft, not published)
-        4. Wait for version 2 to reach CREATION_SUCCESSFUL
-        5. Adopt the dashboard into ACK
-        6. Verify versionNumber == 1 and versionStatus == CREATION_SUCCESSFUL
-        7. Verify AWS still has version 1 as the published version
         """
-        (_, _, template_arn, aws_account_id, data_set_arn) = adoption_dependencies
-        dashboard_id = random_suffix_name("ack-adopt-dash", 24)
-        dashboard_name = dashboard_id
+        (ref, cr, dashboard_id, aws_account_id) = adopted_dashboard
 
-        # Step 1: Create dashboard via boto3 (version 1 auto-published)
-        _create_dashboard_via_boto(
-            quicksight_client, dashboard_id, dashboard_name,
-            template_arn, data_set_arn, aws_account_id,
-        )
-        logging.info(f"Created dashboard {dashboard_id} via boto3")
-
-        # Step 2: Wait for version 1 to be ready
-        v1_status = _wait_dashboard_version_status(
-            quicksight_client, aws_account_id, dashboard_id,
-            version_number=1,
-            target_statuses=["CREATION_SUCCESSFUL"],
-        )
-        logging.info(f"Dashboard version 1 status: {v1_status}")
-
-        # Step 3: Update dashboard to create version 2 (draft, not published)
-        _update_dashboard_via_boto(
-            quicksight_client, dashboard_id, f"{dashboard_name}-v2",
-            template_arn, data_set_arn, aws_account_id,
-        )
-        logging.info(f"Updated dashboard {dashboard_id} to create version 2")
-
-        # Step 4: Wait for version 2 to be ready
-        v2_status = _wait_dashboard_version_status(
-            quicksight_client, aws_account_id, dashboard_id,
-            version_number=2,
-            target_statuses=["CREATION_SUCCESSFUL"],
-        )
-        logging.info(f"Dashboard version 2 status: {v2_status}")
-
-        # Verify the published version is still 1 (default describe returns published)
-        resp = quicksight_client.describe_dashboard(
-            AwsAccountId=aws_account_id,
-            DashboardId=dashboard_id,
-        )
-        published_version = resp["Dashboard"]["Version"]["VersionNumber"]
-        assert published_version == 1, (
-            f"Expected published version 1, got {published_version}"
-        )
-
-        # Step 5: Adopt the dashboard into ACK
-        resource_name = random_suffix_name("ack-adopt-dash-cr", 24)
-        replacements = REPLACEMENT_VALUES.copy()
-        replacements["DASHBOARD_NAME"] = resource_name
-        replacements["DASHBOARD_ID"] = dashboard_id
-        replacements["AWS_ACCOUNT_ID"] = aws_account_id
-
-        resource_data = load_resource(
-            "dashboard_adoption",
-            additional_replacements=replacements,
-        )
-
-        ref = k8s.CustomResourceReference(
-            CRD_GROUP, CRD_VERSION, DASHBOARD_RESOURCE_PLURAL,
-            resource_name, namespace="default",
-        )
-        k8s.create_custom_resource(ref, resource_data)
-        cr = k8s.wait_resource_consumed_by_controller(ref)
-        assert cr is not None
-
-        # Step 6: Wait for sync and verify version fields
-        assert k8s.wait_on_condition(
-            ref, "ACK.ResourceSynced", "True",
-            wait_periods=DASHBOARD_SYNC_WAIT_PERIODS,
-        )
-
-        cr = k8s.get_resource(ref)
         assert "status" in cr
 
         cr_version_number = cr["status"].get("versionNumber")
@@ -280,7 +292,7 @@ class TestDashboardAdoption:
             f"got {cr_version_status}"
         )
 
-        # Step 7: Verify AWS still has version 1 as the published version
+        # Verify AWS still has version 1 as the published version
         # (controller did not publish version 2)
         resp = quicksight_client.describe_dashboard(
             AwsAccountId=aws_account_id,
@@ -292,9 +304,71 @@ class TestDashboardAdoption:
             f"got {aws_published_version}"
         )
 
-        # Cleanup: delete the K8s CR (deletion-policy: retain keeps the AWS resource)
-        _, deleted = k8s.delete_custom_resource(ref, 3, 10)
-        assert deleted
+    def test_update_adopted_dashboard_publishes_new_version(
+        self, quicksight_client, adopted_dashboard, adoption_dependencies,
+    ):
+        """After adopting a dashboard, updating its name via ACK should create
+        a new version and publish it. The versionNumber should increment and
+        versionStatus should reach a successful state.
+        """
+        (ref, cr, dashboard_id, aws_account_id) = adopted_dashboard
+        (_, _, template_arn, _, data_set_arn) = adoption_dependencies
 
-        # Clean up the AWS dashboard
-        _delete_dashboard_via_boto(quicksight_client, dashboard_id, aws_account_id)
+        # Record the version number before update
+        initial_version = cr["status"].get("versionNumber")
+        initial_name = cr["spec"]["name"]
+        logging.info(
+            f"Before update: versionNumber={initial_version}, name={initial_name}"
+        )
+
+        # Update the dashboard name
+        new_name = f"updated-{initial_name}"
+        updates = {
+            "spec": {
+                "name": new_name,
+            },
+        }
+        k8s.patch_custom_resource(ref, updates)
+        time.sleep(MODIFY_WAIT_AFTER_SECONDS)
+
+        # Wait for the update to sync
+        assert k8s.wait_on_condition(
+            ref, "ACK.ResourceSynced", "True",
+            wait_periods=DASHBOARD_SYNC_WAIT_PERIODS,
+        )
+
+        cr = k8s.get_resource(ref)
+        updated_version = cr["status"].get("versionNumber")
+        updated_status = cr["status"].get("versionStatus")
+
+        logging.info(
+            f"After update: versionNumber={updated_version}, "
+            f"versionStatus={updated_status}"
+        )
+
+        # Version number should have incremented
+        assert updated_version is not None
+        assert updated_version > initial_version, (
+            f"Expected versionNumber to increment from {initial_version}, "
+            f"got {updated_version}"
+        )
+
+        # Version status should be successful
+        assert updated_status in ["CREATION_SUCCESSFUL", "UPDATE_SUCCESSFUL"], (
+            f"Expected successful versionStatus, got {updated_status}"
+        )
+
+        # Verify AWS reflects the new published version with the updated name
+        resp = quicksight_client.describe_dashboard(
+            AwsAccountId=aws_account_id,
+            DashboardId=dashboard_id,
+        )
+        aws_version = resp["Dashboard"]["Version"]["VersionNumber"]
+        aws_name = resp["Dashboard"]["Name"]
+
+        assert aws_version == updated_version, (
+            f"Expected AWS published version {updated_version}, got {aws_version}"
+        )
+        assert aws_name == new_name, (
+            f"Expected AWS dashboard name '{new_name}', got '{aws_name}'"
+        )
