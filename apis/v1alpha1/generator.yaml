@@ -170,6 +170,12 @@ resources:
         references:
           resource: DataSet
           path: Status.ACKResourceMetadata.ARN
+      # SourceEntity comparison is handled in the delta_post_compare hook
+      # because DescribeDashboard returns SourceEntityArn with a /version/N
+      # suffix that may not match the user-provided ARN.
+      SourceEntity:
+        compare:
+          is_ignored: true
     hooks:
       sdk_update_pre_build_request:
         template_path: hooks/dashboard/sdk_update_pre_build_request.go.tpl

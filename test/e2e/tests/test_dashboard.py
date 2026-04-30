@@ -108,7 +108,8 @@ def _create_data_set(resource_name: str, data_source_arn: str, aws_account_id: s
 
 
 def _create_template(quicksight_client, template_id: str, template_name: str,
-                     data_set_arn: str, aws_account_id: str):
+                     data_set_arn: str, aws_account_id: str,
+                     placeholder: str = "testDataSet"):
     """Helper to create a QuickSight Template via boto3 (not a K8s CR).
     The template is created from the given DataSet using a minimal definition.
     Returns the template ARN.
@@ -120,7 +121,7 @@ def _create_template(quicksight_client, template_id: str, template_name: str,
         Definition={
             "DataSetConfigurations": [
                 {
-                    "Placeholder": "testDataSet",
+                    "Placeholder": placeholder,
                     "DataSetSchema": {
                         "ColumnSchemaList": [
                             {"Name": "id", "DataType": "STRING"},
@@ -433,6 +434,120 @@ class TestDashboard:
 
         tags.assert_ack_system_tags(tags=latest_tags)
         tags.assert_equal_without_ack_tags(expected=expected_tags, actual=latest_tags)
+
+    def test_update_source_entity(self, quicksight_client, simple_dashboard, dashboard_dependencies):
+        """Test that updating sourceEntity (template ARN, dataset ARN, placeholder)
+        triggers a dashboard update and the new values are reflected in AWS."""
+        (ref, cr, aws_account_id) = simple_dashboard
+        (ds_ref, _, _, _, _) = dashboard_dependencies
+
+        assert k8s.wait_on_condition(ref, "ACK.ResourceSynced", "True", wait_periods=DASHBOARD_SYNC_WAIT_PERIODS)
+
+        dashboard_id = cr["spec"]["id"]
+        data_source_arn = k8s.get_resource(ds_ref)["status"]["ackResourceMetadata"]["arn"]
+
+        # Record initial source entity ARN from AWS
+        resp = quicksight_client.describe_dashboard(
+            AwsAccountId=aws_account_id,
+            DashboardId=dashboard_id,
+        )
+        initial_source_arn = resp["Dashboard"]["Version"]["SourceEntityArn"]
+        initial_data_set_arns = resp["Dashboard"]["Version"]["DataSetArns"]
+        initial_version = resp["Dashboard"]["Version"]["VersionNumber"]
+        logging.info(
+            f"Initial: sourceEntityArn={initial_source_arn}, "
+            f"dataSetArns={initial_data_set_arns}, version={initial_version}"
+        )
+
+        # Create a second DataSet and Template to swap to
+        dset2_name = random_suffix_name("ack-test-dset2-dash", 32)
+        (dset2_ref, _, data_set2_arn) = _create_data_set(
+            dset2_name, data_source_arn, aws_account_id,
+        )
+        logging.info(f"Created second DataSet {dset2_name} with ARN {data_set2_arn}")
+
+        template2_id = random_suffix_name("ack-test-tpl2-dash", 32)
+        new_placeholder = "altDataSet"
+        template2_arn = _create_template(
+            quicksight_client, template2_id, template2_id,
+            data_set2_arn, aws_account_id,
+            placeholder=new_placeholder,
+        )
+        logging.info(f"Created second Template {template2_id} with ARN {template2_arn}")
+
+        try:
+            # Update the dashboard to use the new template and dataset.
+            # The placeholder must match the one defined in the template
+            # (created by _create_template with placeholder "testDataSet").
+            updates = {
+                "spec": {
+                    "sourceEntity": {
+                        "sourceTemplate": {
+                            "arn": template2_arn,
+                            "dataSetReferences": [
+                                {
+                                    "dataSetARN": data_set2_arn,
+                                    "dataSetPlaceholder": new_placeholder,
+                                },
+                            ],
+                        },
+                    },
+                },
+            }
+            k8s.patch_custom_resource(ref, updates)
+            time.sleep(MODIFY_WAIT_AFTER_SECONDS)
+
+            assert k8s.wait_on_condition(
+                ref, "ACK.ResourceSynced", "True",
+                wait_periods=DASHBOARD_SYNC_WAIT_PERIODS,
+            )
+
+            # Verify AWS reflects the new source entity
+            resp = quicksight_client.describe_dashboard(
+                AwsAccountId=aws_account_id,
+                DashboardId=dashboard_id,
+            )
+            updated_version = resp["Dashboard"]["Version"]
+            updated_source_arn = updated_version["SourceEntityArn"]
+            updated_data_set_arns = updated_version["DataSetArns"]
+            updated_version_number = updated_version["VersionNumber"]
+
+            logging.info(
+                f"Updated: sourceEntityArn={updated_source_arn}, "
+                f"dataSetArns={updated_data_set_arns}, version={updated_version_number}"
+            )
+
+            # Source entity ARN should now point to the new template
+            assert template2_arn in updated_source_arn, (
+                f"Expected source entity ARN to contain '{template2_arn}', "
+                f"got '{updated_source_arn}'"
+            )
+
+            # Dataset ARNs should contain the new dataset
+            assert data_set2_arn in updated_data_set_arns, (
+                f"Expected '{data_set2_arn}' in dataSetArns, "
+                f"got {updated_data_set_arns}"
+            )
+
+            # Version should have incremented
+            assert updated_version_number > initial_version, (
+                f"Expected version to increment from {initial_version}, "
+                f"got {updated_version_number}"
+            )
+
+            # Verify CR status
+            cr = k8s.get_resource(ref)
+            assert cr["status"]["versionStatus"] in [
+                "CREATION_SUCCESSFUL", "UPDATE_SUCCESSFUL",
+            ]
+        finally:
+            # Clean up the second template and dataset
+            _delete_template(quicksight_client, template2_id, aws_account_id)
+            try:
+                _, deleted = k8s.delete_custom_resource(dset2_ref, 3, 10)
+                assert deleted
+            except:
+                pass
 
     def test_delete(self, quicksight_client, dashboard_dependencies):
         """Test that deleting the K8s resource deletes the AWS Dashboard."""

@@ -300,28 +300,6 @@ func newResourceDelta(
 			}
 		}
 	}
-	if ackcompare.HasNilDifference(a.ko.Spec.SourceEntity, b.ko.Spec.SourceEntity) {
-		delta.Add("Spec.SourceEntity", a.ko.Spec.SourceEntity, b.ko.Spec.SourceEntity)
-	} else if a.ko.Spec.SourceEntity != nil && b.ko.Spec.SourceEntity != nil {
-		if ackcompare.HasNilDifference(a.ko.Spec.SourceEntity.SourceTemplate, b.ko.Spec.SourceEntity.SourceTemplate) {
-			delta.Add("Spec.SourceEntity.SourceTemplate", a.ko.Spec.SourceEntity.SourceTemplate, b.ko.Spec.SourceEntity.SourceTemplate)
-		} else if a.ko.Spec.SourceEntity.SourceTemplate != nil && b.ko.Spec.SourceEntity.SourceTemplate != nil {
-			if ackcompare.HasNilDifference(a.ko.Spec.SourceEntity.SourceTemplate.ARN, b.ko.Spec.SourceEntity.SourceTemplate.ARN) {
-				delta.Add("Spec.SourceEntity.SourceTemplate.ARN", a.ko.Spec.SourceEntity.SourceTemplate.ARN, b.ko.Spec.SourceEntity.SourceTemplate.ARN)
-			} else if a.ko.Spec.SourceEntity.SourceTemplate.ARN != nil && b.ko.Spec.SourceEntity.SourceTemplate.ARN != nil {
-				if *a.ko.Spec.SourceEntity.SourceTemplate.ARN != *b.ko.Spec.SourceEntity.SourceTemplate.ARN {
-					delta.Add("Spec.SourceEntity.SourceTemplate.ARN", a.ko.Spec.SourceEntity.SourceTemplate.ARN, b.ko.Spec.SourceEntity.SourceTemplate.ARN)
-				}
-			}
-			if len(a.ko.Spec.SourceEntity.SourceTemplate.DataSetReferences) != len(b.ko.Spec.SourceEntity.SourceTemplate.DataSetReferences) {
-				delta.Add("Spec.SourceEntity.SourceTemplate.DataSetReferences", a.ko.Spec.SourceEntity.SourceTemplate.DataSetReferences, b.ko.Spec.SourceEntity.SourceTemplate.DataSetReferences)
-			} else if len(a.ko.Spec.SourceEntity.SourceTemplate.DataSetReferences) > 0 {
-				if !equality.Semantic.Equalities.DeepEqual(a.ko.Spec.SourceEntity.SourceTemplate.DataSetReferences, b.ko.Spec.SourceEntity.SourceTemplate.DataSetReferences) {
-					delta.Add("Spec.SourceEntity.SourceTemplate.DataSetReferences", a.ko.Spec.SourceEntity.SourceTemplate.DataSetReferences, b.ko.Spec.SourceEntity.SourceTemplate.DataSetReferences)
-				}
-			}
-		}
-	}
 	desiredACKTags, _ := convertToOrderedACKTags(a.ko.Spec.Tags)
 	latestACKTags, _ := convertToOrderedACKTags(b.ko.Spec.Tags)
 	if !ackcompare.MapStringStringEqual(desiredACKTags, latestACKTags) {
@@ -355,6 +333,27 @@ func newResourceDelta(
 
 	if !equality.Semantic.DeepEqual(a.ko.Status.VersionNumber, b.ko.Status.VersionNumber) {
 		delta.Add("Status.VersionNumber", a.ko.Status.VersionNumber, b.ko.Status.VersionNumber)
+	}
+	// Custom SourceEntity comparison. The generated delta skips this field
+	// (compare.is_ignored) because DescribeDashboard returns SourceEntityArn
+	// with a /version/N suffix.
+	if ackcompare.HasNilDifference(a.ko.Spec.SourceEntity, b.ko.Spec.SourceEntity) {
+		delta.Add("Spec.SourceEntity", a.ko.Spec.SourceEntity, b.ko.Spec.SourceEntity)
+	} else if a.ko.Spec.SourceEntity != nil && b.ko.Spec.SourceEntity != nil {
+		if ackcompare.HasNilDifference(a.ko.Spec.SourceEntity.SourceTemplate, b.ko.Spec.SourceEntity.SourceTemplate) {
+			delta.Add("Spec.SourceEntity.SourceTemplate", a.ko.Spec.SourceEntity.SourceTemplate, b.ko.Spec.SourceEntity.SourceTemplate)
+		} else if a.ko.Spec.SourceEntity.SourceTemplate != nil && b.ko.Spec.SourceEntity.SourceTemplate != nil {
+			aARN := a.ko.Spec.SourceEntity.SourceTemplate.ARN
+			bARN := b.ko.Spec.SourceEntity.SourceTemplate.ARN
+			if ackcompare.HasNilDifference(aARN, bARN) {
+				delta.Add("Spec.SourceEntity.SourceTemplate.ARN", aARN, bARN)
+			} else if aARN != nil && bARN != nil && !sourceEntityARNsMatch(*aARN, *bARN) {
+				delta.Add("Spec.SourceEntity.SourceTemplate.ARN", aARN, bARN)
+			}
+			if !equality.Semantic.DeepEqual(a.ko.Spec.SourceEntity.SourceTemplate.DataSetReferences, b.ko.Spec.SourceEntity.SourceTemplate.DataSetReferences) {
+				delta.Add("Spec.SourceEntity.SourceTemplate.DataSetReferences", a.ko.Spec.SourceEntity.SourceTemplate.DataSetReferences, b.ko.Spec.SourceEntity.SourceTemplate.DataSetReferences)
+			}
+		}
 	}
 
 	return delta

@@ -16,11 +16,11 @@ package dashboard
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/aws-controllers-k8s/quicksight-controller/pkg/sync"
 	"github.com/aws-controllers-k8s/runtime/pkg/metrics"
 	ackrequeue "github.com/aws-controllers-k8s/runtime/pkg/requeue"
-	"github.com/aws/aws-sdk-go-v2/aws"
 	svcsdk "github.com/aws/aws-sdk-go-v2/service/quicksight"
 	svcsdktypes "github.com/aws/aws-sdk-go-v2/service/quicksight/types"
 )
@@ -68,44 +68,58 @@ func requeueWaitVersionReady(r *resource) *ackrequeue.RequeueNeededAfter {
 	)
 }
 
-// getLatestDashboardVersion calls ListDashboardVersions (with pagination)
-// and returns the version number and status of the version with the highest
-// version number.
-func getLatestDashboardVersion(
+// sourceEntityARNsMatch returns true if the desired and latest source entity
+// ARNs refer to the same resource. The latest ARN from DescribeDashboard
+// includes a /version/N suffix. If the desired ARN is a prefix of the latest
+// ARN (i.e. the same base ARN), they match.
+func sourceEntityARNsMatch(desired, latest string) bool {
+	return strings.HasPrefix(latest, desired)
+}
+
+// templateIDFromARN extracts the template ID from a QuickSight template ARN.
+// ARN format: arn:aws:quicksight:<region>:<account>:template/<template-id>[/version/<N>]
+func templateIDFromARN(arn string) string {
+	const prefix = ":template/"
+	idx := strings.Index(arn, prefix)
+	if idx == -1 {
+		return ""
+	}
+	id := arn[idx+len(prefix):]
+	if vIdx := strings.Index(id, "/"); vIdx != -1 {
+		id = id[:vIdx]
+	}
+	return id
+}
+
+// resolveDataSetPlaceholders calls DescribeTemplate and returns a map of
+// dataset ARN to placeholder name. The DataSetConfigurations in the template
+// correspond by position to the DataSetArns on the dashboard version.
+func resolveDataSetPlaceholders(
 	ctx context.Context,
 	sdkapi *svcsdk.Client,
 	m *metrics.Metrics,
 	awsAccountID *string,
-	dashboardID *string,
-) (versionNumber *int64, versionStatus *string, err error) {
-	var latest *svcsdktypes.DashboardVersionSummary
-	var nextToken *string
-	for {
-		input := &svcsdk.ListDashboardVersionsInput{
-			AwsAccountId: awsAccountID,
-			DashboardId:  dashboardID,
-			MaxResults:   aws.Int32(100),
-			NextToken:    nextToken,
-		}
-		resp, err := sdkapi.ListDashboardVersions(ctx, input)
-		m.RecordAPICall("READ_MANY", "ListDashboardVersions", err)
-		if err != nil {
-			return nil, nil, err
-		}
-		for i := range resp.DashboardVersionSummaryList {
-			v := &resp.DashboardVersionSummaryList[i]
-			if latest == nil || (v.VersionNumber != nil && *v.VersionNumber > *latest.VersionNumber) {
-				latest = v
-			}
-		}
-		if resp.NextToken == nil || *resp.NextToken == "" {
-			break
-		}
-		nextToken = resp.NextToken
+	sourceEntityArn string,
+	dataSetArns []string,
+) map[string]string {
+	result := make(map[string]string, len(dataSetArns))
+	templateID := templateIDFromARN(sourceEntityArn)
+	if templateID == "" {
+		return result
 	}
-	if latest == nil {
-		return nil, nil, nil
+	tplResp, err := sdkapi.DescribeTemplate(ctx, &svcsdk.DescribeTemplateInput{
+		AwsAccountId: awsAccountID,
+		TemplateId:   &templateID,
+	})
+	m.RecordAPICall("READ_ONE", "DescribeTemplate", err)
+	if err != nil || tplResp.Template == nil || tplResp.Template.Version == nil {
+		return result
 	}
-	status := string(latest.Status)
-	return latest.VersionNumber, &status, nil
+	configs := tplResp.Template.Version.DataSetConfigurations
+	for i, dsARN := range dataSetArns {
+		if i < len(configs) && configs[i].Placeholder != nil {
+			result[dsARN] = *configs[i].Placeholder
+		}
+	}
+	return result
 }

@@ -8,17 +8,32 @@
 		if resp.Dashboard.Version.ThemeArn != nil {
 			ko.Spec.ThemeARN = resp.Dashboard.Version.ThemeArn
 		}
-		if resp.Dashboard.Version.SourceEntityArn != nil {
-			if ko.Spec.SourceEntity == nil {
-				ko.Spec.SourceEntity = &svcapitypes.DashboardSourceEntity{}
-			}
-			if ko.Spec.SourceEntity.SourceTemplate == nil {
-				ko.Spec.SourceEntity.SourceTemplate = &svcapitypes.DashboardSourceTemplate{}
-			}
-			ko.Spec.SourceEntity.SourceTemplate.ARN = resp.Dashboard.Version.SourceEntityArn
-		}
 		if resp.Dashboard.Version.Description != nil {
 			ko.Spec.VersionDescription = resp.Dashboard.Version.Description
+		}
+		if resp.Dashboard.Version.SourceEntityArn != nil {
+			placeholderByARN := resolveDataSetPlaceholders(
+				ctx, rm.sdkapi, rm.metrics,
+				ko.Spec.AWSAccountID,
+				*resp.Dashboard.Version.SourceEntityArn,
+				resp.Dashboard.Version.DataSetArns,
+			)
+			var dataSetRefs []*svcapitypes.DataSetReference
+			for _, dsARN := range resp.Dashboard.Version.DataSetArns {
+				ref := &svcapitypes.DataSetReference{
+					DataSetARN: aws.String(dsARN),
+				}
+				if placeholder, ok := placeholderByARN[dsARN]; ok {
+					ref.DataSetPlaceholder = aws.String(placeholder)
+				}
+				dataSetRefs = append(dataSetRefs, ref)
+			}
+			ko.Spec.SourceEntity = &svcapitypes.DashboardSourceEntity{
+				SourceTemplate: &svcapitypes.DashboardSourceTemplate{
+					ARN:               resp.Dashboard.Version.SourceEntityArn,
+					DataSetReferences: dataSetRefs,
+				},
+			}
 		}
 	}
 	ko.Spec.Tags, err = getTags(ctx, string(*ko.Status.ACKResourceMetadata.ARN), rm.sdkapi, rm.metrics)
