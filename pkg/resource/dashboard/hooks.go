@@ -28,14 +28,31 @@ import (
 var syncTags = sync.Tags
 var getTags = sync.GetTags
 
-// dashboardVersionReady returns true if the latest version is in a terminal
-// successful state and can be published.
-func dashboardVersionReady(r *resource) bool {
-	if r.ko.Status.VersionStatus == nil {
-		return false
+// dashboardVersionReady calls DescribeDashboard for the given version number
+// and returns (true, status) if that version is in a terminal successful state
+// and can be published, or (false, status) otherwise.
+func dashboardVersionReady(
+	ctx context.Context,
+	sdkapi *svcsdk.Client,
+	m *metrics.Metrics,
+	r *resource,
+	versionNumber *int64,
+) (bool, string) {
+	if versionNumber == nil {
+		return false, ""
 	}
-	status := *r.ko.Status.VersionStatus
-	return status == string(svcsdktypes.ResourceStatusCreationSuccessful) || status == string(svcsdktypes.ResourceStatusUpdateSuccessful)
+	resp, err := sdkapi.DescribeDashboard(ctx, &svcsdk.DescribeDashboardInput{
+		AwsAccountId:  r.ko.Spec.AWSAccountID,
+		DashboardId:   r.ko.Spec.ID,
+		VersionNumber: versionNumber,
+	})
+	m.RecordAPICall("READ_ONE", "DescribeDashboard", err)
+	if err != nil || resp.Dashboard == nil || resp.Dashboard.Version == nil {
+		return false, ""
+	}
+	status := string(resp.Dashboard.Version.Status)
+	ready := resp.Dashboard.Version.Status == svcsdktypes.ResourceStatusCreationSuccessful || resp.Dashboard.Version.Status == svcsdktypes.ResourceStatusUpdateSuccessful
+	return ready, status
 }
 
 // requeueWaitVersionReady returns a RequeueNeededAfter indicating the

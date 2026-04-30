@@ -130,13 +130,13 @@ func (rm *resourceManager) sdkFind(
 	}
 
 	rm.setStatusDefaults(ko)
-	latestVersionNumber, latestVersionStatus, lvErr := getLatestDashboardVersion(ctx, rm.sdkapi, rm.metrics, ko.Spec.AWSAccountID, ko.Spec.ID)
-	if lvErr != nil {
-		return &resource{ko}, lvErr
-	}
-	ko.Status.VersionNumber = latestVersionNumber
-	if latestVersionStatus != nil {
-		ko.Status.VersionStatus = latestVersionStatus
+	if resp.Dashboard.Version != nil {
+		if resp.Dashboard.Version.VersionNumber != nil {
+			ko.Status.VersionNumber = resp.Dashboard.Version.VersionNumber
+		}
+		if resp.Dashboard.Version.Status != "" {
+			ko.Status.VersionStatus = aws.String(string(resp.Dashboard.Version.Status))
+		}
 	}
 	ko.Spec.Tags, err = getTags(ctx, string(*ko.Status.ACKResourceMetadata.ARN), rm.sdkapi, rm.metrics)
 	if err != nil {
@@ -543,21 +543,22 @@ func (rm *resourceManager) sdkUpdate(
 	// subsequent reconcile would see no diff and skip the publish, leaving
 	// the dashboard stuck on the old published version.
 	if delta.DifferentAt("Status.VersionNumber") {
-		if !dashboardVersionReady(latest) {
-			return desired, requeueWaitVersionReady(latest)
+		ready, versionStatus := dashboardVersionReady(ctx, rm.sdkapi, rm.metrics, desired, desired.ko.Status.VersionNumber)
+		if !ready {
+			return desired, requeueWaitVersionReady(desired)
 		}
 		_, pubErr := rm.sdkapi.UpdateDashboardPublishedVersion(ctx, &svcsdk.UpdateDashboardPublishedVersionInput{
 			AwsAccountId:  desired.ko.Spec.AWSAccountID,
 			DashboardId:   desired.ko.Spec.ID,
-			VersionNumber: latest.ko.Status.VersionNumber,
+			VersionNumber: desired.ko.Status.VersionNumber,
 		})
 		rm.metrics.RecordAPICall("UPDATE", "UpdateDashboardPublishedVersion", pubErr)
 		if pubErr != nil {
 			return desired, pubErr
 		}
-		// Safe to propagate now — the new version is published.
-		desired.ko.Status.VersionNumber = latest.ko.Status.VersionNumber
-		desired.ko.Status.VersionStatus = latest.ko.Status.VersionStatus
+		// VersionNumber is already correct on desired. Set VersionStatus
+		// from the DescribeDashboard result for the desired version.
+		desired.ko.Status.VersionStatus = &versionStatus
 	}
 	if delta.DifferentAt("Spec.Tags") {
 		arn := string(*latest.ko.Status.ACKResourceMetadata.ARN)
@@ -614,7 +615,19 @@ func (rm *resourceManager) sdkUpdate(
 	}
 
 	rm.setStatusDefaults(ko)
-	ko.Status.VersionStatus = aws.String(string(svcsdktypes.ResourceStatusUpdateInProgress))
+	if resp.CreationStatus != "" {
+		ko.Status.VersionStatus = aws.String(string(resp.CreationStatus))
+	}
+	if resp.VersionArn != nil {
+		// VersionArn format: arn:aws:quicksight:<region>:<account>:dashboard/<id>/version/<number>
+		parts := strings.Split(*resp.VersionArn, "/version/")
+		if len(parts) == 2 {
+			var vn int64
+			if _, scanErr := fmt.Sscanf(parts[1], "%d", &vn); scanErr == nil {
+				ko.Status.VersionNumber = &vn
+			}
+		}
+	}
 
 	return &resource{ko}, nil
 }

@@ -4,21 +4,22 @@
 	// subsequent reconcile would see no diff and skip the publish, leaving
 	// the dashboard stuck on the old published version.
 	if delta.DifferentAt("Status.VersionNumber") {
-		if !dashboardVersionReady(latest) {
-			return desired, requeueWaitVersionReady(latest)
+		ready, versionStatus := dashboardVersionReady(ctx, rm.sdkapi, rm.metrics, desired, desired.ko.Status.VersionNumber)
+		if !ready {
+			return desired, requeueWaitVersionReady(desired)
 		}
 		_, pubErr := rm.sdkapi.UpdateDashboardPublishedVersion(ctx, &svcsdk.UpdateDashboardPublishedVersionInput{
 			AwsAccountId:  desired.ko.Spec.AWSAccountID,
 			DashboardId:   desired.ko.Spec.ID,
-			VersionNumber: latest.ko.Status.VersionNumber,
+			VersionNumber: desired.ko.Status.VersionNumber,
 		})
 		rm.metrics.RecordAPICall("UPDATE", "UpdateDashboardPublishedVersion", pubErr)
 		if pubErr != nil {
 			return desired, pubErr
 		}
-		// Safe to propagate now — the new version is published.
-		desired.ko.Status.VersionNumber = latest.ko.Status.VersionNumber
-		desired.ko.Status.VersionStatus = latest.ko.Status.VersionStatus
+		// VersionNumber is already correct on desired. Set VersionStatus
+		// from the DescribeDashboard result for the desired version.
+		desired.ko.Status.VersionStatus = &versionStatus
 	}
 	if delta.DifferentAt("Spec.Tags") {
 		arn := string(*latest.ko.Status.ACKResourceMetadata.ARN)
