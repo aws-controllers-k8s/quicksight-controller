@@ -309,7 +309,8 @@ class TestDashboardAdoption:
     ):
         """After adopting a dashboard, updating its name via ACK should create
         a new version and publish it. The versionNumber should increment and
-        versionStatus should reach a successful state.
+        versionStatus should reach a successful state. The draft version (2)
+        must remain unpublished, and only the latest version should be published.
         """
         (ref, cr, dashboard_id, aws_account_id) = adopted_dashboard
         (_, _, template_arn, _, data_set_arn) = adoption_dependencies
@@ -319,6 +320,36 @@ class TestDashboardAdoption:
         initial_name = cr["spec"]["name"]
         logging.info(
             f"Before update: versionNumber={initial_version}, name={initial_name}"
+        )
+
+        # Verify the draft version (2) is NOT published before the update.
+        # DescribeDashboard without VersionNumber returns the published version;
+        # it should still be version 1, not the draft version 2.
+        resp_before = quicksight_client.describe_dashboard(
+            AwsAccountId=aws_account_id,
+            DashboardId=dashboard_id,
+        )
+        published_before = resp_before["Dashboard"]["Version"]["VersionNumber"]
+        assert published_before == 1, (
+            f"Expected published version to be 1 (not draft version 2) before "
+            f"update, got {published_before}"
+        )
+
+        # Also confirm version 2 exists but is not the published version
+        resp_v2 = quicksight_client.describe_dashboard(
+            AwsAccountId=aws_account_id,
+            DashboardId=dashboard_id,
+            VersionNumber=2,
+        )
+        v2_status = resp_v2["Dashboard"]["Version"]["Status"]
+        logging.info(f"Draft version 2 status: {v2_status}")
+        assert v2_status == "CREATION_SUCCESSFUL", (
+            f"Expected draft version 2 to have status CREATION_SUCCESSFUL, "
+            f"got {v2_status}"
+        )
+        # Draft version 2 should not be the published version
+        assert published_before != 2, (
+            "Draft version 2 should not be the published version before update"
         )
 
         # Update the dashboard name
@@ -358,17 +389,45 @@ class TestDashboardAdoption:
             f"Expected successful versionStatus, got {updated_status}"
         )
 
-        # Verify AWS reflects the new published version with the updated name
-        resp = quicksight_client.describe_dashboard(
+        # Verify the latest version IS published by checking the default
+        # (published) view matches the updated version number and name
+        resp_after = quicksight_client.describe_dashboard(
             AwsAccountId=aws_account_id,
             DashboardId=dashboard_id,
         )
-        aws_version = resp["Dashboard"]["Version"]["VersionNumber"]
-        aws_name = resp["Dashboard"]["Name"]
+        aws_published_version = resp_after["Dashboard"]["Version"]["VersionNumber"]
+        aws_name = resp_after["Dashboard"]["Name"]
 
-        assert aws_version == updated_version, (
-            f"Expected AWS published version {updated_version}, got {aws_version}"
+        assert aws_published_version == updated_version, (
+            f"Expected latest version {updated_version} to be published, "
+            f"but published version is {aws_published_version}"
         )
         assert aws_name == new_name, (
             f"Expected AWS dashboard name '{new_name}', got '{aws_name}'"
+        )
+
+        # Verify the draft version (2) is still NOT the published version
+        assert aws_published_version != 2, (
+            f"Draft version 2 should not be the published version after update, "
+            f"but published version is {aws_published_version}"
+        )
+
+        # The new published version should be exactly 1 more than the draft
+        # version (2), i.e. version 3
+        assert updated_version == 3, (
+            f"Expected new version to be 3 (draft version 2 + 1), "
+            f"got {updated_version}"
+        )
+
+        # Confirm the specific updated version is accessible and has the
+        # correct status, proving it was actually published
+        resp_latest = quicksight_client.describe_dashboard(
+            AwsAccountId=aws_account_id,
+            DashboardId=dashboard_id,
+            VersionNumber=updated_version,
+        )
+        latest_version_status = resp_latest["Dashboard"]["Version"]["Status"]
+        assert latest_version_status in ["CREATION_SUCCESSFUL", "UPDATE_SUCCESSFUL"], (
+            f"Expected published version {updated_version} to have successful "
+            f"status, got {latest_version_status}"
         )
