@@ -70,16 +70,8 @@ func newResourceDelta(
 			delta.Add("Spec.LinkEntities", a.ko.Spec.LinkEntities, b.ko.Spec.LinkEntities)
 		}
 	}
-	if ackcompare.HasNilDifference(a.ko.Spec.LinkSharingConfiguration, b.ko.Spec.LinkSharingConfiguration) {
-		delta.Add("Spec.LinkSharingConfiguration", a.ko.Spec.LinkSharingConfiguration, b.ko.Spec.LinkSharingConfiguration)
-	} else if a.ko.Spec.LinkSharingConfiguration != nil && b.ko.Spec.LinkSharingConfiguration != nil {
-		if len(a.ko.Spec.LinkSharingConfiguration.Permissions) != len(b.ko.Spec.LinkSharingConfiguration.Permissions) {
-			delta.Add("Spec.LinkSharingConfiguration.Permissions", a.ko.Spec.LinkSharingConfiguration.Permissions, b.ko.Spec.LinkSharingConfiguration.Permissions)
-		} else if len(a.ko.Spec.LinkSharingConfiguration.Permissions) > 0 {
-			if !equality.Semantic.Equalities.DeepEqual(a.ko.Spec.LinkSharingConfiguration.Permissions, b.ko.Spec.LinkSharingConfiguration.Permissions) {
-				delta.Add("Spec.LinkSharingConfiguration.Permissions", a.ko.Spec.LinkSharingConfiguration.Permissions, b.ko.Spec.LinkSharingConfiguration.Permissions)
-			}
-		}
+	if !equality.Semantic.Equalities.DeepEqual(a.ko.Spec.LinkEntityRefs, b.ko.Spec.LinkEntityRefs) {
+		delta.Add("Spec.LinkEntityRefs", a.ko.Spec.LinkEntityRefs, b.ko.Spec.LinkEntityRefs)
 	}
 	if ackcompare.HasNilDifference(a.ko.Spec.Name, b.ko.Spec.Name) {
 		delta.Add("Spec.Name", a.ko.Spec.Name, b.ko.Spec.Name)
@@ -118,13 +110,6 @@ func newResourceDelta(
 			if !equality.Semantic.Equalities.DeepEqual(a.ko.Spec.Parameters.StringParameters, b.ko.Spec.Parameters.StringParameters) {
 				delta.Add("Spec.Parameters.StringParameters", a.ko.Spec.Parameters.StringParameters, b.ko.Spec.Parameters.StringParameters)
 			}
-		}
-	}
-	if len(a.ko.Spec.Permissions) != len(b.ko.Spec.Permissions) {
-		delta.Add("Spec.Permissions", a.ko.Spec.Permissions, b.ko.Spec.Permissions)
-	} else if len(a.ko.Spec.Permissions) > 0 {
-		if !equality.Semantic.Equalities.DeepEqual(a.ko.Spec.Permissions, b.ko.Spec.Permissions) {
-			delta.Add("Spec.Permissions", a.ko.Spec.Permissions, b.ko.Spec.Permissions)
 		}
 	}
 	if ackcompare.HasNilDifference(a.ko.Spec.PublishOptions, b.ko.Spec.PublishOptions) {
@@ -353,6 +338,18 @@ func newResourceDelta(
 			if !equality.Semantic.DeepEqual(a.ko.Spec.SourceEntity.SourceTemplate.DataSetReferences, b.ko.Spec.SourceEntity.SourceTemplate.DataSetReferences) {
 				delta.Add("Spec.SourceEntity.SourceTemplate.DataSetReferences", a.ko.Spec.SourceEntity.SourceTemplate.DataSetReferences, b.ko.Spec.SourceEntity.SourceTemplate.DataSetReferences)
 			}
+		}
+	}
+	// Custom Permissions comparison using principal-keyed diff.
+	if !permissionsEqual(a.ko.Spec.Permissions, b.ko.Spec.Permissions) {
+		delta.Add("Spec.Permissions", a.ko.Spec.Permissions, b.ko.Spec.Permissions)
+	}
+	// Custom LinkSharingConfiguration comparison.
+	if ackcompare.HasNilDifference(a.ko.Spec.LinkSharingConfiguration, b.ko.Spec.LinkSharingConfiguration) {
+		delta.Add("Spec.LinkSharingConfiguration", a.ko.Spec.LinkSharingConfiguration, b.ko.Spec.LinkSharingConfiguration)
+	} else if a.ko.Spec.LinkSharingConfiguration != nil && b.ko.Spec.LinkSharingConfiguration != nil {
+		if !permissionsEqual(a.ko.Spec.LinkSharingConfiguration.Permissions, b.ko.Spec.LinkSharingConfiguration.Permissions) {
+			delta.Add("Spec.LinkSharingConfiguration.Permissions", a.ko.Spec.LinkSharingConfiguration.Permissions, b.ko.Spec.LinkSharingConfiguration.Permissions)
 		}
 	}
 

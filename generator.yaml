@@ -135,6 +135,11 @@ resources:
         is_immutable: true
       AwsAccountId:
         is_immutable: true
+      # FolderARNs is create-only. After creation, folder membership is
+      # managed via CreateFolderMembership/DeleteFolderMembership on the
+      # folder side. DescribeDashboard does not return folder membership.
+      FolderARNs:
+        is_immutable: true
       # Status fields from DescribeDashboard
       # Flat scalar mirrors of the published Dashboard.Version so the
       # synced sentinel can reference a scalar and we avoid a nested
@@ -170,10 +175,24 @@ resources:
         references:
           resource: DataSet
           path: Status.ACKResourceMetadata.ARN
+      # Cross-resource reference to Analysis for linked entities
+      LinkEntities:
+        references:
+          resource: Analysis
+          path: Status.ACKResourceMetadata.ARN
       # SourceEntity comparison is handled in the delta_post_compare hook
       # because DescribeDashboard returns SourceEntityArn with a /version/N
       # suffix that may not match the user-provided ARN.
       SourceEntity:
+        compare:
+          is_ignored: true
+      # Permissions and LinkSharingConfiguration are managed via the
+      # separate UpdateDashboardPermissions API. Comparison and sync
+      # are handled in custom hooks.
+      Permissions:
+        compare:
+          is_ignored: true
+      LinkSharingConfiguration:
         compare:
           is_ignored: true
     hooks:

@@ -32,7 +32,32 @@
 			return desired, err
 		}
 	}
-	if !delta.DifferentExcept("Spec.Tags", "Status.VersionNumber") {
+	if delta.DifferentAt("Spec.Permissions") || delta.DifferentAt("Spec.LinkSharingConfiguration") {
+		err = syncPermissions(
+			ctx, rm.sdkapi, rm.metrics,
+			desired.ko.Spec.AWSAccountID,
+			desired.ko.Spec.ID,
+			desired.ko.Spec.Permissions,
+			latest.ko.Spec.Permissions,
+			desired.ko.Spec.LinkSharingConfiguration,
+			latest.ko.Spec.LinkSharingConfiguration,
+		)
+		if err != nil {
+			return desired, err
+		}
+	}
+	if delta.DifferentAt("Spec.LinkEntities") {
+		err = syncLinkEntities(
+			ctx, rm.sdkapi, rm.metrics,
+			desired.ko.Spec.AWSAccountID,
+			desired.ko.Spec.ID,
+			desired.ko.Spec.LinkEntities,
+		)
+		if err != nil {
+			return desired, err
+		}
+	}
+	if !delta.DifferentExcept("Spec.Tags", "Spec.Permissions", "Spec.LinkSharingConfiguration", "Spec.LinkEntities", "Status.VersionNumber") {
 		return desired, nil
 	}
 

@@ -22,3 +22,15 @@
 			}
 		}
 	}
+	// Custom Permissions comparison using principal-keyed diff.
+	if !permissionsEqual(a.ko.Spec.Permissions, b.ko.Spec.Permissions) {
+		delta.Add("Spec.Permissions", a.ko.Spec.Permissions, b.ko.Spec.Permissions)
+	}
+	// Custom LinkSharingConfiguration comparison.
+	if ackcompare.HasNilDifference(a.ko.Spec.LinkSharingConfiguration, b.ko.Spec.LinkSharingConfiguration) {
+		delta.Add("Spec.LinkSharingConfiguration", a.ko.Spec.LinkSharingConfiguration, b.ko.Spec.LinkSharingConfiguration)
+	} else if a.ko.Spec.LinkSharingConfiguration != nil && b.ko.Spec.LinkSharingConfiguration != nil {
+		if !permissionsEqual(a.ko.Spec.LinkSharingConfiguration.Permissions, b.ko.Spec.LinkSharingConfiguration.Permissions) {
+			delta.Add("Spec.LinkSharingConfiguration.Permissions", a.ko.Spec.LinkSharingConfiguration.Permissions, b.ko.Spec.LinkSharingConfiguration.Permissions)
+		}
+	}

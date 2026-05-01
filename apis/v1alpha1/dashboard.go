@@ -33,6 +33,7 @@ type DashboardSpec struct {
 	AWSAccountID *string `json:"awsAccountID"`
 	// When you create the dashboard, Amazon Quick Sight adds the dashboard to these
 	// folders.
+	// +kubebuilder:validation:XValidation:rule="self == oldSelf",message="Value is immutable once set"
 	FolderARNs []*string `json:"folderARNs,omitempty"`
 	// The ID for the dashboard, also added to the IAM policy.
 	//
@@ -41,7 +42,8 @@ type DashboardSpec struct {
 	// +kubebuilder:validation:Required
 	ID *string `json:"id"`
 	// A list of analysis Amazon Resource Names (ARNs) to be linked to the dashboard.
-	LinkEntities []*string `json:"linkEntities,omitempty"`
+	LinkEntities   []*string                                  `json:"linkEntities,omitempty"`
+	LinkEntityRefs []*ackv1alpha1.AWSResourceReferenceWrapper `json:"linkEntityRefs,omitempty"`
 	// A structure that contains the permissions of a shareable link to the dashboard.
 	LinkSharingConfiguration *LinkSharingConfiguration `json:"linkSharingConfiguration,omitempty"`
 	// The display name of the dashboard.

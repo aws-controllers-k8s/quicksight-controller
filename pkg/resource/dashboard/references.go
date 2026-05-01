@@ -37,6 +37,10 @@ import (
 func (rm *resourceManager) ClearResolvedReferences(res acktypes.AWSResource) acktypes.AWSResource {
 	ko := rm.concreteResource(res).ko.DeepCopy()
 
+	if len(ko.Spec.LinkEntityRefs) > 0 {
+		ko.Spec.LinkEntities = nil
+	}
+
 	if ko.Spec.SourceEntity != nil {
 		if ko.Spec.SourceEntity.SourceTemplate != nil {
 			for f0idx, f0iter := range ko.Spec.SourceEntity.SourceTemplate.DataSetReferences {
@@ -66,6 +70,12 @@ func (rm *resourceManager) ResolveReferences(
 
 	resourceHasReferences := false
 	err := validateReferenceFields(ko)
+	if fieldHasReferences, err := rm.resolveReferenceForLinkEntities(ctx, apiReader, ko); err != nil {
+		return &resource{ko}, (resourceHasReferences || fieldHasReferences), err
+	} else {
+		resourceHasReferences = resourceHasReferences || fieldHasReferences
+	}
+
 	if fieldHasReferences, err := rm.resolveReferenceForSourceEntity_SourceTemplate_DataSetReferences_DataSetARN(ctx, apiReader, ko); err != nil {
 		return &resource{ko}, (resourceHasReferences || fieldHasReferences), err
 	} else {
@@ -79,6 +89,10 @@ func (rm *resourceManager) ResolveReferences(
 // identifier field.
 func validateReferenceFields(ko *svcapitypes.Dashboard) error {
 
+	if len(ko.Spec.LinkEntityRefs) > 0 && len(ko.Spec.LinkEntities) > 0 {
+		return ackerr.ResourceReferenceAndIDNotSupportedFor("LinkEntities", "LinkEntityRefs")
+	}
+
 	if ko.Spec.SourceEntity != nil {
 		if ko.Spec.SourceEntity.SourceTemplate != nil {
 			for _, f0iter := range ko.Spec.SourceEntity.SourceTemplate.DataSetReferences {
@@ -87,6 +101,94 @@ func validateReferenceFields(ko *svcapitypes.Dashboard) error {
 				}
 			}
 		}
+	}
+	return nil
+}
+
+// resolveReferenceForLinkEntities reads the resource referenced
+// from LinkEntityRefs field and sets the LinkEntities
+// from referenced resource. Returns a boolean indicating whether a reference
+// contains references, or an error
+func (rm *resourceManager) resolveReferenceForLinkEntities(
+	ctx context.Context,
+	apiReader client.Reader,
+	ko *svcapitypes.Dashboard,
+) (hasReferences bool, err error) {
+	for _, f0iter := range ko.Spec.LinkEntityRefs {
+		if f0iter != nil && f0iter.From != nil {
+			hasReferences = true
+			arr := f0iter.From
+			if arr.Name == nil || *arr.Name == "" {
+				return hasReferences, fmt.Errorf("provided resource reference is nil or empty: LinkEntityRefs")
+			}
+			namespace := ko.ObjectMeta.GetNamespace()
+			if arr.Namespace != nil && *arr.Namespace != "" {
+				namespace = *arr.Namespace
+			}
+			obj := &svcapitypes.Analysis{}
+			if err := getReferencedResourceState_Analysis(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
+				return hasReferences, err
+			}
+			if ko.Spec.LinkEntities == nil {
+				ko.Spec.LinkEntities = make([]*string, 0, 1)
+			}
+			ko.Spec.LinkEntities = append(ko.Spec.LinkEntities, (*string)(obj.Status.ACKResourceMetadata.ARN))
+		}
+	}
+
+	return hasReferences, nil
+}
+
+// getReferencedResourceState_Analysis looks up whether a referenced resource
+// exists and is in a ACK.ResourceSynced=True state. If the referenced resource does exist and is
+// in a Synced state, returns nil, otherwise returns `ackerr.ResourceReferenceTerminalFor` or
+// `ResourceReferenceNotSyncedFor` depending on if the resource is in a Terminal state.
+func getReferencedResourceState_Analysis(
+	ctx context.Context,
+	apiReader client.Reader,
+	obj *svcapitypes.Analysis,
+	name string, // the Kubernetes name of the referenced resource
+	namespace string, // the Kubernetes namespace of the referenced resource
+) error {
+	namespacedName := types.NamespacedName{
+		Namespace: namespace,
+		Name:      name,
+	}
+	err := apiReader.Get(ctx, namespacedName, obj)
+	if err != nil {
+		return err
+	}
+	var refResourceTerminal bool
+	for _, cond := range obj.Status.Conditions {
+		if cond.Type == ackv1alpha1.ConditionTypeTerminal &&
+			cond.Status == corev1.ConditionTrue {
+			return ackerr.ResourceReferenceTerminalFor(
+				"Analysis",
+				namespace, name)
+		}
+	}
+	if refResourceTerminal {
+		return ackerr.ResourceReferenceTerminalFor(
+			"Analysis",
+			namespace, name)
+	}
+	var refResourceSynced bool
+	for _, cond := range obj.Status.Conditions {
+		if cond.Type == ackv1alpha1.ConditionTypeResourceSynced &&
+			cond.Status == corev1.ConditionTrue {
+			refResourceSynced = true
+		}
+	}
+	if !refResourceSynced {
+		return ackerr.ResourceReferenceNotSyncedFor(
+			"Analysis",
+			namespace, name)
+	}
+	if obj.Status.ACKResourceMetadata == nil || obj.Status.ACKResourceMetadata.ARN == nil {
+		return ackerr.ResourceReferenceMissingTargetFieldFor(
+			"Analysis",
+			namespace, name,
+			"Status.ACKResourceMetadata.ARN")
 	}
 	return nil
 }

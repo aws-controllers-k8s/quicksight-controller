@@ -36,6 +36,15 @@
 			}
 		}
 	}
+	// Fetch permissions and link sharing configuration
+	perms, lsc, permErr := getDashboardPermissions(
+		ctx, rm.sdkapi, rm.metrics,
+		ko.Spec.AWSAccountID, ko.Spec.ID,
+	)
+	if permErr == nil {
+		ko.Spec.Permissions = perms
+		ko.Spec.LinkSharingConfiguration = lsc
+	}
 	ko.Spec.Tags, err = getTags(ctx, string(*ko.Status.ACKResourceMetadata.ARN), rm.sdkapi, rm.metrics)
 	if err != nil {
 		return &resource{ko}, err

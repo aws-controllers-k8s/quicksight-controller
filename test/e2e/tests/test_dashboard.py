@@ -549,6 +549,244 @@ class TestDashboard:
             except:
                 pass
 
+    def test_update_permissions(self, quicksight_client, simple_dashboard):
+        """Test that granting and revoking dashboard permissions works correctly."""
+        (ref, cr, aws_account_id) = simple_dashboard
+
+        assert k8s.wait_on_condition(ref, "ACK.ResourceSynced", "True", wait_periods=DASHBOARD_SYNC_WAIT_PERIODS)
+
+        dashboard_id = cr["spec"]["id"]
+        # Use the default namespace principal for permissions
+        principal_arn = f"arn:aws:quicksight:us-west-2:{aws_account_id}:namespace/default"
+
+        # QuickSight requires dashboard permissions to be granted as a
+        # complete predefined set. The valid reader set is:
+        reader_actions = [
+            "quicksight:DescribeDashboard",
+            "quicksight:ListDashboardVersions",
+            "quicksight:QueryDashboard",
+        ]
+
+        # Step 1: Grant permissions to a principal
+        updates = {
+            "spec": {
+                "permissions": [
+                    {
+                        "principal": principal_arn,
+                        "actions": reader_actions,
+                    },
+                ],
+            },
+        }
+        k8s.patch_custom_resource(ref, updates)
+        time.sleep(MODIFY_WAIT_AFTER_SECONDS)
+
+        assert k8s.wait_on_condition(ref, "ACK.ResourceSynced", "True", wait_periods=DASHBOARD_SYNC_WAIT_PERIODS)
+
+        # Verify permissions in AWS
+        resp = quicksight_client.describe_dashboard_permissions(
+            AwsAccountId=aws_account_id,
+            DashboardId=dashboard_id,
+        )
+        aws_perms = resp["Permissions"]
+        assert len(aws_perms) >= 1
+        ns_perm = next((p for p in aws_perms if p["Principal"] == principal_arn), None)
+        assert ns_perm is not None, f"Expected permission for {principal_arn}"
+        assert set(ns_perm["Actions"]) == set(reader_actions)
+        logging.info(f"Granted permissions: {ns_perm}")
+
+        # Step 2: Remove all permissions (revoke the principal)
+        updates = {
+            "spec": {
+                "permissions": [],
+            },
+        }
+        k8s.patch_custom_resource(ref, updates)
+        time.sleep(MODIFY_WAIT_AFTER_SECONDS)
+
+        assert k8s.wait_on_condition(ref, "ACK.ResourceSynced", "True", wait_periods=DASHBOARD_SYNC_WAIT_PERIODS)
+
+        resp = quicksight_client.describe_dashboard_permissions(
+            AwsAccountId=aws_account_id,
+            DashboardId=dashboard_id,
+        )
+        aws_perms = resp.get("Permissions", [])
+        ns_perm = next((p for p in aws_perms if p["Principal"] == principal_arn), None)
+        assert ns_perm is None, (
+            f"Expected permission for {principal_arn} to be removed, "
+            f"but found {ns_perm}"
+        )
+        logging.info("Permissions removed successfully")
+
+    def test_update_link_entities(self, quicksight_client, simple_dashboard, dashboard_dependencies):
+        """Test that updating linkEntities (linked analysis ARNs) works correctly."""
+        (ref, cr, aws_account_id) = simple_dashboard
+        (_, _, template_arn, _, data_set_arn) = dashboard_dependencies
+
+        assert k8s.wait_on_condition(ref, "ACK.ResourceSynced", "True", wait_periods=DASHBOARD_SYNC_WAIT_PERIODS)
+
+        dashboard_id = cr["spec"]["id"]
+
+        # Create an analysis via boto3 to link to the dashboard
+        analysis_id = random_suffix_name("ack-test-an-link", 24)
+        quicksight_client.create_analysis(
+            AwsAccountId=aws_account_id,
+            AnalysisId=analysis_id,
+            Name=analysis_id,
+            SourceEntity={
+                "SourceTemplate": {
+                    "Arn": template_arn,
+                    "DataSetReferences": [
+                        {
+                            "DataSetArn": data_set_arn,
+                            "DataSetPlaceholder": "testDataSet",
+                        },
+                    ],
+                },
+            },
+        )
+        # Wait for analysis creation
+        analysis_arn = None
+        for _ in range(10):
+            time.sleep(TEMPLATE_WAIT_SECONDS)
+            try:
+                resp = quicksight_client.describe_analysis(
+                    AwsAccountId=aws_account_id,
+                    AnalysisId=analysis_id,
+                )
+                if resp["Analysis"]["Status"] == "CREATION_SUCCESSFUL":
+                    analysis_arn = resp["Analysis"]["Arn"]
+                    break
+            except Exception:
+                continue
+        assert analysis_arn is not None, f"Analysis {analysis_id} did not reach CREATION_SUCCESSFUL"
+        logging.info(f"Created analysis {analysis_id} with ARN {analysis_arn}")
+
+        try:
+            # Step 1: Link the analysis to the dashboard
+            updates = {
+                "spec": {
+                    "linkEntities": [analysis_arn],
+                },
+            }
+            k8s.patch_custom_resource(ref, updates)
+            time.sleep(MODIFY_WAIT_AFTER_SECONDS)
+
+            assert k8s.wait_on_condition(ref, "ACK.ResourceSynced", "True", wait_periods=DASHBOARD_SYNC_WAIT_PERIODS)
+
+            # Verify in AWS
+            resp = quicksight_client.describe_dashboard(
+                AwsAccountId=aws_account_id,
+                DashboardId=dashboard_id,
+            )
+            aws_links = resp["Dashboard"].get("LinkEntities", [])
+            assert analysis_arn in aws_links, (
+                f"Expected {analysis_arn} in LinkEntities, got {aws_links}"
+            )
+            logging.info(f"Linked analysis: {aws_links}")
+
+            # Step 2: Remove the link
+            updates = {
+                "spec": {
+                    "linkEntities": [],
+                },
+            }
+            k8s.patch_custom_resource(ref, updates)
+            time.sleep(MODIFY_WAIT_AFTER_SECONDS)
+
+            assert k8s.wait_on_condition(ref, "ACK.ResourceSynced", "True", wait_periods=DASHBOARD_SYNC_WAIT_PERIODS)
+
+            resp = quicksight_client.describe_dashboard(
+                AwsAccountId=aws_account_id,
+                DashboardId=dashboard_id,
+            )
+            aws_links = resp["Dashboard"].get("LinkEntities", [])
+            assert analysis_arn not in aws_links, (
+                f"Expected {analysis_arn} to be removed from LinkEntities, got {aws_links}"
+            )
+            logging.info("Link entity removed successfully")
+        finally:
+            # Clean up the analysis
+            try:
+                quicksight_client.delete_analysis(
+                    AwsAccountId=aws_account_id,
+                    AnalysisId=analysis_id,
+                    ForceDeleteWithoutRecovery=True,
+                )
+            except Exception:
+                logging.warning(f"Failed to delete analysis {analysis_id}", exc_info=True)
+
+    def test_update_link_sharing_configuration(self, quicksight_client, simple_dashboard):
+        """Test that setting and removing linkSharingConfiguration works correctly."""
+        (ref, cr, aws_account_id) = simple_dashboard
+
+        assert k8s.wait_on_condition(ref, "ACK.ResourceSynced", "True", wait_periods=DASHBOARD_SYNC_WAIT_PERIODS)
+
+        dashboard_id = cr["spec"]["id"]
+        principal_arn = f"arn:aws:quicksight:us-west-2:{aws_account_id}:namespace/default"
+
+        link_actions = [
+            "quicksight:DescribeDashboard",
+            "quicksight:ListDashboardVersions",
+            "quicksight:QueryDashboard",
+        ]
+
+        # Step 1: Set link sharing configuration
+        updates = {
+            "spec": {
+                "linkSharingConfiguration": {
+                    "permissions": [
+                        {
+                            "principal": principal_arn,
+                            "actions": link_actions,
+                        },
+                    ],
+                },
+            },
+        }
+        k8s.patch_custom_resource(ref, updates)
+        time.sleep(MODIFY_WAIT_AFTER_SECONDS)
+
+        assert k8s.wait_on_condition(ref, "ACK.ResourceSynced", "True", wait_periods=DASHBOARD_SYNC_WAIT_PERIODS)
+
+        # Verify in AWS
+        resp = quicksight_client.describe_dashboard_permissions(
+            AwsAccountId=aws_account_id,
+            DashboardId=dashboard_id,
+        )
+        lsc = resp.get("LinkSharingConfiguration")
+        assert lsc is not None, "Expected LinkSharingConfiguration to be set"
+        lsc_perms = lsc.get("Permissions", [])
+        ns_perm = next((p for p in lsc_perms if p["Principal"] == principal_arn), None)
+        assert ns_perm is not None, f"Expected link sharing permission for {principal_arn}"
+        assert set(ns_perm["Actions"]) == set(link_actions)
+        logging.info(f"Link sharing configuration set: {ns_perm}")
+
+        # Step 2: Remove link sharing configuration
+        updates = {
+            "spec": {
+                "linkSharingConfiguration": None,
+            },
+        }
+        k8s.patch_custom_resource(ref, updates)
+        time.sleep(MODIFY_WAIT_AFTER_SECONDS)
+
+        assert k8s.wait_on_condition(ref, "ACK.ResourceSynced", "True", wait_periods=DASHBOARD_SYNC_WAIT_PERIODS)
+
+        resp = quicksight_client.describe_dashboard_permissions(
+            AwsAccountId=aws_account_id,
+            DashboardId=dashboard_id,
+        )
+        lsc = resp.get("LinkSharingConfiguration")
+        if lsc is not None:
+            lsc_perms = lsc.get("Permissions", [])
+            ns_perm = next((p for p in lsc_perms if p["Principal"] == principal_arn), None)
+            assert ns_perm is None, (
+                f"Expected link sharing permission for {principal_arn} to be removed, "
+                f"but found {ns_perm}"
+            )
+        logging.info("Link sharing configuration removed successfully")
+
     def test_delete(self, quicksight_client, dashboard_dependencies):
         """Test that deleting the K8s resource deletes the AWS Dashboard."""
         (_, _, template_arn, aws_account_id, data_set_arn) = dashboard_dependencies

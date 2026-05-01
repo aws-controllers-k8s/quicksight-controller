@@ -18,9 +18,12 @@ import (
 	"fmt"
 	"strings"
 
+	svcapitypes "github.com/aws-controllers-k8s/quicksight-controller/apis/v1alpha1"
 	"github.com/aws-controllers-k8s/quicksight-controller/pkg/sync"
+	ackcompare "github.com/aws-controllers-k8s/runtime/pkg/compare"
 	"github.com/aws-controllers-k8s/runtime/pkg/metrics"
 	ackrequeue "github.com/aws-controllers-k8s/runtime/pkg/requeue"
+	ackrtlog "github.com/aws-controllers-k8s/runtime/pkg/runtime/log"
 	svcsdk "github.com/aws/aws-sdk-go-v2/service/quicksight"
 	svcsdktypes "github.com/aws/aws-sdk-go-v2/service/quicksight/types"
 )
@@ -120,6 +123,205 @@ func resolveDataSetPlaceholders(
 		if i < len(configs) && configs[i].Placeholder != nil {
 			result[dsARN] = *configs[i].Placeholder
 		}
+	}
+	return result
+}
+
+// syncLinkEntities calls UpdateDashboardLinks with the desired list of
+// linked analysis ARNs. The API is declarative — it replaces the full list.
+func syncLinkEntities(
+	ctx context.Context,
+	sdkapi *svcsdk.Client,
+	m *metrics.Metrics,
+	awsAccountID *string,
+	dashboardID *string,
+	desired []*string,
+) error {
+	rlog := ackrtlog.FromContext(ctx)
+	exit := rlog.Trace("syncLinkEntities")
+	defer func() { exit(nil) }()
+
+	linkEntities := make([]string, 0, len(desired))
+	for _, e := range desired {
+		if e != nil {
+			linkEntities = append(linkEntities, *e)
+		}
+	}
+	_, err := sdkapi.UpdateDashboardLinks(ctx, &svcsdk.UpdateDashboardLinksInput{
+		AwsAccountId: awsAccountID,
+		DashboardId:  dashboardID,
+		LinkEntities: linkEntities,
+	})
+	m.RecordAPICall("UPDATE", "UpdateDashboardLinks", err)
+	return err
+}
+
+// getDashboardPermissions calls DescribeDashboardPermissions and returns
+// the permissions and link sharing configuration.
+func getDashboardPermissions(
+	ctx context.Context,
+	sdkapi *svcsdk.Client,
+	m *metrics.Metrics,
+	awsAccountID *string,
+	dashboardID *string,
+) ([]*svcapitypes.ResourcePermission, *svcapitypes.LinkSharingConfiguration, error) {
+	resp, err := sdkapi.DescribeDashboardPermissions(ctx, &svcsdk.DescribeDashboardPermissionsInput{
+		AwsAccountId: awsAccountID,
+		DashboardId:  dashboardID,
+	})
+	m.RecordAPICall("READ_ONE", "DescribeDashboardPermissions", err)
+	if err != nil {
+		return nil, nil, err
+	}
+	perms := convertSDKPermissions(resp.Permissions)
+	var lsc *svcapitypes.LinkSharingConfiguration
+	if resp.LinkSharingConfiguration != nil && len(resp.LinkSharingConfiguration.Permissions) > 0 {
+		lsc = &svcapitypes.LinkSharingConfiguration{
+			Permissions: convertSDKPermissions(resp.LinkSharingConfiguration.Permissions),
+		}
+	}
+	return perms, lsc, nil
+}
+
+// syncPermissions computes the grant/revoke diff between desired and latest
+// permissions and calls UpdateDashboardPermissions.
+func syncPermissions(
+	ctx context.Context,
+	sdkapi *svcsdk.Client,
+	m *metrics.Metrics,
+	awsAccountID *string,
+	dashboardID *string,
+	desiredPerms []*svcapitypes.ResourcePermission,
+	latestPerms []*svcapitypes.ResourcePermission,
+	desiredLSC *svcapitypes.LinkSharingConfiguration,
+	latestLSC *svcapitypes.LinkSharingConfiguration,
+) error {
+	rlog := ackrtlog.FromContext(ctx)
+	exit := rlog.Trace("syncPermissions")
+	defer func() { exit(nil) }()
+
+	grantPerms, revokePerms := diffPermissions(desiredPerms, latestPerms)
+
+	var desiredLSCPerms, latestLSCPerms []*svcapitypes.ResourcePermission
+	if desiredLSC != nil {
+		desiredLSCPerms = desiredLSC.Permissions
+	}
+	if latestLSC != nil {
+		latestLSCPerms = latestLSC.Permissions
+	}
+	grantLinkPerms, revokeLinkPerms := diffPermissions(desiredLSCPerms, latestLSCPerms)
+
+	if len(grantPerms) == 0 && len(revokePerms) == 0 &&
+		len(grantLinkPerms) == 0 && len(revokeLinkPerms) == 0 {
+		return nil
+	}
+
+	input := &svcsdk.UpdateDashboardPermissionsInput{
+		AwsAccountId: awsAccountID,
+		DashboardId:  dashboardID,
+	}
+	if len(grantPerms) > 0 {
+		input.GrantPermissions = toSDKPermissions(grantPerms)
+	}
+	if len(revokePerms) > 0 {
+		input.RevokePermissions = toSDKPermissions(revokePerms)
+	}
+	if len(grantLinkPerms) > 0 {
+		input.GrantLinkPermissions = toSDKPermissions(grantLinkPerms)
+	}
+	if len(revokeLinkPerms) > 0 {
+		input.RevokeLinkPermissions = toSDKPermissions(revokeLinkPerms)
+	}
+
+	_, err := sdkapi.UpdateDashboardPermissions(ctx, input)
+	m.RecordAPICall("UPDATE", "UpdateDashboardPermissions", err)
+	return err
+}
+
+// diffPermissions computes the permissions to grant and revoke to move from
+// latest to desired. Each ResourcePermission is keyed by Principal.
+//   - Grant: principals in desired but not in latest, or principals whose
+//     actions changed.
+//   - Revoke: principals in latest but not in desired.
+func diffPermissions(
+	desired []*svcapitypes.ResourcePermission,
+	latest []*svcapitypes.ResourcePermission,
+) (grant, revoke []*svcapitypes.ResourcePermission) {
+	desiredMap := permissionsByPrincipal(desired)
+	latestMap := permissionsByPrincipal(latest)
+
+	// Grant: new or changed principals
+	for principal, desiredPerm := range desiredMap {
+		latestPerm, exists := latestMap[principal]
+		if !exists || !ackcompare.SliceStringPEqual(desiredPerm.Actions, latestPerm.Actions) {
+			grant = append(grant, desiredPerm)
+		}
+	}
+	// Revoke: removed principals
+	for principal, latestPerm := range latestMap {
+		if _, exists := desiredMap[principal]; !exists {
+			revoke = append(revoke, latestPerm)
+		}
+	}
+	return grant, revoke
+}
+
+// permissionsByPrincipal indexes permissions by principal ARN.
+func permissionsByPrincipal(perms []*svcapitypes.ResourcePermission) map[string]*svcapitypes.ResourcePermission {
+	m := make(map[string]*svcapitypes.ResourcePermission, len(perms))
+	for _, p := range perms {
+		if p.Principal != nil {
+			m[*p.Principal] = p
+		}
+	}
+	return m
+}
+
+// permissionsEqual returns true if two permission slices are equivalent.
+func permissionsEqual(a, b []*svcapitypes.ResourcePermission) bool {
+	grant, revoke := diffPermissions(a, b)
+	return len(grant) == 0 && len(revoke) == 0
+}
+
+// convertSDKPermissions converts SDK ResourcePermission slice to CRD type.
+func convertSDKPermissions(perms []svcsdktypes.ResourcePermission) []*svcapitypes.ResourcePermission {
+	if len(perms) == 0 {
+		return nil
+	}
+	result := make([]*svcapitypes.ResourcePermission, 0, len(perms))
+	for _, p := range perms {
+		perm := &svcapitypes.ResourcePermission{
+			Principal: p.Principal,
+		}
+		if p.Actions != nil {
+			actions := make([]*string, 0, len(p.Actions))
+			for i := range p.Actions {
+				actions = append(actions, &p.Actions[i])
+			}
+			perm.Actions = actions
+		}
+		result = append(result, perm)
+	}
+	return result
+}
+
+// toSDKPermissions converts CRD ResourcePermission slice to SDK type.
+func toSDKPermissions(perms []*svcapitypes.ResourcePermission) []svcsdktypes.ResourcePermission {
+	result := make([]svcsdktypes.ResourcePermission, 0, len(perms))
+	for _, p := range perms {
+		sdkPerm := svcsdktypes.ResourcePermission{
+			Principal: p.Principal,
+		}
+		if p.Actions != nil {
+			actions := make([]string, 0, len(p.Actions))
+			for _, a := range p.Actions {
+				if a != nil {
+					actions = append(actions, *a)
+				}
+			}
+			sdkPerm.Actions = actions
+		}
+		result = append(result, sdkPerm)
 	}
 	return result
 }
