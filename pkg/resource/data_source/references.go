@@ -124,6 +124,136 @@ func (rm *resourceManager) ClearResolvedReferences(res acktypes.AWSResource) ack
 	return &resource{ko}
 }
 
+// EnsureReferences restores, onto a copy of `latest`, the cross-resource reference
+// (*Ref) fields it is missing, taking them from `desired`. Only reference fields are
+// written, so every concrete value on `latest` stands.
+//
+// A *Ref is a sibling of the concrete field it resolves into, so rebuilding the
+// containing struct from an AWS API response drops it. That disables
+// ClearResolvedReferences, which suppresses a resolved value only while the sibling
+// *Ref is visible, so the spec patch would otherwise delete the declared *Ref and
+// store the resolved value in its place.
+//
+// Only references reached through structs are restored, and each containing struct
+// is created on `latest` when `desired` has it and `latest` does not -- generated
+// set-output code nils a struct when the response omits it. A top-level *Ref needs
+// no help, since generated set-output code overwrites only the concrete field. One
+// reached through a list is not restored: it has no fixed address, and replacing the
+// whole list would discard whatever the service populated inside it.
+//
+// Nothing is written unless `desired` actually holds the reference, so a source that
+// declares none leaves `latest` untouched.
+func (rm *resourceManager) EnsureReferences(
+	desired acktypes.AWSResource,
+	latest acktypes.AWSResource,
+) acktypes.AWSResource {
+	// Deep copy the source as well, so a reference handed over below does not
+	// alias the caller's declared object.
+	desiredKO := rm.concreteResource(desired).ko.DeepCopy()
+	latestKO := rm.concreteResource(latest).ko.DeepCopy()
+
+	if desiredKO.Spec.Credentials != nil {
+		if desiredKO.Spec.Credentials.SecretRef != nil {
+			if latestKO.Spec.Credentials == nil {
+				latestKO.Spec.Credentials = &svcapitypes.DataSourceCredentials{}
+			}
+			if latestKO.Spec.Credentials.SecretRef == nil {
+				latestKO.Spec.Credentials.SecretRef = desiredKO.Spec.Credentials.SecretRef
+			}
+		}
+	}
+	if desiredKO.Spec.Parameters != nil {
+		if desiredKO.Spec.Parameters.AthenaParameters != nil {
+			if desiredKO.Spec.Parameters.AthenaParameters.RoleRef != nil {
+				if latestKO.Spec.Parameters == nil {
+					latestKO.Spec.Parameters = &svcapitypes.DataSourceParameters{}
+				}
+				if latestKO.Spec.Parameters.AthenaParameters == nil {
+					latestKO.Spec.Parameters.AthenaParameters = &svcapitypes.AthenaParameters{}
+				}
+				if latestKO.Spec.Parameters.AthenaParameters.RoleRef == nil {
+					latestKO.Spec.Parameters.AthenaParameters.RoleRef = desiredKO.Spec.Parameters.AthenaParameters.RoleRef
+				}
+			}
+		}
+		if desiredKO.Spec.Parameters.RdsParameters != nil {
+			if desiredKO.Spec.Parameters.RdsParameters.InstanceRef != nil {
+				if latestKO.Spec.Parameters == nil {
+					latestKO.Spec.Parameters = &svcapitypes.DataSourceParameters{}
+				}
+				if latestKO.Spec.Parameters.RdsParameters == nil {
+					latestKO.Spec.Parameters.RdsParameters = &svcapitypes.RdsParameters{}
+				}
+				if latestKO.Spec.Parameters.RdsParameters.InstanceRef == nil {
+					latestKO.Spec.Parameters.RdsParameters.InstanceRef = desiredKO.Spec.Parameters.RdsParameters.InstanceRef
+				}
+			}
+		}
+		if desiredKO.Spec.Parameters.RedshiftParameters != nil {
+			if desiredKO.Spec.Parameters.RedshiftParameters.IAMParameters != nil {
+				if desiredKO.Spec.Parameters.RedshiftParameters.IAMParameters.RoleRef != nil {
+					if latestKO.Spec.Parameters == nil {
+						latestKO.Spec.Parameters = &svcapitypes.DataSourceParameters{}
+					}
+					if latestKO.Spec.Parameters.RedshiftParameters == nil {
+						latestKO.Spec.Parameters.RedshiftParameters = &svcapitypes.RedshiftParameters{}
+					}
+					if latestKO.Spec.Parameters.RedshiftParameters.IAMParameters == nil {
+						latestKO.Spec.Parameters.RedshiftParameters.IAMParameters = &svcapitypes.RedshiftIAMParameters{}
+					}
+					if latestKO.Spec.Parameters.RedshiftParameters.IAMParameters.RoleRef == nil {
+						latestKO.Spec.Parameters.RedshiftParameters.IAMParameters.RoleRef = desiredKO.Spec.Parameters.RedshiftParameters.IAMParameters.RoleRef
+					}
+				}
+			}
+		}
+		if desiredKO.Spec.Parameters.S3KnowledgeBaseParameters != nil {
+			if desiredKO.Spec.Parameters.S3KnowledgeBaseParameters.RoleRef != nil {
+				if latestKO.Spec.Parameters == nil {
+					latestKO.Spec.Parameters = &svcapitypes.DataSourceParameters{}
+				}
+				if latestKO.Spec.Parameters.S3KnowledgeBaseParameters == nil {
+					latestKO.Spec.Parameters.S3KnowledgeBaseParameters = &svcapitypes.S3KnowledgeBaseParameters{}
+				}
+				if latestKO.Spec.Parameters.S3KnowledgeBaseParameters.RoleRef == nil {
+					latestKO.Spec.Parameters.S3KnowledgeBaseParameters.RoleRef = desiredKO.Spec.Parameters.S3KnowledgeBaseParameters.RoleRef
+				}
+			}
+		}
+		if desiredKO.Spec.Parameters.S3Parameters != nil {
+			if desiredKO.Spec.Parameters.S3Parameters.RoleRef != nil {
+				if latestKO.Spec.Parameters == nil {
+					latestKO.Spec.Parameters = &svcapitypes.DataSourceParameters{}
+				}
+				if latestKO.Spec.Parameters.S3Parameters == nil {
+					latestKO.Spec.Parameters.S3Parameters = &svcapitypes.S3Parameters{}
+				}
+				if latestKO.Spec.Parameters.S3Parameters.RoleRef == nil {
+					latestKO.Spec.Parameters.S3Parameters.RoleRef = desiredKO.Spec.Parameters.S3Parameters.RoleRef
+				}
+			}
+			if desiredKO.Spec.Parameters.S3Parameters.ManifestFileLocation != nil {
+				if desiredKO.Spec.Parameters.S3Parameters.ManifestFileLocation.BucketRef != nil {
+					if latestKO.Spec.Parameters == nil {
+						latestKO.Spec.Parameters = &svcapitypes.DataSourceParameters{}
+					}
+					if latestKO.Spec.Parameters.S3Parameters == nil {
+						latestKO.Spec.Parameters.S3Parameters = &svcapitypes.S3Parameters{}
+					}
+					if latestKO.Spec.Parameters.S3Parameters.ManifestFileLocation == nil {
+						latestKO.Spec.Parameters.S3Parameters.ManifestFileLocation = &svcapitypes.ManifestFileLocation{}
+					}
+					if latestKO.Spec.Parameters.S3Parameters.ManifestFileLocation.BucketRef == nil {
+						latestKO.Spec.Parameters.S3Parameters.ManifestFileLocation.BucketRef = desiredKO.Spec.Parameters.S3Parameters.ManifestFileLocation.BucketRef
+					}
+				}
+			}
+		}
+	}
+
+	return &resource{latestKO}
+}
+
 // ResolveReferences finds if there are any Reference field(s) present
 // inside AWSResource passed in the parameter and attempts to resolve those
 // reference field(s) into their respective target field(s). It returns a
